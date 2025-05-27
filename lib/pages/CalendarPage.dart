@@ -42,6 +42,21 @@ class _CalendarPageState extends State<CalendarPage> {
           });
         },
         eventLoader: (day) => eventsByDate(day),
+        calendarBuilders: CalendarBuilders(
+          markerBuilder: (context, day, events) {
+            if (events.isEmpty || isSameDay(day, focusedDay)) {
+              return Container();
+            }
+            return Container(
+              width: 10,
+              height: 10,
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+            );
+          },
+        ),
       ),
       Expanded(
         child: ListView(
