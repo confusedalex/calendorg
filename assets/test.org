@@ -1,0 +1,12 @@
+* Heading 1
+** orgmode meetup
+<2025-05-23 Friday>
+* restaurant appointment <2025-05-24 Saturday>
+* Vacations
+** Summer vacation 
+<2025-06-01 Sunday>--<2025-06-15 Sunday>
+
+* TODO Buy groceries
+  SCHEDULED: <2025-05-20 Tuesday>
+* TOCALL Call mom
+  SCHEDULED: <2025-05-21 Wednesday>
