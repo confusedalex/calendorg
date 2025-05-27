@@ -24,6 +24,7 @@ List<Event> parseEvents(OrgDocument document) {
       case const (OrgHeadline):
         var headline = node as OrgHeadline;
 
+        // Remove timestamp from headline if it exists
         currentHeadline =
             headline.rawTitle!
                 .replaceAll(
