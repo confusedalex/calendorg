@@ -63,6 +63,7 @@
               flutter
               gradle
               jdk17
+              zenity
             ];
 
             LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath [
