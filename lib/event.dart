@@ -5,13 +5,10 @@ class Event {
   late String? description;
   String id;
   bool isActive;
+  String rawTimestamp;
 
-  Event(this.isActive, this.start, this.title, this.id, this.description,
-      this.end);
-
-  String getTimeStamp() {
-    return "<${start.toIso8601String().split('T').first}>";
-  }
+  Event(this.rawTimestamp, this.isActive, this.start, this.title, this.id,
+      this.description, this.end);
 
   String getOrgHeading(int level) {
     String prefix = '';
@@ -19,9 +16,5 @@ class Event {
       prefix += '*';
     }
     return '$prefix $title';
-  }
-
-  String getOrgEvent(int level) {
-    return '${getOrgHeading(level)} ${getTimeStamp()}';
   }
 }
