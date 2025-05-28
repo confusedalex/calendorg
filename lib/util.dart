@@ -21,17 +21,17 @@ List<Event> parseEvents(OrgDocument document) {
     foundHashes.add(hash);
 
     switch (node.runtimeType) {
+
       case const (OrgHeadline):
         var headline = node as OrgHeadline;
 
         // Remove timestamp from headline if it exists
-        currentHeadline =
-            headline.rawTitle!
-                .replaceAll(
-                  RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
-                  "",
-                )
-                .trim();
+        currentHeadline = headline.rawTitle!
+            .replaceAll(
+              RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
+              "",
+            )
+            .trim();
 
       case const (OrgDateRangeTimestamp):
         var rangeTimeStamp = node as OrgDateRangeTimestamp;
@@ -41,6 +41,7 @@ List<Event> parseEvents(OrgDocument document) {
 
         eventList.add(
           Event(
+            rangeTimeStamp.isActive,
             orgSimpleTimestampToDateTime(rangeTimeStamp.start),
             currentHeadline,
             hash.toString(),
@@ -53,6 +54,7 @@ List<Event> parseEvents(OrgDocument document) {
         var timestamp = node as OrgSimpleTimestamp;
         eventList.add(
           Event(
+            timestamp.isActive,
             orgSimpleTimestampToDateTime(timestamp),
             currentHeadline,
             node.hashCode.toString(),
@@ -65,13 +67,13 @@ List<Event> parseEvents(OrgDocument document) {
     return true;
   });
 
-  for (var event in eventList) {
-    print("======");
-    print("Title: ${event.title}");
-    print("Start: ${event.start}");
-    if (event.end != null) print("Ende: ${event.end}");
-    print("id: ${event.id}");
-  }
+  // for (var event in eventList) {
+  //   print("======");
+  //   print("Title: ${event.title}");
+  //   print("Start: ${event.start}");
+  //   if (event.end != null) print("Ende: ${event.end}");
+  //   print("id: ${event.id}");
+  // }
 
   return eventList;
 }

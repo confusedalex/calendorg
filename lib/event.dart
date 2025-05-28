@@ -4,8 +4,10 @@ class Event {
   String title;
   late String? description;
   String id;
+  bool isActive;
 
-  Event(this.start, this.title, this.id, this.description, this.end);
+  Event(this.isActive, this.start, this.title, this.id, this.description,
+      this.end);
 
   String getTimeStamp() {
     return "<${start.toIso8601String().split('T').first}>";
