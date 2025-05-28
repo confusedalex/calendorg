@@ -1,4 +1,5 @@
 import 'package:calendorg/event.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:org_parser/org_parser.dart';
 
 DateTime orgSimpleTimestampToDateTime(OrgSimpleTimestamp timestamp) {
@@ -6,6 +7,8 @@ DateTime orgSimpleTimestampToDateTime(OrgSimpleTimestamp timestamp) {
     int.parse(timestamp.date.year),
     int.parse(timestamp.date.month),
     int.parse(timestamp.date.day),
+    int.parse(timestamp.time?.hour ?? "00"),
+    int.parse(timestamp.time?.minute ?? "00"),
   );
 }
 
@@ -41,6 +44,7 @@ List<Event> parseEvents(OrgDocument document) {
 
         eventList.add(
           Event(
+            rangeTimeStamp.toMarkup(),
             rangeTimeStamp.isActive,
             orgSimpleTimestampToDateTime(rangeTimeStamp.start),
             currentHeadline,
@@ -54,6 +58,7 @@ List<Event> parseEvents(OrgDocument document) {
         var timestamp = node as OrgSimpleTimestamp;
         eventList.add(
           Event(
+            timestamp.toMarkup(),
             timestamp.isActive,
             orgSimpleTimestampToDateTime(timestamp),
             currentHeadline,
