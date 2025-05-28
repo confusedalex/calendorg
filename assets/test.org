@@ -10,3 +10,7 @@
   SCHEDULED: <2025-05-20 Tuesday>
 * TOCALL Call mom
   SCHEDULED: <2025-05-21 Wednesday>
+
+* School stuff :school:
+** History exam <2025-05-25 Sunday>
+** Math exam <2025-05-12 Sunday> :math:
