@@ -48,14 +48,19 @@ class _CalendarPageState extends State<CalendarPage> {
                 if (events.isEmpty || isSameDay(day, focusedDay)) {
                   return Container();
                 }
-                return Container(
-                  width: 10,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                  ),
-                );
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 1,
+                    children: events
+                        .map((event) => Container(
+                              width: 10,
+                              height: 10,
+                              decoration: const BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
+                              ),
+                            ))
+                        .toList());
               },
             ),
           ),
