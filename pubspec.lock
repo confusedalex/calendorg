@@ -219,10 +219,9 @@ packages:
   org_parser:
     dependency: "direct main"
     description:
-      name: org_parser
-      sha256: "1ec6ee649ef55cbbaf1b65c3f77dd3cd1e236b4324be5f59a8cd2283e6a35850"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../org-parser/org_parser"
+      relative: true
+    source: path
     version: "9.7.3"
   path:
     dependency: transitive
