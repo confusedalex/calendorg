@@ -4,6 +4,7 @@ import 'package:calendorg/DocumentSingelton.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/pages/CalendarPage.dart';
 import 'package:calendorg/pages/EventListPage.dart';
+import 'package:calendorg/pages/SettingsPage.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -80,15 +81,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List pages = [eventListPage(display), CalendarPage(eventList)];
+    final List pages = [
+      eventListPage(display),
+      CalendarPage(eventList),
+      SettingsPage()
+    ];
 
     return Scaffold(
       body: pages[index],
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected:
-            (value) => setState(() {
-              index = value;
-            }),
+        onDestinationSelected: (value) => setState(() {
+          index = value;
+        }),
         selectedIndex: index,
         destinations: [
           NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
