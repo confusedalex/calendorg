@@ -1,4 +1,5 @@
 import 'package:calendorg/event.dart';
+import 'package:calendorg/eventCard.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -66,13 +67,8 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           Expanded(
             child: ListView(
-              children: eventsByDate(focusedDay).map((e) {
-                return Card(
-                    child: ListTile(
-                  title: Text(e.title),
-                  subtitle: Text(e.getTimeStamp()),
-                ));
-              }).toList(),
+              children:
+                  eventsByDate(focusedDay).map((e) => eventCard(e)).toList(),
             ),
           ),
         ],
