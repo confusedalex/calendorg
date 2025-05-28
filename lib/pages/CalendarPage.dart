@@ -67,7 +67,11 @@ class _CalendarPageState extends State<CalendarPage> {
           Expanded(
             child: ListView(
               children: eventsByDate(focusedDay).map((e) {
-                return Card(child: ListTile(title: Text(e.title)));
+                return Card(
+                    child: ListTile(
+                  title: Text(e.title),
+                  subtitle: Text(e.getTimeStamp()),
+                ));
               }).toList(),
             ),
           ),
