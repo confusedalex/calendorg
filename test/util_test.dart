@@ -1,4 +1,3 @@
-import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';

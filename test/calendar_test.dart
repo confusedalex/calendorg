@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:calendorg/event.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/calendar_page.dart';
 import 'package:calendorg/tag_color.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 void main() {
   final markup = """
