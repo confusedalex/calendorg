@@ -1,13 +1,6 @@
 import 'package:calendorg/event.dart';
 import 'package:org_parser/org_parser.dart';
 
-Map<DateTime, int> generateDateTimesForRange(
-        DateTime start, int hash, Duration dur, Map<DateTime, int> cur) =>
-    dur.inDays == 0
-        ? cur
-        : generateDateTimesForRange(start, hash, Duration(days: dur.inDays - 1),
-            {...cur, start.add(dur): hash});
-
 List<Event> parseEvents(OrgDocument document) {
   List<Event> eventList = [];
 
