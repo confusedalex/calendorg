@@ -1,17 +1,5 @@
-import 'dart:collection';
-
 import 'package:calendorg/event.dart';
 import 'package:org_parser/org_parser.dart';
-
-DateTime orgSimpleTimestampToDateTime(OrgSimpleTimestamp timestamp) {
-  return DateTime(
-    int.parse(timestamp.date.year),
-    int.parse(timestamp.date.month),
-    int.parse(timestamp.date.day),
-    int.parse(timestamp.time?.hour ?? "00"),
-    int.parse(timestamp.time?.minute ?? "00"),
-  );
-}
 
 Map<DateTime, int> generateDateTimesForRange(
         DateTime start, int hash, Duration dur, Map<DateTime, int> cur) =>
@@ -26,7 +14,7 @@ List<Event> parseEvents(OrgDocument document) {
   document.visitSections(((section) {
     var foundSections = 0;
     var ignoreNTimestamps = 0;
-    final Map<dynamic, int> foundTimestamps = HashMap();
+    var foundTimestamps = [];
 
     var headline = section.headline.rawTitle?.replaceAll(
           RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
@@ -43,27 +31,16 @@ List<Event> parseEvents(OrgDocument document) {
           return foundSections > 1 ? false : true;
 
         case const (OrgDateRangeTimestamp):
-          var rangeTimeStamp = node as OrgDateRangeTimestamp;
+          // ignore the next 2 timestamps, because they will
+          // be just part of this range
           ignoreNTimestamps = 2;
 
-          var hash = rangeTimeStamp.hashCode;
-          var startTimeStamp = rangeTimeStamp.start;
-          var endTimeStamp = rangeTimeStamp.end;
-
-          foundTimestamps.addAll({startTimeStamp: hash});
-          foundTimestamps.addAll({endTimeStamp: hash});
-          foundTimestamps.addEntries(generateDateTimesForRange(
-              startTimeStamp.dateTime,
-              hash,
-              endTimeStamp.dateTime.difference(startTimeStamp.dateTime),
-              {}).entries);
-
+          foundTimestamps.add(node);
           break;
 
         case const (OrgSimpleTimestamp):
           if (ignoreNTimestamps > 0) break;
-          var timestamp = node as OrgSimpleTimestamp;
-          foundTimestamps.addAll({timestamp: timestamp.hashCode});
+          foundTimestamps.add(node);
 
           break;
       }
@@ -74,14 +51,6 @@ List<Event> parseEvents(OrgDocument document) {
 
     return true;
   }));
-
-  for (var event in eventList) {
-    print("======");
-    print("Title: ${event.title}");
-    print(event.timestamps);
-    // print("Start: ${event.start}");
-    // if (event.end != null) print("Ende: ${event.end}");
-  }
 
   return eventList;
 }
