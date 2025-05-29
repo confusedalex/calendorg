@@ -1,5 +1,6 @@
 import 'package:calendorg/event.dart';
 import 'package:flutter/material.dart';
+import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -16,9 +17,13 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
 
-  List<Event> eventsByDate(DateTime date) => widget.eventlist
-      .where((e) => isSameDay(date, e.start) && e.isActive)
-      .toList();
+  List<Event> eventsByDate(DateTime date) =>
+      widget.eventlist.fold([], (acc, cur) {
+        var timestampsByDate =
+            cur.dateTimeList().where((e) => isSameDay(date, e)).toList();
+
+        return timestampsByDate.isEmpty ? acc : [...acc, cur];
+      });
 
   Widget eventCard(Event event) => Card(
           child: ListTile(
@@ -31,7 +36,6 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
         ),
         title: Text(event.title),
-        subtitle: Text(event.rawTimestamp),
       ));
 
   @override
@@ -81,7 +85,7 @@ class _CalendarPageState extends State<CalendarPage> {
           Expanded(
             child: ListView(
               children:
-                  eventsByDate(focusedDay).map((e) => eventCard(e)).toList(),
+                  eventsByDate(focusedDay).map((event) => eventCard(event)).toList(),
             ),
           ),
         ],

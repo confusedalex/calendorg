@@ -1,7 +1,11 @@
 * Heading 1
 ** developing calendorg <2025-05-23 09:00>
 ** orgmode meetup
-<2025-05-23 Friday>
+<2025-05-05>
+<2025-05-06 11:00>
+<2025-05-08 11:00-13:00>
+<2025-05-28> <2025-05-15>
+
 * restaurant appointment <2025-05-24 Saturday>
 * Vacations
 ** Summer vacation 
