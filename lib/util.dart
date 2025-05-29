@@ -36,6 +36,10 @@ List<Event> parseEvents(OrgDocument document) {
           foundTimestamps.add(node);
 
           break;
+
+        case const (OrgTimeRangeTimestamp):
+          foundTimestamps.add(node);
+          break;
       }
       return true;
     });
