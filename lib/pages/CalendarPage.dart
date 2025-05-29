@@ -1,5 +1,4 @@
 import 'package:calendorg/event.dart';
-import 'package:calendorg/eventCard.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -20,6 +19,20 @@ class _CalendarPageState extends State<CalendarPage> {
   List<Event> eventsByDate(DateTime date) => widget.eventlist
       .where((e) => isSameDay(date, e.start) && e.isActive)
       .toList();
+
+  Widget eventCard(Event event) => Card(
+          child: ListTile(
+        leading: Container(
+          width: 30,
+          height: 30,
+          decoration: const BoxDecoration(
+            color: Colors.blue,
+            shape: BoxShape.circle,
+          ),
+        ),
+        title: Text(event.title),
+        subtitle: Text(event.rawTimestamp),
+      ));
 
   @override
   Widget build(BuildContext context) => Column(
