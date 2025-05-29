@@ -1,5 +1,5 @@
-import 'package:calendorg/TagColor.dart';
-import 'package:calendorg/models/TagModel.dart';
+import 'package:calendorg/tag_color.dart';
+import 'package:calendorg/models/tag_model.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,12 +22,12 @@ class _TagsPageState extends State<TagsPage> {
   }
 
   void saveTag() async {
-    Provider.of<TagsModel>(context, listen: false)
+    Provider.of<TagColorsModel>(context, listen: false)
         .addTagColor(TagColor(tagName, selectedColor));
   }
 
   void deleteTag(String tagName) {
-    Provider.of<TagsModel>(context, listen: false).removeTagColor(tagName);
+    Provider.of<TagColorsModel>(context, listen: false).removeTagColor(tagName);
   }
 
   Widget tagColorEdit(TagColor? tag) => AlertDialog(
@@ -75,7 +75,7 @@ class _TagsPageState extends State<TagsPage> {
         appBar: AppBar(
           title: const Text("Tags"),
         ),
-        body: Consumer<TagsModel>(
+        body: Consumer<TagColorsModel>(
             builder: (context, tags, child) => ListView(
                 children: tags.tagColorsFromPrefs
                     .map((tagColor) => ListTile(

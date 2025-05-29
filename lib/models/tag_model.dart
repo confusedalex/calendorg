@@ -1,14 +1,14 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:calendorg/TagColor.dart';
+import 'package:calendorg/tag_color.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TagsModel extends ChangeNotifier {
+class TagColorsModel extends ChangeNotifier {
   final List<TagColor> _tagColors = [];
 
-  TagsModel() {
+  TagColorsModel() {
     loadTags();
   }
 

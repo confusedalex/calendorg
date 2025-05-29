@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:calendorg/DocumentSingelton.dart';
+import 'package:calendorg/document_singelton.dart';
 import 'package:calendorg/event.dart';
-import 'package:calendorg/models/TagModel.dart';
-import 'package:calendorg/pages/CalendarPage.dart';
-import 'package:calendorg/pages/EventListPage.dart';
-import 'package:calendorg/pages/SettingsPage.dart';
+import 'package:calendorg/models/tag_model.dart';
+import 'package:calendorg/pages/calendar_page.dart';
+import 'package:calendorg/pages/event_list_page.dart';
+import 'package:calendorg/pages/settings_page.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final List pages = [
       eventListPage(display),
       ChangeNotifierProvider(
-          create: (context) => TagsModel(), child: CalendarPage(eventList)),
+          create: (context) => TagColorsModel(),
+          child: CalendarPage(eventList)),
       SettingsPage()
     ];
 

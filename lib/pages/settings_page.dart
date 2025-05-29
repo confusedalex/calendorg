@@ -1,5 +1,5 @@
-import 'package:calendorg/models/TagModel.dart';
-import 'package:calendorg/pages/TagsPage.dart';
+import 'package:calendorg/models/tag_model.dart';
+import 'package:calendorg/pages/tags_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +19,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ChangeNotifierProvider(
-                        create: (context) => TagsModel(),
+                        create: (context) => TagColorsModel(),
                         child: const TagsPage())))),
       ]);
 }

@@ -1,6 +1,6 @@
-import 'package:calendorg/TagColor.dart';
+import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/event.dart';
-import 'package:calendorg/models/TagModel.dart';
+import 'package:calendorg/models/tag_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -19,7 +19,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
 
-  Color getTagColor(Event event) => Provider.of<TagsModel>(context)
+  Color getTagColor(Event event) => Provider.of<TagColorsModel>(context)
       .tagColorsFromPrefs
       .firstWhere((tagColor) => (event).tags.contains(tagColor.tag),
           orElse: () => TagColor("", Colors.blue))
@@ -77,7 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     spacing: 1,
                     children: events
-                        .map<Widget>((event) => Consumer<TagsModel>(
+                        .map<Widget>((event) => Consumer<TagColorsModel>(
                             builder: (context, tags, child) => Container(
                                   width: 10,
                                   height: 10,
