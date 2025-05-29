@@ -46,4 +46,32 @@ void main() {
         ].map((date) => event.timestampsByDateTime(date).length),
         everyElement(0));
   });
+
+  test("Only DateTimes at the same date should match", () {
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 01, 00, 00, 00)).length,
+        equals(1));
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 01, 23, 59, 59)).length,
+        equals(1));
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 02, 00, 00, 00)).length,
+        equals(1));
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 02, 23, 59, 59)).length,
+        equals(1));
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 03, 00, 00, 00)).length,
+        equals(1));
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 03, 23, 59, 59)).length,
+        equals(1));
+
+    expect(
+        event.timestampsByDateTime(DateTime(2024, 04, 30, 23, 59, 59)).length,
+        equals(0));
+    expect(
+        event.timestampsByDateTime(DateTime(2025, 05, 04, 00, 00, 00)).length,
+        equals(0));
+  });
 }
