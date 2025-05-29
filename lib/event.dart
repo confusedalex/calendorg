@@ -13,11 +13,14 @@ class Event {
   DateTime afterMidnight(DateTime date) =>
       date.add(Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
 
-  List timestampsByDateTime(DateTime date) => timestamps.where((timestamp) {
-        if (timestamp is OrgSimpleTimestamp) {
+  List timestampsByDateTime(DateTime date, {bool? includeInactive = false}) =>
+      timestamps.where((timestamp) {
+        if (timestamp is OrgSimpleTimestamp &&
+            timestamp.isActive != includeInactive) {
           return isSameDay(date, timestamp.dateTime);
         }
-        if (timestamp is OrgDateRangeTimestamp) {
+        if (timestamp is OrgDateRangeTimestamp &&
+            timestamp.isActive != includeInactive) {
           return date.isAfter(beforeMidnight(timestamp.start.dateTime)) &&
               date.isBefore(afterMidnight(timestamp.end.dateTime));
         }
