@@ -15,10 +15,12 @@ void main() {
 """;
   late final document;
   late final List<Event> events;
+  late final Event event;
 
   setUp(() {
     document = OrgDocument.parse(markup);
     events = parseEvents(document);
+    event = events.first;
   });
 
   test("Events lenth should be 1", () {
@@ -26,6 +28,8 @@ void main() {
   });
 
   test("6 OrgNodes expected in event", () {
+    expect(event.timestamps.length, 6);
+  });
     expect(events.first.timestamps.length, 6);
   });
 }
