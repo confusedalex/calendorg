@@ -30,6 +30,8 @@ void main() {
   test("6 OrgNodes expected in event", () {
     expect(event.timestamps.length, 6);
   });
-    expect(events.first.timestamps.length, 6);
+
+  test("8 DateTimes expected from event", () {
+    expect(event.timestamps.length, 8);
   });
 }
