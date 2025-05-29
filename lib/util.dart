@@ -1,5 +1,4 @@
 import 'package:calendorg/event.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:org_parser/org_parser.dart';
 
 DateTime orgSimpleTimestampToDateTime(OrgSimpleTimestamp timestamp) {
