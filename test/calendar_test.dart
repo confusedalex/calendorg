@@ -24,12 +24,11 @@ void main() {
 ** School :school:
 <2025-05-27>
 """;
+  final document = OrgDocument.parse(markup);
+  final events = parseEvents(document);
 
   testWidgets('Calendar should show marker for every event occurance',
       (tester) async {
-    final document = OrgDocument.parse(markup);
-    final events = parseEvents(document);
-
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
         body: ChangeNotifierProvider<TagColorsModel>(
@@ -43,9 +42,6 @@ void main() {
   });
 
   testWidgets('Calendar respects tag colors from model', (tester) async {
-    final document = OrgDocument.parse(markup);
-    final events = parseEvents(document);
-
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
         body: ChangeNotifierProvider<TagColorsModel>(

@@ -13,15 +13,9 @@ void main() {
 <2025-05-28> <2025-05-15>
 <2025-05-01>--<2025-05-03>
 """;
-  late final OrgDocument document;
-  late final List<Event> events;
-  late final Event event;
-
-  setUp(() {
-    document = OrgDocument.parse(markup);
-    events = parseEvents(document);
-    event = events.first;
-  });
+  final document = OrgDocument.parse(markup);
+  final events = parseEvents(document);
+  final event = events.first;
 
   test("All DateTimes found from event", () {
     expect(
