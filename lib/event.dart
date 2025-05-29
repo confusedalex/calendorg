@@ -24,6 +24,11 @@ class Event {
           return date.isAfter(beforeMidnight(timestamp.start.dateTime)) &&
               date.isBefore(afterMidnight(timestamp.end.dateTime));
         }
+        if (timestamp is OrgTimeRangeTimestamp &&
+            timestamp.isActive != includeInactive) {
+          return isSameDay(timestamp.startDateTime, date);
+        }
+
         return false;
       }).toList();
 
