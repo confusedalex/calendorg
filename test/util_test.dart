@@ -13,7 +13,7 @@ void main() {
 <2025-05-28> <2025-05-15>
 <2025-05-01>--<2025-05-03>
 """;
-  late final document;
+  late final OrgDocument document;
   late final List<Event> events;
   late final Event event;
 
