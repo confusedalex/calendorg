@@ -1,3 +1,4 @@
+import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
@@ -12,18 +13,19 @@ void main() {
 <2025-05-28> <2025-05-15>
 <2025-05-01>--<2025-05-03>
 """;
+  late final document;
+  late final List<Event> events;
+
+  setUp(() {
+    document = OrgDocument.parse(markup);
+    events = parseEvents(document);
+  });
 
   test("Events lenth should be 1", () {
-    final document = OrgDocument.parse(markup);
-    final events = parseEvents(document);
-
     expect(events.length, 1);
   });
 
   test("6 OrgNodes expected in event", () {
-    final document = OrgDocument.parse(markup);
-    final events = parseEvents(document);
-
     expect(events.first.timestamps.length, 6);
   });
 }
