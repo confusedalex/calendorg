@@ -1,5 +1,8 @@
+import 'package:calendorg/TagColor.dart';
 import 'package:calendorg/event.dart';
+import 'package:calendorg/models/TagModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -16,10 +19,15 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
 
+  Color getTagColor(Event event) => Provider.of<TagsModel>(context)
+      .tagColorsFromPrefs
+      .firstWhere((tagColor) => (event).tags.contains(tagColor.tag),
+          orElse: () => TagColor("", Colors.blue))
+      .color;
+
   List<Event> eventsByDate(DateTime date) =>
       widget.eventlist.fold([], (acc, cur) {
-        var timestampsByDate =
-            cur.timestampsByDateTime(date);
+        var timestampsByDate = cur.timestampsByDateTime(date);
 
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
       });
@@ -29,8 +37,8 @@ class _CalendarPageState extends State<CalendarPage> {
         leading: Container(
           width: 30,
           height: 30,
-          decoration: const BoxDecoration(
-            color: Colors.blue,
+          decoration: BoxDecoration(
+            color: getTagColor(event),
             shape: BoxShape.circle,
           ),
         ),
@@ -69,22 +77,24 @@ class _CalendarPageState extends State<CalendarPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     spacing: 1,
                     children: events
-                        .map((event) => Container(
-                              width: 10,
-                              height: 10,
-                              decoration: const BoxDecoration(
-                                color: Colors.blue,
-                                shape: BoxShape.circle,
-                              ),
-                            ))
+                        .map<Widget>((event) => Consumer<TagsModel>(
+                            builder: (context, tags, child) => Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: getTagColor(event as Event),
+                                    shape: BoxShape.circle,
+                                  ),
+                                )))
                         .toList());
               },
             ),
           ),
           Expanded(
             child: ListView(
-              children:
-                  eventsByDate(focusedDay).map((event) => eventCard(event)).toList(),
+              children: eventsByDate(focusedDay)
+                  .map((event) => eventCard(event))
+                  .toList(),
             ),
           ),
         ],

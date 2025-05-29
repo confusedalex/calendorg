@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:calendorg/DocumentSingelton.dart';
 import 'package:calendorg/event.dart';
+import 'package:calendorg/models/TagModel.dart';
 import 'package:calendorg/pages/CalendarPage.dart';
 import 'package:calendorg/pages/EventListPage.dart';
 import 'package:calendorg/pages/SettingsPage.dart';
@@ -9,6 +10,7 @@ import 'package:calendorg/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -83,7 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final List pages = [
       eventListPage(display),
-      CalendarPage(eventList),
+      ChangeNotifierProvider(
+          create: (context) => TagsModel(), child: CalendarPage(eventList)),
       SettingsPage()
     ];
 

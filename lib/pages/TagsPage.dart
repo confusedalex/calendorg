@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:calendorg/TagColor.dart';
+import 'package:calendorg/models/TagModel.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
@@ -13,7 +12,6 @@ class TagsPage extends StatefulWidget {
 }
 
 class _TagsPageState extends State<TagsPage> {
-  List<TagColor> tagColors = [];
   String tagName = "";
   Color selectedColor = Color(0x00000000);
   TagColor? selectedTag;
@@ -21,37 +19,15 @@ class _TagsPageState extends State<TagsPage> {
   @override
   void initState() {
     super.initState();
-    loadTags();
-  }
-
-  void loadTags() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      tagColors = (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
-          .map((tagColor) => TagColor.fromJson(tagColor))
-          .toList();
-    });
   }
 
   void saveTag() async {
-    setState(() {
-      tagColors.removeWhere((tag) => tag.tag == tagName);
-      tagColors.add(TagColor(tagName, selectedColor));
-    });
-    saveTagsToPrefs();
+    Provider.of<TagsModel>(context, listen: false)
+        .addTagColor(TagColor(tagName, selectedColor));
   }
 
   void deleteTag(String tagName) {
-    setState(() {
-      tagColors.removeWhere((tag) => tag.tag == tagName);
-    });
-    saveTagsToPrefs();
-  }
-
-  void saveTagsToPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString("tagColors", jsonEncode(tagColors));
+    Provider.of<TagsModel>(context, listen: false).removeTagColor(tagName);
   }
 
   Widget tagColorEdit(TagColor? tag) => AlertDialog(
@@ -99,26 +75,33 @@ class _TagsPageState extends State<TagsPage> {
         appBar: AppBar(
           title: const Text("Tags"),
         ),
-        body: ListView(
-            children: tagColors
-                .map((tagColor) => ListTile(
-                      title: Text(tagColor.tag),
-                      trailing: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: tagColor.color,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      onTap: () => showDialog(
-                          context: context,
-                          builder: (context) => tagColorEdit(tagColor)),
-                    ))
-                .toList()),
+        body: Consumer<TagsModel>(
+            builder: (context, tags, child) => ListView(
+                children: tags.tagColorsFromPrefs
+                    .map((tagColor) => ListTile(
+                          title: Text(tagColor.tag),
+                          trailing: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: tagColor.color,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          onTap: () {
+                            tagName = tagColor.tag;
+                            showDialog(
+                                context: context,
+                                builder: (context) => tagColorEdit(tagColor));
+                          },
+                        ))
+                    .toList())),
         floatingActionButton: FloatingActionButton.extended(
-            onPressed: () => showDialog(
-                context: context, builder: (context) => tagColorEdit(null)),
+            onPressed: () {
+              tagName = '';
+              showDialog(
+                  context: context, builder: (context) => tagColorEdit(null));
+            },
             label: Text("Add")),
       );
 }
