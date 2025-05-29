@@ -6,9 +6,10 @@ class Event {
   String id;
   bool isActive;
   String rawTimestamp;
+  List<String> tags = [];
 
   Event(this.rawTimestamp, this.isActive, this.start, this.title, this.id,
-      this.description, this.end);
+      this.tags, this.description, this.end);
 
   String getOrgHeading(int level) {
     String prefix = '';

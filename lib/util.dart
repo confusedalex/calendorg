@@ -14,6 +14,7 @@ DateTime orgSimpleTimestampToDateTime(OrgSimpleTimestamp timestamp) {
 
 List<Event> parseEvents(OrgDocument document) {
   var foundHashes = [];
+  List<String> foundTags = [];
   List<Event> eventList = [];
   String currentHeadline = '';
 
@@ -24,6 +25,9 @@ List<Event> parseEvents(OrgDocument document) {
     foundHashes.add(hash);
 
     switch (node.runtimeType) {
+      case const (OrgSection):
+        foundTags = (node as OrgSection).tagsWithInheritance(document);
+        break;
 
       case const (OrgHeadline):
         var headline = node as OrgHeadline;
@@ -49,6 +53,7 @@ List<Event> parseEvents(OrgDocument document) {
             orgSimpleTimestampToDateTime(rangeTimeStamp.start),
             currentHeadline,
             hash.toString(),
+            foundTags,
             null,
             orgSimpleTimestampToDateTime(rangeTimeStamp.end),
           ),
@@ -58,14 +63,14 @@ List<Event> parseEvents(OrgDocument document) {
         var timestamp = node as OrgSimpleTimestamp;
         eventList.add(
           Event(
-            timestamp.toMarkup(),
-            timestamp.isActive,
-            orgSimpleTimestampToDateTime(timestamp),
-            currentHeadline,
-            node.hashCode.toString(),
-            null,
-            null,
-          ),
+              timestamp.toMarkup(),
+              timestamp.isActive,
+              orgSimpleTimestampToDateTime(timestamp),
+              currentHeadline,
+              node.hashCode.toString(),
+              foundTags,
+              null,
+              null),
         );
         break;
     }
