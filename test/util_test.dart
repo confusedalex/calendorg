@@ -19,4 +19,11 @@ void main() {
 
     expect(events.length, 1);
   });
+
+  test("6 OrgNodes expected in event", () {
+    final document = OrgDocument.parse(markup);
+    final events = parseEvents(document);
+
+    expect(events.first.timestamps.length, 6);
+  });
 }
