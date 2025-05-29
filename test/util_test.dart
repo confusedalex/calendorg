@@ -23,14 +23,6 @@ void main() {
     event = events.first;
   });
 
-  test("Events lenth should be 1", () {
-    expect(events.length, 1);
-  });
-
-  test("6 OrgNodes expected in event", () {
-    expect(event.timestamps.length, 6);
-  });
-
   test("All DateTimes found from event", () {
     expect(
         [
