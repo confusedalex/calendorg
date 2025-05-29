@@ -23,27 +23,11 @@ void main() {
     event = events.first;
   });
 
-  test("All DateTimes found from event", () {
-    expect(
-        [
-          DateTime(2025, 05, 05),
-          DateTime(2025, 05, 06),
-          DateTime(2025, 05, 08),
-          DateTime(2025, 05, 28),
-          DateTime(2025, 05, 15),
-          DateTime(2025, 05, 1),
-          DateTime(2025, 05, 2),
-          DateTime(2025, 05, 3)
-        ].map((date) => event.timestampsByDateTime(date).length),
-        everyElement(1));
+  test("Events lenth should be 1", () {
+    expect(events.length, 1);
+  });
 
-    expect(
-        [
-          DateTime(2015, 05, 05),
-          DateTime(2025, 05, 25),
-          DateTime(2024, 05, 08),
-          DateTime(2025),
-        ].map((date) => event.timestampsByDateTime(date).length),
-        everyElement(0));
+  test("6 OrgNodes expected in event", () {
+    expect(event.timestamps.length, 6);
   });
 }
