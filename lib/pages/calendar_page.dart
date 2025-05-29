@@ -70,7 +70,9 @@ class _CalendarPageState extends State<CalendarPage> {
             eventLoader: (day) => eventsByDate(day),
             calendarBuilders: CalendarBuilders(
               markerBuilder: (context, day, events) {
-                if (events.isEmpty || isSameDay(day, focusedDay)) {
+                if (events.isEmpty ||
+                    isSameDay(day, focusedDay) ||
+                    isSameDay(day, DateTime.now())) {
                   return Container();
                 }
                 return Row(
