@@ -2,6 +2,7 @@ import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:flutter/material.dart';
+import 'package:org_parser/org_parser.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -18,7 +19,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime? selectedDay;
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
-  Map<Event, List<dynamic>> timestampsByEvent = {};
+  Map<Event, List<OrgGenericTimestamp>> timestampsByEvent = {};
 
   Color getTagColor(Event event) => Provider.of<TagColorsModel>(context)
       .tagColorsFromPrefs
@@ -34,7 +35,7 @@ class _CalendarPageState extends State<CalendarPage> {
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
       });
 
-  Widget eventCard(Event event, dynamic timestamp) => Card(
+  Widget eventCard(Event event, OrgGenericTimestamp timestamp) => Card(
       child: ListTile(
           leading: Container(
             width: 30,
@@ -49,7 +50,7 @@ class _CalendarPageState extends State<CalendarPage> {
             children: [
               Expanded(
                   child: Text(
-                "${event.rawTimeStampsFromTimeStamp(timestamp)}",
+                timestamp.toMarkup(),
                 textAlign: TextAlign.left,
               )),
               if (event.tags.isNotEmpty)

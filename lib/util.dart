@@ -5,9 +5,8 @@ List<Event> parseEvents(OrgDocument document) {
   List<Event> eventList = [];
 
   document.visitSections(((section) {
-    var foundSections = 0;
     var ignoreNTimestamps = 0;
-    var foundTimestamps = [];
+    List<OrgGenericTimestamp> foundTimestamps = [];
 
     var headline = section.headline.rawTitle?.replaceAll(
           RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
@@ -16,14 +15,9 @@ List<Event> parseEvents(OrgDocument document) {
         '';
     var tags = section.tagsWithInheritance(document);
 
-    section.visit((node) {
-      switch (node.runtimeType) {
-        // If more than the current section is found break
-        case const (OrgSection):
-          foundSections++;
-          return foundSections > 1 ? false : true;
-
-        case const (OrgDateRangeTimestamp):
+    section.visit<OrgGenericTimestamp>((node) {
+      switch (node) {
+        case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will
           // be just part of this range
           ignoreNTimestamps = 2;
@@ -31,13 +25,13 @@ List<Event> parseEvents(OrgDocument document) {
           foundTimestamps.add(node);
           break;
 
-        case const (OrgSimpleTimestamp):
+        case OrgSimpleTimestamp():
           if (ignoreNTimestamps > 0) break;
           foundTimestamps.add(node);
 
           break;
 
-        case const (OrgTimeRangeTimestamp):
+        case OrgTimeRangeTimestamp():
           foundTimestamps.add(node);
           break;
       }
