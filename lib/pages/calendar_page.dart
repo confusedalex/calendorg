@@ -52,11 +52,12 @@ class _CalendarPageState extends State<CalendarPage> {
                 "${event.rawTimeStampsFromTimeStamp(timestamp)}",
                 textAlign: TextAlign.left,
               )),
-              Expanded(
-                  child: Text(
-                ":${event.tags.join(":")}:",
-                textAlign: TextAlign.right,
-              )),
+              if (event.tags.isNotEmpty)
+                Expanded(
+                    child: Text(
+                  ":${event.tags.join(":")}:",
+                  textAlign: TextAlign.right,
+                )),
             ],
           )));
 
@@ -90,20 +91,21 @@ class _CalendarPageState extends State<CalendarPage> {
                     isSameDay(day, DateTime.now())) {
                   return Container();
                 }
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 1,
-                    children: events
-                        .map<Widget>((event) => Consumer<TagColorsModel>(
-                            builder: (context, tags, child) => Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    color: getTagColor(event as Event),
-                                    shape: BoxShape.circle,
+                return FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 1,
+                        children: events
+                            .map<Widget>((event) => Consumer<TagColorsModel>(
+                                  builder: (context, tags, child) =>
+                                      CircleAvatar(
+                                    radius: 7,
+                                    backgroundColor:
+                                        getTagColor(event as Event),
                                   ),
-                                )))
-                        .toList());
+                                ))
+                            .toList()));
               },
             ),
           ),
