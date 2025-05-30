@@ -18,6 +18,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime? selectedDay;
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
+  Map<Event, List<dynamic>> timestampsByEvent = {};
 
   Color getTagColor(Event event) => Provider.of<TagColorsModel>(context)
       .tagColorsFromPrefs
@@ -28,22 +29,36 @@ class _CalendarPageState extends State<CalendarPage> {
   List<Event> eventsByDate(DateTime date) =>
       widget.eventlist.fold([], (acc, cur) {
         var timestampsByDate = cur.timestampsByDateTime(date);
+        timestampsByEvent.addAll({cur: timestampsByDate});
 
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
       });
 
-  Widget eventCard(Event event) => Card(
-          child: ListTile(
-        leading: Container(
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-            color: getTagColor(event),
-            shape: BoxShape.circle,
+  Widget eventCard(Event event, dynamic timestamp) => Card(
+      child: ListTile(
+          leading: Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: getTagColor(event),
+              shape: BoxShape.circle,
+            ),
           ),
-        ),
-        title: Text(event.title),
-      ));
+          title: Text(event.title),
+          subtitle: Row(
+            children: [
+              Expanded(
+                  child: Text(
+                "${event.rawTimeStampsFromTimeStamp(timestamp)}",
+                textAlign: TextAlign.left,
+              )),
+              Expanded(
+                  child: Text(
+                ":${event.tags.join(":")}:",
+                textAlign: TextAlign.right,
+              )),
+            ],
+          )));
 
   @override
   Widget build(BuildContext context) => Column(
@@ -94,10 +109,14 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           Expanded(
             child: ListView(
-              children: eventsByDate(focusedDay)
-                  .map((event) => eventCard(event))
-                  .toList(),
-            ),
+                children: eventsByDate(focusedDay).fold(
+                    [],
+                    (acc, cur) => [
+                          ...acc,
+                          ...timestampsByEvent[cur]?.map(
+                                  (timestamp) => eventCard(cur, timestamp)) ??
+                              []
+                        ])),
           ),
         ],
       );
