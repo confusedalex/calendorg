@@ -32,5 +32,18 @@ class Event {
         return false;
       }).toList();
 
+  String? rawTimeStampsFromTimeStamp(dynamic timestamp) {
+    if (timestamp is OrgSimpleTimestamp) {
+      return timestamp.toMarkup();
+    }
+    if (timestamp is OrgDateRangeTimestamp) {
+      return timestamp.toMarkup();
+    }
+    if (timestamp is OrgTimeRangeTimestamp) {
+      return timestamp.toMarkup();
+    }
+    return null;
+  }
+
   Event(this.title, this.tags, this.timestamps, this.description);
 }
