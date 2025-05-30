@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TagColorsModel extends ChangeNotifier {
   final List<TagColor> _tagColors = [];
+  late final SharedPreferences prefs;
 
   TagColorsModel() {
     loadTags();
@@ -16,7 +17,7 @@ class TagColorsModel extends ChangeNotifier {
       UnmodifiableListView(_tagColors);
 
   void loadTags() async {
-    final prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     var tagColorsFromPrefs =
         (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
             .map((tagColor) => TagColor.fromJson(tagColor))
@@ -28,25 +29,23 @@ class TagColorsModel extends ChangeNotifier {
   void setTagColors(List<TagColor> tagColors) {
     _tagColors.clear();
     _tagColors.addAll(tagColors);
-    notifyListeners();
+    saveTagsToPrefs();
   }
 
   void saveTagsToPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
     prefs.setString("tagColors", jsonEncode(_tagColors));
+    notifyListeners();
   }
 
   void addTagColor(TagColor tagColor) {
     removeTagColor(tagColor.tag);
     _tagColors.add(tagColor);
     saveTagsToPrefs();
-    notifyListeners();
   }
 
   void removeTagColor(String tagName) {
     _tagColors.removeWhere((tag) => tag.tag == tagName);
     saveTagsToPrefs();
-    notifyListeners();
   }
 
   Color getTagColorByName(String tagName) {
