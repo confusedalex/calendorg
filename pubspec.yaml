@@ -36,14 +36,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   org_parser:
-    git: https://github.com/amake/org_parser.git
+    path: ../org-parser/org_parser
   file_picker: ^10.1.9
   uuid: ^4.5.1
   table_calendar: ^3.2.0
-  shared_preferences: ^2.5.3
   flex_color_picker: ^3.7.1
   provider: ^6.1.5
   http: ^1.4.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
