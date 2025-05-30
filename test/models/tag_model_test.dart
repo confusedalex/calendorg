@@ -35,7 +35,31 @@ Future<void> main() async {
     final newTag = TagColor("new green tag", Colors.green);
 
     tagColorsModel.addTagColor(TagColor("new green tag", Colors.green));
+    var tagsColorsFromPrefs =
+        (jsonDecode(tagColorsModel.prefs.getString("tagColors") ?? "[]")
+                as List)
+            .map((tagColor) => TagColor.fromJson(tagColor))
+            .toList();
+
     expect(tagColorsModel.tagColorsFromPrefs,
         containsAll([schoolTagColor, newTag]));
+    expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
+  });
+
+  test("Adding tag with same name wont add a new tag", () async {
+    final tagColorsModel = await getTagColorsModel();
+    final newSchoolTag = TagColor("school", Colors.green);
+
+    tagColorsModel.addTagColor(newSchoolTag);
+
+    expect(tagColorsModel.tagColorsFromPrefs, contains(newSchoolTag));
+  });
+
+  test("deleting tag work", () async {
+    final tagColorsModel = await getTagColorsModel();
+
+    tagColorsModel.removeTagColor(schoolTagColor.tag);
+
+    expect(tagColorsModel.tagColorsFromPrefs, isEmpty);
   });
 }
