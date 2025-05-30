@@ -14,4 +14,14 @@ class TagColor {
   Map<String, dynamic> toJson() {
     return {"tag": tag, "color": color.value32bit};
   }
+
+  @override
+  int get hashCode => Object.hash(tag, color.value32bit);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TagColor) return false;
+    return tag == other.tag && color.value32bit == other.color.value32bit;
+  }
 }
