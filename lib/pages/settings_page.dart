@@ -1,7 +1,7 @@
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/tags_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -18,8 +18,8 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ChangeNotifierProvider(
-                        create: (context) => TagColorsModel(),
-                        child: const TagsPage())))),
+                    builder: (_) => BlocProvider.value(
+                        value: BlocProvider.of<TagColorsCubit>(context),
+                        child: const TagsPage()))))
       ]);
 }

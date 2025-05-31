@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:calendorg/document_singelton.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/models/tag_model.dart';
-import 'package:calendorg/pages/calendar_page.dart';
+import 'package:calendorg/pages/calendar/calendar_view.dart';
 import 'package:calendorg/pages/event_list_page.dart';
 import 'package:calendorg/pages/settings_page.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,12 +22,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'calendorg',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-      ),
-      home: MyHomePage(title: "calendorg"),
-    );
+        title: 'calendorg',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        ),
+        home: BlocProvider(
+          create: (context) => TagColorsCubit()..setInitialTagColor(),
+          child: MyHomePage(title: "calendorg"),
+        ));
   }
 }
 
@@ -85,12 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final List pages = [
       eventListPage(display),
-      ChangeNotifierProvider(
-          create: (context) => TagColorsModel(),
-          child: CalendarPage(eventList)),
+      CalendarView(eventList),
       SettingsPage()
     ];
-
     return Scaffold(
       body: pages[index],
       bottomNavigationBar: NavigationBar(

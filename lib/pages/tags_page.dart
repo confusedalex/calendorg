@@ -2,7 +2,7 @@ import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TagsPage extends StatefulWidget {
   const TagsPage({super.key});
@@ -15,20 +15,6 @@ class _TagsPageState extends State<TagsPage> {
   String tagName = "";
   Color selectedColor = Color(0x00000000);
   TagColor? selectedTag;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void saveTag() async {
-    Provider.of<TagColorsModel>(context, listen: false)
-        .addTagColor(TagColor(tagName, selectedColor));
-  }
-
-  void deleteTag(String tagName) {
-    Provider.of<TagColorsModel>(context, listen: false).removeTagColor(tagName);
-  }
 
   Widget tagColorEdit(TagColor? tag) => AlertDialog(
         title: Text("Add new Tag"),
@@ -57,13 +43,15 @@ class _TagsPageState extends State<TagsPage> {
           if (tag != null)
             TextButton(
                 onPressed: () {
-                  deleteTag(tag.tag);
+                  context.read<TagColorsCubit>().removeTagColor(tag.tag);
                   Navigator.of(context).pop();
                 },
                 child: Text("delete")),
           TextButton(
               onPressed: () {
-                saveTag();
+                context
+                    .read<TagColorsCubit>()
+                    .addTagColor(TagColor(tagName, selectedColor));
                 Navigator.of(context).pop();
               },
               child: Text("save"))
@@ -75,9 +63,9 @@ class _TagsPageState extends State<TagsPage> {
         appBar: AppBar(
           title: const Text("Tags"),
         ),
-        body: Consumer<TagColorsModel>(
-            builder: (context, tags, child) => ListView(
-                children: tags.tagColorsFromPrefs
+        body: BlocBuilder<TagColorsCubit, List<TagColor>>(
+            builder: (context, state) => ListView(
+                children: state
                     .map((tagColor) => ListTile(
                           title: Text(tagColor.tag),
                           trailing: Container(

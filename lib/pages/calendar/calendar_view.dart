@@ -1,28 +1,27 @@
+import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/event.dart';
-import 'package:calendorg/models/tag_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalendarPage extends StatefulWidget {
+class CalendarView extends StatefulWidget {
   final List<Event> eventlist;
 
-  const CalendarPage(this.eventlist, {super.key});
+  const CalendarView(this.eventlist, {super.key});
 
   @override
-  State<CalendarPage> createState() => _CalendarPageState();
+  State<CalendarView> createState() => _CalendarViewState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class _CalendarViewState extends State<CalendarView> {
   DateTime? selectedDay;
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
   Map<Event, List<OrgTimestamp>> timestampsByEvent = {};
 
-  Color getTagColor(Event event) => Provider.of<TagColorsModel>(context)
-      .tagColorsFromPrefs
+  Color getTagColor(Event event, List<TagColor> tagColors) => tagColors
       .firstWhere((tagColor) => (event).tags.contains(tagColor.tag),
           orElse: () => TagColor("", Colors.blue))
       .color;
@@ -37,12 +36,14 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget eventCard(Event event, OrgTimestamp timestamp) => Card(
       child: ListTile(
-          leading: Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: getTagColor(event),
-              shape: BoxShape.circle,
+          leading: BlocBuilder<TagColorsCubit, List<TagColor>>(
+            builder: (context, state) => Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: getTagColor(event, state),
+                shape: BoxShape.circle,
+              ),
             ),
           ),
           title: Text(event.title),
@@ -98,12 +99,12 @@ class _CalendarPageState extends State<CalendarPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 1,
                         children: events
-                            .map<Widget>((event) => Consumer<TagColorsModel>(
-                                  builder: (context, tags, child) =>
-                                      CircleAvatar(
+                            .map<Widget>((event) =>
+                                BlocBuilder<TagColorsCubit, List<TagColor>>(
+                                  builder: (context, state) => CircleAvatar(
                                     radius: 7,
                                     backgroundColor:
-                                        getTagColor(event as Event),
+                                        getTagColor(event as Event, state),
                                   ),
                                 ))
                             .toList()));

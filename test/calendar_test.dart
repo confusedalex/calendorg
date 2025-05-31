@@ -1,14 +1,11 @@
-import 'dart:collection';
-
 import 'package:calendorg/models/tag_model.dart';
-import 'package:calendorg/pages/calendar_page.dart';
+import 'package:calendorg/pages/calendar/calendar_page.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   final markup = """
@@ -25,53 +22,36 @@ void main() {
   final document = OrgDocument.parse(markup);
   final events = parseEvents(document);
 
+  Future<void> pumpWidgetToTester(dynamic tester) async {
+    await tester.pumpWidget(MaterialApp(
+        home: BlocProvider(
+      create: (context) =>
+          TagColorsCubit.withInitialValue([TagColor("school", Colors.orange)]),
+      child: Scaffold(body: CalendarPage(events)),
+    )));
+  }
+
   testWidgets('Calendar should show marker for every event occurance',
       (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: ChangeNotifierProvider<TagColorsModel>(
-            create: (_) => TagColorsModel(), child: CalendarPage(events)),
-      ),
-    ));
-    var consumers = find.byType(Consumer<TagColorsModel>);
+    await pumpWidgetToTester(tester);
 
-    expect(find.descendant(of: consumers, matching: find.byType(DecoratedBox)),
-        findsNWidgets(9));
+    expect(find.byType(CircleAvatar), findsNWidgets(9));
   });
 
   testWidgets('Calendar respects tag colors from model', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: ChangeNotifierProvider<TagColorsModel>(
-            create: (_) => MockTagColorsModel(), child: CalendarPage(events)),
-      ),
-    ));
+    await pumpWidgetToTester(tester);
 
     expect(
         find.byWidgetPredicate((widget) =>
-            widget is Container &&
-            widget.decoration is BoxDecoration &&
-            (widget.decoration as BoxDecoration).color == Colors.orange),
+            widget is CircleAvatar && widget.backgroundColor == Colors.orange),
         findsOneWidget);
     expect(
         find.byWidgetPredicate((widget) =>
-            widget is Container &&
-            widget.decoration is BoxDecoration &&
-            (widget.decoration as BoxDecoration).color == Colors.blue),
+            widget is CircleAvatar && widget.backgroundColor == Colors.blue),
         findsNWidgets(8));
     expect(
         find.byWidgetPredicate((widget) =>
-            widget is Container &&
-            widget.decoration is BoxDecoration &&
-            (widget.decoration as BoxDecoration).color == Colors.green),
+            widget is CircleAvatar && widget.backgroundColor == Colors.green),
         findsNothing);
   });
-}
-
-class MockTagColorsModel extends Mock implements TagColorsModel {
-  final List<TagColor> _tagColors = [TagColor("school", Colors.orange)];
-
-  @override
-  UnmodifiableListView<TagColor> get tagColorsFromPrefs =>
-      UnmodifiableListView(_tagColors);
 }
