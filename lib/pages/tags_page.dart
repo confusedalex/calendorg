@@ -64,7 +64,7 @@ class _TagsPageState extends State<TagsPage> {
           title: const Text("Tags"),
         ),
         body: BlocBuilder<TagColorsCubit, List<TagColor>>(
-            builder: (context, state) => ListView(
+            builder: (context, state) => ReorderableListView(
                 children: state
                     .map((tagColor) => ListTile(
                           key: Key(tagColor.tag),
@@ -84,7 +84,14 @@ class _TagsPageState extends State<TagsPage> {
                                 builder: (context) => tagColorEdit(tagColor));
                           },
                         ))
-                    .toList())),
+                    .toList(),
+                onReorder: (oldIndex, newIndex) {
+                  final reorderedColor = state[oldIndex];
+                  final currentList = [...state];
+                  currentList.removeAt(oldIndex);
+                  currentList.insert(newIndex, reorderedColor);
+                  context.read<TagColorsCubit>().setTagColors(currentList);
+                })),
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
               tagName = '';
