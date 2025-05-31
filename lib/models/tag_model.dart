@@ -1,54 +1,48 @@
-import 'dart:collection';
 import 'dart:convert';
-
 import 'package:calendorg/tag_color.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TagColorsModel extends ChangeNotifier {
-  final List<TagColor> _tagColors = [];
+class TagColorsCubit extends Cubit<List<TagColor>> {
   late final SharedPreferences prefs;
 
-  TagColorsModel() {
-    loadTags();
+  TagColorsCubit() : super([]);
+  TagColorsCubit.withInitialValue(super.initialState);
+
+  Future<List<TagColor>> loadTags() async {
+    prefs = await SharedPreferences.getInstance();
+    return (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
+        .map((tagColor) => TagColor.fromJson(tagColor))
+        .toList();
   }
 
-  UnmodifiableListView<TagColor> get tagColorsFromPrefs =>
-      UnmodifiableListView(_tagColors);
-
-  void loadTags() async {
-    prefs = await SharedPreferences.getInstance();
-    var tagColorsFromPrefs =
-        (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
-            .map((tagColor) => TagColor.fromJson(tagColor))
-            .toList();
-    setTagColors(tagColorsFromPrefs);
-    notifyListeners();
+  Future<void> setInitialTagColor() async {
+    emit(await loadTags());
   }
 
   void setTagColors(List<TagColor> tagColors) {
-    _tagColors.clear();
-    _tagColors.addAll(tagColors);
-    saveTagsToPrefs();
+    saveTagsToPrefs(tagColors);
   }
 
-  void saveTagsToPrefs() async {
-    prefs.setString("tagColors", jsonEncode(_tagColors));
-    notifyListeners();
+  void saveTagsToPrefs(List<TagColor> tagColors) async {
+    emit(tagColors);
+    prefs.setString("tagColors", jsonEncode(tagColors));
   }
 
   void addTagColor(TagColor tagColor) {
-    removeTagColor(tagColor.tag);
-    _tagColors.add(tagColor);
-    saveTagsToPrefs();
+    final newTagColors = [
+      ...state.where((t) => t.tag != tagColor.tag),
+      tagColor
+    ];
+    saveTagsToPrefs(newTagColors);
   }
 
   void removeTagColor(String tagName) {
-    _tagColors.removeWhere((tag) => tag.tag == tagName);
-    saveTagsToPrefs();
+    saveTagsToPrefs([...state.where((tag) => tag.tag != tagName)]);
   }
 
   Color getTagColorByName(String tagName) {
-    return _tagColors.firstWhere((tagColor) => tagColor.tag == tagName).color;
+    return state.firstWhere((tagColor) => tagColor.tag == tagName).color;
   }
 }
