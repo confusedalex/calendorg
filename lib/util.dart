@@ -6,7 +6,7 @@ List<Event> parseEvents(OrgDocument document) {
 
   document.visitSections(((section) {
     var ignoreNTimestamps = 0;
-    List<OrgGenericTimestamp> foundTimestamps = [];
+    List<OrgTimestamp> foundTimestamps = [];
 
     var headline = section.headline.rawTitle?.replaceAll(
           RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
@@ -15,7 +15,7 @@ List<Event> parseEvents(OrgDocument document) {
         '';
     var tags = section.tagsWithInheritance(document);
 
-    section.visit<OrgGenericTimestamp>((node) {
+    section.visit<OrgTimestamp>((node) {
       switch (node) {
         case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will

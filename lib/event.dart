@@ -5,7 +5,7 @@ class Event {
   String title;
   late String? description;
   List<String> tags = [];
-  List<OrgGenericTimestamp> timestamps;
+  List<OrgTimestamp> timestamps;
 
   DateTime beforeMidnight(DateTime date) => date
       .subtract(Duration(days: 1))
@@ -13,7 +13,7 @@ class Event {
   DateTime afterMidnight(DateTime date) =>
       date.add(Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
 
-  List<OrgGenericTimestamp> timestampsByDateTime(DateTime date,
+  List<OrgTimestamp> timestampsByDateTime(DateTime date,
           {bool? includeInactive = false}) =>
       timestamps
           .where((timestamp) => switch (timestamp) {

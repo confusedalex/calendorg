@@ -19,7 +19,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime? selectedDay;
   DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
-  Map<Event, List<OrgGenericTimestamp>> timestampsByEvent = {};
+  Map<Event, List<OrgTimestamp>> timestampsByEvent = {};
 
   Color getTagColor(Event event) => Provider.of<TagColorsModel>(context)
       .tagColorsFromPrefs
@@ -35,7 +35,7 @@ class _CalendarPageState extends State<CalendarPage> {
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
       });
 
-  Widget eventCard(Event event, OrgGenericTimestamp timestamp) => Card(
+  Widget eventCard(Event event, OrgTimestamp timestamp) => Card(
       child: ListTile(
           leading: Container(
             width: 30,
