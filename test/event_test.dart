@@ -5,8 +5,7 @@ import 'package:org_parser/org_parser.dart';
 void main() {
   final markup = """
 * Heading 1
-** orgmode meetup
-<2025-05-05>
+** orgmode meetup <2025-05-05>
 <2025-05-06 11:00>
 <2025-05-08 11:00-13:00>
 <2025-05-28> <2025-05-15>
