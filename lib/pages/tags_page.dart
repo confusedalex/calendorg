@@ -67,6 +67,7 @@ class _TagsPageState extends State<TagsPage> {
             builder: (context, state) => ListView(
                 children: state
                     .map((tagColor) => ListTile(
+                          key: Key(tagColor.tag),
                           title: Text(tagColor.tag),
                           trailing: Container(
                             width: 30,
