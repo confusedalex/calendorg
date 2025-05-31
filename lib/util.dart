@@ -5,6 +5,7 @@ List<Event> parseEvents(OrgDocument document) {
   List<Event> eventList = [];
 
   document.visitSections(((section) {
+    bool returnIfSectionFound = false;
     var ignoreNTimestamps = 0;
     List<OrgTimestamp> foundTimestamps = [];
 
@@ -15,8 +16,11 @@ List<Event> parseEvents(OrgDocument document) {
         '';
     var tags = section.tagsWithInheritance(document);
 
-    section.visit<OrgTimestamp>((node) {
+    section.visit((node) {
       switch (node) {
+        case OrgSection():
+          return returnIfSectionFound ? false : returnIfSectionFound = true;
+
         case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will
           // be just part of this range
