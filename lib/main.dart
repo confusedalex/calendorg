@@ -90,7 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
       CalendarView(eventList),
       SettingsPage()
     ];
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       body: pages[index],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (value) => setState(() {
@@ -120,6 +121,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
