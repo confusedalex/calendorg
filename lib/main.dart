@@ -5,7 +5,7 @@ import 'package:calendorg/event.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/calendar/calendar_view.dart';
 import 'package:calendorg/pages/event_list_page.dart';
-import 'package:calendorg/pages/settings_page.dart';
+import 'package:calendorg/pages/settings/settings_page.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
