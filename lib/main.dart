@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:calendorg/document_singelton.dart';
 import 'package:calendorg/event.dart';
+import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/calendar/calendar_page.dart';
 import 'package:calendorg/pages/event_list_page.dart';
 import 'package:calendorg/pages/settings/settings_page.dart';
-import 'package:calendorg/util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,27 +25,32 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         ),
-        home: BlocProvider(
-          create: (context) => TagColorsCubit()..setInitialTagColor(),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => TagColorsCubit()..setInitialTagColor()),
+            BlocProvider(
+              create: (context) => OrgDocumentCubit(OrgDocument.parse("")),
+            )
+          ],
           child: MyHomePage(title: "calendorg"),
         ));
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.title});
   final String title;
-  final Documentsingelton documentSingelton = Documentsingelton();
+  const MyHomePage({super.key, required this.title});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String display = "No Document loaded";
   int index = 0;
   List<Event> eventList = [];
   late File orgFile;
+  String firstRead = "loading";
 
   @override
   void initState() {
@@ -63,31 +67,31 @@ class _MyHomePageState extends State<MyHomePage> {
       var document = OrgDocument.parse(fileContent);
 
       setState(() {
-        widget.documentSingelton.setDocument(document);
-        display = fileContent;
+        BlocProvider.of<OrgDocumentCubit>(context).setDocument(document);
+        firstRead = fileContent;
       });
     }
   }
 
-  void reload() async {
-    var fileContent = await orgFile.readAsString();
-    var document = OrgDocument.parse(fileContent);
+  // void reload() async {
+  //   var fileContent = await orgFile.readAsString();
+  //   var document = OrgDocument.parse(fileContent);
 
-    setState(() {
-      widget.documentSingelton.setDocument(document);
-      display = fileContent;
-    });
+  //   setState(() {
+  //     BlocProvider.of<OrgDocumentCubit>(context).setDocument(document);
+  //     display = fileContent;
+  //   });
 
-    setState(() {
-      eventList = parseEvents(document);
-    });
-  }
+  //   setState(() {
+  //     eventList = parseEvents(document);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     final List pages = [
-      eventListPage(display),
-      CalendarPage(eventList, DateTime.now()),
+      eventListPage(firstRead),
+      CalendarPage(DateTime.now()),
       SettingsPage()
     ];
     return SafeArea(
@@ -114,7 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
-              onPressed: reload,
+              // onPressed: reload,
+              onPressed: () => print('is ja gut'),
               tooltip: 'Reload',
               child: const Icon(Icons.refresh),
             ),
