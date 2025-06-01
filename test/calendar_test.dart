@@ -1,7 +1,7 @@
+import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/calendar/calendar_page.dart';
 import 'package:calendorg/tag_color.dart';
-import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,15 +20,16 @@ void main() {
 <2025-05-27>
 """;
   final document = OrgDocument.parse(markup);
-  final events = parseEvents(document);
 
   Future<void> pumpWidgetToTester(dynamic tester) async {
     await tester.pumpWidget(MaterialApp(
         home: BlocProvider(
-      create: (context) =>
-          TagColorsCubit.withInitialValue([TagColor("school", Colors.orange)]),
-      child: Scaffold(body: CalendarPage(events, DateTime(2025, 05, 17))),
-    )));
+            create: (context) => TagColorsCubit.withInitialValue(
+                [TagColor("school", Colors.orange)]),
+            child: Scaffold(
+                body: BlocProvider<OrgDocumentCubit>(
+                    create: (context) => OrgDocumentCubit(document),
+                    child: CalendarPage(DateTime(2025, 05, 17)))))));
   }
 
   testWidgets('Calendar should show marker for every event occurance',
