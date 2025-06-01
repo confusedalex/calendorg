@@ -8,18 +8,25 @@ import 'package:table_calendar/table_calendar.dart';
 
 class CalendarView extends StatefulWidget {
   final List<Event> eventlist;
+  final DateTime initialFocusedDay;
 
-  const CalendarView(this.eventlist, {super.key});
+  const CalendarView(this.eventlist, this.initialFocusedDay, {super.key});
 
   @override
   State<CalendarView> createState() => _CalendarViewState();
 }
 
 class _CalendarViewState extends State<CalendarView> {
+  late DateTime focusedDay;
   DateTime? selectedDay;
-  DateTime focusedDay = DateTime.now();
   CalendarFormat calendarFormat = CalendarFormat.month;
   Map<Event, List<OrgTimestamp>> timestampsByEvent = {};
+
+  @override
+  void initState() {
+    super.initState();
+    focusedDay = widget.initialFocusedDay;
+  }
 
   Color getTagColor(Event event, List<TagColor> tagColors) => tagColors
       .firstWhere((tagColor) => (event).tags.contains(tagColor.tag),

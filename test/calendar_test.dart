@@ -27,7 +27,7 @@ void main() {
         home: BlocProvider(
       create: (context) =>
           TagColorsCubit.withInitialValue([TagColor("school", Colors.orange)]),
-      child: Scaffold(body: CalendarPage(events)),
+      child: Scaffold(body: CalendarPage(events, DateTime(2025, 05, 17))),
     )));
   }
 

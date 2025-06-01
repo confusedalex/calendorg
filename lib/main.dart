@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:calendorg/document_singelton.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/models/tag_model.dart';
-import 'package:calendorg/pages/calendar/calendar_view.dart';
+import 'package:calendorg/pages/calendar/calendar_page.dart';
 import 'package:calendorg/pages/event_list_page.dart';
 import 'package:calendorg/pages/settings/settings_page.dart';
 import 'package:calendorg/util.dart';
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final List pages = [
       eventListPage(display),
-      CalendarView(eventList),
+      CalendarPage(eventList, DateTime.now()),
       SettingsPage()
     ];
     return SafeArea(
