@@ -2,6 +2,7 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Event {
+  OrgSection section;
   String title;
   late String? description;
   List<String> tags = [];
@@ -27,5 +28,5 @@ class Event {
               })
           .toList();
 
-  Event(this.title, this.tags, this.timestamps, this.description);
+  Event(this.section, this.title, this.tags, this.timestamps, this.description);
 }

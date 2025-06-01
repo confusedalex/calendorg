@@ -43,7 +43,7 @@ List<Event> parseEvents(OrgDocument document) {
     });
 
     if (foundTimestamps.isNotEmpty) {
-      eventList.add(Event(headline, tags, foundTimestamps, null));
+      eventList.add(Event(section, headline, tags, foundTimestamps, null));
     }
 
     return true;
