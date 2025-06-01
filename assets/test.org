@@ -19,4 +19,4 @@
 
 * School stuff :school:
 ** History exam <2025-05-25 Sunday>
-** Math exam <2025-05-12 Sunday> :math:
+** Math exam <2025-05-06> :math:
