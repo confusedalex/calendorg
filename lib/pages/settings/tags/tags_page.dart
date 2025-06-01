@@ -15,6 +15,7 @@ class TagsPage extends StatefulWidget {
 class _TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(),
       body: BlocBuilder<TagColorsCubit, List<TagColor>>(
           builder: (_, state) => ReorderableListView(
               children: state
