@@ -1,4 +1,6 @@
+import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
+import 'package:calendorg/pages/calendar/event_view.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/event.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +70,12 @@ class _CalendarViewState extends State<CalendarView> {
                   textAlign: TextAlign.right,
                 )),
             ],
-          )));
+          ),
+          onTap: () => showDialog(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                  value: context.read<OrgDocumentCubit>(),
+                  child: EventView(event, timestamp)))));
 
   @override
   Widget build(BuildContext context) => Column(
