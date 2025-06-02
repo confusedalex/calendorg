@@ -18,7 +18,8 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
   @override
   Widget build(BuildContext context) => AlertDialog(
         title: Text("Edit \"${widget.tagColor.tag}\" Tag"),
-        content: ColorPicker(
+        content: SingleChildScrollView(
+            child: ColorPicker(
           color: widget.tagColor.color,
           onColorChanged: (Color color) => setState(() {
             selectedColor = color;
@@ -28,7 +29,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
             ColorPickerType.accent: false,
             ColorPickerType.wheel: true
           },
-        ),
+        )),
         actions: [
           TextButton(
               key: Key("edittag_deletebutton"),
