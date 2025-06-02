@@ -92,16 +92,16 @@ Future<void> main() async {
       expect(tagColorsModel.getTagColor(event),
           isSameColorAs(schoolTagColor.color));
     });
+  });
 
-    test("reordering will reorder correctly", () async {
-      final homeTagColor = TagColor("@home", Colors.green);
-      final tagColorsModel = await getTagColorsCubit();
-      tagColorsModel.addTagColor(homeTagColor);
+  test("reordering will reorder correctly", () async {
+    final homeTagColor = TagColor("@home", Colors.green);
+    final tagColorsModel = await getTagColorsCubit();
+    tagColorsModel.addTagColor(homeTagColor);
 
-      expect(tagColorsModel.state.first, schoolTagColor);
-      tagColorsModel.reorder(0, 2);
-      expect(tagColorsModel.state.first, homeTagColor);
-    });
+    expect(tagColorsModel.state.first, schoolTagColor);
+    tagColorsModel.reorder(0, 2);
+    expect(tagColorsModel.state.first, homeTagColor);
   });
 }
 
