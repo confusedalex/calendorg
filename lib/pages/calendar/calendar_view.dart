@@ -1,6 +1,5 @@
-import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
-import 'package:calendorg/pages/calendar/event_view.dart';
+import 'package:calendorg/pages/calendar/event_card.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/event.dart';
 import 'package:flutter/material.dart';
@@ -37,40 +36,6 @@ class CalendarViewState extends State<CalendarView> {
 
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
       });
-
-  Widget eventCard(Event event, OrgTimestamp timestamp) => Card(
-      child: ListTile(
-          leading: BlocBuilder<TagColorsCubit, List<TagColor>>(
-            builder: (context, state) => Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: getTagColor(event, state),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-          title: Text(event.title),
-          subtitle: Row(
-            children: [
-              Expanded(
-                  child: Text(
-                timestamp.toMarkup(),
-                textAlign: TextAlign.left,
-              )),
-              if (event.tags.isNotEmpty)
-                Expanded(
-                    child: Text(
-                  ":${event.tags.join(":")}:",
-                  textAlign: TextAlign.right,
-                )),
-            ],
-          ),
-          onTap: () => showDialog(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                  value: context.read<OrgDocumentCubit>(),
-                  child: EventView(event, timestamp)))));
 
   @override
   Widget build(BuildContext context) => Column(
@@ -128,7 +93,7 @@ class CalendarViewState extends State<CalendarView> {
                     (acc, cur) => [
                           ...acc,
                           ...timestampsByEvent[cur]?.map(
-                                  (timestamp) => eventCard(cur, timestamp)) ??
+                                  (timestamp) => EventCard(cur, timestamp)) ??
                               []
                         ])),
           ),
