@@ -44,4 +44,16 @@ void main() {
     expect(cubit.state, containsOnce(TagColor("test tag", Color(0xff043052))));
     expect(cubit.state, containsOnce(schoolTag));
   });
+
+  testWidgets("deleting tag works", (tester) async {
+    await pumpWidgetToTester(tester, cubit);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(Key("school")));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key("edittag_deletebutton")));
+
+    expect(cubit.state, isEmpty);
+  });
+
 }
