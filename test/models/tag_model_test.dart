@@ -26,8 +26,7 @@ Future<void> main() async {
   test("Tags will be loaded from shared preferences", () async {
     final tagColorsModel = await getTagColorsCubit();
 
-    expect(tagColorsModel.state.first.toString(),
-        equals(schoolTagColor.toString()));
+    expect(tagColorsModel.state.first, equals(schoolTagColor));
   });
 
   test("Add tag to model will add to list and save to prefs", () async {
