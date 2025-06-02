@@ -28,9 +28,11 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   }
 
   void reorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) newIndex -= 1;
     final currentList = [...state];
+    final oldTagColor = currentList[oldIndex];
     currentList.removeAt(oldIndex);
-    currentList.insert(newIndex, currentList[oldIndex]);
+    currentList.insert(newIndex, oldTagColor);
     saveTagsToPrefs(currentList);
   }
 
