@@ -30,11 +30,6 @@ class CalendarViewState extends State<CalendarView> {
     focusedDay = widget.initialFocusedDay;
   }
 
-  Color getTagColor(Event event, List<TagColor> tagColors) => tagColors
-      .firstWhere((tagColor) => (event).tags.contains(tagColor.tag),
-          orElse: () => TagColor("", Colors.blue))
-      .color;
-
   List<Event> eventsByDate(DateTime date) =>
       widget.eventlist.fold([], (acc, cur) {
         var timestampsByDate = cur.timestampsByDateTime(date);
@@ -117,8 +112,9 @@ class CalendarViewState extends State<CalendarView> {
                                 BlocBuilder<TagColorsCubit, List<TagColor>>(
                                   builder: (context, state) => CircleAvatar(
                                     radius: 7,
-                                    backgroundColor:
-                                        getTagColor(event as Event, state),
+                                    backgroundColor: context
+                                        .read<TagColorsCubit>()
+                                        .getTagColor(event as Event),
                                   ),
                                 ))
                             .toList()));
