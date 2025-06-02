@@ -8,7 +8,13 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   late final SharedPreferences prefs;
 
   TagColorsCubit() : super([]);
-  TagColorsCubit.withInitialValue(super.initialState);
+  TagColorsCubit.withInitialValue(super.initialState) {
+    loadPrefs();
+  }
+
+  Future<void> loadPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   Future<List<TagColor>> loadTags() async {
     prefs = await SharedPreferences.getInstance();
