@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final schoolTagColor = TagColor("school", Colors.orange);
+final homeTagColor = TagColor("@home", Colors.green);
 
 Future<void> main() async {
   Future<TagColorsCubit> getTagColorsCubit() async {
@@ -15,98 +16,98 @@ Future<void> main() async {
       "tagColors": jsonEncode([schoolTagColor])
     });
 
-    var tagColorsModel = TagColorsCubit()..setInitialTagColor();
+    var cubit = TagColorsCubit()..setInitialTagColor();
 
     // wait for async to finish, I don't know how to do this better :/
     await Future.delayed(Duration(milliseconds: 10));
 
-    return tagColorsModel;
+    return cubit;
   }
 
   test("Tags will be loaded from shared preferences", () async {
-    final tagColorsModel = await getTagColorsCubit();
+    final cubit = await getTagColorsCubit();
 
-    expect(tagColorsModel.state.first, equals(schoolTagColor));
+    expect(cubit.state.first, equals(schoolTagColor));
   });
 
   test("Add tag to model will add to list and save to prefs", () async {
-    final tagColorsModel = await getTagColorsCubit();
+    final cubit = await getTagColorsCubit();
     final newTag = TagColor("new green tag", Colors.green);
 
-    tagColorsModel.addTagColor(TagColor("new green tag", Colors.green));
+    cubit.addTagColor(TagColor("new green tag", Colors.green));
     var tagsColorsFromPrefs =
-        (jsonDecode(tagColorsModel.prefs.getString("tagColors") ?? "[]")
+        (jsonDecode(cubit.prefs.getString("tagColors") ?? "[]")
                 as List)
             .map((tagColor) => TagColor.fromJson(tagColor))
             .toList();
 
-    expect(tagColorsModel.state, containsAll([schoolTagColor, newTag]));
+    expect(cubit.state, containsAll([schoolTagColor, newTag]));
     expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
   });
 
   test("Adding tag with same name wont add a new tag", () async {
-    final tagColorsModel = await getTagColorsCubit();
+    final cubit = await getTagColorsCubit();
     final newSchoolTag = TagColor("school", Colors.green);
 
-    tagColorsModel.addTagColor(newSchoolTag);
+    cubit.addTagColor(newSchoolTag);
 
-    expect(tagColorsModel.state, contains(newSchoolTag));
+    expect(cubit.state, contains(newSchoolTag));
   });
 
   test("deleting tag work", () async {
-    final tagColorsModel = await getTagColorsCubit();
+    final cubit = await getTagColorsCubit();
 
-    tagColorsModel.removeTagColor(schoolTagColor.tag);
+    cubit.removeTagColor(schoolTagColor.tag);
 
-    expect(tagColorsModel.state, isEmpty);
+    expect(cubit.state, isEmpty);
   });
 
   group("getColor tests", () {
     test("Correct color for event will be returned", () async {
-      final tagColorsModel = await getTagColorsCubit();
+      final cubit = await getTagColorsCubit();
 
       var schoolEvent = FakeEvent(["school"]);
 
-      expect(tagColorsModel.getTagColor(schoolEvent),
+      expect(cubit.getTagColor(schoolEvent),
           isSameColorAs(schoolTagColor.color));
     });
 
     test("Default color gets returned, when no TagColor matches the tag",
         () async {
-      final tagColorsModel = await getTagColorsCubit();
+      final cubit = await getTagColorsCubit();
 
       var homeEvent = FakeEvent(["@home"]);
 
-      expect(tagColorsModel.getTagColor(homeEvent), isSameColorAs(Colors.blue));
+      expect(cubit.getTagColor(homeEvent), isSameColorAs(Colors.blue));
     });
 
     test(
         "When multiple matching tags, the tag closest to index 0 gets returned",
         () async {
-      final tagColorsModel = await getTagColorsCubit();
-      tagColorsModel.addTagColor(TagColor("@home", Colors.green));
+      final cubit = await getTagColorsCubit();
+      cubit.addTagColor(homeTagColor);
 
       var event = FakeEvent(["@home", "school"]);
 
-      expect(tagColorsModel.getTagColor(event),
+      expect(cubit.getTagColor(event),
           isSameColorAs(schoolTagColor.color));
     });
   });
 
   test("reordering will reorder correctly", () async {
-    final homeTagColor = TagColor("@home", Colors.green);
-    final tagColorsModel = await getTagColorsCubit();
-    tagColorsModel.addTagColor(homeTagColor);
+    final cubit = await getTagColorsCubit();
+    cubit.addTagColor(homeTagColor);
 
-    expect(tagColorsModel.state.first, schoolTagColor);
-    tagColorsModel.reorder(0, 2);
-    expect(tagColorsModel.state.first, homeTagColor);
+    expect(cubit.state.first, schoolTagColor);
+    cubit.reorder(0, 2);
+    expect(cubit.state.first, homeTagColor);
   });
 
   test("getTagColorByName will return correct color", () async {
-    final tagColorsModel = await getTagColorsCubit();
+    final cubit = await getTagColorsCubit();
 
-    expect(tagColorsModel.getTagColorByName(schoolTagColor.tag), isSameColorAs(schoolTagColor.color));
+    expect(cubit.getTagColorByName(schoolTagColor.tag),
+        isSameColorAs(schoolTagColor.color));
   });
 }
 

@@ -7,14 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final TagColor schoolTag = TagColor("school", Colors.orange);
+final TagColor schoolTagColor = TagColor("school", Colors.orange);
 
 void main() {
   late TagColorsCubit cubit;
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
-    cubit = TagColorsCubit.withInitialValue([schoolTag]);
+    cubit = TagColorsCubit.withInitialValue([schoolTagColor]);
   });
 
   Future<void> pumpWidgetToTester(dynamic tester, TagColorsCubit cubit) async {
@@ -42,7 +42,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(cubit.state, containsOnce(TagColor("test tag", Color(0xff043052))));
-    expect(cubit.state, containsOnce(schoolTag));
+    expect(cubit.state, containsOnce(schoolTagColor));
   });
 
   testWidgets("deleting tag works", (tester) async {
@@ -71,7 +71,7 @@ void main() {
     await tester.tap(find.byKey(Key("edittag_savebutton")));
     await tester.pumpAndSettle();
 
-    expect(cubit.state, isNot(contains(schoolTag)));
+    expect(cubit.state, isNot(contains(schoolTagColor)));
     expect(cubit.state, contains(TagColor("school", Color(0xff523304))));
   });
 
@@ -79,7 +79,7 @@ void main() {
     final TagColor meetupTag = TagColor("meetups", Colors.purple);
     cubit.addTagColor(meetupTag);
 
-    expect(cubit.state, containsAllInOrder([schoolTag, meetupTag]));
+    expect(cubit.state, containsAllInOrder([schoolTagColor, meetupTag]));
 
     await pumpWidgetToTester(tester, cubit);
     await tester.pumpAndSettle();
@@ -91,6 +91,6 @@ void main() {
         const Offset(0, 1000));
     await tester.pumpAndSettle();
 
-    expect(cubit.state, containsAllInOrder([meetupTag, schoolTag]));
+    expect(cubit.state, containsAllInOrder([meetupTag, schoolTagColor]));
   });
 }
