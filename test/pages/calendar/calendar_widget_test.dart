@@ -11,7 +11,10 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 
 void main() {
-  final markup = """
+  group(
+    'CalendarWidget',
+    () {
+      final markup = """
 * Heading 1
 ** orgmode meetup
 <2025-05-05>
@@ -22,69 +25,74 @@ void main() {
 ** School :school:
 <2025-05-27>
 """;
-  final document = OrgDocument.parse(markup);
+      final document = OrgDocument.parse(markup);
 
-  Future<void> pumpWidgetToTester(dynamic tester) async {
-    await tester.pumpWidget(MaterialApp(
-        home: BlocProvider(
-            create: (context) => TagColorsCubit.withInitialValue(
-                [TagColor("school", Colors.orange)]),
-            child: Scaffold(
-                body: BlocProvider<OrgDocumentCubit>(
-                    create: (context) => OrgDocumentCubit(document),
-                    child: CalendarPage(DateTime(2025, 05, 17)))))));
-  }
+      Future<void> pumpWidgetToTester(dynamic tester) async {
+        await tester.pumpWidget(MaterialApp(
+            home: BlocProvider(
+                create: (context) => TagColorsCubit.withInitialValue(
+                    [TagColor("school", Colors.orange)]),
+                child: Scaffold(
+                    body: BlocProvider<OrgDocumentCubit>(
+                        create: (context) => OrgDocumentCubit(document),
+                        child: CalendarPage(DateTime(2025, 05, 17)))))));
+      }
 
-  testWidgets('Calendar should show marker for every event occurance',
-      (tester) async {
-    await pumpWidgetToTester(tester);
+      testWidgets('Calendar should show marker for every event occurance',
+          (tester) async {
+        await pumpWidgetToTester(tester);
 
-    expect(find.byType(CircleAvatar), findsNWidgets(9));
-  });
+        expect(find.byType(CircleAvatar), findsNWidgets(9));
+      });
 
-  testWidgets('Calendar respects tag colors from model', (tester) async {
-    await pumpWidgetToTester(tester);
+      testWidgets('Calendar respects tag colors from model', (tester) async {
+        await pumpWidgetToTester(tester);
 
-    expect(
-        find.byWidgetPredicate((widget) =>
-            widget is CircleAvatar && widget.backgroundColor == Colors.orange),
-        findsOneWidget);
-    expect(
-        find.byWidgetPredicate((widget) =>
-            widget is CircleAvatar && widget.backgroundColor == Colors.blue),
-        findsNWidgets(8));
-    expect(
-        find.byWidgetPredicate((widget) =>
-            widget is CircleAvatar && widget.backgroundColor == Colors.green),
-        findsNothing);
-  });
+        expect(
+            find.byWidgetPredicate((widget) =>
+                widget is CircleAvatar &&
+                widget.backgroundColor == Colors.orange),
+            findsOneWidget);
+        expect(
+            find.byWidgetPredicate((widget) =>
+                widget is CircleAvatar &&
+                widget.backgroundColor == Colors.blue),
+            findsNWidgets(8));
+        expect(
+            find.byWidgetPredicate((widget) =>
+                widget is CircleAvatar &&
+                widget.backgroundColor == Colors.green),
+            findsNothing);
+      });
 
-  testWidgets("Date will change", (tester) async {
-    await pumpWidgetToTester(tester);
+      testWidgets("Date will change", (tester) async {
+        await pumpWidgetToTester(tester);
 
-    await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-    final CalendarViewState state = tester.state(find.byType(CalendarView));
-    expect(isSameDay(state.focusedDay, DateTime(2025, 05, 17)), isTrue);
-    await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
-    expect(isSameDay(state.focusedDay, DateTime(2025, 05, 16)), isTrue);
-  });
+        final CalendarViewState state = tester.state(find.byType(CalendarView));
+        expect(isSameDay(state.focusedDay, DateTime(2025, 05, 17)), isTrue);
+        await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
+        expect(isSameDay(state.focusedDay, DateTime(2025, 05, 16)), isTrue);
+      });
 
-  testWidgets("CalendarFormat change does work", (tester) async {
-    await pumpWidgetToTester(tester);
+      testWidgets("CalendarFormat change does work", (tester) async {
+        await pumpWidgetToTester(tester);
 
-    await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-    final CalendarViewState state = tester.state(find.byType(CalendarView));
-    expect(state.calendarFormat, CalendarFormat.month);
-    await tester.tap(find.byType(FormatButton));
-    await tester.pumpAndSettle();
-    expect(state.calendarFormat, CalendarFormat.twoWeeks);
-    await tester.tap(find.byType(FormatButton));
-    await tester.pumpAndSettle();
-    expect(state.calendarFormat, CalendarFormat.week);
-    await tester.tap(find.byType(FormatButton));
-    await tester.pumpAndSettle();
-    expect(state.calendarFormat, CalendarFormat.month);
-  });
+        final CalendarViewState state = tester.state(find.byType(CalendarView));
+        expect(state.calendarFormat, CalendarFormat.month);
+        await tester.tap(find.byType(FormatButton));
+        await tester.pumpAndSettle();
+        expect(state.calendarFormat, CalendarFormat.twoWeeks);
+        await tester.tap(find.byType(FormatButton));
+        await tester.pumpAndSettle();
+        expect(state.calendarFormat, CalendarFormat.week);
+        await tester.tap(find.byType(FormatButton));
+        await tester.pumpAndSettle();
+        expect(state.calendarFormat, CalendarFormat.month);
+      });
+    },
+  );
 }

@@ -15,12 +15,16 @@ void main() {
   final document = OrgDocument.parse(markup);
   final events = parseEvents(document);
   final event = events.first;
+  group(
+    'Util',
+    () {
+      test("Events lenth should be 1", () {
+        expect(events.length, 1);
+      });
 
-  test("Events lenth should be 1", () {
-    expect(events.length, 1);
-  });
-
-  test("6 OrgNodes expected in event", () {
-    expect(event.timestamps.length, 6);
-  });
+      test("6 OrgNodes expected in event", () {
+        expect(event.timestamps.length, 6);
+      });
+    },
+  );
 }

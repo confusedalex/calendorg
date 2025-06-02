@@ -24,91 +24,94 @@ Future<void> main() async {
     return cubit;
   }
 
-  test("Tags will be loaded from shared preferences", () async {
-    final cubit = await getTagColorsCubit();
+  group(
+    'TagModel',
+    () {
+      test("Tags will be loaded from shared preferences", () async {
+        final cubit = await getTagColorsCubit();
 
-    expect(cubit.state.first, equals(schoolTagColor));
-  });
+        expect(cubit.state.first, equals(schoolTagColor));
+      });
 
-  test("Add tag to model will add to list and save to prefs", () async {
-    final cubit = await getTagColorsCubit();
-    final newTag = TagColor("new green tag", Colors.green);
+      test("Add tag to model will add to list and save to prefs", () async {
+        final cubit = await getTagColorsCubit();
+        final newTag = TagColor("new green tag", Colors.green);
 
-    cubit.addTagColor(TagColor("new green tag", Colors.green));
-    var tagsColorsFromPrefs =
-        (jsonDecode(cubit.prefs.getString("tagColors") ?? "[]")
-                as List)
-            .map((tagColor) => TagColor.fromJson(tagColor))
-            .toList();
+        cubit.addTagColor(TagColor("new green tag", Colors.green));
+        var tagsColorsFromPrefs =
+            (jsonDecode(cubit.prefs.getString("tagColors") ?? "[]") as List)
+                .map((tagColor) => TagColor.fromJson(tagColor))
+                .toList();
 
-    expect(cubit.state, containsAll([schoolTagColor, newTag]));
-    expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
-  });
+        expect(cubit.state, containsAll([schoolTagColor, newTag]));
+        expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
+      });
 
-  test("Adding tag with same name wont add a new tag", () async {
-    final cubit = await getTagColorsCubit();
-    final newSchoolTag = TagColor("school", Colors.green);
+      test("Adding tag with same name wont add a new tag", () async {
+        final cubit = await getTagColorsCubit();
+        final newSchoolTag = TagColor("school", Colors.green);
 
-    cubit.addTagColor(newSchoolTag);
+        cubit.addTagColor(newSchoolTag);
 
-    expect(cubit.state, contains(newSchoolTag));
-  });
+        expect(cubit.state, contains(newSchoolTag));
+      });
 
-  test("deleting tag work", () async {
-    final cubit = await getTagColorsCubit();
+      test("deleting tag work", () async {
+        final cubit = await getTagColorsCubit();
 
-    cubit.removeTagColor(schoolTagColor.tag);
+        cubit.removeTagColor(schoolTagColor.tag);
 
-    expect(cubit.state, isEmpty);
-  });
+        expect(cubit.state, isEmpty);
+      });
 
-  group("getColor tests", () {
-    test("Correct color for event will be returned", () async {
-      final cubit = await getTagColorsCubit();
+      group("getColor tests", () {
+        test("Correct color for event will be returned", () async {
+          final cubit = await getTagColorsCubit();
 
-      var schoolEvent = FakeEvent(["school"]);
+          var schoolEvent = FakeEvent(["school"]);
 
-      expect(cubit.getTagColor(schoolEvent),
-          isSameColorAs(schoolTagColor.color));
-    });
+          expect(cubit.getTagColor(schoolEvent),
+              isSameColorAs(schoolTagColor.color));
+        });
 
-    test("Default color gets returned, when no TagColor matches the tag",
-        () async {
-      final cubit = await getTagColorsCubit();
+        test("Default color gets returned, when no TagColor matches the tag",
+            () async {
+          final cubit = await getTagColorsCubit();
 
-      var homeEvent = FakeEvent(["@home"]);
+          var homeEvent = FakeEvent(["@home"]);
 
-      expect(cubit.getTagColor(homeEvent), isSameColorAs(Colors.blue));
-    });
+          expect(cubit.getTagColor(homeEvent), isSameColorAs(Colors.blue));
+        });
 
-    test(
-        "When multiple matching tags, the tag closest to index 0 gets returned",
-        () async {
-      final cubit = await getTagColorsCubit();
-      cubit.addTagColor(homeTagColor);
+        test(
+            "When multiple matching tags, the tag closest to index 0 gets returned",
+            () async {
+          final cubit = await getTagColorsCubit();
+          cubit.addTagColor(homeTagColor);
 
-      var event = FakeEvent(["@home", "school"]);
+          var event = FakeEvent(["@home", "school"]);
 
-      expect(cubit.getTagColor(event),
-          isSameColorAs(schoolTagColor.color));
-    });
-  });
+          expect(cubit.getTagColor(event), isSameColorAs(schoolTagColor.color));
+        });
+      });
 
-  test("reordering will reorder correctly", () async {
-    final cubit = await getTagColorsCubit();
-    cubit.addTagColor(homeTagColor);
+      test("reordering will reorder correctly", () async {
+        final cubit = await getTagColorsCubit();
+        cubit.addTagColor(homeTagColor);
 
-    expect(cubit.state.first, schoolTagColor);
-    cubit.reorder(0, 2);
-    expect(cubit.state.first, homeTagColor);
-  });
+        expect(cubit.state.first, schoolTagColor);
+        cubit.reorder(0, 2);
+        expect(cubit.state.first, homeTagColor);
+      });
 
-  test("getTagColorByName will return correct color", () async {
-    final cubit = await getTagColorsCubit();
+      test("getTagColorByName will return correct color", () async {
+        final cubit = await getTagColorsCubit();
 
-    expect(cubit.getTagColorByName(schoolTagColor.tag),
-        isSameColorAs(schoolTagColor.color));
-  });
+        expect(cubit.getTagColorByName(schoolTagColor.tag),
+            isSameColorAs(schoolTagColor.color));
+      });
+    },
+  );
 }
 
 class FakeEvent extends Fake implements Event {
