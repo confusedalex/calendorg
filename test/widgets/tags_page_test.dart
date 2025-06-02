@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/settings/tags/tags_page.dart';
 import 'package:calendorg/tag_color.dart';
@@ -12,18 +10,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 final TagColor schoolTag = TagColor("school", Colors.orange);
 
 void main() {
-  SharedPreferences.setMockInitialValues({});
+  late final TagColorsCubit cubit;
 
-  var cubit = TagColorsCubit.withInitialValue([schoolTag]);
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    cubit = TagColorsCubit.withInitialValue([schoolTag]);
+  });
 
-  Future<void> pumpWidgetToTester(dynamic tester) async {
+  Future<void> pumpWidgetToTester(dynamic tester, TagColorsCubit cubit) async {
     await tester.pumpWidget(MaterialApp(
         home: BlocProvider(
             create: (context) => cubit, child: Scaffold(body: TagsPage()))));
   }
 
   testWidgets("creating tag works", (tester) async {
-    await pumpWidgetToTester(tester);
+    await pumpWidgetToTester(tester, cubit);
     await tester.pumpAndSettle();
 
     expect(find.byType(FloatingActionButton), findsOneWidget);
