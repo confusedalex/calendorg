@@ -18,25 +18,29 @@ class _NewTagColorDialogState extends State<NewTagColorDialog> {
   @override
   Widget build(BuildContext context) => AlertDialog(
         title: Text("Add new Tag"),
-        content: ListView(
-          children: [
-            TextField(
-                onChanged: (value) => setState(() {
-                      name = value;
-                    })),
-            Divider(),
-            ColorPicker(
-              color: selectedColor,
-              onColorChanged: (Color color) => setState(() {
-                selectedColor = color;
-              }),
-              pickersEnabled: <ColorPickerType, bool>{
-                ColorPickerType.primary: false,
-                ColorPickerType.accent: false,
-                ColorPickerType.wheel: true
-              },
-            )
-          ],
+        content: SizedBox(
+          height: 400,
+          width: 400,
+          child: ListView(
+            children: [
+              TextField(
+                  onChanged: (value) => setState(() {
+                        name = value;
+                      })),
+              Divider(),
+              ColorPicker(
+                color: selectedColor,
+                onColorChanged: (Color color) => setState(() {
+                  selectedColor = color;
+                }),
+                pickersEnabled: <ColorPickerType, bool>{
+                  ColorPickerType.primary: false,
+                  ColorPickerType.accent: false,
+                  ColorPickerType.wheel: true
+                },
+              )
+            ],
+          ),
         ),
         actions: [
           TextButton(
