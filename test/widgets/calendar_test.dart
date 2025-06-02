@@ -1,11 +1,13 @@
 import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/calendar/calendar_page.dart';
+import 'package:calendorg/pages/calendar/calendar_view.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 void main() {
   final markup = """
@@ -54,5 +56,16 @@ void main() {
         find.byWidgetPredicate((widget) =>
             widget is CircleAvatar && widget.backgroundColor == Colors.green),
         findsNothing);
+  });
+
+  testWidgets("Date will change", (tester) async {
+    await pumpWidgetToTester(tester);
+
+    await tester.pumpAndSettle();
+
+    final CalendarViewState state = tester.state(find.byType(CalendarView));
+    expect(isSameDay(state.focusedDay, DateTime(2025, 05, 17)), isTrue);
+    await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
+    expect(isSameDay(state.focusedDay, DateTime(2025, 05, 16)), isTrue);
   });
 }
