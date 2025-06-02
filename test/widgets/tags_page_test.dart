@@ -74,4 +74,23 @@ void main() {
     expect(cubit.state, isNot(contains(schoolTag)));
     expect(cubit.state, contains(TagColor("school", Color(0xff523304))));
   });
+
+  testWidgets("Moving tags word", (tester) async {
+    final TagColor meetupTag = TagColor("meetups", Colors.purple);
+    cubit.addTagColor(meetupTag);
+
+    expect(cubit.state, containsAllInOrder([schoolTag, meetupTag]));
+
+    await pumpWidgetToTester(tester, cubit);
+    await tester.pumpAndSettle();
+
+    await tester.drag(
+        find.descendant(
+            of: find.byKey(Key("school")),
+            matching: find.byType(ReorderableDragStartListener)),
+        const Offset(0, 1000));
+    await tester.pumpAndSettle();
+
+    expect(cubit.state, containsAllInOrder([meetupTag, schoolTag]));
+  });
 }
