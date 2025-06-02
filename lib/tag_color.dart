@@ -24,4 +24,9 @@ class TagColor {
     if (other is! TagColor) return false;
     return tag == other.tag && color.value32bit == other.color.value32bit;
   }
+  
+  @override
+  String toString() {
+    return "TagColor(tag: $tag, color: $color)";
+  }
 }
