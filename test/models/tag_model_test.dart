@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:calendorg/event.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:flutter/material.dart';
@@ -60,4 +61,53 @@ Future<void> main() async {
 
     expect(tagColorsModel.state, isEmpty);
   });
+
+  group("getColor tests", () {
+    test("Correct color for event will be returned", () async {
+      final tagColorsModel = await getTagColorsCubit();
+
+      var schoolEvent = FakeEvent(["school"]);
+
+      expect(tagColorsModel.getTagColor(schoolEvent),
+          isSameColorAs(schoolTagColor.color));
+    });
+
+    test("Default color gets returned, when no TagColor matches the tag",
+        () async {
+      final tagColorsModel = await getTagColorsCubit();
+
+      var homeEvent = FakeEvent(["@home"]);
+
+      expect(tagColorsModel.getTagColor(homeEvent), isSameColorAs(Colors.blue));
+    });
+
+    test(
+        "When multiple matching tags, the tag closest to index 0 gets returned",
+        () async {
+      final tagColorsModel = await getTagColorsCubit();
+      tagColorsModel.addTagColor(TagColor("@home", Colors.green));
+
+      var event = FakeEvent(["@home", "school"]);
+
+      expect(tagColorsModel.getTagColor(event),
+          isSameColorAs(schoolTagColor.color));
+    });
+
+    test("reordering will reorder correctly", () async {
+      final homeTagColor = TagColor("@home", Colors.green);
+      final tagColorsModel = await getTagColorsCubit();
+      tagColorsModel.addTagColor(homeTagColor);
+
+      expect(tagColorsModel.state.first, schoolTagColor);
+      tagColorsModel.reorder(0, 2);
+      expect(tagColorsModel.state.first, homeTagColor);
+    });
+  });
+}
+
+class FakeEvent extends Fake implements Event {
+  @override
+  List<String> tags;
+
+  FakeEvent(this.tags);
 }
