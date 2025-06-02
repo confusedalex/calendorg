@@ -102,6 +102,12 @@ Future<void> main() async {
     tagColorsModel.reorder(0, 2);
     expect(tagColorsModel.state.first, homeTagColor);
   });
+
+  test("getTagColorByName will return correct color", () async {
+    final tagColorsModel = await getTagColorsCubit();
+
+    expect(tagColorsModel.getTagColorByName(schoolTagColor.tag), isSameColorAs(schoolTagColor.color));
+  });
 }
 
 class FakeEvent extends Fake implements Event {
