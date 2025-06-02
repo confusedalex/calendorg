@@ -27,8 +27,11 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
     emit(await loadTags());
   }
 
-  void setTagColors(List<TagColor> tagColors) {
-    saveTagsToPrefs(tagColors);
+  void reorder(int oldIndex, int newIndex) {
+    final currentList = [...state];
+    currentList.removeAt(oldIndex);
+    currentList.insert(newIndex, currentList[oldIndex]);
+    saveTagsToPrefs(currentList);
   }
 
   void saveTagsToPrefs(List<TagColor> tagColors) async {

@@ -15,7 +15,7 @@ class TagsPage extends StatefulWidget {
 class _TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(),
+      appBar: AppBar(),
       body: BlocBuilder<TagColorsCubit, List<TagColor>>(
           builder: (_, state) => ReorderableListView(
               children: state
@@ -40,13 +40,8 @@ class _TagsPageState extends State<TagsPage> {
                         },
                       ))
                   .toList(),
-              onReorder: (oldIndex, newIndex) {
-                final reorderedColor = state[oldIndex];
-                final currentList = [...state];
-                currentList.removeAt(oldIndex);
-                currentList.insert(newIndex, reorderedColor);
-                context.read<TagColorsCubit>().setTagColors(currentList);
-              })),
+              onReorder: (oldIndex, newIndex) =>
+                  context.read<TagColorsCubit>().reorder(oldIndex, newIndex))),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             showDialog(
