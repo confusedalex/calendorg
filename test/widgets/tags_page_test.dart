@@ -56,4 +56,22 @@ void main() {
     expect(cubit.state, isEmpty);
   });
 
+  testWidgets("changing tag color works", (tester) async {
+    await pumpWidgetToTester(tester, cubit);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(Key("school")));
+    await tester.pumpAndSettle();
+
+    final Offset center = tester.getCenter(find.byType(ColorWheelPicker));
+    await tester.timedDragFrom(
+        center, const Offset(50, 20), const Duration(milliseconds: 100));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(Key("edittag_savebutton")));
+    await tester.pumpAndSettle();
+
+    expect(cubit.state, isNot(contains(schoolTag)));
+    expect(cubit.state, contains(TagColor("school", Color(0xff523304))));
+  });
 }
