@@ -40,6 +40,7 @@ class _NewTagColorDialogState extends State<NewTagColorDialog> {
         ),
         actions: [
           TextButton(
+              key: Key("newtag_savebutton"),
               onPressed: () {
                 context
                     .read<TagColorsCubit>()

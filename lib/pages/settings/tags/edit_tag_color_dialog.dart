@@ -31,6 +31,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
         ),
         actions: [
           TextButton(
+              key: Key("edittag_deletebutton"),
               onPressed: () {
                 context
                     .read<TagColorsCubit>()
@@ -39,6 +40,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
               },
               child: Text("delete")),
           TextButton(
+              key: Key("edittag_savebutton"),
               onPressed: () {
                 context
                     .read<TagColorsCubit>()
