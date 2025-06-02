@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:table_calendar/src/widgets/format_button.dart';
 
 void main() {
   final markup = """
@@ -67,5 +68,23 @@ void main() {
     expect(isSameDay(state.focusedDay, DateTime(2025, 05, 17)), isTrue);
     await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
     expect(isSameDay(state.focusedDay, DateTime(2025, 05, 16)), isTrue);
+  });
+
+  testWidgets("CalendarFormat change does work", (tester) async {
+    await pumpWidgetToTester(tester);
+
+    await tester.pumpAndSettle();
+
+    final CalendarViewState state = tester.state(find.byType(CalendarView));
+    expect(state.calendarFormat, CalendarFormat.month);
+    await tester.tap(find.byType(FormatButton));
+    await tester.pumpAndSettle();
+    expect(state.calendarFormat, CalendarFormat.twoWeeks);
+    await tester.tap(find.byType(FormatButton));
+    await tester.pumpAndSettle();
+    expect(state.calendarFormat, CalendarFormat.week);
+    await tester.tap(find.byType(FormatButton));
+    await tester.pumpAndSettle();
+    expect(state.calendarFormat, CalendarFormat.month);
   });
 }
