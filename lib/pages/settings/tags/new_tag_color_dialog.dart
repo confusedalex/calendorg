@@ -18,7 +18,7 @@ class _NewTagColorDialogState extends State<NewTagColorDialog> {
   @override
   Widget build(BuildContext context) => AlertDialog(
         title: Text("Add new Tag"),
-        content: Column(
+        content: ListView(
           children: [
             TextField(
                 onChanged: (value) => setState(() {
