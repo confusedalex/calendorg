@@ -13,7 +13,6 @@ class EditTagColorDialog extends StatefulWidget {
 }
 
 class _EditTagColorDialogState extends State<EditTagColorDialog> {
-  String tagName = "";
   Color selectedColor = Color(0x00000000);
 
   @override
@@ -43,7 +42,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
               onPressed: () {
                 context
                     .read<TagColorsCubit>()
-                    .addTagColor(TagColor(tagName, selectedColor));
+                    .addTagColor(TagColor(widget.tagColor.tag, selectedColor));
                 Navigator.of(context).pop();
               },
               child: Text("save"))
