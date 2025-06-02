@@ -25,12 +25,11 @@ void main() {
   final document = OrgDocument.parse(markup);
   final event = parseEvents(document).first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
-  group(
-    'EventCard',
-    () {
-      testWidgets(
-        'EventCard displays correct TagColor',
-        (tester) async {
+  group('EventCard', () {
+    group(
+      'EventCard displays correct information',
+      () {
+        Future<void> initWidget(dynamic tester) async {
           await tester.pumpWidget(MaterialApp(
               home: Scaffold(
             body: BlocProvider<TagColorsCubit>(
@@ -41,17 +40,35 @@ void main() {
           )));
 
           await tester.pumpAndSettle();
+        }
 
-          final container = tester.widget<Container>(find.byWidgetPredicate(
-              (widget) =>
-                  widget is Container &&
-                  widget.decoration != null &&
-                  widget.decoration is BoxDecoration));
+        testWidgets(
+          'EventCard displays correct TagColor',
+          (tester) async {
+            await initWidget(tester);
 
-          expect((container.decoration as BoxDecoration).color,
-              isSameColorAs(meetupTagColor.color));
-        },
-      );
-    },
-  );
+            final container = tester.widget<Container>(find.byWidgetPredicate(
+                (widget) =>
+                    widget is Container &&
+                    widget.decoration != null &&
+                    widget.decoration is BoxDecoration));
+
+            expect((container.decoration as BoxDecoration).color,
+                isSameColorAs(meetupTagColor.color));
+          },
+        );
+        testWidgets("EventCard display correct title", (tester) async {
+          await initWidget(tester);
+
+          expect(find.text(event.title), findsOneWidget);
+        });
+
+        testWidgets("EventCard display correct time", (tester) async {
+          await initWidget(tester);
+
+          expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
+        });
+      },
+    );
+  });
 }
