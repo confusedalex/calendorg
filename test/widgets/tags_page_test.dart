@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final TagColor schoolTag = TagColor("school", Colors.orange);
 
 void main() {
-  late final TagColorsCubit cubit;
+  late TagColorsCubit cubit;
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
