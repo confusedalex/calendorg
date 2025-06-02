@@ -43,3 +43,5 @@ app.*.map.json
 
 # direnv
 .direnv
+
+coverage
