@@ -15,10 +15,10 @@ class CalendarView extends StatefulWidget {
   const CalendarView(this.eventlist, this.initialFocusedDay, {super.key});
 
   @override
-  State<CalendarView> createState() => _CalendarViewState();
+  State<CalendarView> createState() => CalendarViewState();
 }
 
-class _CalendarViewState extends State<CalendarView> {
+class CalendarViewState extends State<CalendarView> {
   late DateTime focusedDay;
   DateTime? selectedDay;
   CalendarFormat calendarFormat = CalendarFormat.month;
