@@ -73,20 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // void reload() async {
-  //   var fileContent = await orgFile.readAsString();
-  //   var document = OrgDocument.parse(fileContent);
-
-  //   setState(() {
-  //     BlocProvider.of<OrgDocumentCubit>(context).setDocument(document);
-  //     display = fileContent;
-  //   });
-
-  //   setState(() {
-  //     eventList = parseEvents(document);
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     final List pages = [
