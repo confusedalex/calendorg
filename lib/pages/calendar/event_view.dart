@@ -1,5 +1,6 @@
 import 'package:calendorg/event.dart';
 import 'package:calendorg/models/document_model.dart';
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
@@ -33,22 +34,9 @@ class _EventViewState extends State<EventView> {
         actions: [
           TextButton(
               onPressed: () {
-                var oldSection = widget.event.section;
-                var newSection = oldSection.copyWith(
-                    headline: oldSection.headline
-                        .copyWith(title: OrgContent([OrgPlainText(newTitle)])));
-
-                var newDoc = context
-                    .read<OrgDocumentCubit>()
-                    .state
-                    .edit()
-                    .find(oldSection)!
-                    .replace(newSection)
-                    .commit();
-
-                context
-                    .read<OrgDocumentCubit>()
-                    .setDocument(OrgDocument.parse(newDoc.toMarkup()));
+                var oldNode = widget.event.section;
+                context.read<OrgDocumentCubit>().replaceNode(
+                    oldNode, changeSectionTitle(oldNode, newTitle));
               },
               child: Text("save"))
         ],
