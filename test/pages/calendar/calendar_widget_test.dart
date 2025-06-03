@@ -19,30 +19,36 @@ void main() {
 ** orgmode meetup
 <2025-05-05>
 <2025-05-06 11:00>
-<2025-05-08 11:00-13:00>
-<2025-05-28> <2025-05-15>
 <2025-05-01>--<2025-05-03>
 ** School :school:
 <2025-05-27>
+<2025-05-05>
+<2025-05-08 11:00-13:00>
+* Home "@home:
+<2025-05-08 11:00-13:00>
+<2025-05-28> <2025-05-15>
 """;
       final document = OrgDocument.parse(markup);
+      final schoolTagColor = TagColor("school", Colors.orange);
+      final homeTagColor = TagColor("@home", Colors.lightGreen);
+      final workTagColor = TagColor("@work", Colors.yellow);
 
       Future<void> pumpWidgetToTester(dynamic tester) async {
         await tester.pumpWidget(MaterialApp(
             home: BlocProvider(
                 create: (context) => TagColorsCubit.withInitialValue(
-                    [TagColor("school", Colors.orange)]),
+                    [schoolTagColor, homeTagColor, workTagColor]),
                 child: Scaffold(
                     body: BlocProvider<OrgDocumentCubit>(
                         create: (context) => OrgDocumentCubit(document),
                         child: CalendarPage(DateTime(2025, 05, 17)))))));
       }
 
-      testWidgets('Calendar should show marker for every event occurance',
+      testWidgets('Calendar should show marker for every tag occurance at day',
           (tester) async {
         await pumpWidgetToTester(tester);
 
-        expect(find.byType(CircleAvatar), findsNWidgets(9));
+        expect(find.byType(CircleAvatar), findsNWidgets(10));
       });
 
       testWidgets('Calendar respects tag colors from model', (tester) async {
