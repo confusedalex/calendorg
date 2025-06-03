@@ -51,3 +51,9 @@ List<Event> parseEvents(OrgDocument document) {
 
   return eventList;
 }
+
+OrgSection changeSectionTitle(OrgSection section, String title) =>
+    section.copyWith(
+        headline: section.headline.fromChildren([
+      OrgContent([OrgPlainText(title)])
+    ]));
