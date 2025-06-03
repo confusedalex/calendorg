@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:calendorg/event.dart';
+import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/pages/calendar/event_card.dart';
+import 'package:calendorg/pages/calendar/event_view.dart';
 import 'package:calendorg/tag_color.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
@@ -25,23 +27,23 @@ void main() {
   final document = OrgDocument.parse(markup);
   final event = parseEvents(document).first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
+
+  Future<void> initWidget(dynamic tester) async {
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+      body: BlocProvider<TagColorsCubit>(
+        create: (context) => TagColorsCubit.withInitialValue([meetupTagColor]),
+        child: EventCard(event, event.timestamps.first),
+      ),
+    )));
+
+    await tester.pumpAndSettle();
+  }
+
   group('EventCard', () {
     group(
       'EventCard displays correct information',
       () {
-        Future<void> initWidget(dynamic tester) async {
-          await tester.pumpWidget(MaterialApp(
-              home: Scaffold(
-            body: BlocProvider<TagColorsCubit>(
-              create: (context) =>
-                  TagColorsCubit.withInitialValue([meetupTagColor]),
-              child: EventCard(event, event.timestamps.first),
-            ),
-          )));
-
-          await tester.pumpAndSettle();
-        }
-
         testWidgets(
           'EventCard displays correct TagColor',
           (tester) async {
@@ -70,5 +72,30 @@ void main() {
         });
       },
     );
+    testWidgets("EventCard tap will open EventView", (tester) async {
+      await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) => TagColorsCubit.withInitialValue(
+                      [meetupTagColor],
+                    )),
+            BlocProvider(
+              create: (context) => OrgDocumentCubit(document),
+            )
+          ],
+          child: EventCard(event, event.timestamps.first),
+        ),
+      )));
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(EventCard));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EventView), findsOneWidget);
+    });
   });
 }
