@@ -37,6 +37,18 @@ class CalendarViewState extends State<CalendarView> {
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
       });
 
+  List<Widget> eventMarker(List<Event> events) => events
+      .fold(
+          [],
+          (acc, cur) =>
+              acc.contains(context.read<TagColorsCubit>().getTagColor(cur))
+                  ? acc
+                  : [...acc, context.read<TagColorsCubit>().getTagColor(cur)])
+      .map((color) => BlocBuilder<TagColorsCubit, List<TagColor>>(
+          builder: (context, state) =>
+              CircleAvatar(radius: 7, backgroundColor: color)))
+      .toList();
+
   @override
   Widget build(BuildContext context) => Column(
         children: [
@@ -72,17 +84,7 @@ class CalendarViewState extends State<CalendarView> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 1,
-                        children: events
-                            .map<Widget>((event) =>
-                                BlocBuilder<TagColorsCubit, List<TagColor>>(
-                                  builder: (context, state) => CircleAvatar(
-                                    radius: 7,
-                                    backgroundColor: context
-                                        .read<TagColorsCubit>()
-                                        .getTagColor(event as Event),
-                                  ),
-                                ))
-                            .toList()));
+                        children: eventMarker(events as List<Event>)));
               },
             ),
           ),
