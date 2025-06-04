@@ -18,13 +18,16 @@ void main() {
 * Heading 1
 ** orgmode meetup
 <2025-05-05>
+<2025-05-05>
 <2025-05-06 11:00>
 <2025-05-01>--<2025-05-03>
 ** School :school:
 <2025-05-27>
+<2025-05-27>
 <2025-05-05>
 <2025-05-08 11:00-13:00>
-* Home "@home:
+* Home :@home:
+<2025-05-08 11:00-13:00>
 <2025-05-08 11:00-13:00>
 <2025-05-28> <2025-05-15>
 """;
@@ -48,7 +51,7 @@ void main() {
           (tester) async {
         await pumpWidgetToTester(tester);
 
-        expect(find.byType(CircleAvatar), findsNWidgets(10));
+        expect(find.byType(CircleAvatar), findsNWidgets(11));
       });
 
       testWidgets('Calendar respects tag colors from model', (tester) async {
@@ -58,12 +61,18 @@ void main() {
             find.byWidgetPredicate((widget) =>
                 widget is CircleAvatar &&
                 widget.backgroundColor == Colors.orange),
-            findsOneWidget);
+            findsNWidgets(3));
         expect(
             find.byWidgetPredicate((widget) =>
                 widget is CircleAvatar &&
                 widget.backgroundColor == Colors.blue),
-            findsNWidgets(8));
+            findsNWidgets(5));
+        expect(
+            find.byWidgetPredicate((widget) =>
+                widget is CircleAvatar &&
+                widget.backgroundColor == Colors.lightGreen),
+            findsNWidgets(3));
+
         expect(
             find.byWidgetPredicate((widget) =>
                 widget is CircleAvatar &&
