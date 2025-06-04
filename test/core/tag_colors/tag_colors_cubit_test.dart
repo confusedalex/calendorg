@@ -38,7 +38,7 @@ Future<void> main() async {
         final newTag = TagColor("new green tag", Colors.green);
 
         cubit.addTagColor(TagColor("new green tag", Colors.green));
-        var tagsColorsFromPrefs =
+        final tagsColorsFromPrefs =
             (jsonDecode(cubit.prefs.getString("tagColors") ?? "[]") as List)
                 .map((tagColor) => TagColor.fromJson(tagColor))
                 .toList();
@@ -68,7 +68,7 @@ Future<void> main() async {
         test("Correct color for event will be returned", () async {
           final cubit = await getTagColorsCubit();
 
-          var schoolEvent = FakeEvent(["school"]);
+          final schoolEvent = FakeEvent(["school"]);
 
           expect(cubit.getTagColor(schoolEvent),
               isSameColorAs(schoolTagColor.color));
@@ -78,7 +78,7 @@ Future<void> main() async {
             () async {
           final cubit = await getTagColorsCubit();
 
-          var homeEvent = FakeEvent(["@home"]);
+          final homeEvent = FakeEvent(["@home"]);
 
           expect(cubit.getTagColor(homeEvent), isSameColorAs(Colors.blue));
         });
@@ -89,7 +89,7 @@ Future<void> main() async {
           final cubit = await getTagColorsCubit();
           cubit.addTagColor(homeTagColor);
 
-          var event = FakeEvent(["@home", "school"]);
+          final event = FakeEvent(["@home", "school"]);
 
           expect(cubit.getTagColor(event), isSameColorAs(schoolTagColor.color));
         });

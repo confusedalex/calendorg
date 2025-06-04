@@ -3,19 +3,19 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 List<Event> parseEvents(OrgDocument document) {
-  List<Event> eventList = [];
+  final List<Event> eventList = [];
 
   document.visitSections(((section) {
     bool returnIfSectionFound = false;
     var ignoreNTimestamps = 0;
-    List<OrgTimestamp> foundTimestamps = [];
+    final List<OrgTimestamp> foundTimestamps = [];
 
-    var headline = section.headline.rawTitle?.replaceAll(
+    final headline = section.headline.rawTitle?.replaceAll(
           RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
           "",
         ) ??
         '';
-    var tags = section.tagsWithInheritance(document);
+    final tags = section.tagsWithInheritance(document);
 
     section.visit((node) {
       switch (node) {

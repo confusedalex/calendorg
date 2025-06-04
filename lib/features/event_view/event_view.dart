@@ -1,10 +1,6 @@
-import 'package:calendorg/event.dart';
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
-import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:org_parser/org_parser.dart';
 
 class EventView extends StatelessWidget {
   const EventView({super.key});

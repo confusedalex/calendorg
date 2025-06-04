@@ -59,12 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadAsset() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    final FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       orgFile = File(result.files.single.path!);
-      var fileContent = await orgFile.readAsString();
-      var document = OrgDocument.parse(fileContent);
+      final fileContent = await orgFile.readAsString();
+      final document = OrgDocument.parse(fileContent);
 
       setState(() {
         BlocProvider.of<OrgDocumentCubit>(context).setDocument(document);

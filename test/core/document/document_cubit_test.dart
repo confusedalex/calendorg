@@ -23,13 +23,13 @@ void main() {
       });
 
       test("Cubit will accept and store OrgDocument", () {
-        var cubit = OrgDocumentCubit(document);
+        final cubit = OrgDocumentCubit(document);
 
         expect(cubit.state, equals(document));
       });
 
       test("Cubit will update document", () {
-        var cubit = OrgDocumentCubit(document);
+        final cubit = OrgDocumentCubit(document);
         final newOrgDocument = OrgDocument.parse("* Heading");
 
         cubit.setDocument(newOrgDocument);

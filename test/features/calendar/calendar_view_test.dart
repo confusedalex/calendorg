@@ -1,7 +1,6 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/core/document/document_cubit.dart';
-import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/calendar/calendar_view.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/util.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:table_calendar/src/widgets/format_button.dart';
 
 void main() {
   group(
