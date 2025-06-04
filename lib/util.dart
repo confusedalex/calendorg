@@ -1,5 +1,6 @@
 import 'package:calendorg/event.dart';
 import 'package:org_parser/org_parser.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 List<Event> parseEvents(OrgDocument document) {
   List<Event> eventList = [];
@@ -57,3 +58,53 @@ OrgSection changeSectionTitle(OrgSection section, String title) =>
         headline: section.headline.fromChildren([
       OrgContent([OrgPlainText(title)])
     ]));
+
+OrgDate dateTimeToOrgDate(DateTime dateTime) {
+  final isoDate = dateTime.toIso8601String().split("T")[0].split("-");
+  return (year: isoDate[0], month: isoDate[1], day: isoDate[2], dayName: null);
+}
+
+OrgTime dateTimeToOrgTime(DateTime dateTime) {
+  final isoTime = dateTime.toIso8601String().split("T")[1].split(":");
+  return (hour: isoTime[0], minute: isoTime[1]);
+}
+
+(String, String) prefixAndSuffixFromBool(bool isActive) {
+  final prefix = isActive ? "<" : "[";
+  final suffix = isActive ? ">" : "]";
+  return (prefix, suffix);
+}
+
+OrgSimpleTimestamp dateTimeToSimpleTimestamp(
+    DateTime dateTime, bool includeTime, bool isActive) {
+  final repeaterOrDelay = <String>[];
+  final OrgDate date = dateTimeToOrgDate(dateTime);
+  final OrgTime? time = includeTime ? dateTimeToOrgTime(dateTime) : null;
+  final (prefix, suffix) = prefixAndSuffixFromBool(isActive);
+  return OrgSimpleTimestamp(prefix, date, time, repeaterOrDelay, suffix);
+}
+
+OrgTimestamp dateTimeToTimeRangeTimestamp(
+    DateTime startDateTime,
+    DateTime endDateTime,
+    bool isActive,
+    bool includeStartTime,
+    bool includeEndTime) {
+  if (includeStartTime &&
+      includeEndTime &&
+      isSameDay(startDateTime, endDateTime)) {
+    final repeaterOrDelay = <String>[];
+    final OrgDate date = dateTimeToOrgDate(startDateTime);
+    final OrgTime timeStart = dateTimeToOrgTime(startDateTime);
+    final OrgTime timeEnd = dateTimeToOrgTime(endDateTime);
+    final (prefix, suffix) = prefixAndSuffixFromBool(isActive);
+    return OrgTimeRangeTimestamp(
+        prefix, date, timeStart, timeEnd, repeaterOrDelay, suffix);
+  } else {
+    final OrgSimpleTimestamp start =
+        dateTimeToSimpleTimestamp(startDateTime, includeStartTime, isActive);
+    final OrgSimpleTimestamp end =
+        dateTimeToSimpleTimestamp(endDateTime, includeEndTime, isActive);
+    return OrgDateRangeTimestamp(start, "--", end);
+  }
+}
