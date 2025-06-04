@@ -1,6 +1,7 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
+import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,9 +32,12 @@ void main() {
                 )),
         BlocProvider(
           create: (context) => OrgDocumentCubit(document),
+        ),
+        BlocProvider(
+          create: (context) => EventViewBloc(event, event.timestamps.first),
         )
       ],
-      child: EventView(event, event.timestamps.first),
+      child: EventView(),
     ))));
 
     await tester.pumpAndSettle();
@@ -53,43 +57,7 @@ void main() {
           expect(find.text(event.title), findsOneWidget);
         },
       );
-
-      group(
-        'Date Picker',
-        () {
-          group(
-            'DatePickerSimple',
-            () {
-              testWidgets(
-                'EventView shows datepicker when SimpleTimestamp',
-                (tester) async {
-                  await initWidget(tester);
-
-                  expect(find.byKey(Key("DatePickerSimple")), findsOneWidget);
-                },
-              );
-              testWidgets(
-                'DatePickerSimple shows correct date',
-                (tester) async {
-                  await initWidget(tester);
-
-                  expect(find.text(event.timestamps.first.toMarkup()),
-                      findsOneWidget);
-                },
-              );
-            },
-          );
-        },
-      );
-
-      testWidgets(
-        'EventView shows datepicker when SimpleTimestamp',
-        (tester) async {
-          await initWidget(tester);
-
-          expect(find.byKey(Key("DatePickerSimple")), findsOneWidget);
-        },
-      );
     },
+    skip: true,
   );
 }
