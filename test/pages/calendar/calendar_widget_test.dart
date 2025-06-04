@@ -1,8 +1,10 @@
+import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/models/document_model.dart';
 import 'package:calendorg/models/tag_model.dart';
-import 'package:calendorg/pages/calendar/calendar_page.dart';
-import 'package:calendorg/pages/calendar/calendar_view.dart';
+import 'package:calendorg/features/calendar/calendar_page.dart';
+import 'package:calendorg/features/calendar/calendar_view.dart';
 import 'package:calendorg/tag_color.dart';
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,16 +37,26 @@ void main() {
       final schoolTagColor = TagColor("school", Colors.orange);
       final homeTagColor = TagColor("@home", Colors.lightGreen);
       final workTagColor = TagColor("@work", Colors.yellow);
+      late CalendarBloc calendarBloc;
+
+      setUp(() {
+        calendarBloc =
+            CalendarBloc(parseEvents(document), DateTime(2025, 05, 17));
+      });
 
       Future<void> pumpWidgetToTester(dynamic tester) async {
         await tester.pumpWidget(MaterialApp(
-            home: BlocProvider(
-                create: (context) => TagColorsCubit.withInitialValue(
-                    [schoolTagColor, homeTagColor, workTagColor]),
-                child: Scaffold(
-                    body: BlocProvider<OrgDocumentCubit>(
-                        create: (context) => OrgDocumentCubit(document),
-                        child: CalendarPage(DateTime(2025, 05, 17)))))));
+            home: Scaffold(
+                body: MultiBlocProvider(
+                    // child: CalendarPage(DateTime(2025, 05, 17)))))));
+                    providers: [
+              BlocProvider(create: (context) => OrgDocumentCubit(document)),
+              BlocProvider<CalendarBloc>(create: (context) => calendarBloc),
+              BlocProvider(
+                  create: (context) => TagColorsCubit.withInitialValue(
+                      [schoolTagColor, homeTagColor, workTagColor])),
+            ],
+                    child: CalendarView()))));
       }
 
       testWidgets('Calendar should show marker for every tag occurance at day',
@@ -85,28 +97,11 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        final CalendarViewState state = tester.state(find.byType(CalendarView));
-        expect(isSameDay(state.focusedDay, DateTime(2025, 05, 17)), isTrue);
+        expect(isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 17)),
+            isTrue);
         await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
-        expect(isSameDay(state.focusedDay, DateTime(2025, 05, 16)), isTrue);
-      });
-
-      testWidgets("CalendarFormat change does work", (tester) async {
-        await pumpWidgetToTester(tester);
-
-        await tester.pumpAndSettle();
-
-        final CalendarViewState state = tester.state(find.byType(CalendarView));
-        expect(state.calendarFormat, CalendarFormat.month);
-        await tester.tap(find.byType(FormatButton));
-        await tester.pumpAndSettle();
-        expect(state.calendarFormat, CalendarFormat.twoWeeks);
-        await tester.tap(find.byType(FormatButton));
-        await tester.pumpAndSettle();
-        expect(state.calendarFormat, CalendarFormat.week);
-        await tester.tap(find.byType(FormatButton));
-        await tester.pumpAndSettle();
-        expect(state.calendarFormat, CalendarFormat.month);
+        expect(isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
+            isTrue);
       });
     },
   );

@@ -1,5 +1,6 @@
+import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/models/document_model.dart';
-import 'package:calendorg/pages/calendar/calendar_view.dart';
+import 'package:calendorg/features/calendar/calendar_view.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<OrgDocumentCubit, OrgDocument>(
-          builder: (context, state) =>
-              CalendarView(parseEvents(state), initialSelectedDay));
+          builder: (context, state) => BlocProvider(
+              create: (context) =>
+                  CalendarBloc(parseEvents(state), initialSelectedDay),
+              child: CalendarView()));
 }
