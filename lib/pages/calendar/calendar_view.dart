@@ -38,12 +38,8 @@ class CalendarViewState extends State<CalendarView> {
       });
 
   List<Widget> eventMarker(List<Event> events) => events
-      .fold(
-          [],
-          (acc, cur) =>
-              acc.contains(context.read<TagColorsCubit>().getTagColor(cur))
-                  ? acc
-                  : [...acc, context.read<TagColorsCubit>().getTagColor(cur)])
+      .map(context.read<TagColorsCubit>().getTagColor)
+      .toSet()
       .map((color) => BlocBuilder<TagColorsCubit, List<TagColor>>(
           builder: (context, state) =>
               CircleAvatar(radius: 7, backgroundColor: color)))
