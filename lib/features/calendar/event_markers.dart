@@ -1,6 +1,6 @@
+import 'package:calendorg/core/tag_colors/tag_model.dart';
 import 'package:calendorg/event.dart';
-import 'package:calendorg/models/tag_model.dart';
-import 'package:calendorg/tag_color.dart';
+import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

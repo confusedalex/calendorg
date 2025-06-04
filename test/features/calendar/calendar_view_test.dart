@@ -1,9 +1,9 @@
+import 'package:calendorg/core/tag_colors/tag_model.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/models/document_model.dart';
-import 'package:calendorg/models/tag_model.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/calendar/calendar_view.dart';
-import 'package:calendorg/tag_color.dart';
+import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

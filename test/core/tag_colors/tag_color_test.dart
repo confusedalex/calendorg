@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
-import 'package:calendorg/tag_color.dart';
+import 'package:calendorg/core/tag_colors/tag_color.dart';
 
 void main() {
   group(
