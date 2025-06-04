@@ -1,4 +1,4 @@
-import 'package:calendorg/core/tag_colors/tag_model.dart';
+import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/pages/settings/tags/edit_tag_color_dialog.dart';
 import 'package:calendorg/pages/settings/tags/new_tag_color_dialog.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';

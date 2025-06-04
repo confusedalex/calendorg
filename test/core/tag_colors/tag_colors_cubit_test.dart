@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:calendorg/core/tag_colors/tag_model.dart';
+import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ Future<void> main() async {
       "tagColors": jsonEncode([schoolTagColor])
     });
 
-    var cubit = TagColorsCubit()..setInitialTagColor();
+    final cubit = TagColorsCubit()..setInitialTagColor();
 
     // wait for async to finish, I don't know how to do this better :/
     await Future.delayed(Duration(milliseconds: 10));

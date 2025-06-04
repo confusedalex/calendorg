@@ -9,7 +9,7 @@ class OrgDocumentCubit extends Cubit<OrgDocument> {
   void replaceNode(OrgNode oldNode, OrgNode newNode) {
     if (state.children.contains(oldNode)) return;
 
-    var newDoc = state.edit().find(oldNode)!.replace(newNode).commit();
+    final newDoc = state.edit().find(oldNode)!.replace(newNode).commit();
     emit(OrgDocument.parse(newDoc.toMarkup()));
   }
 }

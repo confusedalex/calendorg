@@ -1,5 +1,5 @@
 import 'package:calendorg/event.dart';
-import 'package:calendorg/models/document_model.dart';
+import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,5 +1,5 @@
 import 'package:calendorg/core/tag_colors/tag_color.dart';
-import 'package:calendorg/core/tag_colors/tag_model.dart';
+import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

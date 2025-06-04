@@ -1,4 +1,4 @@
-import 'package:calendorg/models/document_model.dart';
+import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 

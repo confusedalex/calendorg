@@ -1,4 +1,4 @@
-import 'package:calendorg/core/tag_colors/tag_model.dart';
+import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
