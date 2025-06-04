@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:calendorg/pages/calendar/event_view.dart';
+import 'package:calendorg/features/event_view/event_view.dart';
 
 void main() {
   final markup = """

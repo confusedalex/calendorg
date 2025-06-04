@@ -2,7 +2,7 @@ import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:calendorg/core/document/document_cubit.dart';
-import 'package:calendorg/pages/calendar/event_view.dart';
+import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
