@@ -31,7 +31,7 @@ class CalendarViewState extends State<CalendarView> {
 
   List<Event> eventsByDate(DateTime date) =>
       widget.eventlist.fold([], (acc, cur) {
-        var timestampsByDate = cur.timestampsByDateTime(date);
+        final timestampsByDate = cur.timestampsByDateTime(date);
         timestampsByEvent.addAll({cur: timestampsByDate});
 
         return timestampsByDate.isEmpty ? acc : [...acc, cur];
