@@ -1,3 +1,5 @@
+import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
+import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,38 +39,21 @@ class EventView extends StatelessWidget {
               },
             ),
             BlocBuilder<EventViewBloc, EventViewState>(
-              builder: (context, state) {
-                return CheckboxListTile(
-                    value: state.allDay,
-                    title: Text("ALl day?"),
-                    onChanged: (value) => context
-                        .read<EventViewBloc>()
-                        .add(EventViewTitleChangeAllDay(value!)));
-              },
-            ),
-            BlocBuilder<EventViewBloc, EventViewState>(
-              builder: (context, state) {
-                if (state.allDay) {
-                  return TextButton(
-                      onPressed: () => showDatePicker(
-                          context: context,
-                          firstDate: DateTime(0),
-                          lastDate: DateTime(3000)),
-                      child: Text(timestamp.toMarkup()));
-                } else {
-                  return Row(
-                    children: [
-                      Expanded(
-                          child: TextButton(
-                              onPressed: () => {}, child: Text("start"))),
-                      Expanded(
-                          child: TextButton(
-                              onPressed: () => {}, child: Text("end")))
-                    ],
-                  );
-                }
-              },
-            )
+                builder: (context, state) {
+              return TextButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return BlocProvider(
+                          create: (context) => DatePickerBloc(timestamp),
+                          child: DatePicker(),
+                        );
+                      });
+                },
+                child: Text("DatePicker"),
+              );
+            })
             // TextButton(
             // key: Key("SaveButton"),
             // onPressed: isSavable()
