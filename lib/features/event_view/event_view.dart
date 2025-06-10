@@ -13,9 +13,6 @@ class EventView extends StatelessWidget {
     final title = context.select((EventViewBloc bloc) => bloc.state.title);
     final timestamp =
         context.select((EventViewBloc bloc) => bloc.state.timestamp);
-    final allDay = context.select((EventViewBloc bloc) => bloc.state.allDay);
-    final start = context.select((EventViewBloc bloc) => bloc.state.start);
-    final end = context.select((EventViewBloc bloc) => bloc.state.end);
 
     return AlertDialog(
         title: Row(
