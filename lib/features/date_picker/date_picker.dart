@@ -1,5 +1,5 @@
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
-import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,53 +8,101 @@ class DatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final start = context.select((DatePickerBloc bloc) => bloc.state.startDate);
+    final startDate =
+        context.select((DatePickerBloc bloc) => bloc.state.startDate);
     final end = context.select((DatePickerBloc bloc) => bloc.state.endDate);
+    final timestamp =
+        context.select((DatePickerBloc bloc) => bloc.generateTimestamp());
     return AlertDialog(
         title: Row(children: [Text("DatePicker"), Spacer(), CloseButton()]),
-        content: SizedBox(
-            width: double.maxFinite,
-            child: GridView.count(
-              crossAxisCount: 2,
-              children: <Widget>[
-                Row(
-                  children: [
-                    TextButton(
-                        onPressed: () => {},
-                        child: Text(start.toIso8601String())),
-                  ],
-                ),
-                Row(
-                  children: [
-                    BlocBuilder<DatePickerBloc, DatePickerState>(
-                      builder: (context, state) {
-                        return TextButton(
-                            style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8)),
-                              side: BorderSide(width: 5),
-                            )),
-                            onPressed: state.endDateActive ? () {} : null,
-                            child: Text(
-                                end?.toIso8601String() ?? "select end date"));
-                      },
-                    ),
-                    BlocBuilder<DatePickerBloc, DatePickerState>(
-                      builder: (context, state) {
-                        return Checkbox(
-                          value: state.endDateActive,
-                          onChanged: (value) {
-                            context
+        content: BlocBuilder<DatePickerBloc, DatePickerState>(
+            builder: (context, state) {
+          return SizedBox(
+              width: double.maxFinite,
+              child: GridView.count(
+                crossAxisCount: 2,
+                children: <Widget>[
+                  // Start Date Column
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          TextButton(
+                              onPressed: () => context
+                                  .read<DatePickerBloc>()
+                                  .datePickerDatePressed(context, "start"),
+                              child: Text(dateTimeToSimpleTimestamp(
+                                      startDate, false, true)
+                                  .toMarkup())),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                              onPressed: state.startTimeActive
+                                  ? () => context
+                                      .read<DatePickerBloc>()
+                                      .datePickerTimePressed(context, "start")
+                                  : null,
+                              child: Text(state.startTimeDuration.toString())),
+                          Checkbox(
+                            value: state.startTimeActive,
+                            onChanged: (value) => context
                                 .read<DatePickerBloc>()
-                                .add(DatePickerEndDateActiveChanged(value!));
-                          },
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ],
-            )));
+                                .add(DatePickerStartTimeActiveChanged(value!)),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  // End Date Row
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          // End Date Button
+                          TextButton(
+                              onPressed: state.endDateActive
+                                  ? () => context
+                                      .read<DatePickerBloc>()
+                                      .datePickerDatePressed(context, "end")
+                                  : null,
+                              child: Text(end != null
+                                  ? dateTimeToSimpleTimestamp(end, false, true)
+                                      .toMarkup()
+                                  : "select end date")),
+                          // End Date enabled checkbox
+                          Checkbox(
+                              semanticLabel: state.endDateActive.toString(),
+                              value: state.endDateActive,
+                              onChanged: (value) => context
+                                  .read<DatePickerBloc>()
+                                  .add(DatePickerEndDateActiveChanged(value!)))
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                              onPressed: state.endTimeActive
+                                  ? () => context
+                                      .read<DatePickerBloc>()
+                                      .datePickerTimePressed(context, "end")
+                                  : null,
+                              child: Text(state.endTimeDuration.toString())),
+                          Checkbox(
+                            semanticLabel: state.endTimeActive.toString(),
+                            value: state.endTimeActive,
+                            onChanged: (value) => context
+                                .read<DatePickerBloc>()
+                                .add(DatePickerEndTimeActiveChanged(value!)),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Text(timestamp.toMarkup())
+                ],
+              ));
+        }));
   }
 }

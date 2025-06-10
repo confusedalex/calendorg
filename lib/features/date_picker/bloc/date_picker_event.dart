@@ -28,12 +28,8 @@ final class DatePickerEndDateChanged extends DatePickerEvent {
   DatePickerEndDateChanged(this.endDate);
 }
 
-final class DatePickerStartDurationChanged extends DatePickerEvent {
-  final Duration startTimeDuration;
-  DatePickerStartDurationChanged(this.startTimeDuration);
-}
-
-final class DatePickerEndDurationChanged extends DatePickerEvent {
-  final Duration endTimeDuration;
-  DatePickerEndDurationChanged(this.endTimeDuration);
+final class DatePickerTimeChanged extends DatePickerEvent {
+  final TimeOfDay timeDuration;
+  final String type;
+  DatePickerTimeChanged(this.timeDuration, this.type);
 }

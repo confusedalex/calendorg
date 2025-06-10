@@ -4,18 +4,18 @@ final class DatePickerState {
   DatePickerState(
       {required this.startDate,
       required this.startTimeActive,
-      this.startTimeDuration,
+      this.startTimeDuration = const TimeOfDay(hour: 12, minute: 00),
       required this.endTimeActive,
-      this.endTimeDuration,
+      this.endTimeDuration = const TimeOfDay(hour: 12, minute: 00),
       required this.endDateActive,
       this.endDate});
 
   DateTime startDate;
   DateTime? endDate;
   bool startTimeActive;
-  Duration? startTimeDuration;
+  TimeOfDay startTimeDuration;
   bool endTimeActive;
-  Duration? endTimeDuration;
+  TimeOfDay endTimeDuration;
   bool endDateActive;
 
   factory DatePickerState.initial(OrgTimestamp timestamp) {
@@ -46,8 +46,8 @@ final class DatePickerState {
   DatePickerState copyWith(
       {DateTime? startDate,
       DateTime? endDate,
-      Duration? startTimeDuration,
-      Duration? endTimeDuration,
+      TimeOfDay? startTimeDuration,
+      TimeOfDay? endTimeDuration,
       bool? startTimeActive,
       bool? endTimeActive,
       bool? endDateActive}) {
