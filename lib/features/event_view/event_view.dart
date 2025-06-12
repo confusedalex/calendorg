@@ -22,7 +22,8 @@ class EventView extends StatelessWidget {
           child: Column(children: [
             TextFormField(
               key: Key("TitleField"),
-              decoration: InputDecoration(border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), helperText: "Event Title"),
               initialValue: title,
               autovalidateMode: AutovalidateMode.always,
               onChanged: (value) => context
