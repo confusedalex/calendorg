@@ -1,4 +1,5 @@
 import 'package:calendorg/event.dart';
+import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -107,4 +108,9 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
         dateTimeToSimpleTimestamp(endDateTime, includeEndTime, isActive);
     return OrgDateRangeTimestamp(start, "--", end);
   }
+}
+
+extension GetTimeOfDay on OrgTime {
+  TimeOfDay get timeOfDay =>
+      TimeOfDay(hour: int.parse(this.hour), minute: int.parse(this.minute));
 }
