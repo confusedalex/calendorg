@@ -4,11 +4,14 @@ final class DatePickerState {
   DatePickerState(
       {required this.startDate,
       required this.startTimeActive,
-      this.startTimeDuration = const TimeOfDay(hour: 12, minute: 00),
+      startTimeDuration,
       required this.endTimeActive,
-      this.endTimeDuration = const TimeOfDay(hour: 12, minute: 00),
+      endTimeDuration,
       required this.endDateActive,
-      this.endDate});
+      this.endDate})
+      : startTimeDuration =
+            startTimeDuration ?? TimeOfDay(hour: 12, minute: 00),
+        endTimeDuration = endTimeDuration ?? TimeOfDay(hour: 12, minute: 00);
 
   DateTime startDate;
   DateTime? endDate;
@@ -25,21 +28,30 @@ final class DatePickerState {
             startDate: timestamp.dateTime,
             startTimeActive: timestamp.time != null,
             endTimeActive: false,
-            endDateActive: false);
+            endDateActive: false,
+            startTimeDuration: timestamp.time == null
+                ? null
+                : TimeOfDay(
+                    hour: int.parse(timestamp.time!.hour),
+                    minute: int.parse(timestamp.time!.minute)));
       case OrgDateRangeTimestamp():
         return DatePickerState(
             startDate: timestamp.start.dateTime,
             startTimeActive: timestamp.start.time != null,
             endTimeActive: timestamp.end.time != null,
             endDateActive: true,
-            endDate: timestamp.end.dateTime);
+            endDate: timestamp.end.dateTime,
+            startTimeDuration: timestamp.start.time?.timeOfDay,
+            endTimeDuration: timestamp.end.time?.timeOfDay);
       case OrgTimeRangeTimestamp():
         return DatePickerState(
             startDate: timestamp.startDateTime,
             startTimeActive: true,
             endTimeActive: true,
             endDateActive: false,
-            endDate: timestamp.endDateTime);
+            endDate: null,
+            startTimeDuration: timestamp.timeStart.timeOfDay,
+            endTimeDuration: timestamp.timeEnd.timeOfDay);
     }
   }
 
