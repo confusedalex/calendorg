@@ -25,9 +25,10 @@ class DatePicker extends StatelessWidget {
                   // Start Date Column
                   Column(
                     children: [
-                      Row(
+                      Column(
                         children: [
-                          TextButton(
+                          Text("Start Date"),
+                          OutlinedButton(
                               key: Key("datepicker_startdatebutton"),
                               onPressed: () => context
                                   .read<DatePickerBloc>()
@@ -37,23 +38,33 @@ class DatePicker extends StatelessWidget {
                                   .toMarkup())),
                         ],
                       ),
-                      Row(
+                      Divider(),
+                      Column(
                         children: [
-                          TextButton(
-                              key: Key("datepicker_starttimebutton"),
-                              onPressed: state.startTimeActive
-                                  ? () => context
-                                      .read<DatePickerBloc>()
-                                      .datePickerTimePressed(context, "start")
-                                  : null,
-                              child: Text(state.startTimeDuration.toString())),
-                          Checkbox(
-                            key: Key("datepicker_starttimecheckbox"),
-                            value: state.startTimeActive,
-                            onChanged: (value) => context
-                                .read<DatePickerBloc>()
-                                .add(DatePickerStartTimeActiveChanged(value!)),
-                          )
+                          Text("Start Time"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              OutlinedButton(
+                                  key: Key("datepicker_starttimebutton"),
+                                  onPressed: state.startTimeActive
+                                      ? () => context
+                                          .read<DatePickerBloc>()
+                                          .datePickerTimePressed(
+                                              context, "start")
+                                      : null,
+                                  child:
+                                      Text(state.startTimeDuration.toString())),
+                              Checkbox(
+                                key: Key("datepicker_starttimecheckbox"),
+                                value: state.startTimeActive,
+                                onChanged: (value) => context
+                                    .read<DatePickerBloc>()
+                                    .add(DatePickerStartTimeActiveChanged(
+                                        value!)),
+                              )
+                            ],
+                          ),
                         ],
                       )
                     ],
@@ -61,10 +72,11 @@ class DatePicker extends StatelessWidget {
                   // End Date Row
                   Column(
                     children: [
+                      Text("End Date"),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // End Date Button
-                          TextButton(
+                          OutlinedButton(
                               key: Key("datepicker_enddatebutton"),
                               onPressed: state.endDateActive
                                   ? () => context
@@ -85,9 +97,12 @@ class DatePicker extends StatelessWidget {
                                   .add(DatePickerEndDateActiveChanged(value!)))
                         ],
                       ),
+                      Divider(),
+                      Text("End Time"),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextButton(
+                          OutlinedButton(
                               key: Key("datepicker_endtimebutton"),
                               onPressed: state.endTimeActive
                                   ? () => context
@@ -96,13 +111,16 @@ class DatePicker extends StatelessWidget {
                                   : null,
                               child: Text(state.endTimeDuration.toString())),
                           Checkbox(
-                            key: Key("datepicker_endtimecheckbox"),
-                            semanticLabel: state.endTimeActive.toString(),
-                            value: state.endTimeActive,
-                            onChanged: (value) => context
-                                .read<DatePickerBloc>()
-                                .add(DatePickerEndTimeActiveChanged(value!)),
-                          )
+                              key: Key("datepicker_endtimecheckbox"),
+                              semanticLabel: state.endTimeActive.toString(),
+                              value: state.endTimeActive,
+                              onChanged:
+                                  state.endDateActive || state.startTimeActive
+                                      ? (value) => context
+                                          .read<DatePickerBloc>()
+                                          .add(DatePickerEndTimeActiveChanged(
+                                              value!))
+                                      : null)
                         ],
                       )
                     ],
