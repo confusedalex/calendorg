@@ -1,5 +1,5 @@
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
+import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,6 @@ class DatePicker extends StatelessWidget {
     final timestamp =
         context.select((DatePickerBloc bloc) => bloc.generateTimestamp());
     final savable = context.select((DatePickerBloc bloc) => bloc.savable);
-    final node = context.select((DatePickerBloc bloc) => bloc.state.node);
     return AlertDialog(
       title: Row(children: [Text("DatePicker"), Spacer(), CloseButton()]),
       content: BlocBuilder<DatePickerBloc, DatePickerState>(
@@ -124,8 +123,8 @@ class DatePicker extends StatelessWidget {
             onPressed: savable
                 ? () {
                     context
-                        .read<OrgDocumentCubit>()
-                        .replaceNode(node, timestamp);
+                        .read<EventViewBloc>()
+                        .add(EventViewChangeTimestamp(timestamp));
                     Navigator.pop(context);
                   }
                 : null,

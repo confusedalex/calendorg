@@ -1,3 +1,4 @@
+import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
@@ -33,7 +34,8 @@ class CalendarView extends StatelessWidget {
         onFormatChanged: (format) => context
             .read<CalendarBloc>()
             .add(CalendarChangeFormat(calendarFormat: format)),
-        eventLoader: (day) => context.read<CalendarBloc>().eventsByDate(day),
+        eventLoader: (day) =>
+            context.read<OrgDocumentCubit>().eventsByDate(day),
         calendarBuilders: CalendarBuilders(
           markerBuilder: (context, day, events) {
             if (events.isEmpty ||
@@ -42,14 +44,14 @@ class CalendarView extends StatelessWidget {
               return Container();
             }
             return EventMarkers(
-                eventList: context.read<CalendarBloc>().eventsByDate(day));
+                eventList: context.read<OrgDocumentCubit>().eventsByDate(day));
           },
         ),
       ),
       Expanded(
         child: ListView(
           children: context
-              .read<CalendarBloc>()
+              .read<OrgDocumentCubit>()
               .eventsByDateWithTimestamps(focusedDay)
               .entries
               .fold(

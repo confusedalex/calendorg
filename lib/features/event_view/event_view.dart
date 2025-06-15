@@ -14,10 +14,8 @@ class EventView extends StatelessWidget {
         widgetContext.select((EventViewBloc bloc) => bloc.state.title);
     final timestamp =
         widgetContext.select((EventViewBloc bloc) => bloc.state.timestamp);
-    final isSavable =
-        widgetContext.select((EventViewBloc bloc) => bloc.isSavable);
-    final section =
-        widgetContext.select((EventViewBloc bloc) => bloc.state.event.section);
+    final oldSection =
+        widgetContext.select((EventViewBloc bloc) => bloc.oldSection);
     final newSection =
         widgetContext.select((EventViewBloc bloc) => bloc.generateNewSection());
 
@@ -55,8 +53,7 @@ class EventView extends StatelessWidget {
                             BlocProvider(
                                 create: (context) => DatePickerBloc(timestamp)),
                             BlocProvider.value(
-                                value: BlocProvider.of<OrgDocumentCubit>(
-                                    widgetContext)),
+                                value: widgetContext.read<EventViewBloc>())
                           ],
                           child: DatePicker(),
                         );
@@ -67,14 +64,12 @@ class EventView extends StatelessWidget {
             }),
             TextButton(
                 key: Key("SaveButton"),
-                onPressed: isSavable
-                    ? () {
-                        widgetContext
-                            .read<OrgDocumentCubit>()
-                            .replaceNode(section, newSection);
-                        Navigator.pop(widgetContext);
-                      }
-                    : null,
+                onPressed: () {
+                  widgetContext
+                      .read<OrgDocumentCubit>()
+                      .replaceNode(oldSection, newSection);
+                  Navigator.pop(widgetContext);
+                },
                 child: Text("save"))
           ]),
         ));

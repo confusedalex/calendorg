@@ -7,20 +7,37 @@ part 'event_view_event.dart';
 part 'event_view_state.dart';
 
 class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
+  late final OrgSection oldSection;
   EventViewBloc(Event event, OrgTimestamp timestamp)
       : super(EventViewState.inital(event, timestamp)) {
-    on<EventViewEvent>((event, emit) {});
-    on<EventViewTitleChangeEvent>(
-        (event, emit) => emit(state.copyWith(title: event.title)));
-    on<EventViewTitleChangeAllDay>(
-      (event, emit) => emit(state.copyWith(allDay: event.allDay)),
-    );
+    oldSection = event.section;
+    on<EventViewEvent>((event, emit) => switch (event) {
+          EventViewTitleChangeEvent() =>
+            emit(state.copyWith(title: event.title)),
+          EventViewTitleChangeAllDay() =>
+            emit(state.copyWith(allDay: event.allDay)),
+          EventViewChangeTimestamp() => emit(state.copyWith(
+              timestamp: event.timestmap,
+              event: state.event.copyWith(
+                  section: state.event.section
+                      .edit()
+                      .find(state.timestamp)!
+                      .replace(event.timestmap)
+                      .commit() as OrgSection)))
+        });
   }
 
-  bool get isSavable => state.event.title != state.title;
-
-  OrgSection generateNewSection() => state.event.section.copyWith(
-          headline: state.event.section.headline.fromChildren([
-        OrgContent([OrgPlainText(state.title)])
-      ]));
+  OrgSection generateNewSection() {
+    // replace headline
+    return state.event.section.copyWith(
+        headline: state.event.section.headline.fromChildren([
+      OrgContent([
+        OrgPlainText(state.title +
+            (state.event.containsTimestampInHeadline
+                ? " ${state.timestamp.toMarkup()}"
+                : '') +
+            (state.event.tags.isNotEmpty ? ' ' : ''))
+      ])
+    ]));
+  }
 }

@@ -20,6 +20,11 @@ List<Event> parseEvents(OrgDocument document) {
           "",
         ) ??
         '';
+
+    if (section.tags.isNotEmpty) {
+      headline = headline.substring(0, headline.length - 1);
+    }
+
     final tags = section.tagsWithInheritance(document);
 
     section.visit((node) {
@@ -49,7 +54,13 @@ List<Event> parseEvents(OrgDocument document) {
     });
 
     if (foundTimestamps.isNotEmpty) {
-      eventList.add(Event(section, headline, tags, foundTimestamps, null));
+      eventList.add(Event(
+          section: section,
+          containsTimestampInHeadline: containsTimestamp,
+          title: headline,
+          tags: tags,
+          timestamps: foundTimestamps,
+          description: null));
     }
 
     return true;
