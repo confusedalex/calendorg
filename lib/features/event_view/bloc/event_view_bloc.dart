@@ -16,4 +16,11 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       (event, emit) => emit(state.copyWith(allDay: event.allDay)),
     );
   }
+
+  bool get isSavable => state.event.title != state.title;
+
+  OrgSection generateNewSection() => state.event.section.copyWith(
+          headline: state.event.section.headline.fromChildren([
+        OrgContent([OrgPlainText(state.title)])
+      ]));
 }

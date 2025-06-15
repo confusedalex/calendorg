@@ -54,12 +54,6 @@ List<Event> parseEvents(OrgDocument document) {
   return eventList;
 }
 
-OrgSection changeSectionTitle(OrgSection section, String title) =>
-    section.copyWith(
-        headline: section.headline.fromChildren([
-      OrgContent([OrgPlainText(title)])
-    ]));
-
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
   final isoDate = dateTime.toIso8601String().split("T")[0].split("-");
   return (year: isoDate[0], month: isoDate[1], day: isoDate[2], dayName: null);
