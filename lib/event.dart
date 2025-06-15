@@ -2,6 +2,7 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Event {
+  bool containsTimestampInHeadline;
   OrgSection section;
   String title;
   late String? description;

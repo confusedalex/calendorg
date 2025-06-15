@@ -4,6 +4,7 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 List<Event> parseEvents(OrgDocument document) {
+  final timestampRegEx = RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]");
   final List<Event> eventList = [];
 
   document.visitSections(((section) {
@@ -11,8 +12,11 @@ List<Event> parseEvents(OrgDocument document) {
     var ignoreNTimestamps = 0;
     final List<OrgTimestamp> foundTimestamps = [];
 
-    final headline = section.headline.rawTitle?.replaceAll(
-          RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]"),
+    final containsTimestamp =
+        section.headline.rawTitle?.contains(timestampRegEx) ?? false;
+
+    var headline = section.headline.rawTitle?.replaceAll(
+          timestampRegEx,
           "",
         ) ??
         '';
