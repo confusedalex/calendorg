@@ -2,7 +2,8 @@ part of 'date_picker_bloc.dart';
 
 final class DatePickerState {
   DatePickerState(
-      {required this.startDate,
+      {required this.node,
+      required this.startDate,
       required this.startTimeActive,
       startTimeDuration,
       required this.endTimeActive,
@@ -13,6 +14,7 @@ final class DatePickerState {
             startTimeDuration ?? TimeOfDay(hour: 12, minute: 00),
         endTimeDuration = endTimeDuration ?? TimeOfDay(hour: 12, minute: 00);
 
+  OrgTimestamp node;
   DateTime startDate;
   DateTime? endDate;
   bool startTimeActive;
@@ -33,7 +35,8 @@ final class DatePickerState {
                 ? null
                 : TimeOfDay(
                     hour: int.parse(timestamp.time!.hour),
-                    minute: int.parse(timestamp.time!.minute)));
+                    minute: int.parse(timestamp.time!.minute)),
+            node: timestamp);
       case OrgDateRangeTimestamp():
         return DatePickerState(
             startDate: timestamp.start.dateTime,
@@ -42,7 +45,8 @@ final class DatePickerState {
             endDateActive: true,
             endDate: timestamp.end.dateTime,
             startTimeDuration: timestamp.start.time?.timeOfDay,
-            endTimeDuration: timestamp.end.time?.timeOfDay);
+            endTimeDuration: timestamp.end.time?.timeOfDay,
+            node: timestamp);
       case OrgTimeRangeTimestamp():
         return DatePickerState(
             startDate: timestamp.startDateTime,
@@ -51,7 +55,8 @@ final class DatePickerState {
             endDateActive: false,
             endDate: null,
             startTimeDuration: timestamp.timeStart.timeOfDay,
-            endTimeDuration: timestamp.timeEnd.timeOfDay);
+            endTimeDuration: timestamp.timeEnd.timeOfDay,
+            node: timestamp);
     }
   }
 
@@ -62,7 +67,8 @@ final class DatePickerState {
       TimeOfDay? endTimeDuration,
       bool? startTimeActive,
       bool? endTimeActive,
-      bool? endDateActive}) {
+      bool? endDateActive,
+      OrgTimestamp? node}) {
     return DatePickerState(
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
@@ -70,6 +76,7 @@ final class DatePickerState {
         endTimeDuration: endTimeDuration ?? this.endTimeDuration,
         startTimeActive: startTimeActive ?? this.startTimeActive,
         endTimeActive: endTimeActive ?? this.endTimeActive,
-        endDateActive: endDateActive ?? this.endDateActive);
+        endDateActive: endDateActive ?? this.endDateActive,
+        node: node ?? this.node);
   }
 }

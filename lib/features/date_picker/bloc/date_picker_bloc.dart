@@ -66,7 +66,9 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
 
   void datePickerTimePressed(context, String type) async {
     final TimeOfDay? time = await showTimePicker(
-        context: context, initialTime: TimeOfDay(hour: 12, minute: 00));
+      context: context,
+      initialTime: TimeOfDay(hour: 12, minute: 00),
+    );
 
     if (time == null) return;
     add(DatePickerTimeChanged(time, type));
@@ -106,4 +108,6 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
       return dateTimeToSimpleTimestamp(startDate, state.startTimeActive, true);
     }
   }
+
+  bool get savable => state.node.toMarkup() != generateTimestamp().toMarkup();
 }
