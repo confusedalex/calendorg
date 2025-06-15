@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -29,5 +30,28 @@ class Event {
               })
           .toList();
 
-  Event(this.section, this.title, this.tags, this.timestamps, this.description);
+  Event(
+      {required this.containsTimestampInHeadline,
+      required this.section,
+      required this.title,
+      required this.tags,
+      required this.timestamps,
+      this.description});
+
+  Event copyWith(
+      {bool? containsTimestampInHeadline,
+      OrgSection? section,
+      String? title,
+      ValueGetter<String?>? description,
+      List<String>? tags,
+      List<OrgTimestamp>? timestamps}) {
+    return Event(
+        containsTimestampInHeadline:
+            containsTimestampInHeadline ?? this.containsTimestampInHeadline,
+        section: section ?? this.section,
+        title: title ?? this.title,
+        description: description != null ? description() : this.description,
+        tags: tags ?? this.tags,
+        timestamps: timestamps ?? this.timestamps);
+  }
 }
