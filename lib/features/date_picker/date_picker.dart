@@ -11,7 +11,7 @@ class DatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final startDate =
         context.select((DatePickerBloc bloc) => bloc.state.startDate);
-    final end = context.select((DatePickerBloc bloc) => bloc.state.endDate);
+    final endDate = context.select((DatePickerBloc bloc) => bloc.state.endDate);
     final timestamp =
         context.select((DatePickerBloc bloc) => bloc.generateTimestamp());
     final savable = context.select((DatePickerBloc bloc) => bloc.savable);
@@ -31,7 +31,8 @@ class DatePicker extends StatelessWidget {
                       key: Key("datepicker_startdatebutton"),
                       onPressed: () => context
                           .read<DatePickerBloc>()
-                          .datePickerDatePressed(context, "start"),
+                          .datePickerDatePressed(context, "start",
+                              initialDate: startDate),
                       child: Text(
                           dateTimeToSimpleTimestamp(startDate, false, true)
                               .toMarkup())),
@@ -71,10 +72,11 @@ class DatePicker extends StatelessWidget {
                       onPressed: state.endDateActive
                           ? () => context
                               .read<DatePickerBloc>()
-                              .datePickerDatePressed(context, "end")
+                              .datePickerDatePressed(context, "end",
+                                  initialDate: endDate)
                           : null,
-                      child: Text(end != null
-                          ? dateTimeToSimpleTimestamp(end, false, true)
+                      child: Text(endDate != null
+                          ? dateTimeToSimpleTimestamp(endDate, false, true)
                               .toMarkup()
                           : "select end date")),
                   // End Date enabled checkbox

@@ -39,12 +39,14 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
     });
   }
 
-  void datePickerDatePressed(context, String type) async {
+  void datePickerDatePressed(context, String type,
+      {DateTime? initialDate}) async {
     if (type == "start") {
       final DateTime? pickerDate = await showDatePicker(
           context: context,
           firstDate: DateTime(0),
-          lastDate: state.endDate ?? DateTime(3000));
+          lastDate: state.endDate ?? DateTime(3000),
+          initialDate: initialDate);
 
       if (pickerDate != null) {
         add(DatePickerStartDateChanged(pickerDate));
