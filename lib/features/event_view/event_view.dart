@@ -17,7 +17,7 @@ class EventView extends StatelessWidget {
     final oldSection =
         widgetContext.select((EventViewBloc bloc) => bloc.oldSection);
     final newSection =
-        widgetContext.select((EventViewBloc bloc) => bloc.generateNewSection());
+        widgetContext.select((EventViewBloc bloc) => bloc.state.event.section);
 
     return AlertDialog(
         title: Row(

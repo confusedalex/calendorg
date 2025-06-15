@@ -12,8 +12,19 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       : super(EventViewState.inital(event, timestamp)) {
     oldSection = event.section;
     on<EventViewEvent>((event, emit) => switch (event) {
-          EventViewTitleChangeEvent() =>
-            emit(state.copyWith(title: event.title)),
+          EventViewTitleChangeEvent() => emit(state.copyWith(
+              title: event.title,
+              event: state.event.copyWith(
+                  section: state.event.section.copyWith(
+                      headline: state.event.section.headline.fromChildren([
+                OrgContent([
+                  OrgPlainText(event.title +
+                      (state.event.containsTimestampInHeadline
+                          ? " ${state.timestamp.toMarkup()}"
+                          : '') +
+                      (state.event.tags.isNotEmpty ? ' ' : ''))
+                ])
+              ]))))),
           EventViewTitleChangeAllDay() =>
             emit(state.copyWith(allDay: event.allDay)),
           EventViewChangeTimestamp() => emit(state.copyWith(
@@ -25,19 +36,5 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
                       .replace(event.timestmap)
                       .commit() as OrgSection)))
         });
-  }
-
-  OrgSection generateNewSection() {
-    // replace headline
-    return state.event.section.copyWith(
-        headline: state.event.section.headline.fromChildren([
-      OrgContent([
-        OrgPlainText(state.title +
-            (state.event.containsTimestampInHeadline
-                ? " ${state.timestamp.toMarkup()}"
-                : '') +
-            (state.event.tags.isNotEmpty ? ' ' : ''))
-      ])
-    ]));
   }
 }
