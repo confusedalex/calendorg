@@ -6,6 +6,7 @@ import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/pages/event_list_page.dart';
 import 'package:calendorg/pages/settings/settings_page.dart';
+import 'package:calendorg/pages/settings/starting_day_cubit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         home: MultiBlocProvider(
           providers: [
+            BlocProvider(
+              create: (context) => StartingDayCubit()..loadStartingDay(),
+            ),
             BlocProvider(
                 create: (context) => TagColorsCubit()..setInitialTagColor()),
             BlocProvider(

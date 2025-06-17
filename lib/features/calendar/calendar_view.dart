@@ -2,6 +2,7 @@ import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
+import 'package:calendorg/pages/settings/starting_day_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -18,12 +19,15 @@ class CalendarView extends StatelessWidget {
         context.select((CalendarBloc bloc) => bloc.state.selectedDate);
     final CalendarFormat calendarFormat =
         context.select((CalendarBloc bloc) => bloc.state.calendarFormat);
+    final StartingDayOfWeek startingDay =
+        context.select((StartingDayCubit bloc) => bloc.state);
 
     return Column(children: [
       TableCalendar(
         firstDay: DateTime.utc(2010, 10, 16),
         lastDay: DateTime.utc(2030, 3, 14),
         focusedDay: focusedDay,
+        startingDayOfWeek: startingDay,
         selectedDayPredicate: (day) {
           return isSameDay(selectedDate, day);
         },
