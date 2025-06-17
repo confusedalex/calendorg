@@ -1,4 +1,4 @@
-import 'package:calendorg/features/settings/starting_day_cubit.dart';
+import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
