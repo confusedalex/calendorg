@@ -13,11 +13,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Calendorg());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Calendorg extends StatelessWidget {
+  const Calendorg({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,20 +37,20 @@ class MyApp extends StatelessWidget {
               create: (context) => OrgDocumentCubit(OrgDocument.parse("")),
             )
           ],
-          child: MyHomePage(title: "calendorg"),
+          child: HomePage(title: "calendorg"),
         ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final String title;
-  const MyHomePage({super.key, required this.title});
+  const HomePage({super.key, required this.title});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   int index = 0;
   List<Event> eventList = [];
   late File orgFile;
