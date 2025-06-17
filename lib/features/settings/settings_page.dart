@@ -1,7 +1,7 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/pages/settings/starting_day_dialog.dart';
-import 'package:calendorg/pages/settings/starting_day_cubit.dart';
-import 'package:calendorg/pages/settings/tags/tags_page.dart';
+import 'package:calendorg/features/settings/starting_day_dialog.dart';
+import 'package:calendorg/features/settings/starting_day_cubit.dart';
+import 'package:calendorg/features/settings/tags/tags_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

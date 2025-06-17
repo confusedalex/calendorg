@@ -1,6 +1,6 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/pages/settings/tags/edit_tag_color_dialog.dart';
-import 'package:calendorg/pages/settings/tags/new_tag_color_dialog.dart';
+import 'package:calendorg/features/settings/tags/edit_tag_color_dialog.dart';
+import 'package:calendorg/features/settings/tags/new_tag_color_dialog.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
