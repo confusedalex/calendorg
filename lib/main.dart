@@ -37,14 +37,13 @@ class Calendorg extends StatelessWidget {
               create: (context) => OrgDocumentCubit(OrgDocument.parse("")),
             )
           ],
-          child: HomePage(title: "calendorg"),
+          child: HomePage(),
         ));
   }
 }
 
 class HomePage extends StatefulWidget {
-  final String title;
-  const HomePage({super.key, required this.title});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -100,21 +99,6 @@ class _HomePageState extends State<HomePage> {
           ),
           NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
         ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              // onPressed: reload,
-              onPressed: () => print('is ja gut'),
-              tooltip: 'Reload',
-              child: const Icon(Icons.refresh),
-            ),
-          ],
-        ),
       ),
     ));
   }
