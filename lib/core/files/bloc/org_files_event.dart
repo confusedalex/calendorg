@@ -4,19 +4,19 @@ part of 'org_files_bloc.dart';
 sealed class OrgFilesEvent {}
 
 final class OrgFilesAddFilePath extends OrgFilesEvent {
-  final String file;
-  OrgFilesAddFilePath(this.file);
+  final FileInfo fileInfo;
+  OrgFilesAddFilePath(this.fileInfo);
 }
 
 final class OrgFilesRemoveFilePath extends OrgFilesEvent {
-  final String file;
-  OrgFilesRemoveFilePath(this.file);
+  final FileInfo fileInfo;
+  OrgFilesRemoveFilePath(this.fileInfo);
 }
 
 final class OrgFilesReplaceNode extends OrgFilesEvent {
-  final String filePath;
+  final FileInfo fileInfo;
   final OrgNode oldNode;
   final OrgNode newNode;
 
-  OrgFilesReplaceNode(this.filePath, this.oldNode, this.newNode);
+  OrgFilesReplaceNode(this.fileInfo, this.oldNode, this.newNode);
 }

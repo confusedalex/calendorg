@@ -23,10 +23,18 @@
           toolsVersion = "26.1.1";
           platformToolsVersion = "34.0.4";
           buildToolsVersions = [ buildToolsVer ];
-          platformVersions = [ "34" "35" ];
+          platformVersions = [
+            "33"
+            "34"
+            "35"
+          ];
           abiVersions = [ "x86_64" ];
 
           includeNDK = false;
+          includeSystemImages = true;
+          includeEmulator = true;
+          useGoogleAPIs = true;
+
           systemImageTypes = [
             "google_apis"
             "google_apis_playstore"
@@ -51,7 +59,7 @@
             ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL = "1";
             ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
             ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
-            ANDROID_AVD_HOME = "$HOME/.android/avd";
+            # ANDROID_AVD_HOME = "$HOME/.android/avd";
             JAVA_HOME = jdk17.home;
             FLUTTER_ROOT = flutter;
             DART_ROOT = "${flutter}/bin/cache/dart-sdk";
@@ -62,6 +70,7 @@
               androidSdk
               flutter
               gradle
+              qemu_kvm
               jdk17
               zenity
             ];

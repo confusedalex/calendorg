@@ -10,8 +10,8 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext widgetContext) {
-    final filePath =
-        widgetContext.select((EventViewBloc bloc) => bloc.state.event.filePath);
+    final fileInfo =
+        widgetContext.select((EventViewBloc bloc) => bloc.state.event.fileInfo);
     final title =
         widgetContext.select((EventViewBloc bloc) => bloc.state.title);
     final timestamp =
@@ -68,7 +68,7 @@ class EventView extends StatelessWidget {
                 key: Key("SaveButton"),
                 onPressed: () {
                   widgetContext.read<OrgFilesBloc>().add(
-                      OrgFilesReplaceNode(filePath, oldSection, newSection));
+                      OrgFilesReplaceNode(fileInfo, oldSection, newSection));
                   Navigator.pop(widgetContext);
                 },
                 child: Text("save"))

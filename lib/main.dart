@@ -7,7 +7,7 @@ import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/event_list_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,15 +61,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadAsset() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles();
+    final result = await FilePickerWritable().openFile((fileInfo, file) async {
+      return (fileInfo, file);
+    });
 
     if (result != null) {
-      orgFile = File(result.files.single.path!);
-      final fileContent = await orgFile.readAsString();
+      final (fileInfo, file) = result;
+      final fileContent = await FilePickerWritable().readFile(
+          identifier: fileInfo.identifier,
+          reader: (fileInfo, file) => file.readAsString());
 
       setState(() {
         BlocProvider.of<OrgFilesBloc>(context)
-            .add(OrgFilesAddFilePath(orgFile.path));
+            .add(OrgFilesAddFilePath(fileInfo));
         firstRead = fileContent;
       });
     }

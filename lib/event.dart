@@ -1,3 +1,4 @@
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -6,7 +7,7 @@ class Event {
   bool containsTimestampInHeadline;
   OrgSection section;
   String title;
-  String filePath;
+  FileInfo fileInfo;
   late String? description;
   List<String> tags = [];
   List<OrgTimestamp> timestamps;
@@ -37,14 +38,14 @@ class Event {
       required this.title,
       required this.tags,
       required this.timestamps,
-      required this.filePath,
+      required this.fileInfo,
       this.description});
 
   Event copyWith(
       {bool? containsTimestampInHeadline,
       OrgSection? section,
       String? title,
-      String? filePath,
+      FileInfo? fileInfo,
       ValueGetter<String?>? description,
       List<String>? tags,
       List<OrgTimestamp>? timestamps}) {
@@ -53,7 +54,7 @@ class Event {
             containsTimestampInHeadline ?? this.containsTimestampInHeadline,
         section: section ?? this.section,
         title: title ?? this.title,
-        filePath: filePath ?? this.filePath,
+        fileInfo: fileInfo ?? this.fileInfo,
         description: description != null ? description() : this.description,
         tags: tags ?? this.tags,
         timestamps: timestamps ?? this.timestamps);

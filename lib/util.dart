@@ -1,9 +1,10 @@
 import 'package:calendorg/event.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<Event> parseEvents(String filePath, OrgDocument document) {
+List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
   final timestampRegEx = RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]");
   final List<Event> eventList = [];
 
@@ -57,7 +58,7 @@ List<Event> parseEvents(String filePath, OrgDocument document) {
       eventList.add(Event(
           section: section,
           containsTimestampInHeadline: containsTimestamp,
-          filePath: filePath,
+          fileInfo: fileInfo,
           title: headline,
           tags: tags,
           timestamps: foundTimestamps,

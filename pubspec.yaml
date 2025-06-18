@@ -37,7 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   org_parser:
     git: https://github.com/amake/org_parser.git
-  file_picker: ^10.1.9
+  file_picker_writable:
+    git:
+      url: https://github.com/amake/file_picker_writable.git
+      ref: directory-picker
   uuid: ^4.5.1
   table_calendar: ^3.2.0
   flex_color_picker: ^3.7.1

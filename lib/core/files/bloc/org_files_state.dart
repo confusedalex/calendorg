@@ -2,8 +2,8 @@ part of 'org_files_bloc.dart';
 
 class OrgFilesState {
   OrgFilesState({required this.filePaths, required this.documentsMap});
-  final Set<String> filePaths;
-  final Map<String, OrgDocument> documentsMap;
+  final Set<FileInfo> filePaths;
+  final Map<FileInfo, OrgDocument> documentsMap;
 
   factory OrgFilesState.initial() => OrgFilesState(
         filePaths: {},
@@ -11,7 +11,7 @@ class OrgFilesState {
       );
 
   OrgFilesState copyWith(
-      {Set<String>? filePaths, Map<String, OrgDocument>? documentsMap}) {
+      {Set<FileInfo>? filePaths, Map<FileInfo, OrgDocument>? documentsMap}) {
     return OrgFilesState(
         filePaths: filePaths ?? this.filePaths,
         documentsMap: documentsMap ?? this.documentsMap);

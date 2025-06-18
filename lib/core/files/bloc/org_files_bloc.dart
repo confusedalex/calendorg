@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 
@@ -15,18 +14,21 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
       switch (event) {
         case OrgFilesAddFilePath():
           final document =
-              OrgDocument.parse(await File(event.file).readAsString());
+              OrgDocument.parse(await FilePickerWritable().readFile(
+            identifier: event.fileInfo.identifier,
+            reader: (fileInfo, file) => file.readAsString(),
+          ));
 
           emit(state.copyWith(
-              filePaths: state.filePaths..add(event.file),
+              filePaths: state.filePaths..add(event.fileInfo),
               documentsMap: state.documentsMap
-                ..addAll({event.file: document})));
+                ..addAll({event.fileInfo: document})));
         case OrgFilesRemoveFilePath():
           emit(state.copyWith(
-              filePaths: state.filePaths..remove(event.file),
-              documentsMap: state.documentsMap..remove(event.file)));
+              filePaths: state.filePaths..remove(event.fileInfo),
+              documentsMap: state.documentsMap..remove(event.fileInfo)));
         case OrgFilesReplaceNode():
-          final oldDocument = state.documentsMap[event.filePath];
+          final oldDocument = state.documentsMap[event.fileInfo];
           if (oldDocument == null) return;
           if (!oldDocument.children.contains(event.oldNode)) return;
 
@@ -37,7 +39,7 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
               .commit();
           emit(state.copyWith(
               documentsMap: state.documentsMap
-                ..update(event.filePath,
+                ..update(event.fileInfo,
                     (doc) => OrgDocument.parse(newDoc.toMarkup()))));
       }
     });
