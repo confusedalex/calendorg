@@ -1,5 +1,7 @@
 import 'package:calendorg/util.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
@@ -12,7 +14,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final events = parseEvents("filePath", document);
+  final events = parseEvents(MockFileInfo(), document);
   final event = events.first;
 
   group(
@@ -88,3 +90,5 @@ void main() {
     },
   );
 }
+
+class MockFileInfo extends Mock implements FileInfo {}

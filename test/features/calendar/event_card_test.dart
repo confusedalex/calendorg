@@ -1,12 +1,14 @@
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:calendorg/util.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
@@ -22,7 +24,7 @@ void main() {
 <2025-05-27>
 """;
   final document = OrgDocument.parse(markup);
-  final event = parseEvents(document).first;
+  final event = parseEvents(MockFileInfo() ,document).first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
 
   Future<void> initWidget(dynamic tester) async {
@@ -79,7 +81,7 @@ void main() {
                       [meetupTagColor],
                     )),
             BlocProvider(
-              create: (context) => OrgDocumentCubit(document),
+              create: (context) => MockOrgFilesBloc(document)
             )
           ],
           child: EventCard(event, event.timestamps.first),
@@ -96,3 +98,19 @@ void main() {
     });
   });
 }
+
+class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
+  final fileInfo = MockFileInfo();
+  final OrgDocument document;
+
+  MockOrgFilesBloc(this.document);
+
+  @override
+  OrgFilesState get state =>
+      OrgFilesState(filePaths: {fileInfo}, documentsMap: {fileInfo: document});
+
+  @override
+  Stream<OrgFilesState> get stream => Stream.value(state);
+}
+
+class MockFileInfo extends Mock implements FileInfo {}

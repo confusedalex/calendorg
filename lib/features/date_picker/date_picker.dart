@@ -15,110 +15,114 @@ class DatePicker extends StatelessWidget {
     final timestamp =
         context.select((DatePickerBloc bloc) => bloc.generateTimestamp());
     final savable = context.select((DatePickerBloc bloc) => bloc.savable);
+
     return AlertDialog(
       title: Row(children: [Text("DatePicker"), Spacer(), CloseButton()]),
-      content: BlocBuilder<DatePickerBloc, DatePickerState>(
-          builder: (context, state) {
-        return SizedBox(
-          width: 350,
-          child: Column(
-            spacing: 10,
-            children: [
-              Column(
-                children: [
-                  Text("Start Date"),
-                  OutlinedButton(
-                      key: Key("datepicker_startdatebutton"),
-                      onPressed: () => context
-                          .read<DatePickerBloc>()
-                          .datePickerDatePressed(context, "start",
-                              initialDate: startDate),
-                      child: Text(
-                          dateTimeToSimpleTimestamp(startDate, false, true)
-                              .toMarkup())),
-                ],
-              ),
-              Column(
-                children: [
-                  Text("Start Time"),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+      content: SizedBox(
+          width: double.maxFinite,
+          child: BlocBuilder<DatePickerBloc, DatePickerState>(
+              builder: (context, state) => Column(
                     children: [
-                      OutlinedButton(
-                          key: Key("datepicker_starttimebutton"),
-                          onPressed: state.startTimeActive
-                              ? () => context
+                      Column(
+                        children: [
+                          Text("Start Date"),
+                          OutlinedButton(
+                              key: Key("datepicker_startdatebutton"),
+                              onPressed: () => context
                                   .read<DatePickerBloc>()
-                                  .datePickerTimePressed(context, "start")
-                              : null,
-                          child: Text(state.startTimeDuration.format(context))),
-                      Checkbox(
-                        key: Key("datepicker_starttimecheckbox"),
-                        value: state.startTimeActive,
-                        onChanged: (value) => context
-                            .read<DatePickerBloc>()
-                            .add(DatePickerStartTimeActiveChanged(value!)),
-                      )
+                                  .datePickerDatePressed(context, "start",
+                                      initialDate: startDate),
+                              child: Text(dateTimeToSimpleTimestamp(
+                                      startDate, false, true)
+                                  .toMarkup())),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text("Start Time"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              OutlinedButton(
+                                  key: Key("datepicker_starttimebutton"),
+                                  onPressed: state.startTimeActive
+                                      ? () => context
+                                          .read<DatePickerBloc>()
+                                          .datePickerTimePressed(
+                                              context, "start")
+                                      : null,
+                                  child: Text(
+                                      state.startTimeDuration.format(context))),
+                              Checkbox(
+                                key: Key("datepicker_starttimecheckbox"),
+                                value: state.startTimeActive,
+                                onChanged: (value) => context
+                                    .read<DatePickerBloc>()
+                                    .add(DatePickerStartTimeActiveChanged(
+                                        value!)),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      Text("End Date"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                              key: Key("datepicker_enddatebutton"),
+                              onPressed: state.endDateActive
+                                  ? () => context
+                                      .read<DatePickerBloc>()
+                                      .datePickerDatePressed(context, "end",
+                                          initialDate: endDate)
+                                  : null,
+                              child: Text(endDate != null
+                                  ? dateTimeToSimpleTimestamp(
+                                          endDate, false, true)
+                                      .toMarkup()
+                                  : "select end date")),
+                          // End Date enabled checkbox
+                          Checkbox(
+                              key: Key("datepicker_enddatecheckbox"),
+                              semanticLabel: state.endDateActive.toString(),
+                              value: state.endDateActive,
+                              onChanged: (value) => context
+                                  .read<DatePickerBloc>()
+                                  .add(DatePickerEndDateActiveChanged(value!)))
+                        ],
+                      ),
+                      Text("End Time"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                              key: Key("datepicker_endtimebutton"),
+                              onPressed: state.endTimeActive
+                                  ? () => context
+                                      .read<DatePickerBloc>()
+                                      .datePickerTimePressed(context, "end")
+                                  : null,
+                              child:
+                                  Text(state.endTimeDuration.format(context))),
+                          Checkbox(
+                              key: Key("datepicker_endtimecheckbox"),
+                              semanticLabel: state.endTimeActive.toString(),
+                              value: state.endTimeActive,
+                              onChanged:
+                                  state.endDateActive || state.startTimeActive
+                                      ? (value) => context
+                                          .read<DatePickerBloc>()
+                                          .add(DatePickerEndTimeActiveChanged(
+                                              value!))
+                                      : null)
+                        ],
+                      ),
+                      Spacer(),
+                      Text(timestamp.toMarkup()),
+                      Spacer()
                     ],
-                  ),
-                ],
-              ),
-              Text("End Date"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  OutlinedButton(
-                      key: Key("datepicker_enddatebutton"),
-                      onPressed: state.endDateActive
-                          ? () => context
-                              .read<DatePickerBloc>()
-                              .datePickerDatePressed(context, "end",
-                                  initialDate: endDate)
-                          : null,
-                      child: Text(endDate != null
-                          ? dateTimeToSimpleTimestamp(endDate, false, true)
-                              .toMarkup()
-                          : "select end date")),
-                  // End Date enabled checkbox
-                  Checkbox(
-                      key: Key("datepicker_enddatecheckbox"),
-                      semanticLabel: state.endDateActive.toString(),
-                      value: state.endDateActive,
-                      onChanged: (value) => context
-                          .read<DatePickerBloc>()
-                          .add(DatePickerEndDateActiveChanged(value!)))
-                ],
-              ),
-              Text("End Time"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  OutlinedButton(
-                      key: Key("datepicker_endtimebutton"),
-                      onPressed: state.endTimeActive
-                          ? () => context
-                              .read<DatePickerBloc>()
-                              .datePickerTimePressed(context, "end")
-                          : null,
-                      child: Text(state.endTimeDuration.format(context))),
-                  Checkbox(
-                      key: Key("datepicker_endtimecheckbox"),
-                      semanticLabel: state.endTimeActive.toString(),
-                      value: state.endTimeActive,
-                      onChanged: state.endDateActive || state.startTimeActive
-                          ? (value) => context
-                              .read<DatePickerBloc>()
-                              .add(DatePickerEndTimeActiveChanged(value!))
-                          : null)
-                ],
-              ),
-              Spacer(),
-              Text(timestamp.toMarkup()),
-              Spacer()
-            ],
-          ),
-        );
-      }),
+                  ))),
       actions: [
         TextButton(
             key: Key("SaveButton"),

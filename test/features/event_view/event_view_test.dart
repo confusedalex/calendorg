@@ -2,9 +2,11 @@ import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 
@@ -17,7 +19,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final event = parseEvents("filePath", document).first;
+  final event = parseEvents(MockFileInfo(), document).first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
 
   Future<void> initWidget(dynamic tester) async {
@@ -57,3 +59,5 @@ void main() {
     skip: true,
   );
 }
+
+class MockFileInfo extends Mock implements FileInfo {}

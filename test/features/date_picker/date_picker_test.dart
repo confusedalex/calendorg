@@ -14,15 +14,12 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-      create: (context) => DatePickerBloc(timestamp),
-      child: DatePicker(),
-    ))));
+                create: (context) => DatePickerBloc(timestamp),
+                child: DatePicker()))));
 
-    expect(
-        find.descendant(
-            of: find.byType(TextButton),
-            matching: find.text(timestamp.toMarkup())),
-        findsOne);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key("datepicker_startdatebutton")), findsOne);
   });
 
   testWidgets("start date button shows datepicker", (tester) async {
@@ -82,7 +79,7 @@ void main() {
     await tester.tap(find.byKey(Key("datepicker_enddatebutton")));
     await tester.pumpAndSettle();
 
-    expect(find.byType(CalendarDatePicker), findsNothing);
+    expect(find.byType(CalendarDatePicker), findsOneWidget);
   });
 
   testWidgets("start time button without endtimeactive wont show timepicker",

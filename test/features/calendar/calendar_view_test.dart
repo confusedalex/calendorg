@@ -1,10 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/calendar_view.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/util.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -33,6 +35,7 @@ void main() {
 <2025-05-08 11:00-13:00>
 <2025-05-28> <2025-05-15>
 """;
+
       final document = OrgDocument.parse(markup);
       final schoolTagColor = TagColor("school", Colors.orange);
       final homeTagColor = TagColor("@home", Colors.lightGreen);
@@ -40,11 +43,11 @@ void main() {
       late OrgFilesBloc orgFilesBloc;
       late CalendarBloc calendarBloc;
 
+      orgFilesBloc = MockOrgFilesBloc(document);
+
       setUp(() {
         calendarBloc = CalendarBloc(
-            parseEvents("filePath", document), DateTime(2025, 05, 17));
-
-        orgFilesBloc = OrgFilesBloc()..add(OrgFilesAddFilePath("blalba"));
+            parseEvents(MockFileInfo(), document), DateTime(2025, 05, 17));
       });
 
       Future<void> pumpWidgetToTester(dynamic tester) async {
@@ -52,7 +55,8 @@ void main() {
             home: Scaffold(
                 body: MultiBlocProvider(providers: [
           BlocProvider.value(value: orgFilesBloc),
-          BlocProvider(create: (context) => calendarBloc),
+          BlocProvider(create: (context) => StartingDayCubit()),
+          BlocProvider.value(value: calendarBloc),
           BlocProvider(
               create: (context) => TagColorsCubit.withInitialValue(
                   [schoolTagColor, homeTagColor, workTagColor])),
@@ -106,3 +110,19 @@ void main() {
     },
   );
 }
+
+class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
+  final fileInfo = MockFileInfo();
+  final OrgDocument document;
+
+  MockOrgFilesBloc(this.document);
+
+  @override
+  OrgFilesState get state =>
+      OrgFilesState(filePaths: {fileInfo}, documentsMap: {fileInfo: document});
+
+  @override
+  Stream<OrgFilesState> get stream => Stream.value(state);
+}
+
+class MockFileInfo extends Mock implements FileInfo {}
