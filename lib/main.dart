@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/event.dart';
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/event_list_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
@@ -10,7 +10,6 @@ import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:org_parser/org_parser.dart';
 
 void main() {
   runApp(const Calendorg());
@@ -34,7 +33,7 @@ class Calendorg extends StatelessWidget {
             BlocProvider(
                 create: (context) => TagColorsCubit()..setInitialTagColor()),
             BlocProvider(
-              create: (context) => OrgDocumentCubit(OrgDocument.parse("")),
+              create: (context) => OrgFilesBloc(),
             )
           ],
           child: HomePage(),
@@ -67,10 +66,10 @@ class _HomePageState extends State<HomePage> {
     if (result != null) {
       orgFile = File(result.files.single.path!);
       final fileContent = await orgFile.readAsString();
-      final document = OrgDocument.parse(fileContent);
 
       setState(() {
-        BlocProvider.of<OrgDocumentCubit>(context).setDocument(document);
+        BlocProvider.of<OrgFilesBloc>(context)
+            .add(OrgFilesAddFilePath(orgFile.path));
         firstRead = fileContent;
       });
     }

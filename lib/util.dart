@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<Event> parseEvents(OrgDocument document) {
+List<Event> parseEvents(String filePath, OrgDocument document) {
   final timestampRegEx = RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]");
   final List<Event> eventList = [];
 
@@ -57,6 +57,7 @@ List<Event> parseEvents(OrgDocument document) {
       eventList.add(Event(
           section: section,
           containsTimestampInHeadline: containsTimestamp,
+          filePath: filePath,
           title: headline,
           tags: tags,
           timestamps: foundTimestamps,

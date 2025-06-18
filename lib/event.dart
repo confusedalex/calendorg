@@ -6,6 +6,7 @@ class Event {
   bool containsTimestampInHeadline;
   OrgSection section;
   String title;
+  String filePath;
   late String? description;
   List<String> tags = [];
   List<OrgTimestamp> timestamps;
@@ -36,12 +37,14 @@ class Event {
       required this.title,
       required this.tags,
       required this.timestamps,
+      required this.filePath,
       this.description});
 
   Event copyWith(
       {bool? containsTimestampInHeadline,
       OrgSection? section,
       String? title,
+      String? filePath,
       ValueGetter<String?>? description,
       List<String>? tags,
       List<OrgTimestamp>? timestamps}) {
@@ -50,6 +53,7 @@ class Event {
             containsTimestampInHeadline ?? this.containsTimestampInHeadline,
         section: section ?? this.section,
         title: title ?? this.title,
+        filePath: filePath ?? this.filePath,
         description: description != null ? description() : this.description,
         tags: tags ?? this.tags,
         timestamps: timestamps ?? this.timestamps);

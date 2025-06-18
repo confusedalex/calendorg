@@ -1,5 +1,4 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
@@ -18,7 +17,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final event = parseEvents(document).first;
+  final event = parseEvents("filePath", document).first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
 
   Future<void> initWidget(dynamic tester) async {
@@ -30,9 +29,6 @@ void main() {
             create: (context) => TagColorsCubit.withInitialValue(
                   [meetupTagColor],
                 )),
-        BlocProvider(
-          create: (context) => OrgDocumentCubit(document),
-        ),
         BlocProvider(
           create: (context) => EventViewBloc(event, event.timestamps.first),
         )

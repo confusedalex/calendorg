@@ -1,10 +1,8 @@
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_view.dart';
-import 'package:calendorg/util.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:org_parser/org_parser.dart';
 
 class CalendarPage extends StatelessWidget {
   final DateTime initialSelectedDay;
@@ -12,9 +10,9 @@ class CalendarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<OrgDocumentCubit, OrgDocument>(
+      BlocBuilder<OrgFilesBloc, OrgFilesState>(
           builder: (context, state) => BlocProvider(
               create: (context) =>
-                  CalendarBloc(parseEvents(state), initialSelectedDay),
+                  CalendarBloc(state.allEvents, initialSelectedDay),
               child: CalendarView()));
 }

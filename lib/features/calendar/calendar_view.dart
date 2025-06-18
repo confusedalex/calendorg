@@ -1,4 +1,4 @@
-import 'package:calendorg/core/document/document_cubit.dart';
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
@@ -21,6 +21,7 @@ class CalendarView extends StatelessWidget {
         context.select((CalendarBloc bloc) => bloc.state.calendarFormat);
     final StartingDayOfWeek startingDay =
         context.select((StartingDayCubit bloc) => bloc.state);
+    final eventsByDate = context.read<OrgFilesBloc>().state.eventsByDate;
 
     return Column(children: [
       TableCalendar(
@@ -38,8 +39,7 @@ class CalendarView extends StatelessWidget {
         onFormatChanged: (format) => context
             .read<CalendarBloc>()
             .add(CalendarChangeFormat(calendarFormat: format)),
-        eventLoader: (day) =>
-            context.read<OrgDocumentCubit>().eventsByDate(day),
+        eventLoader: eventsByDate,
         calendarBuilders: CalendarBuilders(
           markerBuilder: (context, day, events) {
             if (events.isEmpty ||
@@ -47,15 +47,15 @@ class CalendarView extends StatelessWidget {
                 isSameDay(day, DateTime.now())) {
               return Container();
             }
-            return EventMarkers(
-                eventList: context.read<OrgDocumentCubit>().eventsByDate(day));
+            return EventMarkers(eventList: eventsByDate(day));
           },
         ),
       ),
       Expanded(
         child: ListView(
           children: context
-              .read<OrgDocumentCubit>()
+              .read<OrgFilesBloc>()
+              .state
               .eventsByDateWithTimestamps(focusedDay)
               .entries
               .fold(

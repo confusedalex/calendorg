@@ -1,4 +1,4 @@
-import 'package:calendorg/core/document/document_cubit.dart';
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
@@ -10,6 +10,8 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext widgetContext) {
+    final filePath =
+        widgetContext.select((EventViewBloc bloc) => bloc.state.event.filePath);
     final title =
         widgetContext.select((EventViewBloc bloc) => bloc.state.title);
     final timestamp =
@@ -65,9 +67,8 @@ class EventView extends StatelessWidget {
             TextButton(
                 key: Key("SaveButton"),
                 onPressed: () {
-                  widgetContext
-                      .read<OrgDocumentCubit>()
-                      .replaceNode(oldSection, newSection);
+                  widgetContext.read<OrgFilesBloc>().add(
+                      OrgFilesReplaceNode(filePath, oldSection, newSection));
                   Navigator.pop(widgetContext);
                 },
                 child: Text("save"))

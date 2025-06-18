@@ -1,12 +1,14 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
-import 'package:calendorg/core/document/document_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_view.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -35,26 +37,26 @@ void main() {
       final schoolTagColor = TagColor("school", Colors.orange);
       final homeTagColor = TagColor("@home", Colors.lightGreen);
       final workTagColor = TagColor("@work", Colors.yellow);
+      late OrgFilesBloc orgFilesBloc;
       late CalendarBloc calendarBloc;
 
       setUp(() {
-        calendarBloc =
-            CalendarBloc(parseEvents(document), DateTime(2025, 05, 17));
+        calendarBloc = CalendarBloc(
+            parseEvents("filePath", document), DateTime(2025, 05, 17));
+
+        orgFilesBloc = OrgFilesBloc()..add(OrgFilesAddFilePath("blalba"));
       });
 
       Future<void> pumpWidgetToTester(dynamic tester) async {
         await tester.pumpWidget(MaterialApp(
             home: Scaffold(
-                body: MultiBlocProvider(
-                    // child: CalendarPage(DateTime(2025, 05, 17)))))));
-                    providers: [
-              BlocProvider(create: (context) => OrgDocumentCubit(document)),
-              BlocProvider<CalendarBloc>(create: (context) => calendarBloc),
-              BlocProvider(
-                  create: (context) => TagColorsCubit.withInitialValue(
-                      [schoolTagColor, homeTagColor, workTagColor])),
-            ],
-                    child: CalendarView()))));
+                body: MultiBlocProvider(providers: [
+          BlocProvider.value(value: orgFilesBloc),
+          BlocProvider(create: (context) => calendarBloc),
+          BlocProvider(
+              create: (context) => TagColorsCubit.withInitialValue(
+                  [schoolTagColor, homeTagColor, workTagColor])),
+        ], child: CalendarView()))));
       }
 
       testWidgets('Calendar should show marker for every tag occurance at day',
