@@ -4,6 +4,8 @@ class OrgFilesState {
   OrgFilesState({required this.filePaths, required this.documentsMap});
   final Set<FileInfo> filePaths;
   final Map<FileInfo, OrgDocument> documentsMap;
+  late final List<Event> allEvents =
+      documentsMap.entries.expand((e) => parseEvents(e.key, e.value)).toList();
 
   factory OrgFilesState.initial() => OrgFilesState(
         filePaths: {},
@@ -18,9 +20,6 @@ class OrgFilesState {
   }
 
   List<Object?> get props => [filePaths, documentsMap];
-
-  List<Event> get allEvents =>
-      documentsMap.entries.expand((e) => parseEvents(e.key, e.value)).toList();
 
   List<Event> eventsByDate(DateTime date) => allEvents.fold([], (acc, cur) {
         final timestampsByDate = cur.timestampsByDateTime(date);
