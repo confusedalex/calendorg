@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
@@ -30,13 +32,13 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
         case OrgFilesReplaceNode():
           final oldDocument = state.documentsMap[event.fileInfo];
           if (oldDocument == null) return;
-          if (!oldDocument.children.contains(event.oldNode)) return;
 
           final newDoc = oldDocument
               .edit()
               .find(event.oldNode)!
               .replace(event.newNode)
               .commit();
+
           emit(state.copyWith(
               documentsMap: state.documentsMap
                 ..update(event.fileInfo,
