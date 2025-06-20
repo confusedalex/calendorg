@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/event.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/event_list_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +29,7 @@ class Calendorg extends StatelessWidget {
             BlocProvider(
                 create: (context) => TagColorsCubit()..setInitialTagColor()),
             BlocProvider(
-              create: (context) => OrgFilesBloc(),
+              create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
             )
           ],
           child: HomePage(),
