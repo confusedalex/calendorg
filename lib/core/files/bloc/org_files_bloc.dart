@@ -16,16 +16,12 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           if (event.fileInfo == null) return;
           final fileInfo = event.fileInfo!;
 
-          final document =
-              OrgDocument.parse(await FilePickerWritable().readFile(
-            identifier: fileInfo.identifier,
-            reader: (fileInfo, file) => file.readAsString(),
-          ));
-
           emit(state.copyWith(
               filePaths: state.filePaths..add(fileInfo),
               documentsMap: state.documentsMap
-                ..addAll({fileInfo: document})));
+                ..addAll({
+                  fileInfo: await documentByIdentifier(fileInfo.identifier)
+                })));
         case OrgFilesRemoveFilePath():
           emit(state.copyWith(
               filePaths: state.filePaths..remove(event.fileInfo),
@@ -48,3 +44,9 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     });
   }
 }
+
+Future<OrgDocument> documentByIdentifier(String identifier) async =>
+    OrgDocument.parse(await FilePickerWritable().readFile(
+      identifier: identifier,
+      reader: (fileInfo, file) => file.readAsString(),
+    ));
