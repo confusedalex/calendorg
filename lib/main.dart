@@ -18,9 +18,6 @@ class Calendorg extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'calendorg',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        ),
         home: MultiBlocProvider(
           providers: [
             BlocProvider(
