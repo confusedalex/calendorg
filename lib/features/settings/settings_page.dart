@@ -1,4 +1,6 @@
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/features/settings/agenda_files_dialog.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';
@@ -26,5 +28,13 @@ class SettingsPage extends StatelessWidget {
                 builder: (_) => BlocProvider.value(
                     value: BlocProvider.of<StartingDayCubit>(context),
                     child: const StartingDateDialog()))),
+        Divider(),
+        ListTile(
+            title: Text("Agenda Files"),
+            onTap: () => showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<OrgFilesBloc>(context),
+                    child: const AgendaFilesDialog()))),
       ]);
 }

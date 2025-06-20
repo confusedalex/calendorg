@@ -50,39 +50,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int index = 0;
-  List<Event> eventList = [];
-  late File orgFile;
-  String firstRead = "loading";
-
-  @override
-  void initState() {
-    super.initState();
-    loadAsset();
-  }
-
-  void loadAsset() async {
-    final result = await FilePickerWritable().openFile((fileInfo, file) async {
-      return (fileInfo, file);
-    });
-
-    if (result != null) {
-      final (fileInfo, file) = result;
-      final fileContent = await FilePickerWritable().readFile(
-          identifier: fileInfo.identifier,
-          reader: (fileInfo, file) => file.readAsString());
-
-      setState(() {
-        BlocProvider.of<OrgFilesBloc>(context)
-            .add(OrgFilesAddFilePath(fileInfo));
-        firstRead = fileContent;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final List pages = [
-      eventListPage(firstRead),
+      eventListPage(),
       CalendarPage(DateTime.now()),
       SettingsPage()
     ];

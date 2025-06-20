@@ -4,7 +4,7 @@ part of 'org_files_bloc.dart';
 sealed class OrgFilesEvent {}
 
 final class OrgFilesAddFilePath extends OrgFilesEvent {
-  final FileInfo fileInfo;
+  final FileInfo? fileInfo;
   OrgFilesAddFilePath(this.fileInfo);
 }
 

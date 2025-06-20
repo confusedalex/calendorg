@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
@@ -15,16 +13,19 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     on<OrgFilesEvent>((event, emit) async {
       switch (event) {
         case OrgFilesAddFilePath():
+          if (event.fileInfo == null) return;
+          final fileInfo = event.fileInfo!;
+
           final document =
               OrgDocument.parse(await FilePickerWritable().readFile(
-            identifier: event.fileInfo.identifier,
+            identifier: fileInfo.identifier,
             reader: (fileInfo, file) => file.readAsString(),
           ));
 
           emit(state.copyWith(
-              filePaths: state.filePaths..add(event.fileInfo),
+              filePaths: state.filePaths..add(fileInfo),
               documentsMap: state.documentsMap
-                ..addAll({event.fileInfo: document})));
+                ..addAll({fileInfo: document})));
         case OrgFilesRemoveFilePath():
           emit(state.copyWith(
               filePaths: state.filePaths..remove(event.fileInfo),

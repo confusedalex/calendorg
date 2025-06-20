@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_diff_text/pretty_diff_text.dart';
 
-Widget eventListPage(String firstRead) => Center(
+Widget eventListPage() => Center(
       child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: BlocBuilder<OrgFilesBloc, OrgFilesState>(
@@ -13,7 +13,7 @@ Widget eventListPage(String firstRead) => Center(
                   children: state.documentsMap.values
                       .map(
                         (e) => PrettyDiffText(
-                            oldText: firstRead, newText: e.toMarkup()),
+                            oldText: "bla", newText: e.toMarkup()),
                       )
                       .toList()),
             ),
