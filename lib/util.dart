@@ -125,3 +125,12 @@ extension GetTimeOfDay on OrgTime {
   TimeOfDay get timeOfDay =>
       TimeOfDay(hour: int.parse(this.hour), minute: int.parse(this.minute));
 }
+
+extension StartDateTime on OrgTimestamp {
+  DateTime get startDateTime => switch (this) {
+        OrgSimpleTimestamp() => (this as OrgSimpleTimestamp).dateTime,
+        OrgDateRangeTimestamp() =>
+          (this as OrgDateRangeTimestamp).start.dateTime,
+        OrgTimeRangeTimestamp() => (this as OrgTimeRangeTimestamp).startDateTime
+      };
+}

@@ -3,6 +3,7 @@ import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -64,7 +65,11 @@ class CalendarView extends StatelessWidget {
                         ...acc,
                         ...entry.value
                             .map((timestamp) => EventCard(entry.key, timestamp))
-                      ]),
+                      ])
+            ..sort((a, b) => (a as EventCard)
+                .timestamp
+                .startDateTime
+                .compareTo((b as EventCard).timestamp.startDateTime)),
         ),
       ),
     ]);
