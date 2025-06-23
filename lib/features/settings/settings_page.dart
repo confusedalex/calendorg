@@ -4,6 +4,8 @@ import 'package:calendorg/features/settings/agenda_files_dialog.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';
+import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
+import 'package:calendorg/features/settings/theme/theme_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,5 +38,13 @@ class SettingsPage extends StatelessWidget {
                 builder: (_) => BlocProvider.value(
                     value: BlocProvider.of<OrgFilesBloc>(context),
                     child: const AgendaFilesDialog()))),
+        Divider(),
+        ListTile(
+            title: Text("Theme"),
+            onTap: () => showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<ThemeBloc>(context),
+                    child: const ThemeDialog()))),
       ]);
 }

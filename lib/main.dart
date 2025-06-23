@@ -20,22 +20,27 @@ class Calendorg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'calendorg',
-        theme: context.read<ThemeBloc>().state,
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => StartingDayCubit()..loadStartingDay(),
-            ),
-            BlocProvider(
-                create: (context) => TagColorsCubit()..setInitialTagColor()),
-            BlocProvider(
-              create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
-            )
-          ],
-          child: HomePage(),
-        ));
+    return BlocBuilder<ThemeBloc, ThemeData>(
+      builder: (context, state) {
+        return MaterialApp(
+            title: 'calendorg',
+            theme: state,
+            home: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => StartingDayCubit()..loadStartingDay(),
+                ),
+                BlocProvider(
+                    create: (context) =>
+                        TagColorsCubit()..setInitialTagColor()),
+                BlocProvider(
+                  create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
+                )
+              ],
+              child: HomePage(),
+            ));
+      },
+    );
   }
 }
 
