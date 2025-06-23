@@ -4,11 +4,15 @@ import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/event_list_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
+import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const Calendorg());
+  runApp(BlocProvider(
+    create: (context) => ThemeBloc(),
+    child: const Calendorg(),
+  ));
 }
 
 class Calendorg extends StatelessWidget {
@@ -18,6 +22,7 @@ class Calendorg extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'calendorg',
+        theme: context.read<ThemeBloc>().state,
         home: MultiBlocProvider(
           providers: [
             BlocProvider(
