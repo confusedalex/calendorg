@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
