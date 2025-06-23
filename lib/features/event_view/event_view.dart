@@ -9,17 +9,15 @@ class EventView extends StatelessWidget {
   const EventView({super.key});
 
   @override
-  Widget build(BuildContext widgetContext) {
+  Widget build(BuildContext context) {
     final fileInfo =
-        widgetContext.select((EventViewBloc bloc) => bloc.state.event.fileInfo);
-    final title =
-        widgetContext.select((EventViewBloc bloc) => bloc.state.title);
+        context.select((EventViewBloc bloc) => bloc.state.event.fileInfo);
+    final title = context.select((EventViewBloc bloc) => bloc.state.title);
     final timestamp =
-        widgetContext.select((EventViewBloc bloc) => bloc.state.timestamp);
-    final oldSection =
-        widgetContext.select((EventViewBloc bloc) => bloc.oldSection);
+        context.select((EventViewBloc bloc) => bloc.state.timestamp);
+    final oldSection = context.select((EventViewBloc bloc) => bloc.oldSection);
     final newSection =
-        widgetContext.select((EventViewBloc bloc) => bloc.state.event.section);
+        context.select((EventViewBloc bloc) => bloc.state.event.section);
 
     return AlertDialog(
         title: Row(
@@ -33,7 +31,7 @@ class EventView extends StatelessWidget {
                   border: OutlineInputBorder(), helperText: "Event Title"),
               initialValue: title,
               autovalidateMode: AutovalidateMode.always,
-              onChanged: (value) => widgetContext
+              onChanged: (value) => context
                   .read<EventViewBloc>()
                   .add(EventViewTitleChangeEvent(value)),
               validator: (value) {
@@ -49,13 +47,13 @@ class EventView extends StatelessWidget {
                 onPressed: () {
                   showDialog(
                       context: context,
-                      builder: (context) {
+                      builder: (_) {
                         return MultiBlocProvider(
                           providers: [
                             BlocProvider(
-                                create: (context) => DatePickerBloc(timestamp)),
+                                create: (_) => DatePickerBloc(timestamp)),
                             BlocProvider.value(
-                                value: widgetContext.read<EventViewBloc>())
+                                value: context.read<EventViewBloc>())
                           ],
                           child: DatePicker(),
                         );
@@ -67,9 +65,9 @@ class EventView extends StatelessWidget {
             TextButton(
                 key: Key("SaveButton"),
                 onPressed: () {
-                  widgetContext.read<OrgFilesBloc>().add(
+                  context.read<OrgFilesBloc>().add(
                       OrgFilesReplaceNode(fileInfo, oldSection, newSection));
-                  Navigator.pop(widgetContext);
+                  Navigator.pop(context);
                 },
                 child: Text("save"))
           ]),
