@@ -28,7 +28,7 @@ class Calendorg extends StatelessWidget {
             home: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) => StartingDayCubit()..loadStartingDay(),
+                  create: (context) => StartingDayCubit()..setInititalStartingDay(),
                 ),
                 BlocProvider(
                     create: (context) =>
