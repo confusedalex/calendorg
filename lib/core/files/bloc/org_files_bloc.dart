@@ -76,10 +76,10 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
         fileInfo: await documentByIdentifier(fileInfo.identifier)
     });
   }
-}
 
-Future<OrgDocument> documentByIdentifier(String identifier) async =>
-    OrgDocument.parse(await FilePickerWritable().readFile(
-      identifier: identifier,
-      reader: (fileInfo, file) => file.readAsString(),
-    ));
+  Future<OrgDocument> documentByIdentifier(String identifier) async =>
+      OrgDocument.parse(await FilePickerWritable().readFile(
+        identifier: identifier,
+        reader: (fileInfo, file) => file.readAsString(),
+      ));
+}
