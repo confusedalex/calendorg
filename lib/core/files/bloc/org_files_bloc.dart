@@ -25,18 +25,22 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
             ..addAll(
                 {fileInfo: await documentByIdentifier(fileInfo.identifier)});
 
-          _updateSharedPreferences(filePaths);
-
-          emit(
-              state.copyWith(filePaths: filePaths, documentsMap: documentsMap));
+          emit(state.copyWith(
+              filePaths: filePaths,
+              documentsMap: documentsMap,
+              fileToCaptureTo: () => filePaths.length == 1
+                  ? filePaths.first
+                  : state.fileToCaptureTo));
         case OrgFilesRemoveFilePath():
           final filePaths = state.filePaths..remove(event.fileInfo);
           final documentsMap = state.documentsMap..remove(event.fileInfo);
 
-          _updateSharedPreferences(filePaths);
+          emit(state.copyWith(
+              filePaths: filePaths,
+              documentsMap: documentsMap,
+              fileToCaptureTo: () =>
+                  filePaths.isEmpty ? null : state.fileToCaptureTo));
 
-          emit(
-              state.copyWith(filePaths: filePaths, documentsMap: documentsMap));
         case OrgFilesReplaceNode():
           final oldDocument = state.documentsMap[event.fileInfo];
           if (oldDocument == null) return;
@@ -51,30 +55,42 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
               documentsMap: state.documentsMap
                 ..update(event.fileInfo,
                     (doc) => OrgDocument.parse(newDoc.toMarkup()))));
+        case OrgFilesChangeCaptureFileEvent():
+          emit(state.copyWith(fileToCaptureTo: () => event.fileInfo));
       }
+
+      _updateSharedPreferences();
     });
   }
 
-  _updateSharedPreferences(Set<FileInfo> filePaths) async {
+  _updateSharedPreferences() async {
     final prefs = SharedPreferencesAsync();
     // We need to convert the Set to a List, because Dart somehow
     // only know how to encode an List, not a Set
-    await prefs.setString("agendaFiles", jsonEncode(filePaths.toList()));
+    await prefs.setString("agendaFiles", jsonEncode(state.filePaths.toList()));
+    await prefs.setString("captureFile", jsonEncode(state.fileToCaptureTo));
   }
 
   Future<OrgFilesState> _initOrgFilesState() async {
     final prefs = SharedPreferencesAsync();
     final files = await prefs.getString("agendaFiles");
+    final captureFileString = await prefs.getString("agendaFiles");
+    final captureFile = captureFileString == null
+        ? null
+        : FileInfo.fromJsonString(captureFileString);
     if (files == null) {
       return OrgFilesState(filePaths: {}, documentsMap: {});
     }
     final jsonObject = jsonDecode(files) as List<dynamic>;
     final fileInfos = jsonObject.map((info) => FileInfo.fromJson(info)).toSet();
 
-    return OrgFilesState(filePaths: fileInfos, documentsMap: {
-      for (var fileInfo in fileInfos)
-        fileInfo: await documentByIdentifier(fileInfo.identifier)
-    });
+    return OrgFilesState(
+        filePaths: fileInfos,
+        documentsMap: {
+          for (var fileInfo in fileInfos)
+            fileInfo: await documentByIdentifier(fileInfo.identifier)
+        },
+        fileToCaptureTo: captureFile);
   }
 
   Future<OrgDocument> documentByIdentifier(String identifier) async =>
