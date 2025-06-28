@@ -11,23 +11,11 @@ class EventViewState {
   final String title;
 
   factory EventViewState.inital(Event event, OrgTimestamp timestamp) =>
-      switch (timestamp) {
-        OrgSimpleTimestamp() => EventViewState(
-            event: event,
-            timestamp: timestamp,
-            title: event.title,
-          ),
-        OrgDateRangeTimestamp() => EventViewState(
-            event: event,
-            timestamp: timestamp,
-            title: event.title,
-          ),
-        OrgTimeRangeTimestamp() => EventViewState(
-            event: event,
-            timestamp: timestamp,
-            title: event.title,
-          )
-      };
+      EventViewState(
+        event: event,
+        timestamp: timestamp,
+        title: event.title,
+      );
 
   EventViewState copyWith(
       {Event? event,
