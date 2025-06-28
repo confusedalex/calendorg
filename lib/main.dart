@@ -1,3 +1,4 @@
+import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
@@ -28,13 +29,17 @@ class Calendorg extends StatelessWidget {
             home: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) => StartingDayCubit()..setInititalStartingDay(),
+                  create: (context) =>
+                      StartingDayCubit()..setInititalStartingDay(),
                 ),
                 BlocProvider(
                     create: (context) =>
                         TagColorsCubit()..setInitialTagColor()),
                 BlocProvider(
                   create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
+                ),
+                BlocProvider(
+                  create: (context) => FloatingActionButtonCubit(),
                 )
               ],
               child: HomePage(),
@@ -61,23 +66,29 @@ class _HomePageState extends State<HomePage> {
       CalendarPage(DateTime.now()),
       SettingsPage()
     ];
-    return SafeArea(
-        child: Scaffold(
-      body: pages[index],
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (value) => setState(() {
-          index = value;
-        }),
-        selectedIndex: index,
-        destinations: [
-          NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_today),
-            label: 'Calendar',
+    return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
+      builder: (context, state) {
+        return SafeArea(
+            child: Scaffold(
+          body: pages[index],
+          bottomNavigationBar: NavigationBar(
+            onDestinationSelected: (value) => setState(() {
+              index = value;
+            }),
+            selectedIndex: index,
+            destinations: [
+              NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_today),
+                label: 'Calendar',
+              ),
+              NavigationDestination(
+                  icon: Icon(Icons.settings), label: 'Settings'),
+            ],
           ),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
-        ],
-      ),
-    ));
+          floatingActionButton: state,
+        ));
+      },
+    );
   }
 }

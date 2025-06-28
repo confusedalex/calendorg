@@ -1,3 +1,4 @@
+import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
@@ -13,7 +14,6 @@ class CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.select((CalendarBloc bloc) => bloc.state.eventList);
     final DateTime focusedDay =
         context.select((CalendarBloc bloc) => bloc.state.focusedDay);
     final DateTime selectedDate =
@@ -23,6 +23,10 @@ class CalendarView extends StatelessWidget {
     final StartingDayOfWeek startingDay =
         context.select((StartingDayCubit bloc) => bloc.state);
     final eventsByDate = context.read<OrgFilesBloc>().state.eventsByDate;
+
+    context
+        .read<FloatingActionButtonCubit>()
+        .changeButton(FloatingActionButton(onPressed: () {}));
 
     return Column(children: [
       TableCalendar(
