@@ -33,7 +33,6 @@ class EventViewState {
       {Event? event,
       OrgTimestamp? timestamp,
       String? title,
-      bool? allDay,
       DateTime? start,
       ValueGetter<DateTime?>? end}) {
     return EventViewState(

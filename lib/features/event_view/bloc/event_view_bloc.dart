@@ -25,8 +25,6 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
                       (state.event.tags.isNotEmpty ? ' ' : ''))
                 ])
               ]))))),
-          EventViewTitleChangeAllDay() =>
-            emit(state.copyWith(allDay: event.allDay)),
           EventViewChangeTimestamp() => emit(state.copyWith(
               timestamp: event.timestmap,
               event: state.event.copyWith(

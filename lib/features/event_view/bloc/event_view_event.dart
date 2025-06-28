@@ -8,11 +8,6 @@ final class EventViewTitleChangeEvent extends EventViewEvent {
   EventViewTitleChangeEvent(this.title);
 }
 
-final class EventViewTitleChangeAllDay extends EventViewEvent {
-  final bool allDay;
-  EventViewTitleChangeAllDay(this.allDay);
-}
-
 final class EventViewChangeTimestamp extends EventViewEvent {
   final OrgTimestamp timestmap;
   EventViewChangeTimestamp(this.timestmap);
