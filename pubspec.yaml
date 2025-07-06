@@ -47,7 +47,6 @@ dependencies:
   http: ^1.4.0
   shared_preferences: ^2.5.3
   flutter_bloc: ^9.1.1
-  pretty_diff_text: ^2.1.0
   bloc: ^9.0.0
   collection: ^1.19.0
 

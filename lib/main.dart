@@ -2,7 +2,7 @@ import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
-import 'package:calendorg/features/event_list_page.dart';
+import 'package:calendorg/features/today_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List pages = [
-      eventListPage(),
+      todayPage(),
       CalendarPage(DateTime.now()),
       SettingsPage()
     ];
