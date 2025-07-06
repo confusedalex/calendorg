@@ -1,3 +1,4 @@
+import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';
@@ -11,8 +12,10 @@ void main() {
     () {
       group('Tag Colors', () {
         testWidgets("Find Tag Colors Button", (tester) async {
-          await tester
-              .pumpWidget(MaterialApp(home: Scaffold(body: SettingsPage())));
+          await tester.pumpWidget(BlocProvider(
+            create: (context) => FloatingActionButtonCubit(),
+            child: MaterialApp(home: Scaffold(body: SettingsPage())),
+          ));
 
           await tester.pumpAndSettle();
 
@@ -22,9 +25,12 @@ void main() {
         testWidgets("Tapping Button open Dialog", (tester) async {
           await tester.pumpWidget(MaterialApp(
               home: Scaffold(
-                  body: BlocProvider(
-                      create: (context) => TagColorsCubit(),
-                      child: SettingsPage()))));
+                  body: MultiBlocProvider(providers: [
+            BlocProvider(
+              create: (context) => TagColorsCubit(),
+            ),
+            BlocProvider(create: (context) => FloatingActionButtonCubit())
+          ], child: SettingsPage()))));
 
           await tester.pumpAndSettle();
           await tester.tap(find.text("Tag Colors"));

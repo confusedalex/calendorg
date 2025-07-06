@@ -1,3 +1,4 @@
+import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -54,8 +55,9 @@ void main() {
             home: Scaffold(
                 body: MultiBlocProvider(providers: [
           BlocProvider.value(value: orgFilesBloc),
-          BlocProvider(create: (context) => StartingDayCubit()),
           BlocProvider.value(value: calendarBloc),
+          BlocProvider(create: (context) => StartingDayCubit()),
+          BlocProvider(create: (context) => FloatingActionButtonCubit()),
           BlocProvider(
               create: (context) => TagColorsCubit.withInitialValue(
                   [schoolTagColor, homeTagColor, workTagColor])),
