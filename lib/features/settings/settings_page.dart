@@ -11,7 +11,6 @@ import 'package:calendorg/features/settings/theme/theme_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/todo_states_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
