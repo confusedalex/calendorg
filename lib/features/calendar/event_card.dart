@@ -4,6 +4,7 @@ import 'package:calendorg/event.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
@@ -33,7 +34,10 @@ class EventCard extends StatelessWidget {
                   : "${event.section.headline.keyword?.value} ",
               style: TextStyle(color: Colors.red),
             ),
-            Text(event.title)
+            Text(
+              event.title,
+              style: TextStyle(color: _colorByEvent(event)),
+            )
           ]),
           subtitle: Row(
             children: [
@@ -58,4 +62,18 @@ class EventCard extends StatelessWidget {
                     create: (context) => EventViewBloc(event, timestamp),
                     child: EventView(),
                   )))));
+
+  Color? _colorByEvent(Event event) {
+    if (event.deadline != null &&
+        (event.deadline?.value as OrgTimestamp).startDateTime ==
+            timestamp.startDateTime) {
+      return Colors.red;
+    }
+    if (event.scheduled != null &&
+        (event.scheduled?.value as OrgTimestamp).startDateTime ==
+            timestamp.startDateTime) {
+      return Colors.amber;
+    }
+    return null;
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
@@ -8,9 +9,11 @@ class Event {
   OrgSection section;
   String title;
   FileInfo fileInfo;
-  late String? description;
   List<String> tags = [];
   List<OrgTimestamp> timestamps;
+  OrgPlanningEntry? scheduled;
+  OrgPlanningEntry? deadline;
+  late String? description;
 
   DateTime beforeMidnight(DateTime date) => date
       .subtract(Duration(days: 1))
@@ -36,9 +39,11 @@ class Event {
       {required this.containsTimestampInHeadline,
       required this.section,
       required this.title,
+      required this.fileInfo,
       required this.tags,
       required this.timestamps,
-      required this.fileInfo,
+      this.scheduled,
+      this.deadline,
       this.description});
 
   Event copyWith(
@@ -46,17 +51,21 @@ class Event {
       OrgSection? section,
       String? title,
       FileInfo? fileInfo,
-      ValueGetter<String?>? description,
       List<String>? tags,
-      List<OrgTimestamp>? timestamps}) {
+      List<OrgTimestamp>? timestamps,
+      ValueGetter<OrgPlanningEntry?>? scheduled,
+      ValueGetter<OrgPlanningEntry?>? deadline,
+      ValueGetter<String?>? description}) {
     return Event(
         containsTimestampInHeadline:
             containsTimestampInHeadline ?? this.containsTimestampInHeadline,
         section: section ?? this.section,
         title: title ?? this.title,
         fileInfo: fileInfo ?? this.fileInfo,
-        description: description != null ? description() : this.description,
         tags: tags ?? this.tags,
-        timestamps: timestamps ?? this.timestamps);
+        timestamps: timestamps ?? this.timestamps,
+        scheduled: scheduled != null ? scheduled() : this.scheduled,
+        deadline: deadline != null ? deadline() : this.deadline,
+        description: description != null ? description() : this.description);
   }
 }

@@ -9,9 +9,11 @@ List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
   final List<Event> eventList = [];
 
   document.visitSections(((section) {
-    bool returnIfSectionFound = false;
-    var ignoreNTimestamps = 0;
     final List<OrgTimestamp> foundTimestamps = [];
+    OrgPlanningEntry? scheduled = null;
+    OrgPlanningEntry? deadline = null;
+    bool returnIfSectionFound = false;
+    int ignoreNTimestamps = 0;
 
     final containsTimestamp =
         section.headline.rawTitle?.contains(timestampRegEx) ?? false;
@@ -32,6 +34,18 @@ List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
       switch (node) {
         case OrgSection():
           return returnIfSectionFound ? false : returnIfSectionFound = true;
+
+        case OrgPlanningEntry():
+          print(node.keyword.content);
+          switch (node.keyword.content) {
+            case "SCHEDULED:":
+              scheduled = node;
+              break;
+            case "DEADLINE:":
+              deadline = node;
+              break;
+          }
+          break;
 
         case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will
@@ -62,6 +76,8 @@ List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
           title: headline,
           tags: tags,
           timestamps: foundTimestamps,
+          scheduled: scheduled,
+          deadline: deadline,
           description: null));
     }
 
