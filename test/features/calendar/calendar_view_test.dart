@@ -1,4 +1,4 @@
-import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
+import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -119,8 +119,10 @@ class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
   MockOrgFilesBloc(this.document);
 
   @override
-  OrgFilesState get state =>
-      OrgFilesState(filePaths: {fileInfo}, documentsMap: {fileInfo: document});
+  OrgFilesState get state => OrgFilesState(
+      filePaths: {fileInfo},
+      documentsMap: {fileInfo: document},
+      todoStates: OrgTodoStates());
 
   @override
   Stream<OrgFilesState> get stream => Stream.value(state);

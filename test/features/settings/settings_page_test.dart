@@ -1,4 +1,4 @@
-import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
+import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';

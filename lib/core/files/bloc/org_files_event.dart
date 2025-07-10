@@ -27,3 +27,8 @@ final class OrgFilesReplaceNode extends OrgFilesEvent {
 
   OrgFilesReplaceNode(this.fileInfo, this.oldNode, this.newNode);
 }
+
+final class OrgFilesChangeTodoStatesEvent extends OrgFilesEvent {
+  final OrgTodoStates todoStates;
+  OrgFilesChangeTodoStatesEvent(this.todoStates);
+}

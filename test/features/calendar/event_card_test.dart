@@ -104,8 +104,10 @@ class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
   MockOrgFilesBloc(this.document);
 
   @override
-  OrgFilesState get state =>
-      OrgFilesState(filePaths: {fileInfo}, documentsMap: {fileInfo: document});
+  OrgFilesState get state => OrgFilesState(
+      filePaths: {fileInfo},
+      documentsMap: {fileInfo: document},
+      todoStates: OrgTodoStates());
 
   @override
   Stream<OrgFilesState> get stream => Stream.value(state);

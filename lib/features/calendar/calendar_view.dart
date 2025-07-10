@@ -1,4 +1,4 @@
-import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
+import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';

@@ -1,6 +1,7 @@
-import 'package:calendorg/core/cubit/floating_action_button_cubit.dart';
+import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
 import 'package:calendorg/features/today_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
@@ -35,6 +36,8 @@ class Calendorg extends StatelessWidget {
                 BlocProvider(
                     create: (context) =>
                         TagColorsCubit()..setInitialTagColor()),
+                BlocProvider(
+                    create: (context) => TodoStatesCubit()..loadFromPrefs()),
                 BlocProvider(
                   create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
                 ),

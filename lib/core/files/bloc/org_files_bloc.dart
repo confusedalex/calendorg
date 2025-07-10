@@ -6,11 +6,15 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:petitparser/petitparser.dart';
 
 part 'org_files_event.dart';
 part 'org_files_state.dart';
 
 class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
+  Parser get parser =>
+      OrgParserDefinition(todoStates: [state.todoStates]).build();
+
   OrgFilesBloc() : super(OrgFilesState.initial()) {
     on<OrgFilesEvent>((event, emit) async {
       switch (event) {
@@ -54,9 +58,17 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           emit(state.copyWith(
               documentsMap: state.documentsMap
                 ..update(event.fileInfo,
-                    (doc) => OrgDocument.parse(newDoc.toMarkup()))));
+                    (doc) => parser.parse(newDoc.toMarkup()).value)));
         case OrgFilesChangeCaptureFileEvent():
           emit(state.copyWith(fileToCaptureTo: () => event.fileInfo));
+        case OrgFilesChangeTodoStatesEvent():
+          emit(state.copyWith(todoStates: event.todoStates));
+          emit(state.copyWith(
+            documentsMap: {
+              for (var fileInfo in state.filePaths)
+                fileInfo: await documentByIdentifier(fileInfo.identifier)
+            },
+          ));
       }
 
       _updateSharedPreferences();
@@ -77,9 +89,10 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     final captureFileString = await prefs.getString("agendaFiles");
     final captureFile = captureFileString == null
         ? null
-        : FileInfo.fromJsonString(captureFileString);
+        : FileInfo.fromJson(
+            (jsonDecode(captureFileString) as List<dynamic>).first);
     if (files == null) {
-      return OrgFilesState(filePaths: {}, documentsMap: {});
+      return OrgFilesState.initial();
     }
     final jsonObject = jsonDecode(files) as List<dynamic>;
     final fileInfos = jsonObject.map((info) => FileInfo.fromJson(info)).toSet();
@@ -90,12 +103,14 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           for (var fileInfo in fileInfos)
             fileInfo: await documentByIdentifier(fileInfo.identifier)
         },
-        fileToCaptureTo: captureFile);
+        fileToCaptureTo: captureFile,
+        todoStates: state.todoStates);
   }
 
-  Future<OrgDocument> documentByIdentifier(String identifier) async =>
-      OrgDocument.parse(await FilePickerWritable().readFile(
+  Future<OrgDocument> documentByIdentifier(String identifier) async => parser
+      .parse(await FilePickerWritable().readFile(
         identifier: identifier,
         reader: (fileInfo, file) => file.readAsString(),
-      ));
+      ))
+      .value;
 }

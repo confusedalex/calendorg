@@ -26,7 +26,15 @@ class EventCard extends StatelessWidget {
               ),
             ),
           ),
-          title: Text(event.title),
+          title: Row(children: [
+            Text(
+              event.section.headline.keyword == null
+                  ? ""
+                  : "${event.section.headline.keyword?.value} ",
+              style: TextStyle(color: Colors.red),
+            ),
+            Text(event.title)
+          ]),
           subtitle: Row(
             children: [
               Expanded(
