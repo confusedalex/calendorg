@@ -11,8 +11,8 @@ class OrgFilesState {
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? fileToCaptureTo;
   final OrgTodoStates todoStates;
-  late final List<Event> allEvents =
-      documentsMap.entries.expand((e) => parseEvents(e.key, e.value)).toList();
+  late final Map<String, List<Event>> allEvents =
+      documentsMap.entries.fold({}, (e, k) => parseEvents(k.key, k.value));
 
   factory OrgFilesState.initial() => OrgFilesState(
         filePaths: {},
@@ -22,13 +22,13 @@ class OrgFilesState {
 
   List<Object?> get props => [filePaths, documentsMap];
 
-  List<Event> eventsByDate(DateTime date) => allEvents.fold([], (acc, cur) {
-        final timestampsByDate = cur.timestampsByDateTime(date);
-        return timestampsByDate.isEmpty ? acc : [...acc, cur];
-      });
+  List<Event> eventsByDate(DateTime date) {
+    print(allEvents[date.toIso8601String().split("T")[0]]);
+    return allEvents[date.toIso8601String().split("T")[0]] ?? [];
+  }
 
   Map<Event, List<OrgTimestamp>> eventsByDateWithTimestamps(DateTime date) =>
-      allEvents.fold({}, (acc, cur) {
+      (allEvents[date.toIso8601String().split("T")[0]] ?? []).fold({}, (acc, cur) {
         final timestampsByDate = cur.timestampsByDateTime(date);
 
         return timestampsByDate.isEmpty ? acc : {...acc, cur: timestampsByDate};

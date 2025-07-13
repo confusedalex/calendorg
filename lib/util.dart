@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
+Map<String, List<Event>> parseEvents(FileInfo fileInfo, OrgDocument document) {
   final timestampRegEx = RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]");
-  final List<Event> eventList = [];
+  final Map<String, List<Event>> eventMap = {};
 
   document.visitSections(((section) {
     final List<OrgTimestamp> foundTimestamps = [];
-    OrgPlanningEntry? scheduled = null;
-    OrgPlanningEntry? deadline = null;
+    OrgPlanningEntry? scheduled;
+    OrgPlanningEntry? deadline;
     bool returnIfSectionFound = false;
     int ignoreNTimestamps = 0;
 
@@ -36,7 +36,6 @@ List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
           return returnIfSectionFound ? false : returnIfSectionFound = true;
 
         case OrgPlanningEntry():
-          print(node.keyword.content);
           switch (node.keyword.content) {
             case "SCHEDULED:":
               scheduled = node;
@@ -69,7 +68,7 @@ List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
     });
 
     if (foundTimestamps.isNotEmpty) {
-      eventList.add(Event(
+      final event = Event(
           section: section,
           containsTimestampInHeadline: containsTimestamp,
           fileInfo: fileInfo,
@@ -78,13 +77,31 @@ List<Event> parseEvents(FileInfo fileInfo, OrgDocument document) {
           timestamps: foundTimestamps,
           scheduled: scheduled,
           deadline: deadline,
-          description: null));
+          description: null);
+      print(foundTimestamps.length);
+      for (final timestamp in foundTimestamps) {
+        if (timestamp is OrgDateRangeTimestamp) {
+          for (final datetime in timestamp.datetimes) {
+            eventMap[datetime.toIso8601String().split("T")[0]] = [
+              ...?eventMap[datetime.toIso8601String().split("T")[0]],
+              event
+            ];
+          }
+        } else {
+          final dateTime = timestamp.startDateTime;
+          eventMap[dateTime.toIso8601String().split("T")[0]] = [
+            ...?eventMap[dateTime.toIso8601String().split("T")[0]],
+            event
+          ];
+        }
+      }
+      print(eventMap);
     }
 
     return true;
   }));
-
-  return eventList;
+  print(eventMap);
+  return eventMap;
 }
 
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
@@ -137,6 +154,23 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
   }
 }
 
+List<DateTime> dateTimesFromOrgDateRange(
+    OrgDateRangeTimestamp timestamp, List<DateTime> list, DateTime? date) {
+  if (date != null && isSameDay(timestamp.end.dateTime, date)) return list;
+  if (date == null) {
+    final next = timestamp.startDateTime.add(Duration(days: 1));
+    return dateTimesFromOrgDateRange(
+        timestamp, [timestamp.startDateTime], next);
+  }
+  return dateTimesFromOrgDateRange(
+      timestamp, [...list, date], date.add(Duration(days: 1)));
+}
+
+DateTime beforeMidnight(DateTime date) =>
+    date.subtract(Duration(days: 1)).copyWith(hour: 23, minute: 59, second: 59);
+DateTime afterMidnight(DateTime date) =>
+    date.add(Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
+
 extension GetTimeOfDay on OrgTime {
   TimeOfDay get timeOfDay =>
       TimeOfDay(hour: int.parse(this.hour), minute: int.parse(this.minute));
@@ -149,4 +183,8 @@ extension StartDateTime on OrgTimestamp {
           (this as OrgDateRangeTimestamp).start.dateTime,
         OrgTimeRangeTimestamp() => (this as OrgTimeRangeTimestamp).startDateTime
       };
+}
+
+extension DateTimesFromRange on OrgDateRangeTimestamp {
+  List<DateTime> get datetimes => dateTimesFromOrgDateRange(this, [], null);
 }

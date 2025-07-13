@@ -1,3 +1,4 @@
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
@@ -13,12 +14,6 @@ class Event {
   OrgPlanningEntry? scheduled;
   OrgPlanningEntry? deadline;
   late String? description;
-
-  DateTime beforeMidnight(DateTime date) => date
-      .subtract(Duration(days: 1))
-      .copyWith(hour: 23, minute: 59, second: 59);
-  DateTime afterMidnight(DateTime date) =>
-      date.add(Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
 
   List<OrgTimestamp> timestampsByDateTime(DateTime date,
           {bool? includeInactive = false}) =>
