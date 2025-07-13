@@ -26,7 +26,7 @@ class CalendarView extends StatelessWidget {
 
     context
         .read<FloatingActionButtonCubit>()
-        .changeButton(FloatingActionButton(onPressed: () {}));
+        .changeButton(FloatingActionButton(onPressed: () {}, child: Icon(Icons.add),));
 
     return Column(children: [
       TableCalendar(
