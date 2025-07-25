@@ -43,6 +43,17 @@ DEADLINE: <2025-05-04>
         expect(installEmacsEvent.deadline, isNotNull);
       });
 
+      test("Parsing single TODO works", () {
+        final markup = """
+** TODO install emacs
+DEADLINE: <2025-05-04>
+""";
+        final document = OrgDocument.parse(markup);
+        final events = parseEvents(MockFileInfo(), document);
+
+        expect(events.entries, hasLength(1));
+      });
+
       group(
         'DateTime to OrgSimpleTimestamp',
         () {
