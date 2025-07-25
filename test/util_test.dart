@@ -20,8 +20,8 @@ void main() {
   group(
     'Util',
     () {
-      test("Events lenth should be 1", () {
-        expect(events.length, 1);
+      test("8 Map entries should be found", () {
+        expect(events.length, 8);
       });
 
       test("6 OrgNodes expected in event", () {
