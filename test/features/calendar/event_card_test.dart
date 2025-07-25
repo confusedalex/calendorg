@@ -1,6 +1,7 @@
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:calendorg/util.dart';
@@ -119,6 +120,34 @@ DEADLINE: <2025-05-17>
                   widget is Text &&
                   widget.style == TextStyle(color: Colors.red)),
               findsOne);
+        });
+        testWidgets("EventCard Title is green for done entry", (tester) async {
+          final markup = """
+** DONE install emacs
+<2025-05-05>
+""";
+          final document = OrgDocument.parse(markup);
+          final event =
+              parseEvents(MockFileInfo(), document).entries.first.value.first;
+
+          await tester.pumpWidget(MaterialApp(
+              home: Scaffold(
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                    create: (create) => TagColorsCubit.withInitialValue([])),
+                BlocProvider(create: (create) => TodoStatesCubit())
+              ],
+              child: EventCard(event, event.timestamps.first),
+            ),
+          )));
+
+          // We expect to find 2 widgets, because of the keyword and the heading
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is Text &&
+                  widget.style == TextStyle(color: Colors.green)),
+              findsNWidgets(2));
         });
       },
     );
