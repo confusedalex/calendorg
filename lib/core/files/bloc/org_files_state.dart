@@ -23,7 +23,6 @@ class OrgFilesState {
   List<Object?> get props => [filePaths, documentsMap];
 
   List<Event> eventsByDate(DateTime date) {
-    print(allEvents[date.toIso8601String().split("T")[0]]);
     return allEvents[date.toIso8601String().split("T")[0]] ?? [];
   }
 

@@ -78,7 +78,6 @@ Map<String, List<Event>> parseEvents(FileInfo fileInfo, OrgDocument document) {
           scheduled: scheduled,
           deadline: deadline,
           description: null);
-      print(foundTimestamps.length);
       for (final timestamp in foundTimestamps) {
         if (timestamp is OrgDateRangeTimestamp) {
           for (final datetime in timestamp.datetimes) {
@@ -95,12 +94,10 @@ Map<String, List<Event>> parseEvents(FileInfo fileInfo, OrgDocument document) {
           ];
         }
       }
-      print(eventMap);
     }
 
     return true;
   }));
-  print(eventMap);
   return eventMap;
 }
 
