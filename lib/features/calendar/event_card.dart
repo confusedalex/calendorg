@@ -32,20 +32,22 @@ class EventCard extends StatelessWidget {
                 ),
               ),
             ),
-            title: Row(children: [
-              BlocBuilder<TodoStatesCubit, OrgTodoStates>(
-                  builder: (context, state) => Text(
-                        keyword == null ? "" : "${keyword.value} ",
+            title: BlocBuilder<TodoStatesCubit, OrgTodoStates>(
+                builder: (context, state) => RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                        text: keyword == null ? "" : "${keyword.value} ",
                         style: keyword == null
                             ? TextStyle()
                             : TextStyle(
                                 color: eventIsDone ? Colors.green : Colors.red),
-                      )),
-              Text(
-                event.title,
-                style: TextStyle(color: _colorByEvent(event, eventIsDone)),
-              )
-            ]),
+                      ),
+                      TextSpan(
+                        text: event.title,
+                        style:
+                            TextStyle(color: _colorByEvent(event, eventIsDone)),
+                      )
+                    ]))),
             subtitle: Row(
               children: [
                 Expanded(
