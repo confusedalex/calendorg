@@ -15,6 +15,8 @@ void main() {
 <2025-05-01>--<2025-05-03>
 ** TODO uninstall vim
 SCHEDULED: <2025-05-05>
+** TODO install emacs
+DEADLINE: <2025-05-04>
 """;
   final document = OrgDocument.parse(markup);
   final events = parseEvents(MockFileInfo(), document);
@@ -24,7 +26,7 @@ SCHEDULED: <2025-05-05>
     'Util',
     () {
       test("8 Map entries should be found", () {
-        expect(events.length, 8);
+        expect(events.length, 9);
       });
 
       test("6 OrgNodes expected in event", () {
@@ -36,6 +38,9 @@ SCHEDULED: <2025-05-05>
         expect(uninstallVimEvent.scheduled, isNotNull);
       });
 
+      test("Deadline entry gets parsed correctly", () {
+        final installEmacsEvent = events.entries.last.value.first;
+        expect(installEmacsEvent.deadline, isNotNull);
       });
 
       group(
