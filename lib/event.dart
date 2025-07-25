@@ -62,4 +62,9 @@ class Event {
         deadline: deadline != null ? deadline() : this.deadline,
         description: description != null ? description() : this.description);
   }
+
+  @override
+  String toString() {
+    return 'Event{title=$title, tags=$tags}';
+  }
 }
