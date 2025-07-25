@@ -46,8 +46,7 @@ void main() {
       orgFilesBloc = MockOrgFilesBloc(document);
 
       setUp(() {
-        calendarBloc = CalendarBloc(
-            parseEvents(MockFileInfo(), document), DateTime(2025, 05, 17));
+        calendarBloc = CalendarBloc(DateTime(2025, 05, 17));
       });
 
       Future<void> pumpWidgetToTester(dynamic tester) async {

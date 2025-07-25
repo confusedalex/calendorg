@@ -10,7 +10,7 @@ void main() {
       late CalendarBloc bloc;
 
       setUp(() {
-        bloc = CalendarBloc([], DateTime(2025, 05, 15));
+        bloc = CalendarBloc(DateTime(2025, 05, 15));
       });
 
       test("Initial format is month", () {

@@ -15,7 +15,7 @@ void main() {
 
   setUp(() {
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
-    event = parseEvents(FakeFileInfo(), document).first;
+    event = parseEvents(FakeFileInfo(), document).entries.first.value.first;
     timestamp = event.timestamps.first;
   });
 

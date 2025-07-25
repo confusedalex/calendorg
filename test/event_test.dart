@@ -15,7 +15,7 @@ void main() {
 """;
   final document = OrgDocument.parse(markup);
   final events = parseEvents(MockFileInfo(), document);
-  final event = events.first;
+  final event = events.entries.first.value.first;
 
   group(
     'Events',
