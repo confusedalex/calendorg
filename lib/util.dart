@@ -153,7 +153,10 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
 
 List<DateTime> dateTimesFromOrgDateRange(
     OrgDateRangeTimestamp timestamp, List<DateTime> list, DateTime? date) {
-  if (date != null && isSameDay(timestamp.end.dateTime, date)) return list;
+  if (date != null &&
+      isSameDay(timestamp.end.dateTime.add(Duration(days: 1)), date)) {
+    return list;
+  }
   if (date == null) {
     final next = timestamp.startDateTime.add(Duration(days: 1));
     return dateTimesFromOrgDateRange(
