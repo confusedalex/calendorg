@@ -125,6 +125,15 @@ void main() {
           });
         },
       );
+      group("dateTimesFromOrgDateRange", () {
+        test("Parse OrgDateRangeTimestamp", () {
+          final dateTimes = dateTimesFromOrgDateRange(
+              event.timestamps.last as OrgDateRangeTimestamp, [], null);
+          expect(dateTimes, containsOnce(DateTime(2025, 05, 01)));
+          expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
+          expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
+        });
+      });
     },
   );
 }
