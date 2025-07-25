@@ -13,10 +13,13 @@ void main() {
 <2025-05-08 11:00-13:00>
 <2025-05-28> <2025-05-15>
 <2025-05-01>--<2025-05-03>
+** TODO uninstall vim
+SCHEDULED: <2025-05-05>
 """;
   final document = OrgDocument.parse(markup);
   final events = parseEvents(MockFileInfo(), document);
-  final event = events.entries.first.value.first;
+  final meetupEvent = events.entries.first.value.first;
+
   group(
     'Util',
     () {
@@ -25,7 +28,14 @@ void main() {
       });
 
       test("6 OrgNodes expected in event", () {
-        expect(event.timestamps.length, 6);
+        expect(meetupEvent.timestamps.length, 6);
+      });
+
+      test("Scheduled entry gets parsed correctly", () {
+        final uninstallVimEvent = events.entries.first.value.last;
+        expect(uninstallVimEvent.scheduled, isNotNull);
+      });
+
       });
 
       group(
@@ -128,7 +138,7 @@ void main() {
       group("dateTimesFromOrgDateRange", () {
         test("Parse OrgDateRangeTimestamp", () {
           final dateTimes = dateTimesFromOrgDateRange(
-              event.timestamps.last as OrgDateRangeTimestamp, [], null);
+              meetupEvent.timestamps.last as OrgDateRangeTimestamp, [], null);
           expect(dateTimes, containsOnce(DateTime(2025, 05, 01)));
           expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
           expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
