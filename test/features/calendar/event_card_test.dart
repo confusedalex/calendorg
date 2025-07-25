@@ -69,6 +69,32 @@ void main() {
 
           expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
         });
+
+        testWidgets("EventCard Title is orange for scheduled entry",
+            (tester) async {
+          final markup = """
+** TODO uninstall vim
+SCHEDULED: <2025-05-16>
+""";
+          final document = OrgDocument.parse(markup);
+          final event =
+              parseEvents(MockFileInfo(), document).entries.first.value.first;
+
+          await tester.pumpWidget(MaterialApp(
+              home: Scaffold(
+            body: BlocProvider<TagColorsCubit>(
+              create: (context) =>
+                  TagColorsCubit.withInitialValue([meetupTagColor]),
+              child: EventCard(event, event.timestamps.first),
+            ),
+          )));
+
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is Text &&
+                  widget.style == TextStyle(color: Colors.amber)),
+              findsOne);
+        });
       },
     );
     testWidgets("EventCard tap will open EventView", (tester) async {
