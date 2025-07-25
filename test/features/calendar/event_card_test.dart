@@ -95,6 +95,31 @@ SCHEDULED: <2025-05-16>
                   widget.style == TextStyle(color: Colors.amber)),
               findsOne);
         });
+
+        testWidgets("EventCard Title is red for deadlined entry",
+            (tester) async {
+          final markup = """
+** TODO install emacs
+DEADLINE: <2025-05-17>
+""";
+          final document = OrgDocument.parse(markup);
+          final event =
+              parseEvents(MockFileInfo(), document).entries.first.value.first;
+
+          await tester.pumpWidget(MaterialApp(
+              home: Scaffold(
+            body: BlocProvider<TagColorsCubit>(
+              create: (context) => TagColorsCubit.withInitialValue([]),
+              child: EventCard(event, event.timestamps.first),
+            ),
+          )));
+
+          expect(
+              find.byWidgetPredicate((widget) =>
+                  widget is Text &&
+                  widget.style == TextStyle(color: Colors.red)),
+              findsOne);
+        });
       },
     );
     testWidgets("EventCard tap will open EventView", (tester) async {
