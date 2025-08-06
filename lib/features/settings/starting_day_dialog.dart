@@ -12,26 +12,29 @@ class StartingDateDialog extends StatelessWidget {
         builder: (context, state) {
           return AlertDialog(
             title: Text("Starting Day"),
-            content: Flex(
-              direction: Axis.vertical,
-              children: [
-                ListTile(
-                    title: Text("Montag"),
-                    leading: Radio<StartingDayOfWeek>(
-                        value: StartingDayOfWeek.monday,
-                        groupValue: state,
-                        onChanged: (day) => context
-                            .read<StartingDayCubit>()
-                            .changeStartingDayOfWeek(day!))),
-                ListTile(
-                    title: Text("Sunday"),
-                    leading: Radio<StartingDayOfWeek>(
-                        value: StartingDayOfWeek.sunday,
-                        groupValue: state,
-                        onChanged: (day) => context
-                            .read<StartingDayCubit>()
-                            .changeStartingDayOfWeek(day!)))
-              ],
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.75,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  ListTile(
+                      title: Text("Montag"),
+                      leading: Radio<StartingDayOfWeek>(
+                          value: StartingDayOfWeek.monday,
+                          groupValue: state,
+                          onChanged: (day) => context
+                              .read<StartingDayCubit>()
+                              .changeStartingDayOfWeek(day!))),
+                  ListTile(
+                      title: Text("Sunday"),
+                      leading: Radio<StartingDayOfWeek>(
+                          value: StartingDayOfWeek.sunday,
+                          groupValue: state,
+                          onChanged: (day) => context
+                              .read<StartingDayCubit>()
+                              .changeStartingDayOfWeek(day!)))
+                ],
+              ),
             ),
           );
         },

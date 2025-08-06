@@ -14,31 +14,32 @@ class AgendaFilesDialog extends StatelessWidget {
       title: Row(
         children: [Text("Agenda Files"), Spacer(), CloseButton()],
       ),
-      content: SizedBox(
-          width: double.maxFinite,
-          child: BlocBuilder<OrgFilesBloc, OrgFilesState>(
-              builder: (context, state) => Column(
-                    children: state.filePaths
-                        .map((fileInfo) => ListTile(
-                              title: Text(fileInfo.fileName ??
-                                  "File name could't not be loaded"),
-                              leading: Radio(
-                                  value: fileInfo,
-                                  groupValue: groupValue,
-                                  onChanged: (value) => context
-                                      .read<OrgFilesBloc>()
-                                      .add(OrgFilesChangeCaptureFileEvent(
-                                          value))
-                                          ),
-                              trailing: IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () => context
-                                    .read<OrgFilesBloc>()
-                                    .add(OrgFilesRemoveFilePath(fileInfo)),
-                              ),
-                            ))
-                        .toList(),
-                  ))),
+      content: BlocBuilder<OrgFilesBloc, OrgFilesState>(
+          builder: (context, state) => SizedBox(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.filePaths.length,
+                    itemBuilder: (context, index) {
+                      final fileInfo = state.filePaths.elementAt(index);
+                      return ListTile(
+                        title: Text(fileInfo.fileName ??
+                            "File name could't not be loaded"),
+                        leading: Radio(
+                            value: fileInfo,
+                            groupValue: groupValue,
+                            onChanged: (value) => context
+                                .read<OrgFilesBloc>()
+                                .add(OrgFilesChangeCaptureFileEvent(value))),
+                        trailing: IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () => context
+                              .read<OrgFilesBloc>()
+                              .add(OrgFilesRemoveFilePath(fileInfo)),
+                        ),
+                      );
+                    }),
+              )),
       actions: [
         TextButton(
             onPressed: () async => context
