@@ -86,11 +86,12 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
   Future<OrgFilesState> _initOrgFilesState() async {
     final prefs = SharedPreferencesAsync();
     final files = await prefs.getString("agendaFiles");
-    final captureFileString = await prefs.getString("agendaFiles");
-    final captureFile = captureFileString == null
-        ? null
-        : FileInfo.fromJson(
-            (jsonDecode(captureFileString) as List<dynamic>).first);
+    final captureFileString = await prefs.getString("captureFile");
+    final captureFile =
+        (captureFileString == null || captureFileString == "null")
+            ? null
+            : FileInfo.fromJson(
+                (jsonDecode(captureFileString) as List<dynamic>).first);
     if (files == null) {
       return OrgFilesState.initial();
     }
