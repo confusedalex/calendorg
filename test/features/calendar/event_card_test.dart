@@ -3,6 +3,7 @@ import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
+import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -101,22 +102,6 @@ void main() {
       expect(find.byType(EventView), findsOneWidget);
     });
   });
-}
-
-class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
-  final fileInfo = MockFileInfo();
-  final OrgDocument document;
-
-  MockOrgFilesBloc(this.document);
-
-  @override
-  OrgFilesState get state => OrgFilesState(
-      filePaths: {fileInfo},
-      documentsMap: {fileInfo: document},
-      todoStates: OrgTodoStates());
-
-  @override
-  Stream<OrgFilesState> get stream => Stream.value(state);
 }
 
 class MockFileInfo extends Mock implements FileInfo {}
