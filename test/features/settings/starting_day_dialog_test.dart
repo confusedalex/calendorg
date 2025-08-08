@@ -47,24 +47,27 @@ void main() {
           },
         );
       });
-      testWidgets(
-        'Dialog should contain button for sunday',
-        (tester) async {
-          await pumpWidgetToTester(tester);
 
-          expect(find.text("Sunday"), findsOne);
-        },
-      );
-      testWidgets(
-        'Dialog should contain button for sunday',
-        (tester) async {
-          await pumpWidgetToTester(tester);
+      group("Sunday button", () {
+        testWidgets(
+          'Dialog should contain button for sunday',
+          (tester) async {
+            await pumpWidgetToTester(tester);
 
-          await tester.tap(find.text("Sunday"));
+            expect(find.text("Sunday"), findsOne);
+          },
+        );
+        testWidgets(
+          'Dialog should contain button for sunday',
+          (tester) async {
+            await pumpWidgetToTester(tester);
 
-          expect(cubit.state, equals(StartingDayOfWeek.sunday));
-        },
-      );
+            await tester.tap(find.text("Sunday"));
+
+            expect(cubit.state, equals(StartingDayOfWeek.sunday));
+          },
+        );
+      });
     },
   );
 }
