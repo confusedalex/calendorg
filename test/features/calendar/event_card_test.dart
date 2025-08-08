@@ -79,10 +79,14 @@ void main() {
         body: MultiBlocProvider(
           providers: [
             BlocProvider(
+                create: (context) =>
+                    EventViewBloc(event, event.timestamps.first)),
+            BlocProvider(create: (context) => TodoStatesCubit()),
+            BlocProvider(
                 create: (context) => TagColorsCubit.withInitialValue(
                       [meetupTagColor],
                     )),
-            BlocProvider(create: (context) => MockOrgFilesBloc(document))
+            BlocProvider(create: (context) => OrgFilesBloc())
           ],
           child: EventCard(event, event.timestamps.first),
         ),
@@ -95,7 +99,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(EventView), findsOneWidget);
-    }, skip: true);
+    });
   });
 }
 
