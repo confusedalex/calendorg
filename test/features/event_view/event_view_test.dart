@@ -50,8 +50,6 @@ void main() {
         (tester) async {
           await initWidget(tester);
 
-          await tester.pumpAndSettle();
-
           expect(find.byKey(Key("TitleField")), findsOneWidget);
           expect(find.text(event.title), findsOneWidget);
         },
@@ -62,8 +60,6 @@ void main() {
           (tester) async {
             await initWidget(tester);
 
-            await tester.pumpAndSettle();
-
             expect(find.byKey(Key("datePickerButton")), findsOneWidget);
           },
         );
@@ -71,8 +67,6 @@ void main() {
           'Date Picker button shows timestamp',
           (tester) async {
             await initWidget(tester);
-
-            await tester.pumpAndSettle();
 
             expect(
                 find.text(event.timestamps.first.toMarkup()), findsOneWidget);
@@ -82,8 +76,6 @@ void main() {
           'Date Picker button open datePickerDialog',
           (tester) async {
             await initWidget(tester);
-
-            await tester.pumpAndSettle();
 
             await tester.tap(find.byKey(Key("datePickerButton")));
 
