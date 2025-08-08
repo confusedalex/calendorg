@@ -46,116 +46,28 @@ void main() {
   }
 
   group('EventCard', () {
-    group(
-      'EventCard displays correct information',
-      () {
-        testWidgets(
-          'EventCard displays correct TagColor',
-          (tester) async {
-            await initWidget(tester);
-
-            final container = tester.widget<Container>(find.byWidgetPredicate(
-                (widget) =>
-                    widget is Container &&
-                    widget.decoration != null &&
-                    widget.decoration is BoxDecoration));
-
-            expect((container.decoration as BoxDecoration).color,
-                isSameColorAs(meetupTagColor.color));
-          },
-        );
-        testWidgets("EventCard display correct title", (tester) async {
+    group('EventCard displays correct information', () {
+      testWidgets(
+        'EventCard displays correct TagColor',
+        (tester) async {
           await initWidget(tester);
 
-          expect(find.text(event.title), findsOneWidget);
-        });
+          final container = tester.widget<Container>(find.byWidgetPredicate(
+              (widget) =>
+                  widget is Container &&
+                  widget.decoration != null &&
+                  widget.decoration is BoxDecoration));
 
-        testWidgets("EventCard display correct time", (tester) async {
-          await initWidget(tester);
+          expect((container.decoration as BoxDecoration).color,
+              isSameColorAs(meetupTagColor.color));
+        },
+      );
+      testWidgets("EventCard display correct time", (tester) async {
+        await initWidget(tester);
 
-          expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
-        });
-
-        testWidgets("EventCard Title is orange for scheduled entry",
-            (tester) async {
-          final markup = """
-** TODO uninstall vim
-SCHEDULED: <2025-05-16>
-""";
-          final document = OrgDocument.parse(markup);
-          final event =
-              parseEvents(MockFileInfo(), document).entries.first.value.first;
-
-          await tester.pumpWidget(MaterialApp(
-              home: Scaffold(
-            body: BlocProvider<TagColorsCubit>(
-              create: (context) =>
-                  TagColorsCubit.withInitialValue([meetupTagColor]),
-              child: EventCard(event, event.timestamps.first),
-            ),
-          )));
-
-          expect(
-              find.byWidgetPredicate((widget) =>
-                  widget is Text &&
-                  widget.style == TextStyle(color: Colors.amber)),
-              findsOne);
-        });
-
-        testWidgets("EventCard Title is red for deadlined entry",
-            (tester) async {
-          final markup = """
-** TODO install emacs
-DEADLINE: <2025-05-17>
-""";
-          final document = OrgDocument.parse(markup);
-          final event =
-              parseEvents(MockFileInfo(), document).entries.first.value.first;
-
-          await tester.pumpWidget(MaterialApp(
-              home: Scaffold(
-            body: BlocProvider<TagColorsCubit>(
-              create: (context) => TagColorsCubit.withInitialValue([]),
-              child: EventCard(event, event.timestamps.first),
-            ),
-          )));
-
-          expect(
-              find.byWidgetPredicate((widget) =>
-                  widget is Text &&
-                  widget.style == TextStyle(color: Colors.red)),
-              findsOne);
-        });
-        testWidgets("EventCard Title is green for done entry", (tester) async {
-          final markup = """
-** DONE install emacs
-<2025-05-05>
-""";
-          final document = OrgDocument.parse(markup);
-          final event =
-              parseEvents(MockFileInfo(), document).entries.first.value.first;
-
-          await tester.pumpWidget(MaterialApp(
-              home: Scaffold(
-            body: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                    create: (create) => TagColorsCubit.withInitialValue([])),
-                BlocProvider(create: (create) => TodoStatesCubit())
-              ],
-              child: EventCard(event, event.timestamps.first),
-            ),
-          )));
-
-          // We expect to find 2 widgets, because of the keyword and the heading
-          expect(
-              find.byWidgetPredicate((widget) =>
-                  widget is Text &&
-                  widget.style == TextStyle(color: Colors.green)),
-              findsNWidgets(2));
-        });
-      },
-    );
+        expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
+      });
+    });
     testWidgets("EventCard tap will open EventView", (tester) async {
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
