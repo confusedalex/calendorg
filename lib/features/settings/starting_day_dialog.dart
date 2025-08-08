@@ -18,7 +18,7 @@ class StartingDateDialog extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   ListTile(
-                      title: Text("Montag"),
+                      title: Text("Monday"),
                       leading: Radio<StartingDayOfWeek>(
                           value: StartingDayOfWeek.monday,
                           groupValue: state,
