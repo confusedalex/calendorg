@@ -1,5 +1,6 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
+import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -55,6 +56,43 @@ void main() {
           expect(find.text(event.title), findsOneWidget);
         },
       );
+      group("date picker", () {
+        testWidgets(
+          'EventView shows date picker Button',
+          (tester) async {
+            await initWidget(tester);
+
+            await tester.pumpAndSettle();
+
+            expect(find.byKey(Key("datePickerButton")), findsOneWidget);
+          },
+        );
+        testWidgets(
+          'Date Picker button shows timestamp',
+          (tester) async {
+            await initWidget(tester);
+
+            await tester.pumpAndSettle();
+
+            expect(
+                find.text(event.timestamps.first.toMarkup()), findsOneWidget);
+          },
+        );
+        testWidgets(
+          'Date Picker button open datePickerDialog',
+          (tester) async {
+            await initWidget(tester);
+
+            await tester.pumpAndSettle();
+
+            await tester.tap(find.byKey(Key("datePickerButton")));
+
+            await tester.pumpAndSettle();
+
+            expect(find.byType(DatePicker), findsOneWidget);
+          },
+        );
+      });
     },
   );
 }
