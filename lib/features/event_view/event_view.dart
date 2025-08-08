@@ -44,6 +44,7 @@ class EventView extends StatelessWidget {
             BlocBuilder<EventViewBloc, EventViewState>(
                 builder: (context, state) {
               return TextButton(
+                key: Key("datePickerButton"),
                 onPressed: () {
                   showDialog(
                       context: context,
