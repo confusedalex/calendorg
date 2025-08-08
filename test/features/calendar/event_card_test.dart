@@ -47,6 +47,11 @@ void main() {
 
   group('EventCard', () {
     group('EventCard displays correct information', () {
+      testWidgets("EventCard display correct title", (tester) async {
+        await initWidget(tester);
+
+        expect(find.text(event.title, findRichText: true), findsOneWidget);
+      });
       testWidgets(
         'EventCard displays correct TagColor',
         (tester) async {
