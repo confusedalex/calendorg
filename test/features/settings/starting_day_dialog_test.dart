@@ -16,7 +16,8 @@ void main() {
       setUp(() {
         SharedPreferencesAsyncPlatform.instance =
             InMemorySharedPreferencesAsync.empty();
-        cubit = StartingDayCubit();
+        cubit = StartingDayCubit()
+          ..changeStartingDayOfWeek(StartingDayOfWeek.friday);
       });
 
       Future<void> pumpWidgetToTester(dynamic tester) async {
