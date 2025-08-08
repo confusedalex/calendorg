@@ -36,6 +36,7 @@ void main() {
             expect(find.text("Monday"), findsOne);
           },
         );
+
         testWidgets(
           'States changes to monday, when pressing monday',
           (tester) async {
@@ -58,7 +59,7 @@ void main() {
           },
         );
         testWidgets(
-          'Dialog should contain button for sunday',
+          'Cubit state should change to sunday, when pressing sunday tile',
           (tester) async {
             await pumpWidgetToTester(tester);
 
