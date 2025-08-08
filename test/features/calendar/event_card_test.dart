@@ -31,8 +31,13 @@ void main() {
   Future<void> initWidget(dynamic tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
-      body: BlocProvider<TagColorsCubit>(
-        create: (context) => TagColorsCubit.withInitialValue([meetupTagColor]),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) =>
+                  TagColorsCubit.withInitialValue([meetupTagColor])),
+          BlocProvider(create: (context) => TodoStatesCubit())
+        ],
         child: EventCard(event, event.timestamps.first),
       ),
     )));
