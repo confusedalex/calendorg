@@ -2,9 +2,11 @@ import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/calendar_view.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
+import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,6 +58,7 @@ void main() {
           BlocProvider.value(value: orgFilesBloc),
           BlocProvider.value(value: calendarBloc),
           BlocProvider(create: (context) => StartingDayCubit()),
+          BlocProvider(create: (context) => TodoStatesCubit()),
           BlocProvider(create: (context) => FloatingActionButtonCubit()),
           BlocProvider(
               create: (context) => TagColorsCubit.withInitialValue(
@@ -115,6 +118,23 @@ void main() {
 
         expect(
             calendarBloc.state.calendarFormat, equals(CalendarFormat.twoWeeks));
+      });
+      testWidgets(
+          "CalendarView shows eventCards for every event, when events are there",
+          (tester) async {
+        calendarBloc = CalendarBloc(DateTime(2025, 05, 05));
+
+        await pumpWidgetToTester(tester);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(EventCard), findsNWidgets(3));
+      });
+      testWidgets("CalendarView shows no eventCards, when no events are there",
+          (tester) async {
+        await pumpWidgetToTester(tester);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(EventCard), findsNothing);
       });
     },
   );
