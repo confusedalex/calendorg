@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:table_calendar/src/widgets/format_button.dart';
 
 void main() {
   group(
@@ -105,6 +106,15 @@ void main() {
         await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
         expect(isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
             isTrue);
+      });
+      testWidgets("Changing calendar format works", (tester) async {
+        await pumpWidgetToTester(tester);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byType(FormatButton));
+
+        expect(
+            calendarBloc.state.calendarFormat, equals(CalendarFormat.twoWeeks));
       });
     },
   );
