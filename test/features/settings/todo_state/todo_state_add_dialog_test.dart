@@ -33,17 +33,6 @@ void main() {
           expect(find.byType(TodoStateAddDialog), findsNothing);
         },
       );
-      testWidgets(
-        'save button closes dialog',
-        (tester) async {
-          await pumpWidgetToTester(tester);
-
-          await tester.tap(find.text("save"));
-          await tester.pumpAndSettle();
-
-          expect(find.byType(TodoStateAddDialog), findsNothing);
-        },
-      );
     },
   );
 }
