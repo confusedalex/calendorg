@@ -9,24 +9,40 @@ class TodoStateAddDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final states = context.read<TodoStatesCubit>().state;
+    final formKey = GlobalKey<FormState>();
+
     return BlocBuilder<TodoStateAddDialogCubit, String>(
       builder: (context, state) {
-        return AlertDialog(
-          title: Text("TODO State Name"),
-          content: TextField(
-            onChanged: context.read<TodoStateAddDialogCubit>().updateText,
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(context), child: Text("cancel")),
-            TextButton(
-                onPressed: () {
-                  context.read<TodoStatesCubit>().addTodo("todo", state);
-                  Navigator.pop(context);
+        return Form(
+            key: formKey,
+            child: AlertDialog(
+              title: Text("TODO State Name"),
+              content: TextFormField(
+                onChanged: context.read<TodoStateAddDialogCubit>().updateText,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return "state cannot be empty!";
+                  } else if (states.done.contains(value) ||
+                      states.todo.contains(value)) {
+                    return "state already exists!";
+                  }
                 },
-                child: Text("save"))
-          ],
-        );
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("cancel")),
+                TextButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        context.read<TodoStatesCubit>().addTodo("todo", state);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text("save"))
+              ],
+            ));
       },
     );
   }
