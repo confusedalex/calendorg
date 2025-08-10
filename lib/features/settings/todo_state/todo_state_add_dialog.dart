@@ -27,6 +27,7 @@ class TodoStateAddDialog extends StatelessWidget {
                       states.todo.contains(value)) {
                     return "state already exists!";
                   }
+                  return null;
                 },
               ),
               actions: [
