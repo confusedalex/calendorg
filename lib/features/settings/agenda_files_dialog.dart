@@ -8,8 +8,6 @@ class AgendaFilesDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupValue =
-        context.select((OrgFilesBloc bloc) => bloc.state.fileToCaptureTo);
     return AlertDialog(
       title: Row(
         children: [Text("Agenda Files"), Spacer(), CloseButton()],
@@ -26,11 +24,11 @@ class AgendaFilesDialog extends StatelessWidget {
                         title: Text(fileInfo.fileName ??
                             "File name could't not be loaded"),
                         leading: Radio(
-                            value: fileInfo,
-                            groupValue: groupValue,
+                            value: fileInfo.identifier,
+                            groupValue: state.fileToCaptureTo?.identifier,
                             onChanged: (value) => context
                                 .read<OrgFilesBloc>()
-                                .add(OrgFilesChangeCaptureFileEvent(value))),
+                                .add(OrgFilesChangeCaptureFileEvent(fileInfo))),
                         trailing: IconButton(
                           icon: Icon(Icons.close),
                           onPressed: () => context
