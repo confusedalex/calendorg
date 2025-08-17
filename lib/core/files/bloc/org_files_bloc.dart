@@ -90,8 +90,7 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     final captureFile =
         (captureFileString == null || captureFileString == "null")
             ? null
-            : FileInfo.fromJson(
-                (jsonDecode(captureFileString) as List<dynamic>).first);
+            : FileInfo.fromJson((jsonDecode(captureFileString)));
     if (files == null) {
       return OrgFilesState.initial();
     }
