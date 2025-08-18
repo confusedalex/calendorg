@@ -9,44 +9,41 @@ class AgendaFilesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(
-        children: [Text("Agenda Files"), Spacer(), CloseButton()],
-      ),
+      title: Row(children: [Text("Agenda Files"), Spacer(), CloseButton()]),
       content: BlocBuilder<OrgFilesBloc, OrgFilesState>(
-          builder: (context, state) => SizedBox(
-                width: MediaQuery.of(context).size.width * 0.75,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.filePaths.length,
-                    itemBuilder: (context, index) {
-                      final fileInfo = state.filePaths.elementAt(index);
-                      return ListTile(
-                        title: Text(fileInfo.fileName ??
-                            "File name could't not be loaded"),
-                        leading: Radio(
-                            value: fileInfo.identifier,
-                            groupValue: state.fileToCaptureTo?.identifier,
-                            onChanged: (value) => context
-                                .read<OrgFilesBloc>()
-                                .add(OrgFilesChangeCaptureFileEvent(fileInfo))),
-                        trailing: IconButton(
-                          icon: Icon(Icons.close),
-                          onPressed: () => context
-                              .read<OrgFilesBloc>()
-                              .add(OrgFilesRemoveFilePath(fileInfo)),
-                        ),
-                      );
-                    }),
-              )),
+        builder: (context, state) => SizedBox(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.filePaths.length,
+            itemBuilder: (context, index) {
+              final fileInfo = state.filePaths.elementAt(index);
+              return ListTile(
+                title: Text(
+                  fileInfo.fileName ?? "File name could't not be loaded",
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () => context.read<OrgFilesBloc>().add(
+                    OrgFilesRemoveFilePath(fileInfo),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
       actions: [
         TextButton(
-            onPressed: () async => context
-                .read<OrgFilesBloc>()
-                .add(OrgFilesAddFilePath(
-                    await FilePickerWritable().openFile((fileInfo, file) async {
-                  return fileInfo;
-                }))),
-            child: Text("add"))
+          onPressed: () async => context.read<OrgFilesBloc>().add(
+            OrgFilesAddFilePath(
+              await FilePickerWritable().openFile((fileInfo, file) async {
+                return fileInfo;
+              }),
+            ),
+          ),
+          child: Text("add"),
+        ),
       ],
     );
   }

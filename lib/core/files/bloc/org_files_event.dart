@@ -15,9 +15,9 @@ final class OrgFilesRemoveFilePath extends OrgFilesEvent {
   OrgFilesRemoveFilePath(this.fileInfo);
 }
 
-final class OrgFilesChangeCaptureFileEvent extends OrgFilesEvent {
+final class OrgFilesChangeInboxFileEvent extends OrgFilesEvent {
   final FileInfo? fileInfo;
-  OrgFilesChangeCaptureFileEvent(this.fileInfo);
+  OrgFilesChangeInboxFileEvent(this.fileInfo);
 }
 
 final class OrgFilesReplaceNode extends OrgFilesEvent {

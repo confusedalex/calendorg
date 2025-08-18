@@ -15,110 +15,93 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group(
-    'Settings Page Test',
-    () {
-      group('Tag Colors', () {
-        testWidgets("Find Tag Colors Button", (tester) async {
-          await tester.pumpWidget(BlocProvider(
-            create: (context) => FloatingActionButtonCubit(),
-            child: MaterialApp(home: Scaffold(body: SettingsPage())),
-          ));
-
-          await tester.pumpAndSettle();
-
-          expect(find.text("Tag Colors"), findsOneWidget);
-        });
-
-        testWidgets("Tapping Button open Dialog", (tester) async {
-          await tester.pumpWidget(MaterialApp(
-              home: Scaffold(
-                  body: MultiBlocProvider(providers: [
-            BlocProvider(
-              create: (context) => TagColorsCubit(),
+  group('Settings Page Test', () {
+    Future<void> pumpWidget(WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => OrgFilesBloc()),
+                BlocProvider(create: (context) => ThemeBloc()),
+                BlocProvider(create: (context) => TagColorsCubit()),
+                BlocProvider(create: (context) => TodoStatesCubit()),
+                BlocProvider(create: (context) => StartingDayCubit()),
+                BlocProvider(create: (context) => FloatingActionButtonCubit()),
+              ],
+              child: SettingsPage(),
             ),
-            BlocProvider(create: (context) => FloatingActionButtonCubit())
-          ], child: SettingsPage()))));
-
-          await tester.pumpAndSettle();
-          await tester.tap(find.text("Tag Colors"));
-
-          await tester.pumpAndSettle();
-
-          expect(find.byType(TagsPage), findsOneWidget);
-        });
-      });
-      testWidgets("Theme Dialog will open", (tester) async {
-        await tester.pumpWidget(MaterialApp(
-            home: Scaffold(
-                body: MultiBlocProvider(providers: [
-          BlocProvider(
-            create: (context) => ThemeBloc(),
           ),
-          BlocProvider(create: (context) => FloatingActionButtonCubit())
-        ], child: SettingsPage()))));
+        ),
+      );
+    }
+
+    group('Tag Colors', () {
+      testWidgets("Find Tag Colors Button", (tester) async {
+        await pumpWidget(tester);
 
         await tester.pumpAndSettle();
-        await tester.tap(find.text("Theme"));
 
-        await tester.pumpAndSettle();
-
-        expect(find.byType(ThemeDialog), findsOneWidget);
+        expect(find.text("Tag Colors"), findsOneWidget);
       });
-      testWidgets("Agenda Files Dialog will open", (tester) async {
-        await tester.pumpWidget(MaterialApp(
-            home: Scaffold(
-                body: MultiBlocProvider(providers: [
-          BlocProvider(
-            create: (context) => OrgFilesBloc(),
-          ),
-          BlocProvider(create: (context) => FloatingActionButtonCubit())
-        ], child: SettingsPage()))));
+
+      testWidgets("Tapping Button open Dialog", (tester) async {
+        await pumpWidget(tester);
 
         await tester.pumpAndSettle();
-        await tester.tap(find.text("Agenda Files"));
+        await tester.tap(find.text("Tag Colors"));
 
         await tester.pumpAndSettle();
 
-        expect(find.byType(AgendaFilesDialog), findsOneWidget);
+        expect(find.byType(TagsPage), findsOneWidget);
       });
-      testWidgets("TODO States Dialog will open", (tester) async {
-        await tester.pumpWidget(MaterialApp(
-            home: Scaffold(
-                body: MultiBlocProvider(providers: [
-          BlocProvider(
-            create: (context) => OrgFilesBloc(),
-          ),
-          BlocProvider(
-            create: (context) => TodoStatesCubit(),
-          ),
-          BlocProvider(create: (context) => FloatingActionButtonCubit())
-        ], child: SettingsPage()))));
+    });
+    testWidgets("Theme Dialog will open", (tester) async {
+      await pumpWidget(tester);
 
-        await tester.pumpAndSettle();
-        await tester.tap(find.text("TODO states"));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("Theme"));
 
-        await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-        expect(find.byType(TodoStatesDialog), findsOneWidget);
-      });
-      testWidgets("Starting Day Dialog will open", (tester) async {
-        await tester.pumpWidget(MaterialApp(
-            home: Scaffold(
-                body: MultiBlocProvider(providers: [
-          BlocProvider(
-            create: (context) => StartingDayCubit(),
-          ),
-          BlocProvider(create: (context) => FloatingActionButtonCubit())
-        ], child: SettingsPage()))));
+      expect(find.byType(ThemeDialog), findsOneWidget);
+    });
+    testWidgets("Agenda Files Dialog will open", (tester) async {
+      await pumpWidget(tester);
 
-        await tester.pumpAndSettle();
-        await tester.tap(find.text("Starting Day of week"));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("Agenda Files"));
 
-        await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-        expect(find.byType(StartingDateDialog), findsOneWidget);
-      });
-    },
-  );
+      expect(find.byType(AgendaFilesDialog), findsOneWidget);
+    });
+    testWidgets("TODO States Dialog will open", (tester) async {
+      await pumpWidget(tester);
+
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("TODO states"));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(TodoStatesDialog), findsOneWidget);
+    });
+    testWidgets("Starting Day Dialog will open", (tester) async {
+      await pumpWidget(tester);
+
+      await tester.pumpAndSettle();
+      await tester.tap(find.text("Starting Day of week"));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(StartingDateDialog), findsOneWidget);
+    });
+    testWidgets('Inbox File ListTile should open FilePicker', (tester) async {
+      await pumpWidget(tester);
+
+      await tester.pumpAndSettle();
+
+      expect(find.text("Inbox File"), findsOneWidget);
+    });
+  });
 }
