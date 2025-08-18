@@ -26,24 +26,20 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
 
           final filePaths = state.filePaths..add(fileInfo);
           final documentsMap = state.documentsMap
-            ..addAll(
-                {fileInfo: await documentByIdentifier(fileInfo.identifier)});
+            ..addAll({
+              fileInfo: await documentByIdentifier(fileInfo.identifier),
+            });
 
-          emit(state.copyWith(
-              filePaths: filePaths,
-              documentsMap: documentsMap,
-              inboxFile: () => filePaths.length == 1
-                  ? filePaths.first
-                  : state.inboxFile));
+          emit(
+            state.copyWith(filePaths: filePaths, documentsMap: documentsMap),
+          );
         case OrgFilesRemoveFilePath():
           final filePaths = state.filePaths..remove(event.fileInfo);
           final documentsMap = state.documentsMap..remove(event.fileInfo);
 
-          emit(state.copyWith(
-              filePaths: filePaths,
-              documentsMap: documentsMap,
-              inboxFile: () =>
-                  filePaths.isEmpty ? null : state.inboxFile));
+          emit(
+            state.copyWith(filePaths: filePaths, documentsMap: documentsMap),
+          );
 
         case OrgFilesReplaceNode():
           final oldDocument = state.documentsMap[event.fileInfo];
@@ -55,20 +51,27 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
               .replace(event.newNode)
               .commit();
 
-          emit(state.copyWith(
+          emit(
+            state.copyWith(
               documentsMap: state.documentsMap
-                ..update(event.fileInfo,
-                    (doc) => parser.parse(newDoc.toMarkup()).value)));
+                ..update(
+                  event.fileInfo,
+                  (doc) => parser.parse(newDoc.toMarkup()).value,
+                ),
+            ),
+          );
         case OrgFilesChangeInboxFileEvent():
           emit(state.copyWith(inboxFile: () => event.fileInfo));
         case OrgFilesChangeTodoStatesEvent():
           emit(state.copyWith(todoStates: event.todoStates));
-          emit(state.copyWith(
-            documentsMap: {
-              for (var fileInfo in state.filePaths)
-                fileInfo: await documentByIdentifier(fileInfo.identifier)
-            },
-          ));
+          emit(
+            state.copyWith(
+              documentsMap: {
+                for (var fileInfo in state.filePaths)
+                  fileInfo: await documentByIdentifier(fileInfo.identifier),
+              },
+            ),
+          );
       }
 
       _updateSharedPreferences();
@@ -87,10 +90,9 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     final prefs = SharedPreferencesAsync();
     final files = await prefs.getString("agendaFiles");
     final inboxFileString = await prefs.getString("inboxFile");
-    final inboxFile =
-        (inboxFileString == null || inboxFileString == "null")
-            ? null
-            : FileInfo.fromJson((jsonDecode(inboxFileString)));
+    final inboxFile = (inboxFileString == null || inboxFileString == "null")
+        ? null
+        : FileInfo.fromJson((jsonDecode(inboxFileString)));
     if (files == null) {
       return OrgFilesState.initial();
     }
@@ -98,19 +100,22 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     final fileInfos = jsonObject.map((info) => FileInfo.fromJson(info)).toSet();
 
     return OrgFilesState(
-        filePaths: fileInfos,
-        documentsMap: {
-          for (var fileInfo in fileInfos)
-            fileInfo: await documentByIdentifier(fileInfo.identifier)
-        },
-        inboxFile: inboxFile,
-        todoStates: state.todoStates);
+      filePaths: fileInfos,
+      documentsMap: {
+        for (var fileInfo in fileInfos)
+          fileInfo: await documentByIdentifier(fileInfo.identifier),
+      },
+      inboxFile: inboxFile,
+      todoStates: state.todoStates,
+    );
   }
 
   Future<OrgDocument> documentByIdentifier(String identifier) async => parser
-      .parse(await FilePickerWritable().readFile(
-        identifier: identifier,
-        reader: (fileInfo, file) => file.readAsString(),
-      ))
+      .parse(
+        await FilePickerWritable().readFile(
+          identifier: identifier,
+          reader: (fileInfo, file) => file.readAsString(),
+        ),
+      )
       .value;
 }
