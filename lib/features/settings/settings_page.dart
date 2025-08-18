@@ -18,48 +18,68 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<FloatingActionButtonCubit>().changeButton(null);
-    return Column(children: [
-      ListTile(
+    return Column(
+      children: [
+        ListTile(
           title: Text("Tag Colors"),
           onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<TagColorsCubit>(context),
-                      child: const TagsPage())))),
-      Divider(),
-      ListTile(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<TagColorsCubit>(context),
+                child: const TagsPage(),
+              ),
+            ),
+          ),
+        ),
+        Divider(),
+        ListTile(
           title: Text("Starting Day of week"),
           onTap: () => showDialog(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<StartingDayCubit>(context),
-                  child: const StartingDateDialog()))),
-      Divider(),
-      ListTile(
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: BlocProvider.of<StartingDayCubit>(context),
+              child: const StartingDateDialog(),
+            ),
+          ),
+        ),
+        Divider(),
+        ListTile(
           title: Text("TODO states"),
           onTap: () => showDialog(
-              context: context,
-              builder: (_) => MultiBlocProvider(providers: [
-                    BlocProvider.value(value: context.read<TodoStatesCubit>()),
-                    BlocProvider.value(value: context.read<OrgFilesBloc>())
-                  ], child: const TodoStatesDialog()))),
-      Divider(),
-      ListTile(
+            context: context,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: context.read<TodoStatesCubit>()),
+                BlocProvider.value(value: context.read<OrgFilesBloc>()),
+              ],
+              child: const TodoStatesDialog(),
+            ),
+          ),
+        ),
+        Divider(),
+        ListTile(
           title: Text("Agenda Files"),
           onTap: () => showDialog(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<OrgFilesBloc>(context),
-                  child: const AgendaFilesDialog()))),
-      Divider(),
-      ListTile(
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: BlocProvider.of<OrgFilesBloc>(context),
+              child: const AgendaFilesDialog(),
+            ),
+          ),
+        ),
+        Divider(),
+        ListTile(
           title: Text("Theme"),
           onTap: () => showDialog(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<ThemeBloc>(context),
-                  child: const ThemeDialog()))),
-    ]);
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: BlocProvider.of<ThemeBloc>(context),
+              child: const ThemeDialog(),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
