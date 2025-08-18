@@ -9,6 +9,7 @@ import 'package:calendorg/features/settings/tags/tags_page.dart';
 import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
 import 'package:calendorg/features/settings/theme/theme_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/todo_states_dialog.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,6 +56,21 @@ class SettingsPage extends StatelessWidget {
               ],
               child: const TodoStatesDialog(),
             ),
+          ),
+        ),
+        Divider(),
+        ListTile(
+          title: Text("Inbox File"),
+          onTap: () async => context.read<OrgFilesBloc>().add(
+            OrgFilesChangeInboxFileEvent(
+              await FilePickerWritable().openFile((fileInfo, file) async {
+                return fileInfo;
+              }),
+            ),
+          ),
+          subtitle: BlocBuilder<OrgFilesBloc, OrgFilesState>(
+            builder: (context, state) =>
+                Text(state.inboxFile?.fileName ?? "No file selected"),
           ),
         ),
         Divider(),
