@@ -96,5 +96,12 @@ void main() {
 
       expect(find.byType(StartingDateDialog), findsOneWidget);
     });
+    testWidgets('Inbox File ListTile should open FilePicker', (tester) async {
+      await pumpWidget(tester);
+
+      await tester.pumpAndSettle();
+
+      expect(find.text("Inbox File"), findsOneWidget);
+    });
   });
 }
