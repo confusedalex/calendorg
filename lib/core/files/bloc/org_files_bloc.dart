@@ -93,21 +93,31 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     final inboxFile = (inboxFileString == null || inboxFileString == "null")
         ? null
         : FileInfo.fromJson((jsonDecode(inboxFileString)));
-    if (files == null) {
-      return OrgFilesState.initial();
-    }
-    final jsonObject = jsonDecode(files) as List<dynamic>;
-    final fileInfos = jsonObject.map((info) => FileInfo.fromJson(info)).toSet();
 
-    return OrgFilesState(
-      filePaths: fileInfos,
-      documentsMap: {
-        for (var fileInfo in fileInfos)
-          fileInfo: await documentByIdentifier(fileInfo.identifier),
-      },
-      inboxFile: inboxFile,
-      todoStates: state.todoStates,
-    );
+    if (files == null && inboxFile == null) {
+      return OrgFilesState.initial();
+    } else if (files == null) {
+      return OrgFilesState(
+        inboxFile: inboxFile,
+        todoStates: state.todoStates,
+        filePaths: {},
+        documentsMap: {},
+      );
+    } else {
+      final jsonObject = jsonDecode(files) as List<dynamic>;
+      final fileInfos =
+          jsonObject.map((info) => FileInfo.fromJson(info)).toSet();
+
+      return OrgFilesState(
+        filePaths: fileInfos,
+        documentsMap: {
+          for (var fileInfo in fileInfos)
+            fileInfo: await documentByIdentifier(fileInfo.identifier),
+        },
+        inboxFile: inboxFile,
+        todoStates: state.todoStates,
+      );
+    }
   }
 
   Future<OrgDocument> documentByIdentifier(String identifier) async => parser
