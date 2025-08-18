@@ -32,9 +32,9 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           emit(state.copyWith(
               filePaths: filePaths,
               documentsMap: documentsMap,
-              fileToCaptureTo: () => filePaths.length == 1
+              inboxFile: () => filePaths.length == 1
                   ? filePaths.first
-                  : state.fileToCaptureTo));
+                  : state.inboxFile));
         case OrgFilesRemoveFilePath():
           final filePaths = state.filePaths..remove(event.fileInfo);
           final documentsMap = state.documentsMap..remove(event.fileInfo);
@@ -42,8 +42,8 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           emit(state.copyWith(
               filePaths: filePaths,
               documentsMap: documentsMap,
-              fileToCaptureTo: () =>
-                  filePaths.isEmpty ? null : state.fileToCaptureTo));
+              inboxFile: () =>
+                  filePaths.isEmpty ? null : state.inboxFile));
 
         case OrgFilesReplaceNode():
           final oldDocument = state.documentsMap[event.fileInfo];
@@ -59,8 +59,8 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
               documentsMap: state.documentsMap
                 ..update(event.fileInfo,
                     (doc) => parser.parse(newDoc.toMarkup()).value)));
-        case OrgFilesChangeCaptureFileEvent():
-          emit(state.copyWith(fileToCaptureTo: () => event.fileInfo));
+        case OrgFilesChangeInboxFileEvent():
+          emit(state.copyWith(inboxFile: () => event.fileInfo));
         case OrgFilesChangeTodoStatesEvent():
           emit(state.copyWith(todoStates: event.todoStates));
           emit(state.copyWith(
@@ -80,17 +80,17 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     // We need to convert the Set to a List, because Dart somehow
     // only know how to encode an List, not a Set
     await prefs.setString("agendaFiles", jsonEncode(state.filePaths.toList()));
-    await prefs.setString("captureFile", jsonEncode(state.fileToCaptureTo));
+    await prefs.setString("inboxFile", jsonEncode(state.inboxFile));
   }
 
   Future<OrgFilesState> _initOrgFilesState() async {
     final prefs = SharedPreferencesAsync();
     final files = await prefs.getString("agendaFiles");
-    final captureFileString = await prefs.getString("captureFile");
-    final captureFile =
-        (captureFileString == null || captureFileString == "null")
+    final inboxFileString = await prefs.getString("inboxFile");
+    final inboxFile =
+        (inboxFileString == null || inboxFileString == "null")
             ? null
-            : FileInfo.fromJson((jsonDecode(captureFileString)));
+            : FileInfo.fromJson((jsonDecode(inboxFileString)));
     if (files == null) {
       return OrgFilesState.initial();
     }
@@ -103,7 +103,7 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           for (var fileInfo in fileInfos)
             fileInfo: await documentByIdentifier(fileInfo.identifier)
         },
-        fileToCaptureTo: captureFile,
+        inboxFile: inboxFile,
         todoStates: state.todoStates);
   }
 

@@ -5,11 +5,11 @@ class OrgFilesState {
       {required this.filePaths,
       required this.documentsMap,
       required this.todoStates,
-      this.fileToCaptureTo});
+      this.inboxFile});
 
   final Set<FileInfo> filePaths;
   final Map<FileInfo, OrgDocument> documentsMap;
-  final FileInfo? fileToCaptureTo;
+  final FileInfo? inboxFile;
   final OrgTodoStates todoStates;
   late final Map<String, List<Event>> allEvents =
       documentsMap.entries.fold({}, (e, k) => parseEvents(k.key, k.value));
@@ -36,14 +36,14 @@ class OrgFilesState {
       {Set<FileInfo>? filePaths,
       Map<FileInfo, OrgDocument>? documentsMap,
       OrgTodoStates? todoStates,
-      ValueGetter<FileInfo?>? fileToCaptureTo,
+      ValueGetter<FileInfo?>? inboxFile,
       List<Event>? allEvents}) {
     return OrgFilesState(
       filePaths: filePaths ?? this.filePaths,
       documentsMap: documentsMap ?? this.documentsMap,
       todoStates: todoStates ?? this.todoStates,
-      fileToCaptureTo:
-          fileToCaptureTo != null ? fileToCaptureTo() : this.fileToCaptureTo,
+      inboxFile:
+          inboxFile != null ? inboxFile() : this.inboxFile,
     );
   }
 }

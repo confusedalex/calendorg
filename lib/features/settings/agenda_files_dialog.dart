@@ -25,10 +25,10 @@ class AgendaFilesDialog extends StatelessWidget {
                             "File name could't not be loaded"),
                         leading: Radio(
                             value: fileInfo.identifier,
-                            groupValue: state.fileToCaptureTo?.identifier,
+                            groupValue: state.inboxFile?.identifier,
                             onChanged: (value) => context
                                 .read<OrgFilesBloc>()
-                                .add(OrgFilesChangeCaptureFileEvent(fileInfo))),
+                                .add(OrgFilesChangeInboxFileEvent(fileInfo))),
                         trailing: IconButton(
                           icon: Icon(Icons.close),
                           onPressed: () => context
