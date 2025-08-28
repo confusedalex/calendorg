@@ -1,4 +1,5 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/features/settings/tags/cubit/new_tag_color_cubit.dart';
 import 'package:calendorg/features/settings/tags/edit_tag_color_dialog.dart';
 import 'package:calendorg/features/settings/tags/new_tag_color_dialog.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
@@ -52,9 +53,13 @@ class _TagsPageState extends State<TagsPage> {
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<TagColorsCubit>(context),
-                    child: NewTagColorDialog()));
+                builder: (_) => MultiBlocProvider(providers: [
+                      BlocProvider.value(
+                          value: BlocProvider.of<TagColorsCubit>(context)),
+                      BlocProvider(
+                        create: (context) => NewTagColorCubit(),
+                      )
+                    ], child: NewTagColorDialog()));
           },
           label: Text("Add")));
 }
