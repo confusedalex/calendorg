@@ -160,6 +160,37 @@ DEADLINE: <2025-05-04>
           expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
         });
       });
+      group("validator", () {
+        test("validator should return string when null", () {
+          final result = validate(null, "Placeholder");
+
+          expect(result, isA<String>());
+        });
+        test("validator should return string when string is empty", () {
+          final result = validate("", "Placeholder");
+
+          expect(result, isA<String>());
+        });
+        test("validator should return string when string is just spaces", () {
+          final result = validate("                           ", "Placeholder");
+
+          expect(result, isA<String>());
+        });
+        test("validator should return string when string is in set", () {
+          final result = validate("alreadyExists", "Placeholder",
+              notIn: ["alreadyExists"]);
+
+          expect(result, isA<String>());
+        });
+        test(
+            "validator should return null when string not in set and not empty",
+            () {
+          final result = validate("doesntAlreadyExists", "Placeholder",
+              notIn: ["alreadyExists"]);
+
+          expect(result, isNull);
+        });
+      });
     },
   );
 }

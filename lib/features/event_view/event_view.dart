@@ -2,6 +2,7 @@ import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
+import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,21 +27,15 @@ class EventView extends StatelessWidget {
         content: SingleChildScrollView(
           child: Column(spacing: 20, children: [
             TextFormField(
-              key: Key("TitleField"),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), helperText: "Event Title"),
-              initialValue: title,
-              autovalidateMode: AutovalidateMode.always,
-              onChanged: (value) => context
-                  .read<EventViewBloc>()
-                  .add(EventViewTitleChangeEvent(value)),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "The Event name can't be empty";
-                }
-                return null;
-              },
-            ),
+                key: Key("TitleField"),
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(), helperText: "Event Title"),
+                initialValue: title,
+                autovalidateMode: AutovalidateMode.always,
+                onChanged: (value) => context
+                    .read<EventViewBloc>()
+                    .add(EventViewTitleChangeEvent(value)),
+                validator: (value) => validate(value, "Event Name")),
             BlocBuilder<EventViewBloc, EventViewState>(
                 builder: (context, state) {
               return TextButton(

@@ -101,6 +101,13 @@ Map<String, List<Event>> parseEvents(FileInfo fileInfo, OrgDocument document) {
   return eventMap;
 }
 
+String? validate(String? value, String object, {Iterable<String>? notIn}) {
+  if (value == null || value.trim().isEmpty) return "$object can't be empty!";
+  if (notIn != null && notIn.contains(value)) return "$object already exists!";
+
+  return null;
+}
+
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
   final isoDate = dateTime.toIso8601String().split("T")[0].split("-");
   return (year: isoDate[0], month: isoDate[1], day: isoDate[2], dayName: null);
