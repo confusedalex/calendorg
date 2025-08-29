@@ -14,7 +14,8 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-                create: (context) => DatePickerBloc(timestamp),
+                create: (context) =>
+                    DatePickerBloc(DatePickerState.initial(timestamp)),
                 child: DatePicker()))));
 
     await tester.pumpAndSettle();
@@ -30,7 +31,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-      create: (context) => DatePickerBloc(timestamp),
+      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
       child: DatePicker(),
     ))));
 
@@ -50,7 +51,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-      create: (context) => DatePickerBloc(timestamp),
+      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
       child: DatePicker(),
     ))));
 
@@ -70,7 +71,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-      create: (context) => DatePickerBloc(timestamp),
+      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
       child: DatePicker(),
     ))));
 
@@ -91,7 +92,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-      create: (context) => DatePickerBloc(timestamp),
+      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
       child: DatePicker(),
     ))));
 
@@ -111,7 +112,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: BlocProvider(
-      create: (context) => DatePickerBloc(timestamp),
+      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
       child: DatePicker(),
     ))));
 

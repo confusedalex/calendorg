@@ -47,7 +47,8 @@ class EventView extends StatelessWidget {
                         return MultiBlocProvider(
                           providers: [
                             BlocProvider(
-                                create: (_) => DatePickerBloc(timestamp)),
+                                create: (_) => DatePickerBloc(
+                                    DatePickerState.initial(timestamp))),
                             BlocProvider.value(
                                 value: context.read<EventViewBloc>())
                           ],

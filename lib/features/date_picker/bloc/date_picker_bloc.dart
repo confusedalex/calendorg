@@ -7,8 +7,7 @@ part 'date_picker_event.dart';
 part 'date_picker_state.dart';
 
 class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
-  DatePickerBloc(OrgTimestamp timestamp)
-      : super(DatePickerState.initial(timestamp)) {
+  DatePickerBloc(DatePickerState state) : super(state) {
     on<DatePickerEvent>((event, emit) {
       switch (event) {
         case DatePickerStartDateChanged():

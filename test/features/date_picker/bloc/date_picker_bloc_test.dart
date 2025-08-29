@@ -14,7 +14,7 @@ void main() {
               .find<OrgSimpleTimestamp>((node) => true)!
               .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -42,7 +42,7 @@ void main() {
                   .find<OrgSimpleTimestamp>((node) => true)!
                   .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -70,7 +70,7 @@ void main() {
                   .find<OrgTimeRangeTimestamp>((node) => true)!
                   .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -98,7 +98,7 @@ void main() {
                   .find<OrgDateRangeTimestamp>((node) => true)!
                   .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -128,7 +128,7 @@ void main() {
                   .find<OrgDateRangeTimestamp>((node) => true)!
                   .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -158,7 +158,7 @@ void main() {
                   .find<OrgDateRangeTimestamp>((node) => true)!
                   .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -187,7 +187,7 @@ void main() {
                   .find<OrgDateRangeTimestamp>((node) => true)!
                   .node;
 
-          final bloc = DatePickerBloc(timestamp);
+          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
 
           expect(
               bloc.state,
@@ -208,20 +208,20 @@ void main() {
                       equals(TimeOfDay(hour: 19, minute: 56)))
                   .having((state) => state.endTimeDuration, "endTimeDuration",
                       equals(TimeOfDay(hour: 9, minute: 31))));
-
-            });
+        });
       });
 
       group("Event tests", () {
         late DatePickerBloc datePickerBloc;
 
         setUp(() {
-          datePickerBloc = DatePickerBloc(OrgSimpleTimestamp(
-              "<",
-              (day: "01", month: "05", year: "2025", dayName: "justaday"),
-              null,
-              [],
-              ">"));
+          datePickerBloc = DatePickerBloc(DatePickerState.initial(
+              OrgSimpleTimestamp(
+                  "<",
+                  (day: "01", month: "05", year: "2025", dayName: "justaday"),
+                  null,
+                  [],
+                  ">")));
         });
 
         blocTest(
