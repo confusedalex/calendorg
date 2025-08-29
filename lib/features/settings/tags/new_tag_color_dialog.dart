@@ -20,9 +20,9 @@ class NewTagColorDialog extends StatelessWidget {
         child: AlertDialog(
           title: Text("Add new Tag"),
           content: SizedBox(
-            height: 400,
-            width: 400,
+            width: MediaQuery.of(context).size.width * 0.75,
             child: ListView(
+              shrinkWrap: true,
               children: [
                 TextFormField(
                     onChanged: (value) => state.updateText(value),
