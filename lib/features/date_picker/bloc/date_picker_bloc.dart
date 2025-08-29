@@ -110,6 +110,4 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
       return dateTimeToSimpleTimestamp(startDate, state.startTimeActive, true);
     }
   }
-
-  bool get savable => state.node.toMarkup() != generateTimestamp().toMarkup();
 }

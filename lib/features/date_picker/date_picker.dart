@@ -14,7 +14,6 @@ class DatePicker extends StatelessWidget {
     final endDate = context.select((DatePickerBloc bloc) => bloc.state.endDate);
     final timestamp =
         context.select((DatePickerBloc bloc) => bloc.generateTimestamp());
-    final savable = context.select((DatePickerBloc bloc) => bloc.savable);
 
     return AlertDialog(
       title: Row(children: [Text("DatePicker"), Spacer(), CloseButton()]),
@@ -126,14 +125,12 @@ class DatePicker extends StatelessWidget {
       actions: [
         TextButton(
             key: Key("SaveButton"),
-            onPressed: savable
-                ? () {
-                    context
-                        .read<EventViewBloc>()
-                        .add(EventViewChangeTimestamp(timestamp));
-                    Navigator.pop(context);
-                  }
-                : null,
+            onPressed: () {
+              context
+                  .read<EventViewBloc>()
+                  .add(EventViewChangeTimestamp(timestamp));
+              Navigator.pop(context);
+            },
             child: Text("save"))
       ],
     );
