@@ -34,7 +34,8 @@ class OrgFilesState {
   }
 
   Map<Event, List<OrgTimestamp>> eventsByDateWithTimestamps(DateTime date) =>
-      (allEvents[date.toIso8601String().split("T")[0]] ?? []).fold({}, (acc, cur) {
+      (allEvents[date.toIso8601String().split("T")[0]] ?? []).fold({},
+          (acc, cur) {
         final timestampsByDate = cur.timestampsByDateTime(date);
 
         return timestampsByDate.isEmpty ? acc : {...acc, cur: timestampsByDate};
@@ -49,8 +50,7 @@ class OrgFilesState {
       filePaths: filePaths ?? this.filePaths,
       documentsMap: documentsMap ?? this.documentsMap,
       todoStates: todoStates ?? this.todoStates,
-      inboxFile:
-          inboxFile != null ? inboxFile() : this.inboxFile,
+      inboxFile: inboxFile != null ? inboxFile() : this.inboxFile,
     );
   }
 }

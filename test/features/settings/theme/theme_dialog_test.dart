@@ -41,12 +41,14 @@ void main() {
 
         testWidgets('Find dark theme', (tester) async {
           await pumpWidgetToTester(tester);
-          expect(find.widgetWithText(RadioListTile<ThemeData>, "dark"), findsOne);
+          expect(
+              find.widgetWithText(RadioListTile<ThemeData>, "dark"), findsOne);
         });
 
         testWidgets('Find green theme', (tester) async {
           await pumpWidgetToTester(tester);
-          expect(find.widgetWithText(RadioListTile<ThemeData>, "green"), findsOne);
+          expect(
+              find.widgetWithText(RadioListTile<ThemeData>, "green"), findsOne);
         });
       });
 

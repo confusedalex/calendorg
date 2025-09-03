@@ -9,8 +9,7 @@ part 'calendar_state.dart';
 
 class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   CalendarBloc(DateTime today)
-      : super(CalendarState(
-            selectedDate: today, focusedDay: today)) {
+      : super(CalendarState(selectedDate: today, focusedDay: today)) {
     on<CalendarEvent>((event, emit) {});
     on<CalendarChangeFormat>((event, emit) {
       emit(state.copyWith(calendarFormat: event.calendarFormat));
@@ -20,6 +19,4 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
           selectedDate: event.selectedDate, focusedDay: event.selectedDate)),
     );
   }
-
-
 }
