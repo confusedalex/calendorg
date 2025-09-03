@@ -4,6 +4,8 @@ import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
+import 'package:calendorg/features/new_section/cubit/new_section_cubit.dart';
+import 'package:calendorg/features/new_section/new_section_dialog.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,9 +26,21 @@ class CalendarView extends StatelessWidget {
         context.select((StartingDayCubit bloc) => bloc.state);
     final eventsByDate = context.read<OrgFilesBloc>().state.eventsByDate;
 
-    context
-        .read<FloatingActionButtonCubit>()
-        .changeButton(FloatingActionButton(onPressed: () {}, child: Icon(Icons.add),));
+    context.read<FloatingActionButtonCubit>().changeButton(FloatingActionButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: context.read<OrgFilesBloc>()),
+                BlocProvider(
+                  create: (context) => NewSectionCubit(null, null),
+                )
+              ],
+              child: NewSectionDialog(dateTime: selectedDate),
+            ),
+          ),
+          child: Icon(Icons.add),
+        ));
 
     return Column(children: [
       TableCalendar(
