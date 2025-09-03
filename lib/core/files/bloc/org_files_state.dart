@@ -12,7 +12,14 @@ class OrgFilesState {
   final FileInfo? inboxFile;
   final OrgTodoStates todoStates;
   late final Map<String, List<Event>> allEvents =
-      documentsMap.entries.fold({}, (e, k) => parseEvents(k.key, k.value));
+      documentsMap.entries.fold({}, (acc, cur) {
+    final copyAcc = {...acc};
+    parseEvents(cur.key, cur.value).forEach((k, v) {
+      acc.containsKey(k) ? copyAcc[k] = [...?copyAcc[k], ...v] : copyAcc[k] = v;
+    });
+
+    return copyAcc;
+  });
 
   factory OrgFilesState.initial() => OrgFilesState(
         filePaths: {},
