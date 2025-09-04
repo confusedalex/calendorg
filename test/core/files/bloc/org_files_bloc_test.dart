@@ -125,11 +125,43 @@ void main() {
             equals(agendaFilesArray.map((e) => e.identifier)));
       });
     });
+    test("Merging of maps works", () async {
+      final file1 = FileInfo(
+          identifier: "file-identifier-1",
+          persistable: true,
+          uri: "file-uri-1");
+      final file2 = FileInfo(
+          identifier: "file-identifier-2",
+          persistable: true,
+          uri: "file-uri-2");
+      final file3 = FileInfo(
+          identifier: "file-identifier-3",
+          persistable: true,
+          uri: "file-uri-3");
+      final file4 = FileInfo(
+          identifier: "file-identifier-4",
+          persistable: true,
+          uri: "file-uri-4");
+
+      final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
+
+      bloc.add(OrgFilesAddFilePath(file1));
+      bloc.add(OrgFilesAddFilePath(file2));
+      bloc.add(OrgFilesAddFilePath(file3));
+      bloc.add(OrgFilesAddFilePath(file4));
+
+      await Future.delayed(Duration(milliseconds: 10));
+
+      expect(bloc.state.allEvents, containsPair("2025-01-01", hasLength(4)));
+    });
   });
 }
 
 class FakeOrgFilesBloc extends OrgFilesBloc {
   @override
   Future<OrgDocument> documentByIdentifier(String identifier) =>
-      Future.value(OrgDocument.parse("* Heading 1"));
+      Future.value(OrgDocument.parse("""
+* Heading 1
+** Having fun <2025-01-01 15:00>
+"""));
 }
