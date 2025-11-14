@@ -78,7 +78,7 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     });
   }
 
-  _updateSharedPreferences() async {
+  void _updateSharedPreferences() async {
     final prefs = SharedPreferencesAsync();
     // We need to convert the Set to a List, because Dart somehow
     // only know how to encode an List, not a Set
