@@ -17,20 +17,24 @@ class StartingDateDialog extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  RadioListTile(
-                      title: Text("Monday"),
-                      value: StartingDayOfWeek.monday,
-                      groupValue: state,
-                      onChanged: (day) => context
-                          .read<StartingDayCubit>()
-                          .changeStartingDayOfWeek(day!)),
-                  RadioListTile(
-                      title: Text("Sunday"),
-                      value: StartingDayOfWeek.sunday,
-                      groupValue: state,
-                      onChanged: (day) => context
-                          .read<StartingDayCubit>()
-                          .changeStartingDayOfWeek(day!))
+                  RadioGroup(
+                    groupValue: state,
+                    onChanged: (day) => context
+                        .read<StartingDayCubit>()
+                        .changeStartingDayOfWeek(day!),
+                    child: Column(
+                      children: [
+                        RadioListTile(
+                          title: Text("Monday"),
+                          value: StartingDayOfWeek.monday,
+                        ),
+                        RadioListTile(
+                          title: Text("Sunday"),
+                          value: StartingDayOfWeek.sunday,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

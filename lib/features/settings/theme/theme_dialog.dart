@@ -7,40 +7,47 @@ class ThemeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<ThemeBloc, ThemeData>(
-        builder: (context, state) {
-          void changeTheme(ThemeData? theme) =>
-              context.read<ThemeBloc>().add(ThemeSwitchEvent(theme!));
-          return AlertDialog(
-            title: Row(children: [Text("Themes"), Spacer(), CloseButton()]),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.75,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  RadioListTile(
+    builder: (context, state) {
+      void changeTheme(ThemeData? theme) =>
+          context.read<ThemeBloc>().add(ThemeSwitchEvent(theme!));
+      return AlertDialog(
+        title: Row(children: [Text("Themes"), Spacer(), CloseButton()]),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              RadioGroup(
+                groupValue: state,
+                onChanged: changeTheme,
+                child: Column(
+                  children: [
+                    RadioListTile(
                       title: Text("dark"),
                       value: ThemeData.dark(),
                       key: Key("ThemeRadioDarkTheme"),
-                      groupValue: state,
-                      onChanged: changeTheme),
-                  RadioListTile(
+                    ),
+                    RadioListTile(
                       title: Text("light"),
                       key: Key("ThemeRadioLightTheme"),
                       value: ThemeData.light(),
-                      groupValue: state,
-                      onChanged: changeTheme),
-                  RadioListTile(
+                    ),
+                    RadioListTile(
                       title: Text("green"),
                       key: Key("ThemeRadioGreenTheme"),
                       value: ThemeData.from(
-                          colorScheme:
-                              ColorScheme.fromSeed(seedColor: Colors.green)),
-                      groupValue: state,
-                      onChanged: changeTheme),
-                ],
+                        colorScheme: ColorScheme.fromSeed(
+                          seedColor: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       );
+    },
+  );
 }
