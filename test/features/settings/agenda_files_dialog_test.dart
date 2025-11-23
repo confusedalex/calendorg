@@ -1,5 +1,6 @@
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/settings/agenda_files_dialog.dart';
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +17,9 @@ void main() {
     Future<void> pumpWidgetToTester(dynamic tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+          supportedLocales: CalendorgLocalizations.supportedLocales,
+
           home: Scaffold(
             body: BlocProvider(
               create: (context) => OrgFilesBloc(),

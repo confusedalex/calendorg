@@ -66,11 +66,11 @@ abstract class CalendorgLocalizations {
 
   final String localeName;
 
-  static CalendorgLocalizations? of(BuildContext context) {
+  static CalendorgLocalizations of(BuildContext context) {
     return Localizations.of<CalendorgLocalizations>(
       context,
       CalendorgLocalizations,
-    );
+    )!;
   }
 
   static const LocalizationsDelegate<CalendorgLocalizations> delegate =

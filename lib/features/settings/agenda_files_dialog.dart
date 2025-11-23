@@ -13,7 +13,7 @@ class AgendaFilesDialog extends StatelessWidget {
       if (fileInfo == null || fileInfo.fileName == null) {
         sendError(
           context,
-          CalendorgLocalizations.of(context)!.file_could_not_open,
+          CalendorgLocalizations.of(context).file_could_not_open,
         );
         return false;
       }
@@ -25,7 +25,7 @@ class AgendaFilesDialog extends StatelessWidget {
           state.filePaths.any((it) => it.fileName == fileName)) {
         sendError(
           context,
-          CalendorgLocalizations.of(context)!.file_already_exists,
+          CalendorgLocalizations.of(context).file_already_exists,
         );
         return false;
       }
@@ -52,11 +52,11 @@ class AgendaFilesDialog extends StatelessWidget {
     return [
       TextButton(
         onPressed: () async => onPressed(await selectGetFileInfo()),
-        child: Text(CalendorgLocalizations.of(context)!.select_file),
+        child: Text(CalendorgLocalizations.of(context).select_file),
       ),
       TextButton(
         onPressed: () async => onPressed(await createGetFileInfo()),
-        child: Text(CalendorgLocalizations.of(context)!.create_file),
+        child: Text(CalendorgLocalizations.of(context).create_file),
       ),
     ];
   }
@@ -65,16 +65,16 @@ class AgendaFilesDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OrgFilesBloc, OrgFilesState>(
-      builder: (_, state) => AlertDialog(
-        title: Row(
-          children: [
-            Text(CalendorgLocalizations.of(context)!.agenda_files),
-            Spacer(),
-            CloseButton(),
-          ],
-        ), // Agenda Files
-        content: SizedBox(
+    return AlertDialog(
+      title: Row(
+        children: [
+          Text(CalendorgLocalizations.of(context).agenda_files),
+          Spacer(),
+          CloseButton(),
+        ],
+      ), // Agenda Files
+      content: BlocBuilder<OrgFilesBloc, OrgFilesState>(
+        builder: (_, state) => SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
           child: ListView.builder(
             shrinkWrap: true,
@@ -84,9 +84,7 @@ class AgendaFilesDialog extends StatelessWidget {
               return ListTile(
                 title: Text(
                   fileInfo.fileName ??
-                      CalendorgLocalizations.of(
-                        context,
-                      )!.file_name_couldnt_load,
+                      CalendorgLocalizations.of(context).file_name_couldnt_load,
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.close),
