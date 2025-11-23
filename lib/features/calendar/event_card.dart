@@ -22,6 +22,7 @@ class EventCard extends StatelessWidget {
     final eventIsDone = todoStates.done.contains(keyword?.value);
     return Card(
       child: ListTile(
+        minTileHeight: 83,
         leading: BlocBuilder<TagColorsCubit, List<TagColor>>(
           builder: (context, state) => Container(
             width: 29,
@@ -52,18 +53,19 @@ class EventCard extends StatelessWidget {
             ),
           ),
         ),
-        subtitle: Row(
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Text(timestamp.toMarkup(), textAlign: TextAlign.left),
+            Text(
+              timestamp.toMarkup(),
+              textAlign: TextAlign.left,
+              textScaler: TextScaler.linear(0.9),
             ),
-            if (event.tags.isNotEmpty)
-              Expanded(
-                child: Text(
-                  ":${event.tags.join(":")}:",
-                  textAlign: TextAlign.right,
-                ),
-              ),
+            Text(
+              event.tags.isNotEmpty ? ":${event.tags.join(":")}:" : '',
+              textAlign: TextAlign.right,
+              textScaler: TextScaler.linear(0.9),
+            ),
           ],
         ),
         onTap: () => showDialog(
