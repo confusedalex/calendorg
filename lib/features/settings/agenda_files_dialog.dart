@@ -1,3 +1,4 @@
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'dart:io';
 
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
@@ -10,7 +11,10 @@ class AgendaFilesDialog extends StatelessWidget {
   List<TextButton> buttons(OrgFilesState state, BuildContext context) {
     bool validateFile(FileInfo? fileInfo) {
       if (fileInfo == null || fileInfo.fileName == null) {
-        sendError(context, "File could not be opened!");
+        sendError(
+          context,
+          CalendorgLocalizations.of(context)!.file_could_not_open,
+        );
         return false;
       }
       return true;
@@ -19,7 +23,10 @@ class AgendaFilesDialog extends StatelessWidget {
     bool validateFileName(String? fileName) {
       if (fileName == null ||
           state.filePaths.any((it) => it.fileName == fileName)) {
-        sendError(context, "File does already exist!");
+        sendError(
+          context,
+          CalendorgLocalizations.of(context)!.file_already_exists,
+        );
         return false;
       }
       return true;
@@ -45,11 +52,11 @@ class AgendaFilesDialog extends StatelessWidget {
     return [
       TextButton(
         onPressed: () async => onPressed(await selectGetFileInfo()),
-        child: Text("select file"),
+        child: Text(CalendorgLocalizations.of(context)!.select_file),
       ),
       TextButton(
         onPressed: () async => onPressed(await createGetFileInfo()),
-        child: Text("create file"),
+        child: Text(CalendorgLocalizations.of(context)!.create_file),
       ),
     ];
   }
@@ -60,7 +67,13 @@ class AgendaFilesDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OrgFilesBloc, OrgFilesState>(
       builder: (_, state) => AlertDialog(
-        title: Row(children: [Text("Agenda Files"), Spacer(), CloseButton()]),
+        title: Row(
+          children: [
+            Text(CalendorgLocalizations.of(context)!.agenda_files),
+            Spacer(),
+            CloseButton(),
+          ],
+        ), // Agenda Files
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
           child: ListView.builder(
@@ -70,7 +83,10 @@ class AgendaFilesDialog extends StatelessWidget {
               final fileInfo = state.filePaths.elementAt(index);
               return ListTile(
                 title: Text(
-                  fileInfo.fileName ?? "File name could't not be loaded",
+                  fileInfo.fileName ??
+                      CalendorgLocalizations.of(
+                        context,
+                      )!.file_name_couldnt_load,
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.close),

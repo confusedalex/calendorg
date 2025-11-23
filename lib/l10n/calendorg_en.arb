@@ -1,0 +1,8 @@
+{
+  "file_could_not_open": "File could not be opened!",
+  "file_already_exists": "File does already exist!",
+  "select_file": "select file",
+  "create_file": "create file",
+  "agenda_files": "Agenda Files",
+  "file_name_couldnt_load": "File name could't not be loaded"
+ }
