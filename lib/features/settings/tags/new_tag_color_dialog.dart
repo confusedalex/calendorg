@@ -19,10 +19,8 @@ class NewTagColorDialog extends StatelessWidget {
       key: formKey,
       child: AlertDialog(
         title: Text("Add new Tag"),
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
-          child: ListView(
-            shrinkWrap: true,
+        content: SingleChildScrollView(
+          child: Column(
             children: [
               TextFormField(
                 onChanged: (value) => state.updateText(value),
