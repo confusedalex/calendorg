@@ -3,13 +3,11 @@ import 'dart:io';
 import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
-import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/features/new_section/cubit/new_section_cubit.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:org_parser/org_parser.dart';
 
 class NewSectionDialog extends StatelessWidget {
   final DateTime dateTime;
@@ -24,8 +22,6 @@ class NewSectionDialog extends StatelessWidget {
     final timestamp = context.select(
       (NewSectionCubit bloc) => bloc.state.timestamp,
     );
-    void handleSave(OrgTimestamp timestamp) =>
-        context.read<EventViewBloc>().add(EventViewChangeTimestamp(timestamp));
 
     return AlertDialog(
       title: Row(children: [Text("Add Heading"), Spacer(), CloseButton()]),
@@ -62,11 +58,12 @@ class NewSectionDialog extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              BlocProvider.value(
-                                value: context.read<EventViewBloc>(),
-                              ),
                             ],
-                            child: DatePicker(handleSave),
+                            child: DatePicker(
+                              (timestamp) => context
+                                  .read<NewSectionCubit>()
+                                  .changeTimestamp(timestamp),
+                            ),
                           );
                         },
                       );
@@ -75,22 +72,24 @@ class NewSectionDialog extends StatelessWidget {
                   ),
                   TextButton(
                     key: Key("SaveButton"),
-                    onPressed: () {
-                      final oldFile = FilePickerWritable().readFile(
-                        identifier: inboxFile.identifier,
-                        reader: (FileInfo fileInfo, File file) =>
-                            file.readAsString(),
-                      );
+                    onPressed: timestamp != null
+                        ? () {
+                            final oldFile = FilePickerWritable().readFile(
+                              identifier: inboxFile.identifier,
+                              reader: (FileInfo fileInfo, File file) =>
+                                  file.readAsString(),
+                            );
 
-                      FilePickerWritable().writeFile(
-                        identifier: inboxFile.identifier,
-                        writer: (file) async => file.writeAsString(
-                          "${await oldFile} \n $title",
-                          mode: FileMode.writeOnly,
-                        ),
-                      );
-                      Navigator.pop(context);
-                    },
+                            FilePickerWritable().writeFile(
+                              identifier: inboxFile.identifier,
+                              writer: (file) async => file.writeAsString(
+                                "${await oldFile} \n* $title ${timestamp.toMarkup()}",
+                                mode: FileMode.writeOnly,
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        : null,
                     child: Text("save"),
                   ),
                 ],
