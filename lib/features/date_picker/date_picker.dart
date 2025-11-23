@@ -1,11 +1,13 @@
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
-import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:org_parser/org_parser.dart';
 
 class DatePicker extends StatelessWidget {
-  const DatePicker({super.key});
+  final void Function(OrgTimestamp timestamp) handleSave;
+
+  const DatePicker(this.handleSave, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +145,7 @@ class DatePicker extends StatelessWidget {
         TextButton(
           key: Key("SaveButton"),
           onPressed: () {
-            context.read<EventViewBloc>().add(
-              EventViewChangeTimestamp(timestamp),
-            );
+            handleSave(timestamp);
             Navigator.pop(context);
           },
           child: Text("save"),

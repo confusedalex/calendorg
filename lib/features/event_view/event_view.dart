@@ -5,6 +5,7 @@ import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:org_parser/org_parser.dart';
 
 class EventView extends StatelessWidget {
   const EventView({super.key});
@@ -22,6 +23,8 @@ class EventView extends StatelessWidget {
     final newSection = context.select(
       (EventViewBloc bloc) => bloc.state.event.section,
     );
+    void handleSave(OrgTimestamp timestamp) =>
+        context.read<EventViewBloc>().add(EventViewChangeTimestamp(timestamp));
 
     return AlertDialog(
       title: Row(children: [Text("Edit Event"), Spacer(), CloseButton()]),
@@ -61,7 +64,7 @@ class EventView extends StatelessWidget {
                               value: context.read<EventViewBloc>(),
                             ),
                           ],
-                          child: DatePicker(),
+                          child: DatePicker(handleSave),
                         );
                       },
                     );

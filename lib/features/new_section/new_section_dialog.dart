@@ -9,6 +9,7 @@ import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:org_parser/org_parser.dart';
 
 class NewSectionDialog extends StatelessWidget {
   final DateTime dateTime;
@@ -23,6 +24,8 @@ class NewSectionDialog extends StatelessWidget {
     final timestamp = context.select(
       (NewSectionCubit bloc) => bloc.state.timestamp,
     );
+    void handleSave(OrgTimestamp timestamp) =>
+        context.read<EventViewBloc>().add(EventViewChangeTimestamp(timestamp));
 
     return AlertDialog(
       title: Row(children: [Text("Add Heading"), Spacer(), CloseButton()]),
@@ -63,7 +66,7 @@ class NewSectionDialog extends StatelessWidget {
                                 value: context.read<EventViewBloc>(),
                               ),
                             ],
-                            child: DatePicker(),
+                            child: DatePicker(handleSave),
                           );
                         },
                       );

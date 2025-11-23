@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
+  void handleSave(OrgTimestamp timestamp) => {};
   testWidgets("DatePicker shows startDate Button", (tester) async {
     final OrgSimpleTimestamp timestamp = OrgDocument.parse(
       "<2025-12-04>",
@@ -17,7 +18,7 @@ void main() {
           body: BlocProvider(
             create: (context) =>
                 DatePickerBloc(DatePickerState.initial(timestamp)),
-            child: DatePicker(),
+            child: DatePicker(handleSave),
           ),
         ),
       ),
@@ -39,7 +40,7 @@ void main() {
           body: BlocProvider(
             create: (context) =>
                 DatePickerBloc(DatePickerState.initial(timestamp)),
-            child: DatePicker(),
+            child: DatePicker(handleSave),
           ),
         ),
       ),
@@ -65,7 +66,7 @@ void main() {
           body: BlocProvider(
             create: (context) =>
                 DatePickerBloc(DatePickerState.initial(timestamp)),
-            child: DatePicker(),
+            child: DatePicker(handleSave),
           ),
         ),
       ),
@@ -91,7 +92,7 @@ void main() {
           body: BlocProvider(
             create: (context) =>
                 DatePickerBloc(DatePickerState.initial(timestamp)),
-            child: DatePicker(),
+            child: DatePicker(handleSave),
           ),
         ),
       ),
@@ -118,7 +119,7 @@ void main() {
           body: BlocProvider(
             create: (context) =>
                 DatePickerBloc(DatePickerState.initial(timestamp)),
-            child: DatePicker(),
+            child: DatePicker(handleSave),
           ),
         ),
       ),
@@ -144,7 +145,7 @@ void main() {
           body: BlocProvider(
             create: (context) =>
                 DatePickerBloc(DatePickerState.initial(timestamp)),
-            child: DatePicker(),
+            child: DatePicker(handleSave),
           ),
         ),
       ),
