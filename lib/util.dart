@@ -106,6 +106,18 @@ String? validate(String? value, String object, {Iterable<String>? notIn}) {
   return null;
 }
 
+void sendError(BuildContext context, String error) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        error,
+      ),
+      backgroundColor: Colors.red,
+    ),
+  );
+}
+
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
   final isoDate = dateTime.toIso8601String().split("T")[0].split("-");
   return (year: isoDate[0], month: isoDate[1], day: isoDate[2], dayName: null);

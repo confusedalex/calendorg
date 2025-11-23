@@ -26,10 +26,16 @@ void main() {
       );
     }
 
-    testWidgets('should find add button', (tester) async {
+    testWidgets('should find "select file" button', (tester) async {
       await pumpWidgetToTester(tester);
 
-      expect(find.text("add"), findsOneWidget);
+      expect(find.text("select file"), findsOneWidget);
+    });
+
+    testWidgets('should find "create file" button', (tester) async {
+      await pumpWidgetToTester(tester);
+
+      expect(find.text("create file"), findsOneWidget);
     });
   });
 }
