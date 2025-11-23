@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
@@ -50,6 +51,12 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
               .find(event.oldNode)!
               .replace(event.newNode)
               .commit();
+
+          FilePickerWritable().writeFile(
+            identifier: event.fileInfo.identifier,
+            writer: (file) async =>
+                file.writeAsString(newDoc.toMarkup(), mode: FileMode.writeOnly),
+          );
 
           emit(
             state.copyWith(
