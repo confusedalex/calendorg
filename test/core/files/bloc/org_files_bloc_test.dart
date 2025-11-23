@@ -19,8 +19,15 @@ void main() {
     test('adding file works', () async {
       final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
-      bloc.add(OrgFilesAddFilePath(FileInfo(
-          identifier: "file-identifier", persistable: true, uri: "file-uri")));
+      bloc.add(
+        OrgFilesAddFilePath(
+          FileInfo(
+            identifier: "file-identifier",
+            persistable: true,
+            uri: "file-uri",
+          ),
+        ),
+      );
 
       await Future.delayed(Duration(milliseconds: 100));
 
@@ -28,7 +35,10 @@ void main() {
     });
     test('removing file works', () async {
       final file = FileInfo(
-          identifier: "file-identifier", persistable: true, uri: "file-uri");
+        identifier: "file-identifier",
+        persistable: true,
+        uri: "file-uri",
+      );
       final bloc = FakeOrgFilesBloc();
 
       bloc.add(OrgFilesAddFilePath(file));
@@ -43,7 +53,10 @@ void main() {
     });
     test('changing inboxFile works', () async {
       final file = FileInfo(
-          identifier: "file-identifier", persistable: true, uri: "file-uri");
+        identifier: "file-identifier",
+        persistable: true,
+        uri: "file-uri",
+      );
       final bloc = FakeOrgFilesBloc();
 
       bloc.add(OrgFilesChangeInboxFileEvent(file));
@@ -53,46 +66,57 @@ void main() {
       expect(bloc.state.inboxFile, equals(file));
     });
     group("loading from sharedPreferences", () {
-      test('loading agendaFiles and inboxFile from sharedPreferences works',
-          () async {
-        final inboxFile = FileInfo(
+      test(
+        'loading agendaFiles and inboxFile from sharedPreferences works',
+        () async {
+          final inboxFile = FileInfo(
             identifier: "inboxFile-identifier",
             persistable: true,
-            uri: "inboxFile-uri");
-        final agendaFileOne = FileInfo(
+            uri: "inboxFile-uri",
+          );
+          final agendaFileOne = FileInfo(
             identifier: "agendaFileOne-identifier",
             persistable: true,
-            uri: "agendaFileOne-uri");
-        final agendaFileTwo = FileInfo(
+            uri: "agendaFileOne-uri",
+          );
+          final agendaFileTwo = FileInfo(
             identifier: "agendaFileTwo-identifier",
             persistable: true,
-            uri: "agendaFileTwo-uri");
-        final agendaFilesArray = [agendaFileTwo, agendaFileOne];
+            uri: "agendaFileTwo-uri",
+          );
+          final agendaFilesArray = [agendaFileTwo, agendaFileOne];
 
-        SharedPreferencesAsyncPlatform.instance =
-            InMemorySharedPreferencesAsync.withData({
-          "inboxFile": inboxFile.toJsonString(),
-          "agendaFiles": jsonEncode(agendaFilesArray)
-        });
+          SharedPreferencesAsyncPlatform.instance =
+              InMemorySharedPreferencesAsync.withData({
+                "inboxFile": inboxFile.toJsonString(),
+                "agendaFiles": jsonEncode(agendaFilesArray),
+              });
 
-        final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
+          final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
-        await Future.delayed(Duration(milliseconds: 10));
+          await Future.delayed(Duration(milliseconds: 10));
 
-        expect(bloc.state.inboxFile!.identifier, equals(inboxFile.identifier));
-        expect(bloc.state.filePaths.map((e) => e.identifier),
-            equals(agendaFilesArray.map((e) => e.identifier)));
-      });
+          expect(
+            bloc.state.inboxFile!.identifier,
+            equals(inboxFile.identifier),
+          );
+          expect(
+            bloc.state.filePaths.map((e) => e.identifier),
+            equals(agendaFilesArray.map((e) => e.identifier)),
+          );
+        },
+      );
       test('loading only inboxFile from sharedPreferences works', () async {
         final inboxFile = FileInfo(
-            identifier: "inboxFile-identifier",
-            persistable: true,
-            uri: "inboxFile-uri");
+          identifier: "inboxFile-identifier",
+          persistable: true,
+          uri: "inboxFile-uri",
+        );
 
         SharedPreferencesAsyncPlatform.instance =
             InMemorySharedPreferencesAsync.withData({
-          "inboxFile": inboxFile.toJsonString(),
-        });
+              "inboxFile": inboxFile.toJsonString(),
+            });
 
         final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
@@ -103,45 +127,54 @@ void main() {
       });
       test('loading only agendaFiles from sharedPreferences works', () async {
         final agendaFileOne = FileInfo(
-            identifier: "agendaFileOne-identifier",
-            persistable: true,
-            uri: "agendaFileOne-uri");
+          identifier: "agendaFileOne-identifier",
+          persistable: true,
+          uri: "agendaFileOne-uri",
+        );
         final agendaFileTwo = FileInfo(
-            identifier: "agendaFileTwo-identifier",
-            persistable: true,
-            uri: "agendaFileTwo-uri");
+          identifier: "agendaFileTwo-identifier",
+          persistable: true,
+          uri: "agendaFileTwo-uri",
+        );
         final agendaFilesArray = [agendaFileTwo, agendaFileOne];
 
         SharedPreferencesAsyncPlatform.instance =
-            InMemorySharedPreferencesAsync.withData(
-                {"agendaFiles": jsonEncode(agendaFilesArray)});
+            InMemorySharedPreferencesAsync.withData({
+              "agendaFiles": jsonEncode(agendaFilesArray),
+            });
 
         final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
         await Future.delayed(Duration(milliseconds: 10));
 
         expect(bloc.state.inboxFile, isNull);
-        expect(bloc.state.filePaths.map((e) => e.identifier),
-            equals(agendaFilesArray.map((e) => e.identifier)));
+        expect(
+          bloc.state.filePaths.map((e) => e.identifier),
+          equals(agendaFilesArray.map((e) => e.identifier)),
+        );
       });
     });
     test("Merging of maps works", () async {
       final file1 = FileInfo(
-          identifier: "file-identifier-1",
-          persistable: true,
-          uri: "file-uri-1");
+        identifier: "file-identifier-1",
+        persistable: true,
+        uri: "file-uri-1",
+      );
       final file2 = FileInfo(
-          identifier: "file-identifier-2",
-          persistable: true,
-          uri: "file-uri-2");
+        identifier: "file-identifier-2",
+        persistable: true,
+        uri: "file-uri-2",
+      );
       final file3 = FileInfo(
-          identifier: "file-identifier-3",
-          persistable: true,
-          uri: "file-uri-3");
+        identifier: "file-identifier-3",
+        persistable: true,
+        uri: "file-uri-3",
+      );
       final file4 = FileInfo(
-          identifier: "file-identifier-4",
-          persistable: true,
-          uri: "file-uri-4");
+        identifier: "file-identifier-4",
+        persistable: true,
+        uri: "file-uri-4",
+      );
 
       final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
@@ -159,9 +192,10 @@ void main() {
 
 class FakeOrgFilesBloc extends OrgFilesBloc {
   @override
-  Future<OrgDocument> documentByIdentifier(String identifier) =>
-      Future.value(OrgDocument.parse("""
+  Future<OrgDocument> documentByIdentifier(String identifier) => Future.value(
+    OrgDocument.parse("""
 * Heading 1
 ** Having fun <2025-01-01 15:00>
-"""));
+"""),
+  );
 }

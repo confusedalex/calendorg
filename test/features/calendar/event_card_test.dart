@@ -30,18 +30,22 @@ void main() {
   final meetupTagColor = TagColor("meetups", Colors.pink);
 
   Future<void> initWidget(dynamic tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-              create: (context) =>
-                  TagColorsCubit.withInitialValue([meetupTagColor])),
-          BlocProvider(create: (context) => TodoStatesCubit())
-        ],
-        child: EventCard(event, event.timestamps.first),
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    TagColorsCubit.withInitialValue([meetupTagColor]),
+              ),
+              BlocProvider(create: (context) => TodoStatesCubit()),
+            ],
+            child: EventCard(event, event.timestamps.first),
+          ),
+        ),
       ),
-    )));
+    );
 
     await tester.pumpAndSettle();
   }
@@ -53,21 +57,23 @@ void main() {
 
         expect(find.text(event.title, findRichText: true), findsOneWidget);
       });
-      testWidgets(
-        'EventCard displays correct TagColor',
-        (tester) async {
-          await initWidget(tester);
+      testWidgets('EventCard displays correct TagColor', (tester) async {
+        await initWidget(tester);
 
-          final container = tester.widget<Container>(find.byWidgetPredicate(
-              (widget) =>
-                  widget is Container &&
-                  widget.decoration != null &&
-                  widget.decoration is BoxDecoration));
+        final container = tester.widget<Container>(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is Container &&
+                widget.decoration != null &&
+                widget.decoration is BoxDecoration,
+          ),
+        );
 
-          expect((container.decoration as BoxDecoration).color,
-              isSameColorAs(meetupTagColor.color));
-        },
-      );
+        expect(
+          (container.decoration as BoxDecoration).color,
+          isSameColorAs(meetupTagColor.color),
+        );
+      });
       testWidgets("EventCard display correct time", (tester) async {
         await initWidget(tester);
 
@@ -75,23 +81,27 @@ void main() {
       });
     });
     testWidgets("EventCard tap will open EventView", (tester) async {
-      await tester.pumpWidget(MaterialApp(
+      await tester.pumpWidget(
+        MaterialApp(
           home: Scaffold(
-        body: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-                create: (context) =>
-                    EventViewBloc(event, event.timestamps.first)),
-            BlocProvider(create: (context) => TodoStatesCubit()),
-            BlocProvider(
-                create: (context) => TagColorsCubit.withInitialValue(
-                      [meetupTagColor],
-                    )),
-            BlocProvider(create: (context) => OrgFilesBloc())
-          ],
-          child: EventCard(event, event.timestamps.first),
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) =>
+                      EventViewBloc(event, event.timestamps.first),
+                ),
+                BlocProvider(create: (context) => TodoStatesCubit()),
+                BlocProvider(
+                  create: (context) =>
+                      TagColorsCubit.withInitialValue([meetupTagColor]),
+                ),
+                BlocProvider(create: (context) => OrgFilesBloc()),
+              ],
+              child: EventCard(event, event.timestamps.first),
+            ),
+          ),
         ),
-      )));
+      );
 
       await tester.pumpAndSettle();
 

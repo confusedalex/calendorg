@@ -6,21 +6,24 @@ final class CalendarState {
   final CalendarFormat calendarFormat;
   final Map<Event, List<OrgTimestamp>> timestampsByEvent;
 
-  CalendarState(
-      {required this.focusedDay,
-      required this.selectedDate,
-      this.calendarFormat = CalendarFormat.month,
-      this.timestampsByEvent = const {}});
+  CalendarState({
+    required this.focusedDay,
+    required this.selectedDate,
+    this.calendarFormat = CalendarFormat.month,
+    this.timestampsByEvent = const {},
+  });
 
-  CalendarState copyWith(
-      {DateTime? focusedDay,
-      DateTime? selectedDate,
-      CalendarFormat? calendarFormat,
-      Map<Event, List<OrgTimestamp>>? timestampsByEvent}) {
+  CalendarState copyWith({
+    DateTime? focusedDay,
+    DateTime? selectedDate,
+    CalendarFormat? calendarFormat,
+    Map<Event, List<OrgTimestamp>>? timestampsByEvent,
+  }) {
     return CalendarState(
-        focusedDay: focusedDay ?? this.focusedDay,
-        selectedDate: selectedDate ?? this.selectedDate,
-        calendarFormat: calendarFormat ?? this.calendarFormat,
-        timestampsByEvent: timestampsByEvent ?? this.timestampsByEvent);
+      focusedDay: focusedDay ?? this.focusedDay,
+      selectedDate: selectedDate ?? this.selectedDate,
+      calendarFormat: calendarFormat ?? this.calendarFormat,
+      timestampsByEvent: timestampsByEvent ?? this.timestampsByEvent,
+    );
   }
 }

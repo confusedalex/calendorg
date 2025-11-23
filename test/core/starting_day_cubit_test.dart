@@ -6,36 +6,30 @@ import 'package:test/test.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 
 void main() {
-  group(
-    "Starting Day Cubit Tests",
-    () {
-      setUp(() {
-        SharedPreferencesAsyncPlatform.instance =
-            InMemorySharedPreferencesAsync.empty();
-      });
+  group("Starting Day Cubit Tests", () {
+    setUp(() {
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.empty();
+    });
 
-      test(
-        'Initial Starting Day is monday',
-        () {
-          final cubit = StartingDayCubit();
-          expect(cubit.state, equals(StartingDayOfWeek.monday));
-        },
-      );
+    test('Initial Starting Day is monday', () {
+      final cubit = StartingDayCubit();
+      expect(cubit.state, equals(StartingDayOfWeek.monday));
+    });
 
-      blocTest(
-        "Switchting Starting Day works",
-        build: () => StartingDayCubit(),
-        act: (bloc) => bloc.changeStartingDayOfWeek(StartingDayOfWeek.sunday),
-        expect: () => [StartingDayOfWeek.sunday],
-      );
+    blocTest(
+      "Switchting Starting Day works",
+      build: () => StartingDayCubit(),
+      act: (bloc) => bloc.changeStartingDayOfWeek(StartingDayOfWeek.sunday),
+      expect: () => [StartingDayOfWeek.sunday],
+    );
 
-      blocTest(
-        "Loading Starting Day from Shared Preferences works",
-        setUp: () => SharedPreferencesAsyncPlatform.instance =
-            InMemorySharedPreferencesAsync.withData({"startingDay": 4}),
-        build: () => StartingDayCubit()..setInititalStartingDay(),
-        expect: () => [StartingDayOfWeek.friday],
-      );
-    },
-  );
+    blocTest(
+      "Loading Starting Day from Shared Preferences works",
+      setUp: () => SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.withData({"startingDay": 4}),
+      build: () => StartingDayCubit()..setInititalStartingDay(),
+      expect: () => [StartingDayOfWeek.friday],
+    );
+  });
 }

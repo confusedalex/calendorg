@@ -11,10 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(BlocProvider(
-    create: (context) => ThemeBloc(),
-    child: const Calendorg(),
-  ));
+  runApp(
+    BlocProvider(create: (context) => ThemeBloc(), child: const Calendorg()),
+  );
 }
 
 class Calendorg extends StatelessWidget {
@@ -25,28 +24,28 @@ class Calendorg extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeData>(
       builder: (context, state) {
         return MaterialApp(
-            title: 'calendorg',
-            theme: state,
-            home: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) =>
-                      StartingDayCubit()..setInititalStartingDay(),
-                ),
-                BlocProvider(
-                    create: (context) =>
-                        TagColorsCubit()..setInitialTagColor()),
-                BlocProvider(
-                    create: (context) => TodoStatesCubit()..loadFromPrefs()),
-                BlocProvider(
-                  create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
-                ),
-                BlocProvider(
-                  create: (context) => FloatingActionButtonCubit(),
-                )
-              ],
-              child: HomePage(),
-            ));
+          title: 'calendorg',
+          theme: state,
+          home: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    StartingDayCubit()..setInititalStartingDay(),
+              ),
+              BlocProvider(
+                create: (context) => TagColorsCubit()..setInitialTagColor(),
+              ),
+              BlocProvider(
+                create: (context) => TodoStatesCubit()..loadFromPrefs(),
+              ),
+              BlocProvider(
+                create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
+              ),
+              BlocProvider(create: (context) => FloatingActionButtonCubit()),
+            ],
+            child: HomePage(),
+          ),
+        );
       },
     );
   }
@@ -67,30 +66,33 @@ class _HomePageState extends State<HomePage> {
     final List pages = [
       todayPage(),
       CalendarPage(DateTime.now()),
-      SettingsPage()
+      SettingsPage(),
     ];
     return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
       builder: (context, state) {
         return SafeArea(
-            child: Scaffold(
-          body: pages[index],
-          bottomNavigationBar: NavigationBar(
-            onDestinationSelected: (value) => setState(() {
-              index = value;
-            }),
-            selectedIndex: index,
-            destinations: [
-              NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
-              NavigationDestination(
-                icon: Icon(Icons.calendar_today),
-                label: 'Calendar',
-              ),
-              NavigationDestination(
-                  icon: Icon(Icons.settings), label: 'Settings'),
-            ],
+          child: Scaffold(
+            body: pages[index],
+            bottomNavigationBar: NavigationBar(
+              onDestinationSelected: (value) => setState(() {
+                index = value;
+              }),
+              selectedIndex: index,
+              destinations: [
+                NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
+                NavigationDestination(
+                  icon: Icon(Icons.calendar_today),
+                  label: 'Calendar',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.settings),
+                  label: 'Settings',
+                ),
+              ],
+            ),
+            floatingActionButton: state,
           ),
-          floatingActionButton: state,
-        ));
+        );
       },
     );
   }

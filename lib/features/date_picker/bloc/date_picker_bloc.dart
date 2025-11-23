@@ -13,21 +13,28 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
         case DatePickerStartDateChanged():
           emit(state.copyWith(startDate: event.startDate));
         case DatePickerStartTimeActiveChanged():
-          emit(state.copyWith(
+          emit(
+            state.copyWith(
               startTimeActive: event.startTimeActive,
-              endTimeActive: (event.startTimeActive == false &&
+              endTimeActive:
+                  (event.startTimeActive == false &&
                       state.endDateActive == false)
                   ? false
-                  : null));
+                  : null,
+            ),
+          );
         case DatePickerEndTimeActiveChanged():
           emit(state.copyWith(endTimeActive: event.endTimeActive));
         case DatePickerEndDateActiveChanged():
-          emit(state.copyWith(
+          emit(
+            state.copyWith(
               endDateActive: event.endDateActive,
               endTimeActive:
                   event.endDateActive == false && state.startTimeActive == false
-                      ? false
-                      : null));
+                  ? false
+                  : null,
+            ),
+          );
         case DatePickerEndDateChanged():
           emit(state.copyWith(endDate: event.endDate));
         case DatePickerTimeChanged():
@@ -38,14 +45,18 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
     });
   }
 
-  void datePickerDatePressed(BuildContext context, String type,
-      {DateTime? initialDate}) async {
+  void datePickerDatePressed(
+    BuildContext context,
+    String type, {
+    DateTime? initialDate,
+  }) async {
     if (type == "start") {
       final DateTime? pickerDate = await showDatePicker(
-          context: context,
-          firstDate: DateTime(0),
-          lastDate: state.endDate ?? DateTime(3000),
-          initialDate: initialDate);
+        context: context,
+        firstDate: DateTime(0),
+        lastDate: state.endDate ?? DateTime(3000),
+        initialDate: initialDate,
+      );
 
       if (pickerDate != null) {
         add(DatePickerStartDateChanged(pickerDate));
@@ -54,9 +65,10 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
     }
     if (type == "end") {
       final DateTime? pickerDate = await showDatePicker(
-          context: context,
-          firstDate: state.startDate,
-          lastDate: DateTime(3000));
+        context: context,
+        firstDate: state.startDate,
+        lastDate: DateTime(3000),
+      );
 
       if (pickerDate != null) {
         add(DatePickerEndDateChanged(pickerDate));
@@ -82,7 +94,8 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
             state.startDate.month,
             state.startDate.day,
             state.startTimeDuration.hour,
-            state.startTimeDuration.minute)
+            state.startTimeDuration.minute,
+          )
         : state.startDate;
     final DateTime? endDate = state.endTimeActive && state.endDate != null
         ? DateTime(
@@ -90,21 +103,29 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
             state.endDate!.month,
             state.endDate!.day,
             state.endTimeDuration.hour,
-            state.endTimeDuration.minute)
+            state.endTimeDuration.minute,
+          )
         : state.endDate;
 
     if (state.endDateActive && state.endDate != null) {
-      return dateTimeToTimeRangeTimestamp(startDate, endDate!, true,
-          state.startTimeActive, state.endTimeActive);
+      return dateTimeToTimeRangeTimestamp(
+        startDate,
+        endDate!,
+        true,
+        state.startTimeActive,
+        state.endTimeActive,
+      );
     } else if (state.startTimeActive && state.endTimeActive) {
       return dateTimeToTimeRangeTimestamp(
-          startDate,
-          startDate.copyWith(
-              hour: state.endTimeDuration.hour,
-              minute: state.endTimeDuration.minute),
-          true,
-          true,
-          true);
+        startDate,
+        startDate.copyWith(
+          hour: state.endTimeDuration.hour,
+          minute: state.endTimeDuration.minute,
+        ),
+        true,
+        true,
+        true,
+      );
     } else {
       return dateTimeToSimpleTimestamp(startDate, state.startTimeActive, true);
     }

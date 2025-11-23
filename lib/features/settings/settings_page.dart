@@ -62,12 +62,12 @@ class SettingsPage extends StatelessWidget {
         ListTile(
           title: Text("Inbox File"),
           onTap: () async => context.read<OrgFilesBloc>().add(
-                OrgFilesChangeInboxFileEvent(
-                  await FilePickerWritable().openFile((fileInfo, file) async {
-                    return fileInfo;
-                  }),
-                ),
-              ),
+            OrgFilesChangeInboxFileEvent(
+              await FilePickerWritable().openFile((fileInfo, file) async {
+                return fileInfo;
+              }),
+            ),
+          ),
           subtitle: BlocBuilder<OrgFilesBloc, OrgFilesState>(
             builder: (context, state) =>
                 Text(state.inboxFile?.fileName ?? "No file selected"),

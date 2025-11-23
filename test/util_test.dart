@@ -22,177 +22,220 @@ DEADLINE: <2025-05-04>
   final events = parseEvents(MockFileInfo(), document);
   final meetupEvent = events.entries.first.value.first;
 
-  group(
-    'Util',
-    () {
-      test("8 Map entries should be found", () {
-        expect(events.length, 9);
-      });
+  group('Util', () {
+    test("8 Map entries should be found", () {
+      expect(events.length, 9);
+    });
 
-      test("6 OrgNodes expected in event", () {
-        expect(meetupEvent.timestamps.length, 6);
-      });
+    test("6 OrgNodes expected in event", () {
+      expect(meetupEvent.timestamps.length, 6);
+    });
 
-      test("Scheduled entry gets parsed correctly", () {
-        final uninstallVimEvent = events.entries.first.value.last;
-        expect(uninstallVimEvent.scheduled, isNotNull);
-      });
+    test("Scheduled entry gets parsed correctly", () {
+      final uninstallVimEvent = events.entries.first.value.last;
+      expect(uninstallVimEvent.scheduled, isNotNull);
+    });
 
-      test("Deadline entry gets parsed correctly", () {
-        final installEmacsEvent = events.entries.last.value.first;
-        expect(installEmacsEvent.deadline, isNotNull);
-      });
+    test("Deadline entry gets parsed correctly", () {
+      final installEmacsEvent = events.entries.last.value.first;
+      expect(installEmacsEvent.deadline, isNotNull);
+    });
 
-      test("Parsing single TODO works", () {
-        final markup = """
+    test("Parsing single TODO works", () {
+      final markup = """
 ** TODO install emacs
 DEADLINE: <2025-05-04>
 """;
-        final document = OrgDocument.parse(markup);
-        final events = parseEvents(MockFileInfo(), document);
+      final document = OrgDocument.parse(markup);
+      final events = parseEvents(MockFileInfo(), document);
 
-        expect(events.entries, hasLength(1));
+      expect(events.entries, hasLength(1));
+    });
+
+    group('DateTime to OrgSimpleTimestamp', () {
+      test(
+        "DateTime without Time and month under 10 should return correct OrgSimpleTimestamp",
+        () {
+          final dateTime = DateTime(2025, 05, 15);
+
+          var timestamp = dateTimeToSimpleTimestamp(dateTime, false, true);
+
+          expect(timestamp.toMarkup(), "<2025-05-15>");
+          timestamp = dateTimeToSimpleTimestamp(dateTime, false, false);
+          expect(timestamp.toMarkup(), "[2025-05-15]");
+        },
+      );
+      test(
+        "DateTime without Time and month above 10 should return correct OrgSimpleTimestamp",
+        () {
+          final dateTime = DateTime(2025, 12, 31);
+
+          final timestamp = dateTimeToSimpleTimestamp(dateTime, false, true);
+
+          expect(timestamp.toMarkup(), "<2025-12-31>");
+        },
+      );
+      test("DateTime Time should return correct OrgSimpleTimestamp", () {
+        final dateTime = DateTime(2025, 12, 31, 15, 00);
+
+        final timestamp = dateTimeToSimpleTimestamp(dateTime, true, true);
+
+        expect(timestamp.toMarkup(), "<2025-12-31 15:00>");
       });
-
-      group(
-        'DateTime to OrgSimpleTimestamp',
+    });
+    group('DateTime to OrgTimeRangeTimestamp', () {
+      test(
+        "Two Datetimes with times should return correct OrgTimeRangeTimestamp",
         () {
-          test(
-              "DateTime without Time and month under 10 should return correct OrgSimpleTimestamp",
-              () {
-            final dateTime = DateTime(2025, 05, 15);
+          final start = DateTime(2025, 05, 15, 11, 0);
+          final end = DateTime(2025, 05, 15, 17, 0);
 
-            var timestamp = dateTimeToSimpleTimestamp(dateTime, false, true);
+          final timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            true,
+            true,
+            true,
+          );
 
-            expect(timestamp.toMarkup(), "<2025-05-15>");
-            timestamp = dateTimeToSimpleTimestamp(dateTime, false, false);
-            expect(timestamp.toMarkup(), "[2025-05-15]");
-          });
-          test(
-              "DateTime without Time and month above 10 should return correct OrgSimpleTimestamp",
-              () {
-            final dateTime = DateTime(2025, 12, 31);
-
-            final timestamp = dateTimeToSimpleTimestamp(dateTime, false, true);
-
-            expect(timestamp.toMarkup(), "<2025-12-31>");
-          });
-          test("DateTime Time should return correct OrgSimpleTimestamp", () {
-            final dateTime = DateTime(2025, 12, 31, 15, 00);
-
-            final timestamp = dateTimeToSimpleTimestamp(dateTime, true, true);
-
-            expect(timestamp.toMarkup(), "<2025-12-31 15:00>");
-          });
+          expect(timestamp.toMarkup(), "<2025-05-15 11:00-17:00>");
         },
       );
-      group(
-        'DateTime to OrgTimeRangeTimestamp',
+      test(
+        "Datimes spanning von 00:00 to 23:59 should still return correct OrgTimeRangeTimestamp",
         () {
-          test(
-              "Two Datetimes with times should return correct OrgTimeRangeTimestamp",
-              () {
-            final start = DateTime(2025, 05, 15, 11, 0);
-            final end = DateTime(2025, 05, 15, 17, 0);
+          final start = DateTime(2025, 12, 31, 0, 0);
+          final end = DateTime(2025, 12, 31, 23, 59);
 
-            final timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, true, true, true);
+          final timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            true,
+            true,
+            true,
+          );
 
-            expect(timestamp.toMarkup(), "<2025-05-15 11:00-17:00>");
-          });
-          test(
-              "Datimes spanning von 00:00 to 23:59 should still return correct OrgTimeRangeTimestamp",
-              () {
-            final start = DateTime(2025, 12, 31, 0, 0);
-            final end = DateTime(2025, 12, 31, 23, 59);
-
-            final timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, true, true, true);
-
-            expect(timestamp.toMarkup(), "<2025-12-31 00:00-23:59>");
-          });
+          expect(timestamp.toMarkup(), "<2025-12-31 00:00-23:59>");
         },
       );
-      group(
-        'DateTime to OrgDateRangeTimestamp',
+    });
+    group('DateTime to OrgDateRangeTimestamp', () {
+      test(
+        "Two Datetimes with times should return correct OrgDateRangeTimestamp",
         () {
-          test(
-              "Two Datetimes with times should return correct OrgDateRangeTimestamp",
-              () {
-            final start = DateTime(2025, 05, 15, 11, 0);
-            final end = DateTime(2025, 05, 16, 17, 0);
+          final start = DateTime(2025, 05, 15, 11, 0);
+          final end = DateTime(2025, 05, 16, 17, 0);
 
-            var timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, true, true, true);
+          var timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            true,
+            true,
+            true,
+          );
 
-            expect(
-                timestamp.toMarkup(), "<2025-05-15 11:00>--<2025-05-16 17:00>");
-            timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, false, true, true);
-            expect(
-                timestamp.toMarkup(), "[2025-05-15 11:00]--[2025-05-16 17:00]");
-            timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, false, false, true);
-            expect(timestamp.toMarkup(), "[2025-05-15]--[2025-05-16 17:00]");
-            timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, false, false, false);
-            expect(timestamp.toMarkup(), "[2025-05-15]--[2025-05-16]");
-          });
-          test(
-              "Datimes spanning von 00:00 to 23:59 should still return correct OrgTimeRangeTimestamp",
-              () {
-            final start = DateTime(2025, 12, 31, 0, 0);
-            final end = DateTime(2025, 12, 31, 23, 59);
-
-            final timestamp =
-                dateTimeToTimeRangeTimestamp(start, end, true, true, true);
-
-            expect(timestamp.toMarkup(), "<2025-12-31 00:00-23:59>");
-          });
+          expect(
+            timestamp.toMarkup(),
+            "<2025-05-15 11:00>--<2025-05-16 17:00>",
+          );
+          timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            false,
+            true,
+            true,
+          );
+          expect(
+            timestamp.toMarkup(),
+            "[2025-05-15 11:00]--[2025-05-16 17:00]",
+          );
+          timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            false,
+            false,
+            true,
+          );
+          expect(timestamp.toMarkup(), "[2025-05-15]--[2025-05-16 17:00]");
+          timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            false,
+            false,
+            false,
+          );
+          expect(timestamp.toMarkup(), "[2025-05-15]--[2025-05-16]");
         },
       );
-      group("dateTimesFromOrgDateRange", () {
-        test("Parse OrgDateRangeTimestamp", () {
-          final dateTimes = dateTimesFromOrgDateRange(
-              meetupEvent.timestamps.last as OrgDateRangeTimestamp, [], null);
-          expect(dateTimes, containsOnce(DateTime(2025, 05, 01)));
-          expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
-          expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
-        });
+      test(
+        "Datimes spanning von 00:00 to 23:59 should still return correct OrgTimeRangeTimestamp",
+        () {
+          final start = DateTime(2025, 12, 31, 0, 0);
+          final end = DateTime(2025, 12, 31, 23, 59);
+
+          final timestamp = dateTimeToTimeRangeTimestamp(
+            start,
+            end,
+            true,
+            true,
+            true,
+          );
+
+          expect(timestamp.toMarkup(), "<2025-12-31 00:00-23:59>");
+        },
+      );
+    });
+    group("dateTimesFromOrgDateRange", () {
+      test("Parse OrgDateRangeTimestamp", () {
+        final dateTimes = dateTimesFromOrgDateRange(
+          meetupEvent.timestamps.last as OrgDateRangeTimestamp,
+          [],
+          null,
+        );
+        expect(dateTimes, containsOnce(DateTime(2025, 05, 01)));
+        expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
+        expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
       });
-      group("validator", () {
-        test("validator should return string when null", () {
-          final result = validate(null, "Placeholder");
+    });
+    group("validator", () {
+      test("validator should return string when null", () {
+        final result = validate(null, "Placeholder");
 
-          expect(result, isA<String>());
-        });
-        test("validator should return string when string is empty", () {
-          final result = validate("", "Placeholder");
+        expect(result, isA<String>());
+      });
+      test("validator should return string when string is empty", () {
+        final result = validate("", "Placeholder");
 
-          expect(result, isA<String>());
-        });
-        test("validator should return string when string is just spaces", () {
-          final result = validate("                           ", "Placeholder");
+        expect(result, isA<String>());
+      });
+      test("validator should return string when string is just spaces", () {
+        final result = validate("                           ", "Placeholder");
 
-          expect(result, isA<String>());
-        });
-        test("validator should return string when string is in set", () {
-          final result = validate("alreadyExists", "Placeholder",
-              notIn: ["alreadyExists"]);
+        expect(result, isA<String>());
+      });
+      test("validator should return string when string is in set", () {
+        final result = validate(
+          "alreadyExists",
+          "Placeholder",
+          notIn: ["alreadyExists"],
+        );
 
-          expect(result, isA<String>());
-        });
-        test(
-            "validator should return null when string not in set and not empty",
-            () {
-          final result = validate("doesntAlreadyExists", "Placeholder",
-              notIn: ["alreadyExists"]);
+        expect(result, isA<String>());
+      });
+      test(
+        "validator should return null when string not in set and not empty",
+        () {
+          final result = validate(
+            "doesntAlreadyExists",
+            "Placeholder",
+            notIn: ["alreadyExists"],
+          );
 
           expect(result, isNull);
-        });
-      });
-    },
-  );
+        },
+      );
+    });
+  });
 }
 
 class MockFileInfo extends Mock implements FileInfo {}

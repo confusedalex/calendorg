@@ -7,32 +7,29 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Future<void> pumpWidgetToTester(dynamic tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: MultiBlocProvider(
-                providers: [
-          BlocProvider(create: (context) => TodoStatesCubit()),
-          BlocProvider(create: (context) => TodoStateAddDialogCubit()),
-        ],
-                child: TodoStateAddDialog(
-                  status: 'todo',
-                )))));
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => TodoStatesCubit()),
+              BlocProvider(create: (context) => TodoStateAddDialogCubit()),
+            ],
+            child: TodoStateAddDialog(status: 'todo'),
+          ),
+        ),
+      ),
+    );
   }
 
-  group(
-    "todo_state_add_dialog_test",
-    () {
-      testWidgets(
-        'cancel button closes dialog',
-        (tester) async {
-          await pumpWidgetToTester(tester);
+  group("todo_state_add_dialog_test", () {
+    testWidgets('cancel button closes dialog', (tester) async {
+      await pumpWidgetToTester(tester);
 
-          await tester.tap(find.text("cancel"));
-          await tester.pumpAndSettle();
+      await tester.tap(find.text("cancel"));
+      await tester.pumpAndSettle();
 
-          expect(find.byType(TodoStateAddDialog), findsNothing);
-        },
-      );
-    },
-  );
+      expect(find.byType(TodoStateAddDialog), findsNothing);
+    });
+  });
 }

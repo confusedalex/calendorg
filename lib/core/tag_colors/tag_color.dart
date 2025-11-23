@@ -8,8 +8,8 @@ class TagColor {
   TagColor(this.tag, this.color);
 
   TagColor.fromJson(Map<String, dynamic> json)
-      : tag = json['tag'] as String,
-        color = Color(json['color'] as int);
+    : tag = json['tag'] as String,
+      color = Color(json['color'] as int);
 
   Map<String, dynamic> toJson() {
     return {"tag": tag, "color": color.value32bit};

@@ -17,49 +17,59 @@ class TagsPage extends StatefulWidget {
 class _TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(),
-      body: BlocBuilder<TagColorsCubit, List<TagColor>>(
-          builder: (_, state) => ReorderableListView(
-              buildDefaultDragHandles: false,
-              children: state
-                  .mapIndexed((i, tagColor) => ListTile(
-                        key: Key(tagColor.tag),
-                        title: Text(tagColor.tag),
-                        trailing: ReorderableDragStartListener(
-                          index: i,
-                          child: const Icon(Icons.drag_handle),
-                        ),
-                        leading: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: tagColor.color,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (_) => BlocProvider.value(
-                                  value:
-                                      BlocProvider.of<TagColorsCubit>(context),
-                                  child: EditTagColorDialog(tagColor)));
-                        },
-                      ))
-                  .toList(),
-              onReorder: (oldIndex, newIndex) =>
-                  context.read<TagColorsCubit>().reorder(oldIndex, newIndex))),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (_) => MultiBlocProvider(providers: [
-                      BlocProvider.value(
-                          value: BlocProvider.of<TagColorsCubit>(context)),
-                      BlocProvider(
-                        create: (context) => NewTagColorCubit(),
-                      )
-                    ], child: NewTagColorDialog()));
-          },
-          label: Text("Add")));
+    appBar: AppBar(),
+    body: BlocBuilder<TagColorsCubit, List<TagColor>>(
+      builder: (_, state) => ReorderableListView(
+        buildDefaultDragHandles: false,
+        children: state
+            .mapIndexed(
+              (i, tagColor) => ListTile(
+                key: Key(tagColor.tag),
+                title: Text(tagColor.tag),
+                trailing: ReorderableDragStartListener(
+                  index: i,
+                  child: const Icon(Icons.drag_handle),
+                ),
+                leading: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: tagColor.color,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<TagColorsCubit>(context),
+                      child: EditTagColorDialog(tagColor),
+                    ),
+                  );
+                },
+              ),
+            )
+            .toList(),
+        onReorder: (oldIndex, newIndex) =>
+            context.read<TagColorsCubit>().reorder(oldIndex, newIndex),
+      ),
+    ),
+    floatingActionButton: FloatingActionButton.extended(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(
+                value: BlocProvider.of<TagColorsCubit>(context),
+              ),
+              BlocProvider(create: (context) => NewTagColorCubit()),
+            ],
+            child: NewTagColorDialog(),
+          ),
+        );
+      },
+      label: Text("Add"),
+    ),
+  );
 }

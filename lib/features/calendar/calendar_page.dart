@@ -11,7 +11,9 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocBuilder<OrgFilesBloc, OrgFilesState>(
-          builder: (context, state) => BlocProvider(
-              create: (context) => CalendarBloc(initialSelectedDay),
-              child: CalendarView()));
+        builder: (context, state) => BlocProvider(
+          create: (context) => CalendarBloc(initialSelectedDay),
+          child: CalendarView(),
+        ),
+      );
 }

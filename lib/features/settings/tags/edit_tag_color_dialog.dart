@@ -17,38 +17,39 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-        title: Text("Edit \"${widget.tagColor.tag}\" Tag"),
-        content: SingleChildScrollView(
-            child: ColorPicker(
-          color: widget.tagColor.color,
-          onColorChanged: (Color color) => setState(() {
-            selectedColor = color;
-          }),
-          pickersEnabled: <ColorPickerType, bool>{
-            ColorPickerType.primary: false,
-            ColorPickerType.accent: false,
-            ColorPickerType.wheel: true
-          },
-        )),
-        actions: [
-          TextButton(
-              key: Key("edittag_deletebutton"),
-              onPressed: () {
-                context
-                    .read<TagColorsCubit>()
-                    .removeTagColor(widget.tagColor.tag);
-                Navigator.of(context).pop();
-              },
-              child: Text("delete")),
-          TextButton(
-              key: Key("edittag_savebutton"),
-              onPressed: () {
-                context
-                    .read<TagColorsCubit>()
-                    .addTagColor(TagColor(widget.tagColor.tag, selectedColor));
-                Navigator.of(context).pop();
-              },
-              child: Text("save"))
-        ],
-      );
+    title: Text("Edit \"${widget.tagColor.tag}\" Tag"),
+    content: SingleChildScrollView(
+      child: ColorPicker(
+        color: widget.tagColor.color,
+        onColorChanged: (Color color) => setState(() {
+          selectedColor = color;
+        }),
+        pickersEnabled: <ColorPickerType, bool>{
+          ColorPickerType.primary: false,
+          ColorPickerType.accent: false,
+          ColorPickerType.wheel: true,
+        },
+      ),
+    ),
+    actions: [
+      TextButton(
+        key: Key("edittag_deletebutton"),
+        onPressed: () {
+          context.read<TagColorsCubit>().removeTagColor(widget.tagColor.tag);
+          Navigator.of(context).pop();
+        },
+        child: Text("delete"),
+      ),
+      TextButton(
+        key: Key("edittag_savebutton"),
+        onPressed: () {
+          context.read<TagColorsCubit>().addTagColor(
+            TagColor(widget.tagColor.tag, selectedColor),
+          );
+          Navigator.of(context).pop();
+        },
+        child: Text("save"),
+      ),
+    ],
+  );
 }

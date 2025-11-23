@@ -24,69 +24,58 @@ void main() {
   final meetupTagColor = TagColor("meetups", Colors.pink);
 
   Future<void> initWidget(dynamic tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: (context) => TagColorsCubit.withInitialValue(
-                  [meetupTagColor],
-                )),
-        BlocProvider(
-          create: (context) => EventViewBloc(event, event.timestamps.first),
-        )
-      ],
-      child: EventView(),
-    ))));
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    TagColorsCubit.withInitialValue([meetupTagColor]),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    EventViewBloc(event, event.timestamps.first),
+              ),
+            ],
+            child: EventView(),
+          ),
+        ),
+      ),
+    );
 
     await tester.pumpAndSettle();
   }
 
-  group(
-    'Event View',
-    () {
-      testWidgets(
-        'EventView shows event title',
-        (tester) async {
-          await initWidget(tester);
+  group('Event View', () {
+    testWidgets('EventView shows event title', (tester) async {
+      await initWidget(tester);
 
-          expect(find.byKey(Key("TitleField")), findsOneWidget);
-          expect(find.text(event.title), findsOneWidget);
-        },
-      );
-      group("date picker", () {
-        testWidgets(
-          'EventView shows date picker Button',
-          (tester) async {
-            await initWidget(tester);
+      expect(find.byKey(Key("TitleField")), findsOneWidget);
+      expect(find.text(event.title), findsOneWidget);
+    });
+    group("date picker", () {
+      testWidgets('EventView shows date picker Button', (tester) async {
+        await initWidget(tester);
 
-            expect(find.byKey(Key("datePickerButton")), findsOneWidget);
-          },
-        );
-        testWidgets(
-          'Date Picker button shows timestamp',
-          (tester) async {
-            await initWidget(tester);
-
-            expect(
-                find.text(event.timestamps.first.toMarkup()), findsOneWidget);
-          },
-        );
-        testWidgets(
-          'Date Picker button open datePickerDialog',
-          (tester) async {
-            await initWidget(tester);
-
-            await tester.tap(find.byKey(Key("datePickerButton")));
-
-            await tester.pumpAndSettle();
-
-            expect(find.byType(DatePicker), findsOneWidget);
-          },
-        );
+        expect(find.byKey(Key("datePickerButton")), findsOneWidget);
       });
-    },
-  );
+      testWidgets('Date Picker button shows timestamp', (tester) async {
+        await initWidget(tester);
+
+        expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
+      });
+      testWidgets('Date Picker button open datePickerDialog', (tester) async {
+        await initWidget(tester);
+
+        await tester.tap(find.byKey(Key("datePickerButton")));
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(DatePicker), findsOneWidget);
+      });
+    });
+  });
 }
 
 class MockFileInfo extends Mock implements FileInfo {}

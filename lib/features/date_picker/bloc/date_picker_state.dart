@@ -1,17 +1,16 @@
 part of 'date_picker_bloc.dart';
 
 final class DatePickerState {
-  DatePickerState(
-      {required this.startDate,
-      required this.startTimeActive,
-      startTimeDuration,
-      required this.endTimeActive,
-      endTimeDuration,
-      required this.endDateActive,
-      this.endDate})
-      : startTimeDuration =
-            startTimeDuration ?? TimeOfDay(hour: 12, minute: 00),
-        endTimeDuration = endTimeDuration ?? TimeOfDay(hour: 12, minute: 00);
+  DatePickerState({
+    required this.startDate,
+    required this.startTimeActive,
+    startTimeDuration,
+    required this.endTimeActive,
+    endTimeDuration,
+    required this.endDateActive,
+    this.endDate,
+  }) : startTimeDuration = startTimeDuration ?? TimeOfDay(hour: 12, minute: 00),
+       endTimeDuration = endTimeDuration ?? TimeOfDay(hour: 12, minute: 00);
 
   DateTime startDate;
   DateTime? endDate;
@@ -33,7 +32,8 @@ final class DatePickerState {
               ? null
               : TimeOfDay(
                   hour: int.parse(timestamp.time!.hour),
-                  minute: int.parse(timestamp.time!.minute)),
+                  minute: int.parse(timestamp.time!.minute),
+                ),
         );
       case OrgDateRangeTimestamp():
         return DatePickerState(
@@ -60,13 +60,14 @@ final class DatePickerState {
 
   factory DatePickerState.parseDateTimeWithoutTime(DateTime dateTime) =>
       DatePickerState(
-          startDate: dateTime,
-          startTimeActive: false,
-          endTimeActive: false,
-          endDateActive: false,
-          endDate: null,
-          endTimeDuration: null,
-          startTimeDuration: null);
+        startDate: dateTime,
+        startTimeActive: false,
+        endTimeActive: false,
+        endDateActive: false,
+        endDate: null,
+        endTimeDuration: null,
+        startTimeDuration: null,
+      );
 
   DatePickerState copyWith({
     DateTime? startDate,

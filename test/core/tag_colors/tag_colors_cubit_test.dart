@@ -13,7 +13,7 @@ final homeTagColor = TagColor("@home", Colors.green);
 Future<void> main() async {
   Future<TagColorsCubit> getTagColorsCubit() async {
     SharedPreferences.setMockInitialValues({
-      "tagColors": jsonEncode([schoolTagColor])
+      "tagColors": jsonEncode([schoolTagColor]),
     });
 
     final cubit = TagColorsCubit()..setInitialTagColor();
@@ -24,94 +24,98 @@ Future<void> main() async {
     return cubit;
   }
 
-  group(
-    'TagModel',
-    () {
-      test("Tags will be loaded from shared preferences", () async {
+  group('TagModel', () {
+    test("Tags will be loaded from shared preferences", () async {
+      final cubit = await getTagColorsCubit();
+
+      expect(cubit.state.first, equals(schoolTagColor));
+    });
+
+    test("Add tag to model will add to list and save to prefs", () async {
+      final cubit = await getTagColorsCubit();
+      final newTag = TagColor("new green tag", Colors.green);
+
+      cubit.addTagColor(TagColor("new green tag", Colors.green));
+      final tagsColorsFromPrefs =
+          (jsonDecode(cubit.prefs.getString("tagColors") ?? "[]") as List)
+              .map((tagColor) => TagColor.fromJson(tagColor))
+              .toList();
+
+      expect(cubit.state, containsAll([schoolTagColor, newTag]));
+      expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
+    });
+
+    test("Adding tag with same name wont add a new tag", () async {
+      final cubit = await getTagColorsCubit();
+      final newSchoolTag = TagColor("school", Colors.green);
+
+      cubit.addTagColor(newSchoolTag);
+
+      expect(cubit.state, contains(newSchoolTag));
+    });
+
+    test("deleting tag work", () async {
+      final cubit = await getTagColorsCubit();
+
+      cubit.removeTagColor(schoolTagColor.tag);
+
+      expect(cubit.state, isEmpty);
+    });
+
+    group("getColor tests", () {
+      test("Correct color for event will be returned", () async {
         final cubit = await getTagColorsCubit();
 
-        expect(cubit.state.first, equals(schoolTagColor));
+        final schoolEvent = FakeEvent(["school"]);
+
+        expect(
+          cubit.getTagColor(schoolEvent),
+          isSameColorAs(schoolTagColor.color),
+        );
       });
 
-      test("Add tag to model will add to list and save to prefs", () async {
-        final cubit = await getTagColorsCubit();
-        final newTag = TagColor("new green tag", Colors.green);
-
-        cubit.addTagColor(TagColor("new green tag", Colors.green));
-        final tagsColorsFromPrefs =
-            (jsonDecode(cubit.prefs.getString("tagColors") ?? "[]") as List)
-                .map((tagColor) => TagColor.fromJson(tagColor))
-                .toList();
-
-        expect(cubit.state, containsAll([schoolTagColor, newTag]));
-        expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
-      });
-
-      test("Adding tag with same name wont add a new tag", () async {
-        final cubit = await getTagColorsCubit();
-        final newSchoolTag = TagColor("school", Colors.green);
-
-        cubit.addTagColor(newSchoolTag);
-
-        expect(cubit.state, contains(newSchoolTag));
-      });
-
-      test("deleting tag work", () async {
-        final cubit = await getTagColorsCubit();
-
-        cubit.removeTagColor(schoolTagColor.tag);
-
-        expect(cubit.state, isEmpty);
-      });
-
-      group("getColor tests", () {
-        test("Correct color for event will be returned", () async {
-          final cubit = await getTagColorsCubit();
-
-          final schoolEvent = FakeEvent(["school"]);
-
-          expect(cubit.getTagColor(schoolEvent),
-              isSameColorAs(schoolTagColor.color));
-        });
-
-        test("Default color gets returned, when no TagColor matches the tag",
-            () async {
+      test(
+        "Default color gets returned, when no TagColor matches the tag",
+        () async {
           final cubit = await getTagColorsCubit();
 
           final homeEvent = FakeEvent(["@home"]);
 
           expect(cubit.getTagColor(homeEvent), isSameColorAs(Colors.blue));
-        });
+        },
+      );
 
-        test(
-            "When multiple matching tags, the tag closest to index 0 gets returned",
-            () async {
+      test(
+        "When multiple matching tags, the tag closest to index 0 gets returned",
+        () async {
           final cubit = await getTagColorsCubit();
           cubit.addTagColor(homeTagColor);
 
           final event = FakeEvent(["@home", "school"]);
 
           expect(cubit.getTagColor(event), isSameColorAs(schoolTagColor.color));
-        });
-      });
+        },
+      );
+    });
 
-      test("reordering will reorder correctly", () async {
-        final cubit = await getTagColorsCubit();
-        cubit.addTagColor(homeTagColor);
+    test("reordering will reorder correctly", () async {
+      final cubit = await getTagColorsCubit();
+      cubit.addTagColor(homeTagColor);
 
-        expect(cubit.state.first, schoolTagColor);
-        cubit.reorder(0, 2);
-        expect(cubit.state.first, homeTagColor);
-      });
+      expect(cubit.state.first, schoolTagColor);
+      cubit.reorder(0, 2);
+      expect(cubit.state.first, homeTagColor);
+    });
 
-      test("getTagColorByName will return correct color", () async {
-        final cubit = await getTagColorsCubit();
+    test("getTagColorByName will return correct color", () async {
+      final cubit = await getTagColorsCubit();
 
-        expect(cubit.getTagColorByName(schoolTagColor.tag),
-            isSameColorAs(schoolTagColor.color));
-      });
-    },
-  );
+      expect(
+        cubit.getTagColorByName(schoolTagColor.tag),
+        isSameColorAs(schoolTagColor.color),
+      );
+    });
+  });
 }
 
 class FakeEvent extends Fake implements Event {

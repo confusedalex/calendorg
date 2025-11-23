@@ -25,8 +25,8 @@ class AgendaFilesDialog extends StatelessWidget {
                 trailing: IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () => context.read<OrgFilesBloc>().add(
-                        OrgFilesRemoveFilePath(fileInfo),
-                      ),
+                    OrgFilesRemoveFilePath(fileInfo),
+                  ),
                 ),
               );
             },
@@ -36,12 +36,12 @@ class AgendaFilesDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () async => context.read<OrgFilesBloc>().add(
-                OrgFilesAddFilePath(
-                  await FilePickerWritable().openFile((fileInfo, file) async {
-                    return fileInfo;
-                  }),
-                ),
-              ),
+            OrgFilesAddFilePath(
+              await FilePickerWritable().openFile((fileInfo, file) async {
+                return fileInfo;
+              }),
+            ),
+          ),
           child: Text("add"),
         ),
       ],

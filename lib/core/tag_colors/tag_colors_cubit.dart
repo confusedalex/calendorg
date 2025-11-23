@@ -45,7 +45,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   void addTagColor(TagColor tagColor) {
     final newTagColors = [
       ...state.where((t) => t.tag != tagColor.tag),
-      tagColor
+      tagColor,
     ];
     saveTagsToPrefs(newTagColors);
   }
@@ -59,7 +59,9 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   }
 
   Color getTagColor(Event event) => state
-      .firstWhere((tagColor) => (event).tags.contains(tagColor.tag),
-          orElse: () => TagColor("", Colors.blue))
+      .firstWhere(
+        (tagColor) => (event).tags.contains(tagColor.tag),
+        orElse: () => TagColor("", Colors.blue),
+      )
       .color;
 }

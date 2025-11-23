@@ -8,67 +8,61 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
-  group(
-    "starting_day_dialog_test",
-    () {
-      late StartingDayCubit cubit;
+  group("starting_day_dialog_test", () {
+    late StartingDayCubit cubit;
 
-      setUp(() {
-        SharedPreferencesAsyncPlatform.instance =
-            InMemorySharedPreferencesAsync.empty();
-        cubit = StartingDayCubit()
-          ..changeStartingDayOfWeek(StartingDayOfWeek.friday);
+    setUp(() {
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.empty();
+      cubit = StartingDayCubit()
+        ..changeStartingDayOfWeek(StartingDayOfWeek.friday);
+    });
+
+    Future<void> pumpWidgetToTester(dynamic tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocProvider(
+            create: (context) => cubit,
+            child: Scaffold(body: StartingDateDialog()),
+          ),
+        ),
+      );
+    }
+
+    group("Monday button", () {
+      testWidgets('Dialog should contain button for monday', (tester) async {
+        await pumpWidgetToTester(tester);
+
+        expect(find.text("Monday"), findsOne);
       });
 
-      Future<void> pumpWidgetToTester(dynamic tester) async {
-        await tester.pumpWidget(MaterialApp(
-            home: BlocProvider(
-                create: (context) => cubit,
-                child: Scaffold(body: StartingDateDialog()))));
-      }
+      testWidgets('States changes to monday, when pressing monday', (
+        tester,
+      ) async {
+        await pumpWidgetToTester(tester);
 
-      group("Monday button", () {
-        testWidgets(
-          'Dialog should contain button for monday',
-          (tester) async {
-            await pumpWidgetToTester(tester);
+        await tester.tap(find.text("Monday"));
 
-            expect(find.text("Monday"), findsOne);
-          },
-        );
-
-        testWidgets(
-          'States changes to monday, when pressing monday',
-          (tester) async {
-            await pumpWidgetToTester(tester);
-
-            await tester.tap(find.text("Monday"));
-
-            expect(cubit.state, equals(StartingDayOfWeek.monday));
-          },
-        );
+        expect(cubit.state, equals(StartingDayOfWeek.monday));
       });
+    });
 
-      group("Sunday button", () {
-        testWidgets(
-          'Dialog should contain button for sunday',
-          (tester) async {
-            await pumpWidgetToTester(tester);
+    group("Sunday button", () {
+      testWidgets('Dialog should contain button for sunday', (tester) async {
+        await pumpWidgetToTester(tester);
 
-            expect(find.text("Sunday"), findsOne);
-          },
-        );
-        testWidgets(
-          'Cubit state should change to sunday, when pressing sunday tile',
-          (tester) async {
-            await pumpWidgetToTester(tester);
-
-            await tester.tap(find.text("Sunday"));
-
-            expect(cubit.state, equals(StartingDayOfWeek.sunday));
-          },
-        );
+        expect(find.text("Sunday"), findsOne);
       });
-    },
-  );
+      testWidgets(
+        'Cubit state should change to sunday, when pressing sunday tile',
+        (tester) async {
+          await pumpWidgetToTester(tester);
+
+          await tester.tap(find.text("Sunday"));
+
+          expect(cubit.state, equals(StartingDayOfWeek.sunday));
+        },
+      );
+    });
+  });
 }

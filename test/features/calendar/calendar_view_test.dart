@@ -17,10 +17,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 
 void main() {
-  group(
-    'CalendarWidget',
-    () {
-      final markup = """
+  group('CalendarWidget', () {
+    final markup = """
 * Heading 1
 ** orgmode meetup
 <2025-05-05>
@@ -38,106 +36,134 @@ void main() {
 <2025-05-28> <2025-05-15>
 """;
 
-      final document = OrgDocument.parse(markup);
-      final schoolTagColor = TagColor("school", Colors.orange);
-      final homeTagColor = TagColor("@home", Colors.lightGreen);
-      final workTagColor = TagColor("@work", Colors.yellow);
-      late OrgFilesBloc orgFilesBloc;
-      late CalendarBloc calendarBloc;
+    final document = OrgDocument.parse(markup);
+    final schoolTagColor = TagColor("school", Colors.orange);
+    final homeTagColor = TagColor("@home", Colors.lightGreen);
+    final workTagColor = TagColor("@work", Colors.yellow);
+    late OrgFilesBloc orgFilesBloc;
+    late CalendarBloc calendarBloc;
 
-      orgFilesBloc = MockOrgFilesBloc(document);
+    orgFilesBloc = MockOrgFilesBloc(document);
 
-      setUp(() {
-        calendarBloc = CalendarBloc(DateTime(2025, 05, 17));
-      });
+    setUp(() {
+      calendarBloc = CalendarBloc(DateTime(2025, 05, 17));
+    });
 
-      Future<void> pumpWidgetToTester(dynamic tester) async {
-        await tester.pumpWidget(MaterialApp(
-            home: Scaffold(
-                body: MultiBlocProvider(providers: [
-          BlocProvider.value(value: orgFilesBloc),
-          BlocProvider.value(value: calendarBloc),
-          BlocProvider(create: (context) => StartingDayCubit()),
-          BlocProvider(create: (context) => TodoStatesCubit()),
-          BlocProvider(create: (context) => FloatingActionButtonCubit()),
-          BlocProvider(
-              create: (context) => TagColorsCubit.withInitialValue(
-                  [schoolTagColor, homeTagColor, workTagColor])),
-        ], child: CalendarView()))));
-      }
+    Future<void> pumpWidgetToTester(dynamic tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: orgFilesBloc),
+                BlocProvider.value(value: calendarBloc),
+                BlocProvider(create: (context) => StartingDayCubit()),
+                BlocProvider(create: (context) => TodoStatesCubit()),
+                BlocProvider(create: (context) => FloatingActionButtonCubit()),
+                BlocProvider(
+                  create: (context) => TagColorsCubit.withInitialValue([
+                    schoolTagColor,
+                    homeTagColor,
+                    workTagColor,
+                  ]),
+                ),
+              ],
+              child: CalendarView(),
+            ),
+          ),
+        ),
+      );
+    }
 
-      testWidgets('Calendar should show marker for every tag occurance at day',
-          (tester) async {
-        await pumpWidgetToTester(tester);
+    testWidgets('Calendar should show marker for every tag occurance at day', (
+      tester,
+    ) async {
+      await pumpWidgetToTester(tester);
 
-        expect(find.byType(CircleAvatar), findsNWidgets(11));
-      });
+      expect(find.byType(CircleAvatar), findsNWidgets(11));
+    });
 
-      testWidgets('Calendar respects tag colors from model', (tester) async {
-        await pumpWidgetToTester(tester);
+    testWidgets('Calendar respects tag colors from model', (tester) async {
+      await pumpWidgetToTester(tester);
 
-        expect(
-            find.byWidgetPredicate((widget) =>
-                widget is CircleAvatar &&
-                widget.backgroundColor == Colors.orange),
-            findsNWidgets(3));
-        expect(
-            find.byWidgetPredicate((widget) =>
-                widget is CircleAvatar &&
-                widget.backgroundColor == Colors.blue),
-            findsNWidgets(5));
-        expect(
-            find.byWidgetPredicate((widget) =>
-                widget is CircleAvatar &&
-                widget.backgroundColor == Colors.lightGreen),
-            findsNWidgets(3));
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CircleAvatar && widget.backgroundColor == Colors.orange,
+        ),
+        findsNWidgets(3),
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CircleAvatar && widget.backgroundColor == Colors.blue,
+        ),
+        findsNWidgets(5),
+      );
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CircleAvatar &&
+              widget.backgroundColor == Colors.lightGreen,
+        ),
+        findsNWidgets(3),
+      );
 
-        expect(
-            find.byWidgetPredicate((widget) =>
-                widget is CircleAvatar &&
-                widget.backgroundColor == Colors.green),
-            findsNothing);
-      });
+      expect(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is CircleAvatar && widget.backgroundColor == Colors.green,
+        ),
+        findsNothing,
+      );
+    });
 
-      testWidgets("Date will change", (tester) async {
-        await pumpWidgetToTester(tester);
+    testWidgets("Date will change", (tester) async {
+      await pumpWidgetToTester(tester);
 
-        await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-        expect(isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 17)),
-            isTrue);
-        await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
-        expect(isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
-            isTrue);
-      });
-      testWidgets("Changing calendar format works", (tester) async {
-        await pumpWidgetToTester(tester);
-        await tester.pumpAndSettle();
+      expect(
+        isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 17)),
+        isTrue,
+      );
+      await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
+      expect(
+        isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
+        isTrue,
+      );
+    });
+    testWidgets("Changing calendar format works", (tester) async {
+      await pumpWidgetToTester(tester);
+      await tester.pumpAndSettle();
 
-        await tester.tap(find.byType(FormatButton));
+      await tester.tap(find.byType(FormatButton));
 
-        expect(
-            calendarBloc.state.calendarFormat, equals(CalendarFormat.twoWeeks));
-      });
-      testWidgets(
-          "CalendarView shows eventCards for every event, when events are there",
-          (tester) async {
+      expect(
+        calendarBloc.state.calendarFormat,
+        equals(CalendarFormat.twoWeeks),
+      );
+    });
+    testWidgets(
+      "CalendarView shows eventCards for every event, when events are there",
+      (tester) async {
         calendarBloc = CalendarBloc(DateTime(2025, 05, 05));
 
         await pumpWidgetToTester(tester);
         await tester.pumpAndSettle();
 
         expect(find.byType(EventCard), findsNWidgets(3));
-      });
-      testWidgets("CalendarView shows no eventCards, when no events are there",
-          (tester) async {
-        await pumpWidgetToTester(tester);
-        await tester.pumpAndSettle();
+      },
+    );
+    testWidgets("CalendarView shows no eventCards, when no events are there", (
+      tester,
+    ) async {
+      await pumpWidgetToTester(tester);
+      await tester.pumpAndSettle();
 
-        expect(find.byType(EventCard), findsNothing);
-      });
-    },
-  );
+      expect(find.byType(EventCard), findsNothing);
+    });
+  });
 }
 
 class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
@@ -148,9 +174,10 @@ class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
 
   @override
   OrgFilesState get state => OrgFilesState(
-      filePaths: {fileInfo},
-      documentsMap: {fileInfo: document},
-      todoStates: OrgTodoStates());
+    filePaths: {fileInfo},
+    documentsMap: {fileInfo: document},
+    todoStates: OrgTodoStates(),
+  );
 
   @override
   Stream<OrgFilesState> get stream => Stream.value(state);

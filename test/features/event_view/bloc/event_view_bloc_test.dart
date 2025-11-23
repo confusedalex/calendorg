@@ -8,8 +8,13 @@ import 'package:org_parser/org_parser.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final newTimestamp = OrgSimpleTimestamp("<",
-      (year: "2025", month: "05", day: "16", dayName: null), null, [], ">");
+  final newTimestamp = OrgSimpleTimestamp(
+    "<",
+    (year: "2025", month: "05", day: "16", dayName: null),
+    null,
+    [],
+    ">",
+  );
   late Event event;
   late OrgTimestamp timestamp;
 
@@ -19,30 +24,33 @@ void main() {
     timestamp = event.timestamps.first;
   });
 
-  group(
-    "Event View Bloc",
-    () {
-      blocTest(
-        "Chaning title works",
-        build: () => EventViewBloc(event, timestamp),
-        act: (bloc) => bloc.add(EventViewTitleChangeEvent("History exam")),
-        expect: () => [
-          TypeMatcher<EventViewState>()
-              .having((state) => state.title, "Title", equals("History exam"))
-        ],
-      );
+  group("Event View Bloc", () {
+    blocTest(
+      "Chaning title works",
+      build: () => EventViewBloc(event, timestamp),
+      act: (bloc) => bloc.add(EventViewTitleChangeEvent("History exam")),
+      expect: () => [
+        TypeMatcher<EventViewState>().having(
+          (state) => state.title,
+          "Title",
+          equals("History exam"),
+        ),
+      ],
+    );
 
-      blocTest<EventViewBloc, EventViewState>(
-        'emits correct timestamp when Timestamp is changed',
-        build: () => EventViewBloc(event, timestamp),
-        act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
-        expect: () => [
-          TypeMatcher<EventViewState>().having(
-              (state) => state.timestamp, "timestamp", equals(newTimestamp))
-        ],
-      );
-    },
-  );
+    blocTest<EventViewBloc, EventViewState>(
+      'emits correct timestamp when Timestamp is changed',
+      build: () => EventViewBloc(event, timestamp),
+      act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
+      expect: () => [
+        TypeMatcher<EventViewState>().having(
+          (state) => state.timestamp,
+          "timestamp",
+          equals(newTimestamp),
+        ),
+      ],
+    );
+  });
 }
 
 class FakeFileInfo extends Fake implements FileInfo {

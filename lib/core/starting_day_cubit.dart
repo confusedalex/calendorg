@@ -6,13 +6,19 @@ class StartingDayCubit extends Cubit<StartingDayOfWeek> {
   StartingDayCubit() : super(StartingDayOfWeek.monday);
 
   Future<void> changeStartingDayOfWeek(StartingDayOfWeek day) async {
-    await SharedPreferencesAsync()
-        .setInt("startingDay", getWeekdayNumber(day) - 1);
+    await SharedPreferencesAsync().setInt(
+      "startingDay",
+      getWeekdayNumber(day) - 1,
+    );
     emit(day);
   }
 
   Future<void> setInititalStartingDay() async {
-    emit(StartingDayOfWeek
-        .values[(await SharedPreferencesAsync().getInt("startingDay") ?? 0)]);
+    emit(
+      StartingDayOfWeek.values[(await SharedPreferencesAsync().getInt(
+            "startingDay",
+          ) ??
+          0)],
+    );
   }
 }

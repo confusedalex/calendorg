@@ -105,8 +105,9 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
       );
     } else {
       final jsonObject = jsonDecode(files) as List<dynamic>;
-      final fileInfos =
-          jsonObject.map((info) => FileInfo.fromJson(info)).toSet();
+      final fileInfos = jsonObject
+          .map((info) => FileInfo.fromJson(info))
+          .toSet();
 
       return OrgFilesState(
         filePaths: fileInfos,

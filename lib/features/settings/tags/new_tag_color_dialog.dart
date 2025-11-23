@@ -16,43 +16,50 @@ class NewTagColorDialog extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
 
     return Form(
-        key: formKey,
-        child: AlertDialog(
-          title: Text("Add new Tag"),
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.75,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                TextFormField(
-                    onChanged: (value) => state.updateText(value),
-                    validator: (value) => validate(value, "Tag Color",
-                        notIn: tagColorsCubit.state.map((e) => e.tag))),
-                Divider(),
-                ColorPicker(
-                  color: state.state.color,
-                  onColorChanged: (Color color) => state.updateColor(color),
-                  pickersEnabled: <ColorPickerType, bool>{
-                    ColorPickerType.primary: false,
-                    ColorPickerType.accent: false,
-                    ColorPickerType.wheel: true
-                  },
-                )
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-                key: Key("newtag_savebutton"),
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    tagColorsCubit.addTagColor(
-                        TagColor(state.state.text, state.state.color));
-                    Navigator.of(context).pop();
-                  }
+      key: formKey,
+      child: AlertDialog(
+        title: Text("Add new Tag"),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              TextFormField(
+                onChanged: (value) => state.updateText(value),
+                validator: (value) => validate(
+                  value,
+                  "Tag Color",
+                  notIn: tagColorsCubit.state.map((e) => e.tag),
+                ),
+              ),
+              Divider(),
+              ColorPicker(
+                color: state.state.color,
+                onColorChanged: (Color color) => state.updateColor(color),
+                pickersEnabled: <ColorPickerType, bool>{
+                  ColorPickerType.primary: false,
+                  ColorPickerType.accent: false,
+                  ColorPickerType.wheel: true,
                 },
-                child: Text("save"))
-          ],
-        ));
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            key: Key("newtag_savebutton"),
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                tagColorsCubit.addTagColor(
+                  TagColor(state.state.text, state.state.color),
+                );
+                Navigator.of(context).pop();
+              }
+            },
+            child: Text("save"),
+          ),
+        ],
+      ),
+    );
   }
 }

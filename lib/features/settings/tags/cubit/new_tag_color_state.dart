@@ -8,6 +8,8 @@ final class NewTagColorState {
 
   NewTagColorState copyWith({Color? color, String? text}) {
     return NewTagColorState(
-        color: color ?? this.color, text: text ?? this.text);
+      color: color ?? this.color,
+      text: text ?? this.text,
+    );
   }
 }

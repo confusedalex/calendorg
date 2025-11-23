@@ -17,68 +17,82 @@ class NewSectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = context.select((NewSectionCubit bloc) => bloc.state.title);
-    final inboxFile =
-        context.select((OrgFilesBloc bloc) => bloc.state.inboxFile);
-    final timestamp =
-        context.select((NewSectionCubit bloc) => bloc.state.timestamp);
+    final inboxFile = context.select(
+      (OrgFilesBloc bloc) => bloc.state.inboxFile,
+    );
+    final timestamp = context.select(
+      (NewSectionCubit bloc) => bloc.state.timestamp,
+    );
 
     return AlertDialog(
-        title: Row(
-          children: [Text("Add Heading"), Spacer(), CloseButton()],
-        ),
-        content: inboxFile == null
-            ? Text("You need to set an inbox file")
-            : SingleChildScrollView(
-                child: Column(spacing: 20, children: [
+      title: Row(children: [Text("Add Heading"), Spacer(), CloseButton()]),
+      content: inboxFile == null
+          ? Text("You need to set an inbox file")
+          : SingleChildScrollView(
+              child: Column(
+                spacing: 20,
+                children: [
                   TextFormField(
-                      key: Key("titleField"),
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(), helperText: "Title"),
-                      initialValue: "",
-                      autovalidateMode: AutovalidateMode.always,
-                      onChanged: (value) =>
-                          context.read<NewSectionCubit>().changeTitle(value),
-                      validator: (value) => validate(value, "Title")),
+                    key: Key("titleField"),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      helperText: "Title",
+                    ),
+                    initialValue: "",
+                    autovalidateMode: AutovalidateMode.always,
+                    onChanged: (value) =>
+                        context.read<NewSectionCubit>().changeTitle(value),
+                    validator: (value) => validate(value, "Title"),
+                  ),
                   TextButton(
                     key: Key("datePickerButton"),
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (_) {
-                            return MultiBlocProvider(
-                              providers: [
-                                BlocProvider(
-                                    create: (_) => DatePickerBloc(
-                                        DatePickerState
-                                            .parseDateTimeWithoutTime(
-                                                dateTime))),
-                                BlocProvider.value(
-                                    value: context.read<EventViewBloc>())
-                              ],
-                              child: DatePicker(),
-                            );
-                          });
+                        context: context,
+                        builder: (_) {
+                          return MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (_) => DatePickerBloc(
+                                  DatePickerState.parseDateTimeWithoutTime(
+                                    dateTime,
+                                  ),
+                                ),
+                              ),
+                              BlocProvider.value(
+                                value: context.read<EventViewBloc>(),
+                              ),
+                            ],
+                            child: DatePicker(),
+                          );
+                        },
+                      );
                     },
                     child: Text(timestamp?.toMarkup() ?? "No date selected"),
                   ),
                   TextButton(
-                      key: Key("SaveButton"),
-                      onPressed: () {
-                        final oldFile = FilePickerWritable().readFile(
-                            identifier: inboxFile.identifier,
-                            reader: (FileInfo fileInfo, File file) =>
-                                file.readAsString());
+                    key: Key("SaveButton"),
+                    onPressed: () {
+                      final oldFile = FilePickerWritable().readFile(
+                        identifier: inboxFile.identifier,
+                        reader: (FileInfo fileInfo, File file) =>
+                            file.readAsString(),
+                      );
 
-                        FilePickerWritable().writeFile(
-                          identifier: inboxFile.identifier,
-                          writer: (file) async => file.writeAsString(
-                              "${await oldFile} \n $title",
-                              mode: FileMode.writeOnly),
-                        );
-                        Navigator.pop(context);
-                      },
-                      child: Text("save"))
-                ]),
-              ));
+                      FilePickerWritable().writeFile(
+                        identifier: inboxFile.identifier,
+                        writer: (file) async => file.writeAsString(
+                          "${await oldFile} \n $title",
+                          mode: FileMode.writeOnly,
+                        ),
+                      );
+                      Navigator.pop(context);
+                    },
+                    child: Text("save"),
+                  ),
+                ],
+              ),
+            ),
+    );
   }
 }

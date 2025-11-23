@@ -21,56 +21,63 @@ class EventCard extends StatelessWidget {
     final todoStates = context.read<TodoStatesCubit>().state;
     final eventIsDone = todoStates.done.contains(keyword?.value);
     return Card(
-        child: ListTile(
-            leading: BlocBuilder<TagColorsCubit, List<TagColor>>(
-              builder: (context, state) => Container(
-                width: 29,
-                height: 29,
-                decoration: BoxDecoration(
-                  color: context.read<TagColorsCubit>().getTagColor(event),
-                  shape: BoxShape.circle,
-                ),
-              ),
+      child: ListTile(
+        leading: BlocBuilder<TagColorsCubit, List<TagColor>>(
+          builder: (context, state) => Container(
+            width: 29,
+            height: 29,
+            decoration: BoxDecoration(
+              color: context.read<TagColorsCubit>().getTagColor(event),
+              shape: BoxShape.circle,
             ),
-            title: BlocBuilder<TodoStatesCubit, OrgTodoStates>(
-                builder: (context, state) => RichText(
-                        text: TextSpan(children: [
-                      TextSpan(
-                        text: keyword == null ? "" : "${keyword.value} ",
-                        style: keyword == null
-                            ? TextStyle()
-                            : TextStyle(
-                                color: eventIsDone ? Colors.green : Colors.red),
-                      ),
-                      TextSpan(
-                        text: event.title,
-                        style:
-                            TextStyle(color: _colorByEvent(event, eventIsDone)),
-                      )
-                    ]))),
-            subtitle: Row(
+          ),
+        ),
+        title: BlocBuilder<TodoStatesCubit, OrgTodoStates>(
+          builder: (context, state) => RichText(
+            text: TextSpan(
               children: [
-                Expanded(
-                    child: Text(
-                  timestamp.toMarkup(),
-                  textAlign: TextAlign.left,
-                )),
-                if (event.tags.isNotEmpty)
-                  Expanded(
-                      child: Text(
-                    ":${event.tags.join(":")}:",
-                    textAlign: TextAlign.right,
-                  )),
+                TextSpan(
+                  text: keyword == null ? "" : "${keyword.value} ",
+                  style: keyword == null
+                      ? TextStyle()
+                      : TextStyle(
+                          color: eventIsDone ? Colors.green : Colors.red,
+                        ),
+                ),
+                TextSpan(
+                  text: event.title,
+                  style: TextStyle(color: _colorByEvent(event, eventIsDone)),
+                ),
               ],
             ),
-            onTap: () => showDialog(
-                context: context,
-                builder: (_) => BlocProvider.value(
-                    value: context.read<OrgFilesBloc>(),
-                    child: BlocProvider(
-                      create: (context) => EventViewBloc(event, timestamp),
-                      child: EventView(),
-                    )))));
+          ),
+        ),
+        subtitle: Row(
+          children: [
+            Expanded(
+              child: Text(timestamp.toMarkup(), textAlign: TextAlign.left),
+            ),
+            if (event.tags.isNotEmpty)
+              Expanded(
+                child: Text(
+                  ":${event.tags.join(":")}:",
+                  textAlign: TextAlign.right,
+                ),
+              ),
+          ],
+        ),
+        onTap: () => showDialog(
+          context: context,
+          builder: (_) => BlocProvider.value(
+            value: context.read<OrgFilesBloc>(),
+            child: BlocProvider(
+              create: (context) => EventViewBloc(event, timestamp),
+              child: EventView(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Color? _colorByEvent(Event event, bool eventIsDone) {

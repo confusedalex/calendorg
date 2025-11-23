@@ -7,16 +7,21 @@ import 'package:org_parser/org_parser.dart';
 
 void main() {
   testWidgets("DatePicker shows startDate Button", (tester) async {
-    final OrgSimpleTimestamp timestamp = OrgDocument.parse("<2025-12-04>")
-        .find<OrgSimpleTimestamp>((node) => true)!
-        .node;
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: BlocProvider(
-                create: (context) =>
-                    DatePickerBloc(DatePickerState.initial(timestamp)),
-                child: DatePicker()))));
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(),
+          ),
+        ),
+      ),
+    );
 
     await tester.pumpAndSettle();
 
@@ -24,16 +29,21 @@ void main() {
   });
 
   testWidgets("start date button shows datepicker", (tester) async {
-    final OrgSimpleTimestamp timestamp = OrgDocument.parse("<2025-12-04>")
-        .find<OrgSimpleTimestamp>((node) => true)!
-        .node;
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: BlocProvider(
-      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
-      child: DatePicker(),
-    ))));
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(),
+          ),
+        ),
+      ),
+    );
 
     await tester.tap(find.byKey(Key("datepicker_startdatebutton")));
 
@@ -42,18 +52,24 @@ void main() {
     expect(find.byType(CalendarDatePicker), findsOneWidget);
   });
 
-  testWidgets("end date button without enddateactive wont show datepicker",
-      (tester) async {
-    final OrgSimpleTimestamp timestamp = OrgDocument.parse("<2025-12-04>")
-        .find<OrgSimpleTimestamp>((node) => true)!
-        .node;
+  testWidgets("end date button without enddateactive wont show datepicker", (
+    tester,
+  ) async {
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: BlocProvider(
-      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
-      child: DatePicker(),
-    ))));
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(),
+          ),
+        ),
+      ),
+    );
 
     await tester.tap(find.byKey(Key("datepicker_enddatebutton")));
 
@@ -62,18 +78,24 @@ void main() {
     expect(find.byType(CalendarDatePicker), findsNothing);
   });
 
-  testWidgets("end date button with enddateactive shows datepicker",
-      (tester) async {
-    final OrgSimpleTimestamp timestamp = OrgDocument.parse("<2025-12-04>")
-        .find<OrgSimpleTimestamp>((node) => true)!
-        .node;
+  testWidgets("end date button with enddateactive shows datepicker", (
+    tester,
+  ) async {
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: BlocProvider(
-      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
-      child: DatePicker(),
-    ))));
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(),
+          ),
+        ),
+      ),
+    );
 
     await tester.tap(find.byKey(Key("datepicker_enddatecheckbox")));
     await tester.pumpAndSettle();
@@ -83,18 +105,24 @@ void main() {
     expect(find.byType(CalendarDatePicker), findsOneWidget);
   });
 
-  testWidgets("start time button without endtimeactive wont show timepicker",
-      (tester) async {
-    final OrgSimpleTimestamp timestamp = OrgDocument.parse("<2025-12-04>")
-        .find<OrgSimpleTimestamp>((node) => true)!
-        .node;
+  testWidgets("start time button without endtimeactive wont show timepicker", (
+    tester,
+  ) async {
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: BlocProvider(
-      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
-      child: DatePicker(),
-    ))));
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(),
+          ),
+        ),
+      ),
+    );
 
     await tester.tap(find.byKey(Key("datepicker_starttimebutton")));
 
@@ -103,18 +131,24 @@ void main() {
     expect(find.byType(TimePickerDialog), findsNothing);
   });
 
-  testWidgets("start time button with endtimeactive shows timepicker",
-      (tester) async {
-    final OrgSimpleTimestamp timestamp = OrgDocument.parse("<2025-12-04>")
-        .find<OrgSimpleTimestamp>((node) => true)!
-        .node;
+  testWidgets("start time button with endtimeactive shows timepicker", (
+    tester,
+  ) async {
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(
+      MaterialApp(
         home: Scaffold(
-            body: BlocProvider(
-      create: (context) => DatePickerBloc(DatePickerState.initial(timestamp)),
-      child: DatePicker(),
-    ))));
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(),
+          ),
+        ),
+      ),
+    );
 
     await tester.tap(find.byKey(Key("datepicker_starttimecheckbox")));
     await tester.pumpAndSettle();

@@ -6,10 +6,13 @@ final class NewSectionState {
 
   NewSectionState({this.title, this.timestamp});
 
-  NewSectionState copyWith(
-      {ValueGetter<String?>? title, ValueGetter<OrgTimestamp?>? timestamp}) {
+  NewSectionState copyWith({
+    ValueGetter<String?>? title,
+    ValueGetter<OrgTimestamp?>? timestamp,
+  }) {
     return NewSectionState(
-        title: title != null ? title() : this.title,
-        timestamp: timestamp != null ? timestamp() : this.timestamp);
+      title: title != null ? title() : this.title,
+      timestamp: timestamp != null ? timestamp() : this.timestamp,
+    );
   }
 }
