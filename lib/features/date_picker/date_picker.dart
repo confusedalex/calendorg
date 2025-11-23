@@ -19,6 +19,12 @@ class DatePicker extends StatelessWidget {
       (DatePickerBloc bloc) => bloc.generateTimestamp(),
     );
 
+    TableRow titleRow(String title) => TableRow(
+      children: [
+        Text(title, textAlign: TextAlign.center),
+        SizedBox(),
+      ],
+    );
     return AlertDialog(
       title: Row(children: [Text("DatePicker"), Spacer(), CloseButton()]),
       content: BlocBuilder<DatePickerBloc, DatePickerState>(
@@ -27,12 +33,7 @@ class DatePicker extends StatelessWidget {
           child: Table(
             columnWidths: {1: FractionColumnWidth(0.25)},
             children: [
-              TableRow(
-                children: [
-                  Text("Start Date", textAlign: TextAlign.center),
-                  SizedBox(),
-                ],
-              ),
+              titleRow("Start Date"),
               TableRow(
                 children: [
                   OutlinedButton(
@@ -54,12 +55,7 @@ class DatePicker extends StatelessWidget {
                   SizedBox(),
                 ],
               ),
-              TableRow(
-                children: [
-                  Text("Start Time", textAlign: TextAlign.center),
-                  SizedBox(),
-                ],
-              ),
+              titleRow("Start Time"),
               TableRow(
                 children: [
                   OutlinedButton(
@@ -80,12 +76,7 @@ class DatePicker extends StatelessWidget {
                   ),
                 ],
               ),
-              TableRow(
-                children: [
-                  Text("End Date", textAlign: TextAlign.center),
-                  SizedBox(),
-                ],
-              ),
+              titleRow("End Date"),
               TableRow(
                 children: [
                   OutlinedButton(
@@ -121,13 +112,7 @@ class DatePicker extends StatelessWidget {
                   ),
                 ],
               ),
-              TableRow(
-                children: [
-                  Text("End Time", textAlign: TextAlign.center),
-                  SizedBox(),
-                ],
-              ),
-
+              titleRow("End Time"),
               TableRow(
                 children: [
                   OutlinedButton(
