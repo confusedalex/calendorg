@@ -96,8 +96,8 @@ class AgendaFilesDialog extends StatelessWidget {
             },
           ),
         ),
-        actions: buttons(state, context),
       ),
+      actions: buttons(context.read<OrgFilesBloc>().state, context),
     );
   }
 }
