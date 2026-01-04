@@ -25,8 +25,8 @@ class Event {
             isSameDay(date, timestamp.dateTime) &&
                 timestamp.isActive != includeInactive,
           OrgDateRangeTimestamp() =>
-            date.isAfter(beforeMidnight(timestamp.start.dateTime)) &&
-                date.isBefore(afterMidnight(timestamp.end.dateTime)),
+            date.isAfter(beforeMidnight(timestamp.startDateTime)) &&
+                date.isBefore(afterMidnight(timestamp.endDateTime)),
           OrgTimeRangeTimestamp() => isSameDay(date, timestamp.startDateTime),
         },
       )

@@ -37,13 +37,15 @@ final class DatePickerState {
         );
       case OrgDateRangeTimestamp():
         return DatePickerState(
-          startDate: timestamp.start.dateTime,
-          startTimeActive: timestamp.start.time != null,
-          endTimeActive: timestamp.end.time != null,
+          startDate: timestamp.startDateTime,
+          startTimeActive: (timestamp.start as OrgSimpleTimestamp).time != null,
+          endTimeActive: (timestamp.end as OrgSimpleTimestamp).time != null,
           endDateActive: true,
-          endDate: timestamp.end.dateTime,
-          startTimeDuration: timestamp.start.time?.timeOfDay,
-          endTimeDuration: timestamp.end.time?.timeOfDay,
+          endDate: timestamp.endDateTime,
+          startTimeDuration:
+              (timestamp.start as OrgSimpleTimestamp).time?.timeOfDay,
+          endTimeDuration:
+              (timestamp.end as OrgSimpleTimestamp).time?.timeOfDay,
         );
       case OrgTimeRangeTimestamp():
         return DatePickerState(

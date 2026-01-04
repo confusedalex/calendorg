@@ -139,11 +139,10 @@ OrgSimpleTimestamp dateTimeToSimpleTimestamp(
   bool includeTime,
   bool isActive,
 ) {
-  final repeaterOrDelay = <String>[];
   final OrgDate date = dateTimeToOrgDate(dateTime);
   final OrgTime? time = includeTime ? dateTimeToOrgTime(dateTime) : null;
   final (prefix, suffix) = prefixAndSuffixFromBool(isActive);
-  return OrgSimpleTimestamp(prefix, date, time, repeaterOrDelay, suffix);
+  return OrgSimpleTimestamp(prefix, date, time, [], suffix);
 }
 
 OrgTimestamp dateTimeToTimeRangeTimestamp(
@@ -156,19 +155,11 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
   if (includeStartTime &&
       includeEndTime &&
       isSameDay(startDateTime, endDateTime)) {
-    final repeaterOrDelay = <String>[];
     final OrgDate date = dateTimeToOrgDate(startDateTime);
     final OrgTime timeStart = dateTimeToOrgTime(startDateTime);
     final OrgTime timeEnd = dateTimeToOrgTime(endDateTime);
     final (prefix, suffix) = prefixAndSuffixFromBool(isActive);
-    return OrgTimeRangeTimestamp(
-      prefix,
-      date,
-      timeStart,
-      timeEnd,
-      repeaterOrDelay,
-      suffix,
-    );
+    return OrgTimeRangeTimestamp(prefix, date, timeStart, timeEnd, [], suffix);
   } else {
     final OrgSimpleTimestamp start = dateTimeToSimpleTimestamp(
       startDateTime,
@@ -190,7 +181,7 @@ List<DateTime> dateTimesFromOrgDateRange(
   DateTime? date,
 ) {
   if (date != null &&
-      isSameDay(timestamp.end.dateTime.add(Duration(days: 1)), date)) {
+      isSameDay(timestamp.endDateTime.add(Duration(days: 1)), date)) {
     return list;
   }
   if (date == null) {
@@ -218,7 +209,7 @@ extension GetTimeOfDay on OrgTime {
 extension StartDateTime on OrgTimestamp {
   DateTime get startDateTime => switch (this) {
     OrgSimpleTimestamp() => (this as OrgSimpleTimestamp).dateTime,
-    OrgDateRangeTimestamp() => (this as OrgDateRangeTimestamp).start.dateTime,
+    OrgDateRangeTimestamp() => (this as OrgDateRangeTimestamp).startDateTime,
     OrgTimeRangeTimestamp() => (this as OrgTimeRangeTimestamp).startDateTime,
   };
 }
