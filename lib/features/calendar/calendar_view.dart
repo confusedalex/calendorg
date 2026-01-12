@@ -6,7 +6,6 @@ import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/new_section/cubit/new_section_cubit.dart';
 import 'package:calendorg/features/new_section/new_section_dialog.dart';
-import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';

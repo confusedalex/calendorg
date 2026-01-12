@@ -5,7 +5,6 @@ import 'package:calendorg/event.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
-import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
