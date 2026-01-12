@@ -27,7 +27,7 @@ Map<String, List<Event>> parseEvents(FileInfo fileInfo, OrgDocument document) {
 
     final tags = section.tagsWithInheritance(document);
 
-    section.visit((node) {
+    section.visitWithBlacklist([OrgProperty], (OrgNode node) {
       switch (node) {
         case OrgSection():
           return returnIfSectionFound ? false : returnIfSectionFound = true;
@@ -216,4 +216,28 @@ extension StartDateTime on OrgTimestamp {
 
 extension DateTimesFromRange on OrgDateRangeTimestamp {
   List<DateTime> get datetimes => dateTimesFromOrgDateRange(this, [], null);
+}
+
+extension VisitBlacklist on OrgNode {
+  bool visitWithBlacklist<T extends OrgNode>(
+    List blacklist,
+    bool Function(T) visitor,
+  ) {
+    final self = this;
+    if (self is T) {
+      if (!visitor.call(self)) {
+        return false;
+      }
+    }
+    final children = [...?this.children]
+      ..removeWhere((e) => blacklist.contains(e.runtimeType));
+    if (children.isNotEmpty) {
+      for (final child in children) {
+        if (!child.visitWithBlacklist<T>(blacklist, visitor)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }
