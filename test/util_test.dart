@@ -17,6 +17,15 @@ void main() {
 SCHEDULED: <2025-05-05>
 ** TODO install emacs
 DEADLINE: <2025-05-04>
+** DONE Call mom
+CLOSED: [2025-05-02 10:00]
+** Weight
+  - 70kg [2025-05-01]
+* Heading with properties 
+:PROPERTIES:
+:CREATED: [2026-01-06 Tue 23:59]
+:END:
+Just some text.
 """;
   final document = OrgDocument.parse(markup);
   final events = parseEvents(MockFileInfo(), document);
