@@ -32,7 +32,7 @@ Just some text.
   final meetupEvent = events.entries.first.value.first;
 
   group('Util', () {
-    test("8 Map entries should be found", () {
+    test("9 Map entries should be found", () {
       expect(events.length, 9);
     });
 
