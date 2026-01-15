@@ -22,6 +22,14 @@ environment:
   sdk: ^3.9.2
   flutter: ^3.35.0
 
+icons_launcher:
+  image_path: "assets/ic_launcher.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
+
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -52,6 +60,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  icons_launcher: ^3.0.3
 
 dev_dependencies:
   flutter_test:
