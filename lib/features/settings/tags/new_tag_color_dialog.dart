@@ -30,7 +30,6 @@ class NewTagColorDialog extends StatelessWidget {
                   notIn: tagColorsCubit.state.map((e) => e.tag),
                 ),
               ),
-              Divider(),
               ColorPicker(
                 color: state.state.color,
                 onColorChanged: (Color color) => state.updateColor(color),
