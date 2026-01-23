@@ -7,18 +7,18 @@ void main() {
   group("Theme Bloc", () {
     test(
       "Initial state is dark",
-      () => expect(ThemeBloc().state, equals(ThemeData.dark())),
+      () => expect(ThemeBloc().state, equals(ThemeMode.system)),
     );
 
     blocTest(
       "Switching theme works",
       build: () => ThemeBloc(),
-      act: (bloc) => bloc.add(ThemeSwitchEvent(ThemeData.light())),
+      act: (bloc) => bloc.add(ThemeSwitchEvent(ThemeMode.light)),
       expect: () => [
-        TypeMatcher<ThemeData>().having(
+        TypeMatcher<ThemeMode>().having(
           (state) => state,
           "Theme",
-          equals(ThemeData.light()),
+          equals(ThemeMode.light),
         ),
       ],
     );

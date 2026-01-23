@@ -8,6 +8,7 @@ import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
+import 'package:calendorg/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,11 +23,13 @@ class Calendorg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeData>(
+    return BlocBuilder<ThemeBloc, ThemeMode>(
       builder: (context, state) {
         return MaterialApp(
           title: 'calendorg',
-          theme: state,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: state,
           localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
           supportedLocales: CalendorgLocalizations.supportedLocales,
           home: MultiBlocProvider(

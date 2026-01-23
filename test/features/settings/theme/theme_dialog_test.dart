@@ -11,7 +11,7 @@ void main() {
     late ThemeBloc bloc;
 
     setUpAll(() {
-      registerFallbackValue(ThemeSwitchEvent(ThemeData.light()));
+      registerFallbackValue(ThemeSwitchEvent(ThemeMode.light));
     });
 
     setUp(() {
@@ -19,8 +19,8 @@ void main() {
 
       whenListen(
         bloc,
-        Stream<ThemeData>.value(ThemeData.dark()),
-        initialState: ThemeData.dark(),
+        Stream<ThemeMode>.value(ThemeMode.dark),
+        initialState: ThemeMode.dark,
       );
     });
 
@@ -39,20 +39,20 @@ void main() {
       testWidgets('Find light theme', (tester) async {
         await pumpWidgetToTester(tester);
         expect(
-          find.widgetWithText(RadioListTile<ThemeData>, "light"),
+          find.widgetWithText(RadioListTile<ThemeMode>, "light"),
           findsOne,
         );
       });
 
       testWidgets('Find dark theme', (tester) async {
         await pumpWidgetToTester(tester);
-        expect(find.widgetWithText(RadioListTile<ThemeData>, "dark"), findsOne);
+        expect(find.widgetWithText(RadioListTile<ThemeMode>, "dark"), findsOne);
       });
 
-      testWidgets('Find green theme', (tester) async {
+      testWidgets('Find automatic theme', (tester) async {
         await pumpWidgetToTester(tester);
         expect(
-          find.widgetWithText(RadioListTile<ThemeData>, "green"),
+          find.widgetWithText(RadioListTile<ThemeMode>, "automatic"),
           findsOne,
         );
       });
@@ -72,5 +72,5 @@ void main() {
   });
 }
 
-class MockThemeBloc extends MockBloc<ThemeEvent, ThemeData>
+class MockThemeBloc extends MockBloc<ThemeEvent, ThemeMode>
     implements ThemeBloc {}

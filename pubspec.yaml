@@ -52,6 +52,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  flex_color_scheme: ^8.4.0
 
 dev_dependencies:
   flutter_test:

@@ -6,9 +6,9 @@ class ThemeDialog extends StatelessWidget {
   const ThemeDialog({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<ThemeBloc, ThemeData>(
+  Widget build(BuildContext context) => BlocBuilder<ThemeBloc, ThemeMode>(
     builder: (context, state) {
-      void changeTheme(ThemeData? theme) =>
+      void changeTheme(ThemeMode? theme) =>
           context.read<ThemeBloc>().add(ThemeSwitchEvent(theme!));
       return AlertDialog(
         title: Row(children: [Text("Themes"), Spacer(), CloseButton()]),
@@ -24,22 +24,18 @@ class ThemeDialog extends StatelessWidget {
                   children: [
                     RadioListTile(
                       title: Text("dark"),
-                      value: ThemeData.dark(),
+                      value: ThemeMode.dark,
                       key: Key("ThemeRadioDarkTheme"),
                     ),
                     RadioListTile(
                       title: Text("light"),
                       key: Key("ThemeRadioLightTheme"),
-                      value: ThemeData.light(),
+                      value: ThemeMode.light,
                     ),
                     RadioListTile(
-                      title: Text("green"),
+                      title: Text("automatic"),
                       key: Key("ThemeRadioGreenTheme"),
-                      value: ThemeData.from(
-                        colorScheme: ColorScheme.fromSeed(
-                          seedColor: Colors.green,
-                        ),
-                      ),
+                      value: ThemeMode.system,
                     ),
                   ],
                 ),

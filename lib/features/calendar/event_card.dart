@@ -19,6 +19,8 @@ class EventCard extends StatelessWidget {
     final keyword = event.section.headline.keyword;
     final todoStates = context.read<TodoStatesCubit>().state;
     final eventIsDone = todoStates.done.contains(keyword?.value);
+    final brightness = MediaQuery.of(context).platformBrightness;
+
     return Card(
       child: ListTile(
         minTileHeight: 83,
@@ -46,7 +48,9 @@ class EventCard extends StatelessWidget {
                 ),
                 TextSpan(
                   text: event.title,
-                  style: TextStyle(color: _colorByEvent(event, eventIsDone)),
+                  style: TextStyle(
+                    color: _colorByEvent(event, eventIsDone, brightness),
+                  ),
                 ),
               ],
             ),
@@ -81,7 +85,7 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  Color? _colorByEvent(Event event, bool eventIsDone) {
+  Color? _colorByEvent(Event event, bool eventIsDone, Brightness brightness) {
     if (eventIsDone) return Colors.green;
     if (event.deadline != null &&
         (event.deadline?.value as OrgTimestamp).startDateTime ==
@@ -93,6 +97,9 @@ class EventCard extends StatelessWidget {
             timestamp.startDateTime) {
       return Colors.amber;
     }
-    return null;
+    return switch (brightness) {
+      Brightness.dark => Colors.white,
+      Brightness.light => Colors.black,
+    };
   }
 }
