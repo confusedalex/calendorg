@@ -143,12 +143,17 @@ class DatePicker extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          key: Key("SaveButton"),
+          key: Key("CancelButton"),
+          onPressed: () => Navigator.pop(context),
+          child: Text("Cancel"),
+        ),
+        TextButton(
+          key: Key("SetButton"),
           onPressed: () {
             handleSave(timestamp);
             Navigator.pop(context);
           },
-          child: Text("save"),
+          child: Text("Set"),
         ),
       ],
     );

@@ -76,7 +76,8 @@ class EventCard extends StatelessWidget {
           builder: (_) => BlocProvider.value(
             value: context.read<OrgFilesBloc>(),
             child: BlocProvider(
-              create: (context) => EventViewBloc(event, timestamp),
+              create: (context) =>
+                  EventViewBloc(context.read<OrgFilesBloc>(), event, timestamp),
               child: EventView(),
             ),
           ),

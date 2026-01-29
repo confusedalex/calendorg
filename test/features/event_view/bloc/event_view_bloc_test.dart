@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/util.dart';
@@ -17,6 +18,7 @@ void main() {
   );
   late Event event;
   late OrgTimestamp timestamp;
+  final OrgFilesBloc orgFilesBloc = OrgFilesBloc();
 
   setUp(() {
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
@@ -27,11 +29,11 @@ void main() {
   group("Event View Bloc", () {
     blocTest(
       "Chaning title works",
-      build: () => EventViewBloc(event, timestamp),
+      build: () => EventViewBloc(orgFilesBloc, event, timestamp),
       act: (bloc) => bloc.add(EventViewTitleChangeEvent("History exam")),
       expect: () => [
         TypeMatcher<EventViewState>().having(
-          (state) => state.title,
+          (state) => state.newEvent.title,
           "Title",
           equals("History exam"),
         ),
@@ -40,11 +42,11 @@ void main() {
 
     blocTest<EventViewBloc, EventViewState>(
       'emits correct timestamp when Timestamp is changed',
-      build: () => EventViewBloc(event, timestamp),
+      build: () => EventViewBloc(orgFilesBloc, event, timestamp),
       act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
       expect: () => [
         TypeMatcher<EventViewState>().having(
-          (state) => state.timestamp,
+          (state) => state.newTimestamp,
           "timestamp",
           equals(newTimestamp),
         ),

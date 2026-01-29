@@ -9,6 +9,10 @@ final class EventViewTitleChangeEvent extends EventViewEvent {
 }
 
 final class EventViewChangeTimestamp extends EventViewEvent {
-  final OrgTimestamp timestmap;
-  EventViewChangeTimestamp(this.timestmap);
+  final OrgTimestamp timestamp;
+  EventViewChangeTimestamp(this.timestamp);
+}
+
+final class EventViewSaveEvent extends EventViewEvent {
+  EventViewSaveEvent();
 }

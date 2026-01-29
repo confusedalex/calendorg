@@ -2,28 +2,36 @@ part of 'event_view_bloc.dart';
 
 class EventViewState {
   EventViewState({
-    required this.event,
-    required this.timestamp,
-    required this.title,
+    required this.oldEvent,
+    required this.newEvent,
+    required this.oldTimestamp,
+    required this.newTimestamp,
   });
-  final Event event;
-  final OrgTimestamp timestamp;
-  final String title;
+
+  final Event oldEvent;
+  final Event newEvent;
+  final OrgTimestamp oldTimestamp;
+  final OrgTimestamp newTimestamp;
 
   factory EventViewState.inital(Event event, OrgTimestamp timestamp) =>
-      EventViewState(event: event, timestamp: timestamp, title: event.title);
+      EventViewState(
+        oldEvent: event,
+        newEvent: event,
+        oldTimestamp: timestamp,
+        newTimestamp: timestamp,
+      );
 
   EventViewState copyWith({
-    Event? event,
-    OrgTimestamp? timestamp,
-    String? title,
-    DateTime? start,
-    ValueGetter<DateTime?>? end,
+    Event? oldEvent,
+    Event? newEvent,
+    OrgTimestamp? oldTimestamp,
+    OrgTimestamp? newTimestamp,
   }) {
     return EventViewState(
-      event: event ?? this.event,
-      timestamp: timestamp ?? this.timestamp,
-      title: title ?? this.title,
+      oldEvent: oldEvent ?? this.oldEvent,
+      newEvent: newEvent ?? this.newEvent,
+      oldTimestamp: oldTimestamp ?? this.oldTimestamp,
+      newTimestamp: newTimestamp ?? this.newTimestamp,
     );
   }
 }

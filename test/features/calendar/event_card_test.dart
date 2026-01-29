@@ -28,6 +28,7 @@ void main() {
   final document = OrgDocument.parse(markup);
   final event = parseEvents(MockFileInfo(), document).entries.first.value.first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
+  final OrgFilesBloc orgFilesBloc = OrgFilesBloc();
 
   Future<void> initWidget(dynamic tester) async {
     await tester.pumpWidget(
@@ -40,6 +41,7 @@ void main() {
                     TagColorsCubit.withInitialValue([meetupTagColor]),
               ),
               BlocProvider(create: (context) => TodoStatesCubit()),
+              BlocProvider(create: (context) => orgFilesBloc),
             ],
             child: EventCard(event, event.timestamps.first),
           ),
@@ -87,8 +89,11 @@ void main() {
             body: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) =>
-                      EventViewBloc(event, event.timestamps.first),
+                  create: (context) => EventViewBloc(
+                    orgFilesBloc,
+                    event,
+                    event.timestamps.first,
+                  ),
                 ),
                 BlocProvider(create: (context) => TodoStatesCubit()),
                 BlocProvider(

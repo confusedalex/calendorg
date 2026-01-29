@@ -1,3 +1,4 @@
+import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
@@ -22,6 +23,7 @@ void main() {
   final document = OrgDocument.parse(markup);
   final event = parseEvents(MockFileInfo(), document).entries.first.value.first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
+  final OrgFilesBloc orgFilesBloc = OrgFilesBloc();
 
   Future<void> initWidget(dynamic tester) async {
     await tester.pumpWidget(
@@ -35,7 +37,7 @@ void main() {
               ),
               BlocProvider(
                 create: (context) =>
-                    EventViewBloc(event, event.timestamps.first),
+                    EventViewBloc(orgFilesBloc, event, event.timestamps.first),
               ),
             ],
             child: EventView(),

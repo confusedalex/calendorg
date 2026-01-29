@@ -1,4 +1,3 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
@@ -12,22 +11,18 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fileInfo = context.select(
-      (EventViewBloc bloc) => bloc.state.event.fileInfo,
+    final title = context.select(
+      (EventViewBloc bloc) => bloc.state.newEvent.title,
     );
-    final title = context.select((EventViewBloc bloc) => bloc.state.title);
     final timestamp = context.select(
-      (EventViewBloc bloc) => bloc.state.timestamp,
+      (EventViewBloc bloc) => bloc.state.newTimestamp,
     );
-    final oldSection = context.select((EventViewBloc bloc) => bloc.oldSection);
-    final newSection = context.select(
-      (EventViewBloc bloc) => bloc.state.event.section,
-    );
-    void handleSave(OrgTimestamp timestamp) =>
+
+    void handleDatePickerSet(OrgTimestamp timestamp) =>
         context.read<EventViewBloc>().add(EventViewChangeTimestamp(timestamp));
 
     return AlertDialog(
-      title: Row(children: [Text("Edit Event"), Spacer(), CloseButton()]),
+      title: Row(children: [Text("Edit Event")]),
       content: SingleChildScrollView(
         child: Column(
           spacing: 20,
@@ -64,7 +59,7 @@ class EventView extends StatelessWidget {
                               value: context.read<EventViewBloc>(),
                             ),
                           ],
-                          child: DatePicker(handleSave),
+                          child: DatePicker(handleDatePickerSet),
                         );
                       },
                     );
@@ -73,19 +68,29 @@ class EventView extends StatelessWidget {
                 );
               },
             ),
-            TextButton(
-              key: Key("SaveButton"),
-              onPressed: () {
-                context.read<OrgFilesBloc>().add(
-                  OrgFilesReplaceNode(fileInfo, oldSection, newSection),
-                );
-                Navigator.pop(context);
-              },
-              child: Text("save"),
-            ),
           ],
         ),
       ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              key: Key("CancelButton"),
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              key: Key("SaveButton"),
+              onPressed: () {
+                context.read<EventViewBloc>().add(EventViewSaveEvent());
+                Navigator.pop(context);
+              },
+              child: Text("Save"),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
