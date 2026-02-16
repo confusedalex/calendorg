@@ -3,6 +3,8 @@ import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
+import 'package:calendorg/features/diff_view/cubit/diff_view_cubit.dart';
+import 'package:calendorg/features/diff_view/diff_view_page.dart';
 import 'package:calendorg/features/today_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
@@ -48,6 +50,7 @@ class Calendorg extends StatelessWidget {
                 create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
               ),
               BlocProvider(create: (context) => FloatingActionButtonCubit()),
+              BlocProvider(create: (context) => DiffViewCubit()),
             ],
             child: HomePage(),
           ),
@@ -70,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List pages = [
+      DiffViewPage(),
       todayPage(),
       CalendarPage(DateTime.now()),
       SettingsPage(),
@@ -85,6 +89,10 @@ class _HomePageState extends State<HomePage> {
               }),
               selectedIndex: index,
               destinations: [
+                NavigationDestination(
+                  icon: Icon(Icons.compare_arrows),
+                  label: 'Diff',
+                ),
                 NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
                 NavigationDestination(
                   icon: Icon(Icons.calendar_today),
