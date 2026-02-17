@@ -11,6 +11,7 @@ import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:calendorg/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -50,7 +51,8 @@ class Calendorg extends StatelessWidget {
                 create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
               ),
               BlocProvider(create: (context) => FloatingActionButtonCubit()),
-              BlocProvider(create: (context) => DiffViewCubit()),
+              if (kDebugMode)
+                BlocProvider(create: (context) => DiffViewCubit()),
             ],
             child: HomePage(),
           ),
@@ -73,7 +75,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List pages = [
-      DiffViewPage(),
+      if (kDebugMode) DiffViewPage(),
       todayPage(),
       CalendarPage(DateTime.now()),
       SettingsPage(),
@@ -89,10 +91,11 @@ class _HomePageState extends State<HomePage> {
               }),
               selectedIndex: index,
               destinations: [
-                NavigationDestination(
-                  icon: Icon(Icons.compare_arrows),
-                  label: 'Diff',
-                ),
+                if (kDebugMode)
+                  NavigationDestination(
+                    icon: Icon(Icons.compare_arrows),
+                    label: 'Diff',
+                  ),
                 NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
                 NavigationDestination(
                   icon: Icon(Icons.calendar_today),
