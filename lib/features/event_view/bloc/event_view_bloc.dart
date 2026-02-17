@@ -18,16 +18,35 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
         EventViewChangeTimestamp() => emit(
           state.copyWith(newTimestamp: event.timestamp),
         ),
-        EventViewSaveEvent() => {
-          orgFilesBloc.add(
-            OrgFilesReplaceNode(
-              state.oldEvent.fileInfo,
-              state.oldTimestamp,
-              state.newTimestamp,
-            ),
-          ),
-        },
+        EventViewSaveEvent() => save(orgFilesBloc),
       },
     );
+  }
+
+  void save(OrgFilesBloc bloc) {
+    final replacements = <(OrgNode, OrgNode)>[];
+    final titleChanged = state.oldEvent.title != state.newEvent.title;
+    final timestampChanged = state.oldTimestamp != state.newTimestamp;
+
+    if (state.oldEvent.containsTimestampInHeadline) {
+      if (titleChanged || timestampChanged) {
+        replacements.add((
+          state.oldEvent.section.headline.title as OrgNode,
+          OrgContent([OrgPlainText(state.newEvent.title), state.newTimestamp]),
+        ));
+      }
+    } else {
+      if (timestampChanged) {
+        replacements.add((state.oldTimestamp, state.newTimestamp));
+      }
+      if (titleChanged) {
+        replacements.add((
+          state.oldEvent.section.headline.title as OrgNode,
+          OrgContent([OrgPlainText(state.newEvent.title)]),
+        ));
+      }
+    }
+
+    bloc.add(OrgFilesReplaceNodes(state.oldEvent.fileInfo, replacements));
   }
 }

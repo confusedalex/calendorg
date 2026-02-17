@@ -20,12 +20,11 @@ final class OrgFilesChangeInboxFileEvent extends OrgFilesEvent {
   OrgFilesChangeInboxFileEvent(this.fileInfo);
 }
 
-final class OrgFilesReplaceNode extends OrgFilesEvent {
+final class OrgFilesReplaceNodes extends OrgFilesEvent {
   final FileInfo fileInfo;
-  final OrgNode oldNode;
-  final OrgNode newNode;
+  final List<(OrgNode oldNode, OrgNode newNode)> replacements;
 
-  OrgFilesReplaceNode(this.fileInfo, this.oldNode, this.newNode);
+  OrgFilesReplaceNodes(this.fileInfo, this.replacements);
 }
 
 final class OrgFilesChangeTodoStatesEvent extends OrgFilesEvent {

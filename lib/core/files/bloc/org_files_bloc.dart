@@ -41,15 +41,19 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           emit(
             state.copyWith(filePaths: filePaths, documentsMap: documentsMap),
           );
-
-        case OrgFilesReplaceNode():
+        case OrgFilesReplaceNodes():
           final oldDocument = state.documentsMap[event.fileInfo];
           if (oldDocument == null) return;
 
-          final newDoc = oldDocument
-              .edit()
-              .find(event.oldNode)!
-              .replace(event.newNode)
+          // Generates the new document.
+          // The replacments (oldNode, newNode) are reduced
+          // to a Zipper which then get's comitted
+          final newDoc = event.replacements
+              .fold<OrgZipper>(
+                oldDocument.edit(),
+                (builder, nodes) =>
+                    builder.find(nodes.$1)?.replace(nodes.$2) as OrgZipper,
+              )
               .commit();
 
           FilePickerWritable().writeFile(
