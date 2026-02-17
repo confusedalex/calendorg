@@ -8,6 +8,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:test/test.dart';
 
+class MockOrgFilesBloc extends Mock implements OrgFilesBloc {}
+
+class FakeFileInfo extends Fake implements FileInfo {
+  @override
+  String get identifier => "MockIdentifier";
+}
+
 void main() {
   final newTimestamp = OrgSimpleTimestamp(
     "<",
@@ -18,9 +25,15 @@ void main() {
   );
   late Event event;
   late OrgTimestamp timestamp;
-  final OrgFilesBloc orgFilesBloc = OrgFilesBloc();
+  late MockOrgFilesBloc orgFilesBloc;
+
+  setUpAll(() {
+    registerFallbackValue(OrgFilesReplaceNodes(FakeFileInfo(), []));
+  });
 
   setUp(() {
+    orgFilesBloc = MockOrgFilesBloc();
+    when(() => orgFilesBloc.add(any())).thenReturn(null);
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
     event = parseEvents(FakeFileInfo(), document).entries.first.value.first;
     timestamp = event.timestamps.first;
@@ -41,7 +54,7 @@ void main() {
     );
 
     blocTest<EventViewBloc, EventViewState>(
-      'emits correct timestamp when Timestamp is changed',
+      'emits correct timestamp when Timestamp is changed in title',
       build: () => EventViewBloc(orgFilesBloc, event, timestamp),
       act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
       expect: () => [
@@ -52,10 +65,46 @@ void main() {
         ),
       ],
     );
-  });
-}
 
-class FakeFileInfo extends Fake implements FileInfo {
-  @override
-  String get identifier => "MockIdentifier";
+    blocTest<EventViewBloc, EventViewState>(
+      'emits correct timestamp when Timestamp is changed',
+      build: () => EventViewBloc(
+        orgFilesBloc,
+        parseEvents(
+          FakeFileInfo(),
+          OrgDocument.parse("""* Math Exam
+          <2025-10-10>"""),
+        ).entries.first.value.first,
+        timestamp,
+      ),
+      act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
+      expect: () => [
+        TypeMatcher<EventViewState>().having(
+          (state) => state.newTimestamp,
+          "timestamp",
+          equals(newTimestamp),
+        ),
+      ],
+    );
+
+    blocTest<EventViewBloc, EventViewState>(
+      'emits correct state when EventViewSaveEvent is triggered',
+      build: () => EventViewBloc(orgFilesBloc, event, timestamp),
+      act: (bloc) {
+        bloc.add(EventViewTitleChangeEvent("History exam"));
+        bloc.add(EventViewChangeTimestamp(newTimestamp));
+        bloc.add(EventViewSaveEvent());
+      },
+      verify: (bloc) {
+        verify(() => orgFilesBloc.add(any<OrgFilesReplaceNodes>())).called(1);
+      },
+    );
+
+    blocTest<EventViewBloc, EventViewState>(
+      'save does not emit event when no changes',
+      build: () => EventViewBloc(orgFilesBloc, event, timestamp),
+      act: (bloc) => bloc.add(EventViewSaveEvent()),
+      expect: () => [],
+    );
+  });
 }
