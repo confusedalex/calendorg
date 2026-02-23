@@ -74,19 +74,19 @@ final class DatePickerState {
   DatePickerState copyWith({
     DateTime? startDate,
     DateTime? endDate,
-    TimeOfDay? startTimeDuration,
-    TimeOfDay? endTimeDuration,
     bool? startTimeActive,
+    TimeOfDay? startTimeDuration,
     bool? endTimeActive,
+    TimeOfDay? endTimeDuration,
     bool? endDateActive,
   }) {
     return DatePickerState(
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      startTimeDuration: startTimeDuration ?? this.startTimeDuration,
-      endTimeDuration: endTimeDuration ?? this.endTimeDuration,
       startTimeActive: startTimeActive ?? this.startTimeActive,
+      startTimeDuration: startTimeDuration ?? this.startTimeDuration,
       endTimeActive: endTimeActive ?? this.endTimeActive,
+      endTimeDuration: endTimeDuration ?? this.endTimeDuration,
       endDateActive: endDateActive ?? this.endDateActive,
     );
   }

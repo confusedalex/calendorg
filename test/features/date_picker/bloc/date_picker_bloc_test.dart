@@ -6,14 +6,17 @@ import 'package:org_parser/org_parser.dart';
 
 void main() {
   group('Date Picker Bloc Test', () {
+    final OrgSimpleTimestamp timestamp = OrgDocument.parse(
+      "<2025-12-04>",
+    ).find<OrgSimpleTimestamp>((node) => true)!.node;
+    late DatePickerBloc bloc;
+
+    setUp(() {
+      bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+    });
+
     group("initialization tests", () {
       test("OrgSimpleTimestamp without time parses correctly", () {
-        final OrgSimpleTimestamp timestamp = OrgDocument.parse(
-          "<2025-12-04>",
-        ).find<OrgSimpleTimestamp>((node) => true)!.node;
-
-        final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
-
         expect(
           bloc.state,
           TypeMatcher<DatePickerState>()
@@ -578,6 +581,44 @@ void main() {
                 (state) => state.endTimeDuration,
                 "endTimeDuration",
                 equals(TimeOfDay(hour: 12, minute: 00)),
+              ),
+        ],
+      );
+
+      blocTest(
+        "Setting EndTimeActive while StartTimeActive is true won't set StartTimeActive to false",
+        build: () => datePickerBloc,
+        act: (bloc) {
+          bloc
+            ..add(DatePickerStartTimeActiveChanged(true))
+            ..add(DatePickerEndTimeActiveChanged(true));
+        },
+        expect: () => [
+          TypeMatcher<DatePickerState>()
+              .having(
+                (state) => state.startDate,
+                "startDate",
+                equals(DateTime(2025, 05, 01)),
+              )
+              .having((state) => state.endDate, "endDate", isNull)
+              .having((state) => state.endTimeActive, "endTimeActive", isFalse)
+              .having(
+                (state) => state.startTimeActive,
+                "startTimeActive",
+                isTrue,
+              ),
+          TypeMatcher<DatePickerState>()
+              .having(
+                (state) => state.startDate,
+                "startDate",
+                equals(DateTime(2025, 05, 01)),
+              )
+              .having((state) => state.endDate, "endDate", isNull)
+              .having((state) => state.endTimeActive, "endTimeActive", isTrue)
+              .having(
+                (state) => state.startTimeActive,
+                "startTimeActive",
+                isTrue,
               ),
         ],
       );

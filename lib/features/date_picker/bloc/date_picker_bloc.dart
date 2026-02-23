@@ -7,7 +7,7 @@ part 'date_picker_event.dart';
 part 'date_picker_state.dart';
 
 class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
-  DatePickerBloc(DatePickerState state) : super(state) {
+  DatePickerBloc(super.initialState) {
     on<DatePickerEvent>((event, emit) {
       switch (event) {
         case DatePickerStartDateChanged():
@@ -19,8 +19,8 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
               endTimeActive:
                   (event.startTimeActive == false &&
                       state.endDateActive == false)
-                  ? false
-                  : null,
+                  ? null
+                  : state.endTimeActive,
             ),
           );
         case DatePickerEndTimeActiveChanged():
@@ -30,9 +30,10 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
             state.copyWith(
               endDateActive: event.endDateActive,
               endTimeActive:
-                  event.endDateActive == false && state.startTimeActive == false
-                  ? false
-                  : null,
+                  (event.endDateActive == false &&
+                      state.startTimeActive == false)
+                  ? null
+                  : state.endTimeActive,
             ),
           );
         case DatePickerEndDateChanged():
