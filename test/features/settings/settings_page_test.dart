@@ -83,7 +83,7 @@ void main() {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text("TODO states"));
+      await tester.tap(find.text("TODO States"));
 
       await tester.pumpAndSettle();
 
@@ -93,7 +93,7 @@ void main() {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text("Starting Day of week"));
+      await tester.tap(find.text("Starting Day of Week"));
 
       await tester.pumpAndSettle();
 

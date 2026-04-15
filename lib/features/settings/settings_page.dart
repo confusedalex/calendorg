@@ -19,9 +19,10 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<FloatingActionButtonCubit>().changeButton(null);
-    return Column(
+    return ListView(
       children: [
         ListTile(
+          leading: Icon(Icons.palette),
           title: Text("Tag Colors"),
           onTap: () => Navigator.push(
             context,
@@ -33,9 +34,10 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(),
+        Divider(height: 1),
         ListTile(
-          title: Text("Starting Day of week"),
+          leading: Icon(Icons.calendar_today),
+          title: Text("Starting Day of Week"),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -44,9 +46,10 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(),
+        Divider(height: 1),
         ListTile(
-          title: Text("TODO states"),
+          leading: Icon(Icons.check_circle),
+          title: Text("TODO States"),
           onTap: () => showDialog(
             context: context,
             builder: (_) => MultiBlocProvider(
@@ -58,37 +61,41 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(),
-        ListTile(
-          title: Text("Inbox File"),
-          onTap: () async {
-            try {
-              final fileInfo = await FilePickerWritable().openFile((
-                fileInfo,
-                file,
-              ) async {
-                return fileInfo;
-              });
-              if (fileInfo != null) {
-                context.read<OrgFilesBloc>().add(
-                  OrgFilesChangeInboxFileEvent(fileInfo),
-                );
+        Divider(height: 1),
+        BlocBuilder<OrgFilesBloc, OrgFilesState>(
+          builder: (context, state) => ListTile(
+            leading: Icon(Icons.inbox),
+            title: Text("Inbox File"),
+            trailing: Text(
+              state.inboxFile?.fileName ?? "Not set",
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            onTap: () async {
+              try {
+                final fileInfo = await FilePickerWritable().openFile((
+                  fileInfo,
+                  file,
+                ) async {
+                  return fileInfo;
+                });
+                if (fileInfo != null) {
+                  context.read<OrgFilesBloc>().add(
+                    OrgFilesChangeInboxFileEvent(fileInfo),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error selecting file: $e')),
+                  );
+                }
               }
-            } catch (e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error selecting file: $e')),
-                );
-              }
-            }
-          },
-          subtitle: BlocBuilder<OrgFilesBloc, OrgFilesState>(
-            builder: (context, state) =>
-                Text(state.inboxFile?.fileName ?? "No file selected"),
+            },
           ),
         ),
-        Divider(),
+        Divider(height: 1),
         ListTile(
+          leading: Icon(Icons.folder),
           title: Text("Agenda Files"),
           onTap: () => showDialog(
             context: context,
@@ -98,8 +105,9 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(),
+        Divider(height: 1),
         ListTile(
+          leading: Icon(Icons.brightness_4),
           title: Text("Theme"),
           onTap: () => showDialog(
             context: context,
