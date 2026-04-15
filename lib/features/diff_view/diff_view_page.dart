@@ -23,7 +23,10 @@ class DiffViewPage extends StatelessWidget {
         child: OutlinedButton(
           onPressed: () async {
             try {
-              final content = await FilePickerWritable().openFile((fileInfo, file) {
+              final content = await FilePickerWritable().openFile((
+                fileInfo,
+                file,
+              ) {
                 return file.readAsString();
               });
               if (content != null) {

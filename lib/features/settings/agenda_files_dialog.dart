@@ -39,10 +39,7 @@ class AgendaFilesDialog extends StatelessWidget {
         });
       } catch (e) {
         if (context.mounted) {
-          sendError(
-            context,
-            'Error selecting file: $e',
-          );
+          sendError(context, 'Error selecting file: $e');
         }
         return null;
       }
@@ -56,10 +53,7 @@ class AgendaFilesDialog extends StatelessWidget {
         );
       } catch (e) {
         if (context.mounted) {
-          sendError(
-            context,
-            'Error creating file: $e',
-          );
+          sendError(context, 'Error creating file: $e');
         }
         return null;
       }

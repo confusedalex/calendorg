@@ -59,31 +59,34 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         Divider(),
-          ListTile(
-            title: Text("Inbox File"),
-            onTap: () async {
-              try {
-                final fileInfo = await FilePickerWritable().openFile((fileInfo, file) async {
-                  return fileInfo;
-                });
-                if (fileInfo != null) {
-                  context.read<OrgFilesBloc>().add(
-                    OrgFilesChangeInboxFileEvent(fileInfo),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error selecting file: $e')),
-                  );
-                }
+        ListTile(
+          title: Text("Inbox File"),
+          onTap: () async {
+            try {
+              final fileInfo = await FilePickerWritable().openFile((
+                fileInfo,
+                file,
+              ) async {
+                return fileInfo;
+              });
+              if (fileInfo != null) {
+                context.read<OrgFilesBloc>().add(
+                  OrgFilesChangeInboxFileEvent(fileInfo),
+                );
               }
-            },
-            subtitle: BlocBuilder<OrgFilesBloc, OrgFilesState>(
-              builder: (context, state) =>
-                  Text(state.inboxFile?.fileName ?? "No file selected"),
-            ),
+            } catch (e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error selecting file: $e')),
+                );
+              }
+            }
+          },
+          subtitle: BlocBuilder<OrgFilesBloc, OrgFilesState>(
+            builder: (context, state) =>
+                Text(state.inboxFile?.fileName ?? "No file selected"),
           ),
+        ),
         Divider(),
         ListTile(
           title: Text("Agenda Files"),

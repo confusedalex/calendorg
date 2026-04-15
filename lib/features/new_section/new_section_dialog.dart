@@ -78,10 +78,10 @@ class NewSectionDialog extends StatelessWidget {
                             try {
                               final oldFile = await FilePickerWritable()
                                   .readFile(
-                                identifier: inboxFile.identifier,
-                                reader: (FileInfo fileInfo, File file) =>
-                                    file.readAsString(),
-                              );
+                                    identifier: inboxFile.identifier,
+                                    reader: (FileInfo fileInfo, File file) =>
+                                        file.readAsString(),
+                                  );
 
                               if (!context.mounted) return;
                               await FilePickerWritable().writeFile(

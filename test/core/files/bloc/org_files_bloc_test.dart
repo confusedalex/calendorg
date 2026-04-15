@@ -203,48 +203,54 @@ void main() {
 
       expect(bloc.state.allEvents, containsPair("2025-01-01", hasLength(1)));
     });
-    test("AllEvents includes inbox file events on init when only inbox file is loaded", () async {
-      final inboxFile = FileInfo(
-        identifier: "inboxFile-identifier",
-        persistable: true,
-        uri: "inboxFile-uri",
-      );
+    test(
+      "AllEvents includes inbox file events on init when only inbox file is loaded",
+      () async {
+        final inboxFile = FileInfo(
+          identifier: "inboxFile-identifier",
+          persistable: true,
+          uri: "inboxFile-uri",
+        );
 
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.withData({
-            "inboxFile": inboxFile.toJsonString(),
-          });
+        SharedPreferencesAsyncPlatform.instance =
+            InMemorySharedPreferencesAsync.withData({
+              "inboxFile": inboxFile.toJsonString(),
+            });
 
-      final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
+        final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
-      await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(Duration(milliseconds: 10));
 
-      expect(bloc.state.allEvents, containsPair("2025-01-01", hasLength(1)));
-    });
-    test("AllEvents includes inbox file events on init when agenda files and inbox file are loaded", () async {
-      final inboxFile = FileInfo(
-        identifier: "inboxFile-identifier",
-        persistable: true,
-        uri: "inboxFile-uri",
-      );
-      final agendaFile = FileInfo(
-        identifier: "agendaFile-identifier",
-        persistable: true,
-        uri: "agendaFile-uri",
-      );
+        expect(bloc.state.allEvents, containsPair("2025-01-01", hasLength(1)));
+      },
+    );
+    test(
+      "AllEvents includes inbox file events on init when agenda files and inbox file are loaded",
+      () async {
+        final inboxFile = FileInfo(
+          identifier: "inboxFile-identifier",
+          persistable: true,
+          uri: "inboxFile-uri",
+        );
+        final agendaFile = FileInfo(
+          identifier: "agendaFile-identifier",
+          persistable: true,
+          uri: "agendaFile-uri",
+        );
 
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.withData({
-            "inboxFile": inboxFile.toJsonString(),
-            "agendaFiles": jsonEncode([agendaFile]),
-          });
+        SharedPreferencesAsyncPlatform.instance =
+            InMemorySharedPreferencesAsync.withData({
+              "inboxFile": inboxFile.toJsonString(),
+              "agendaFiles": jsonEncode([agendaFile]),
+            });
 
-      final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
+        final bloc = FakeOrgFilesBloc()..add(OrgFilesInit());
 
-      await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(Duration(milliseconds: 10));
 
-      expect(bloc.state.allEvents, containsPair("2025-01-01", hasLength(2)));
-    });
+        expect(bloc.state.allEvents, containsPair("2025-01-01", hasLength(2)));
+      },
+    );
   });
 }
 

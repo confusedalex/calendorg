@@ -67,10 +67,7 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           emit(
             state.copyWith(
               documentsMap: state.documentsMap
-                ..update(
-                  event.fileInfo,
-                  (doc) => parseResult.value,
-                ),
+                ..update(event.fileInfo, (doc) => parseResult.value),
             ),
           );
         case OrgFilesChangeInboxFileEvent():
@@ -111,7 +108,10 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
       final prefs = SharedPreferencesAsync();
       // We need to convert the Set to a List, because Dart somehow
       // only know how to encode an List, not a Set
-      await prefs.setString("agendaFiles", jsonEncode(state.filePaths.toList()));
+      await prefs.setString(
+        "agendaFiles",
+        jsonEncode(state.filePaths.toList()),
+      );
       await prefs.setString("inboxFile", jsonEncode(state.inboxFile));
     } catch (e) {
       debugPrint('Error updating shared preferences: $e');
@@ -152,10 +152,12 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
             .map((info) => FileInfo.fromJson(info))
             .toSet();
         final documentsMap = <FileInfo, OrgDocument>{};
-        
+
         for (var fileInfo in fileInfos) {
           try {
-            documentsMap[fileInfo] = await documentByIdentifier(fileInfo.identifier);
+            documentsMap[fileInfo] = await documentByIdentifier(
+              fileInfo.identifier,
+            );
           } catch (e) {
             debugPrint('Error loading file $fileInfo: $e');
           }
