@@ -72,7 +72,20 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
             ),
           );
         case OrgFilesChangeInboxFileEvent():
-          emit(state.copyWith(inboxFile: () => event.fileInfo));
+          final documentsMap = {...state.documentsMap}..remove(state.inboxFile);
+
+          if (event.fileInfo case final fileInfo?) {
+            documentsMap[fileInfo] = await documentByIdentifier(
+              fileInfo.identifier,
+            );
+          }
+
+          emit(
+            state.copyWith(
+              inboxFile: () => event.fileInfo,
+              documentsMap: documentsMap,
+            ),
+          );
         case OrgFilesChangeTodoStatesEvent():
           emit(state.copyWith(todoStates: event.todoStates));
           emit(
@@ -108,24 +121,37 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
     if (files == null && inboxFile == null) {
       return OrgFilesState.initial();
     } else if (files == null) {
+      final documentsMap = <FileInfo, OrgDocument>{};
+      if (inboxFile != null) {
+        documentsMap[inboxFile] = await documentByIdentifier(
+          inboxFile.identifier,
+        );
+      }
       return OrgFilesState(
         inboxFile: inboxFile,
         todoStates: state.todoStates,
         filePaths: {},
-        documentsMap: {},
+        documentsMap: documentsMap,
       );
     } else {
       final jsonObject = jsonDecode(files) as List<dynamic>;
       final fileInfos = jsonObject
           .map((info) => FileInfo.fromJson(info))
           .toSet();
+      final documentsMap = <FileInfo, OrgDocument>{
+        for (var fileInfo in fileInfos)
+          fileInfo: await documentByIdentifier(fileInfo.identifier),
+      };
+
+      if (inboxFile != null && !fileInfos.contains(inboxFile)) {
+        documentsMap[inboxFile] = await documentByIdentifier(
+          inboxFile.identifier,
+        );
+      }
 
       return OrgFilesState(
         filePaths: fileInfos,
-        documentsMap: {
-          for (var fileInfo in fileInfos)
-            fileInfo: await documentByIdentifier(fileInfo.identifier),
-        },
+        documentsMap: documentsMap,
         inboxFile: inboxFile,
         todoStates: state.todoStates,
       );
