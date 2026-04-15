@@ -80,35 +80,63 @@ class _HomePageState extends State<HomePage> {
       CalendarPage(DateTime.now()),
       SettingsPage(),
     ];
-    return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
-      builder: (context, state) {
-        return SafeArea(
-          child: Scaffold(
-            body: pages[index],
-            bottomNavigationBar: NavigationBar(
-              onDestinationSelected: (value) => setState(() {
-                index = value;
-              }),
-              selectedIndex: index,
-              destinations: [
-                if (kDebugMode)
-                  NavigationDestination(
-                    icon: Icon(Icons.compare_arrows),
-                    label: 'Diff',
-                  ),
-                NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
-                NavigationDestination(
-                  icon: Icon(Icons.calendar_today),
-                  label: 'Calendar',
+
+    return BlocBuilder<OrgFilesBloc, OrgFilesState>(
+      builder: (context, filesState) {
+        final isLoading =
+            filesState.filePaths.isEmpty && filesState.inboxFile == null;
+
+        if (isLoading) {
+          return SafeArea(
+            child: Scaffold(
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Loading calendar files...'),
+                  ],
                 ),
-                NavigationDestination(
-                  icon: Icon(Icons.settings),
-                  label: 'Settings',
-                ),
-              ],
+              ),
             ),
-            floatingActionButton: state,
-          ),
+          );
+        }
+
+        return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
+          builder: (context, state) {
+            return SafeArea(
+              child: Scaffold(
+                body: pages[index],
+                bottomNavigationBar: NavigationBar(
+                  onDestinationSelected: (value) => setState(() {
+                    index = value;
+                  }),
+                  selectedIndex: index,
+                  destinations: [
+                    if (kDebugMode)
+                      NavigationDestination(
+                        icon: Icon(Icons.compare_arrows),
+                        label: 'Diff',
+                      ),
+                    NavigationDestination(
+                      icon: Icon(Icons.list),
+                      label: 'Events',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.calendar_today),
+                      label: 'Calendar',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.settings),
+                      label: 'Settings',
+                    ),
+                  ],
+                ),
+                floatingActionButton: state,
+              ),
+            );
+          },
         );
       },
     );
