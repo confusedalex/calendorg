@@ -18,44 +18,53 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   }
 
   Future<List<TagColor>> loadTags() async {
-    prefs = await SharedPreferences.getInstance();
-    return (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
-        .map((tagColor) => TagColor.fromJson(tagColor))
-        .toList();
+    try {
+      prefs = await SharedPreferences.getInstance();
+      return (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
+          .map((tagColor) => TagColor.fromJson(tagColor))
+          .toList();
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<void> setInitialTagColor() async {
     emit(await loadTags());
   }
 
-  void reorder(int oldIndex, int newIndex) {
+  Future<void> reorder(int oldIndex, int newIndex) async {
     if (oldIndex < newIndex) newIndex -= 1;
     final currentList = [...state];
     final oldTagColor = currentList[oldIndex];
     currentList.removeAt(oldIndex);
     currentList.insert(newIndex, oldTagColor);
-    saveTagsToPrefs(currentList);
+    await saveTagsToPrefs(currentList);
   }
 
-  void saveTagsToPrefs(List<TagColor> tagColors) async {
+  Future<void> saveTagsToPrefs(List<TagColor> tagColors) async {
     emit(tagColors);
-    prefs.setString("tagColors", jsonEncode(tagColors));
+    await prefs.setString("tagColors", jsonEncode(tagColors));
   }
 
-  void addTagColor(TagColor tagColor) {
+  Future<void> addTagColor(TagColor tagColor) async {
     final newTagColors = [
       ...state.where((t) => t.tag != tagColor.tag),
       tagColor,
     ];
-    saveTagsToPrefs(newTagColors);
+    await saveTagsToPrefs(newTagColors);
   }
 
-  void removeTagColor(String tagName) {
-    saveTagsToPrefs([...state.where((tag) => tag.tag != tagName)]);
+  Future<void> removeTagColor(String tagName) async {
+    await saveTagsToPrefs([...state.where((tag) => tag.tag != tagName)]);
   }
 
   Color getTagColorByName(String tagName) {
-    return state.firstWhere((tagColor) => tagColor.tag == tagName).color;
+    return state
+        .firstWhere(
+          (tagColor) => tagColor.tag == tagName,
+          orElse: () => TagColor("", Colors.blue),
+        )
+        .color;
   }
 
   Color getTagColor(Event event) => state

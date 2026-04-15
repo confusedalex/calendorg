@@ -22,12 +22,20 @@ class DiffViewPage extends StatelessWidget {
       return Center(
         child: OutlinedButton(
           onPressed: () async {
-            context.read<DiffViewCubit>().changeOldText(
-              (await FilePickerWritable().openFile((fileInfo, file) {
-                    return file.readAsString();
-                  }) ??
-                  ""),
-            );
+            try {
+              final content = await FilePickerWritable().openFile((fileInfo, file) {
+                return file.readAsString();
+              });
+              if (content != null) {
+                context.read<DiffViewCubit>().changeOldText(content);
+              }
+            } catch (e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error reading file: $e')),
+                );
+              }
+            }
           },
           child: Text("select"),
         ),

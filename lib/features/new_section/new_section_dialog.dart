@@ -73,21 +73,35 @@ class NewSectionDialog extends StatelessWidget {
                   TextButton(
                     key: Key("SaveButton"),
                     onPressed: timestamp != null
-                        ? () {
-                            final oldFile = FilePickerWritable().readFile(
-                              identifier: inboxFile.identifier,
-                              reader: (FileInfo fileInfo, File file) =>
-                                  file.readAsString(),
-                            );
+                        ? () async {
+                            if (!context.mounted) return;
+                            try {
+                              final oldFile = await FilePickerWritable()
+                                  .readFile(
+                                identifier: inboxFile.identifier,
+                                reader: (FileInfo fileInfo, File file) =>
+                                    file.readAsString(),
+                              );
 
-                            FilePickerWritable().writeFile(
-                              identifier: inboxFile.identifier,
-                              writer: (file) async => file.writeAsString(
-                                "${await oldFile} \n* $title\n${timestamp.toMarkup()}",
-                                mode: FileMode.writeOnly,
-                              ),
-                            );
-                            Navigator.pop(context);
+                              if (!context.mounted) return;
+                              await FilePickerWritable().writeFile(
+                                identifier: inboxFile.identifier,
+                                writer: (file) async => file.writeAsString(
+                                  "$oldFile \n* $title\n${timestamp.toMarkup()}",
+                                  mode: FileMode.writeOnly,
+                                ),
+                              );
+
+                              if (!context.mounted) return;
+                              Navigator.pop(context);
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error saving section: $e'),
+                                ),
+                              );
+                            }
                           }
                         : null,
                     child: Text("save"),

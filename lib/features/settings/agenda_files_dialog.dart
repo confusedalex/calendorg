@@ -32,16 +32,38 @@ class AgendaFilesDialog extends StatelessWidget {
       return true;
     }
 
-    Future<FileInfo?> selectGetFileInfo() async =>
-        await FilePickerWritable().openFile((fileInfo, file) async {
+    Future<FileInfo?> selectGetFileInfo() async {
+      try {
+        return await FilePickerWritable().openFile((fileInfo, file) async {
           return fileInfo;
         });
+      } catch (e) {
+        if (context.mounted) {
+          sendError(
+            context,
+            'Error selecting file: $e',
+          );
+        }
+        return null;
+      }
+    }
 
-    Future<FileInfo?> createGetFileInfo() async =>
-        await FilePickerWritable().openFileForCreate(
+    Future<FileInfo?> createGetFileInfo() async {
+      try {
+        return await FilePickerWritable().openFileForCreate(
           writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
           fileName: "agenda.org",
         );
+      } catch (e) {
+        if (context.mounted) {
+          sendError(
+            context,
+            'Error creating file: $e',
+          );
+        }
+        return null;
+      }
+    }
 
     void onPressed(FileInfo? fileInfo) {
       if (!validateFile(fileInfo)) return;

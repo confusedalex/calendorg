@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,18 +57,19 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
               )
               .commit();
 
-          FilePickerWritable().writeFile(
+          await FilePickerWritable().writeFile(
             identifier: event.fileInfo.identifier,
             writer: (file) async =>
                 file.writeAsString(newDoc.toMarkup(), mode: FileMode.writeOnly),
           );
 
+          final parseResult = parser.parse(newDoc.toMarkup());
           emit(
             state.copyWith(
               documentsMap: state.documentsMap
                 ..update(
                   event.fileInfo,
-                  (doc) => parser.parse(newDoc.toMarkup()).value,
+                  (doc) => parseResult.value,
                 ),
             ),
           );
@@ -87,9 +89,9 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
             ),
           );
         case OrgFilesChangeTodoStatesEvent():
-          emit(state.copyWith(todoStates: event.todoStates));
           emit(
             state.copyWith(
+              todoStates: event.todoStates,
               documentsMap: {
                 for (var fileInfo in state.filePaths)
                   fileInfo: await documentByIdentifier(fileInfo.identifier),
@@ -98,72 +100,101 @@ class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
           );
       }
 
-      _updateSharedPreferences();
+      _updateSharedPreferences().then((_) {}).catchError((e) {
+        debugPrint('Error updating preferences after event: $e');
+      });
     });
   }
 
-  void _updateSharedPreferences() async {
-    final prefs = SharedPreferencesAsync();
-    // We need to convert the Set to a List, because Dart somehow
-    // only know how to encode an List, not a Set
-    await prefs.setString("agendaFiles", jsonEncode(state.filePaths.toList()));
-    await prefs.setString("inboxFile", jsonEncode(state.inboxFile));
-  }
-
-  Future<OrgFilesState> _initOrgFilesState() async {
-    final prefs = SharedPreferencesAsync();
-    final files = await prefs.getString("agendaFiles");
-    final inboxFileString = await prefs.getString("inboxFile");
-    final inboxFile = (inboxFileString == null || inboxFileString == "null")
-        ? null
-        : FileInfo.fromJson((jsonDecode(inboxFileString)));
-
-    if (files == null && inboxFile == null) {
-      return OrgFilesState.initial();
-    } else if (files == null) {
-      final documentsMap = <FileInfo, OrgDocument>{};
-      if (inboxFile != null) {
-        documentsMap[inboxFile] = await documentByIdentifier(
-          inboxFile.identifier,
-        );
-      }
-      return OrgFilesState(
-        inboxFile: inboxFile,
-        todoStates: state.todoStates,
-        filePaths: {},
-        documentsMap: documentsMap,
-      );
-    } else {
-      final jsonObject = jsonDecode(files) as List<dynamic>;
-      final fileInfos = jsonObject
-          .map((info) => FileInfo.fromJson(info))
-          .toSet();
-      final documentsMap = <FileInfo, OrgDocument>{
-        for (var fileInfo in fileInfos)
-          fileInfo: await documentByIdentifier(fileInfo.identifier),
-      };
-
-      if (inboxFile != null && !fileInfos.contains(inboxFile)) {
-        documentsMap[inboxFile] = await documentByIdentifier(
-          inboxFile.identifier,
-        );
-      }
-
-      return OrgFilesState(
-        filePaths: fileInfos,
-        documentsMap: documentsMap,
-        inboxFile: inboxFile,
-        todoStates: state.todoStates,
-      );
+  Future<void> _updateSharedPreferences() async {
+    try {
+      final prefs = SharedPreferencesAsync();
+      // We need to convert the Set to a List, because Dart somehow
+      // only know how to encode an List, not a Set
+      await prefs.setString("agendaFiles", jsonEncode(state.filePaths.toList()));
+      await prefs.setString("inboxFile", jsonEncode(state.inboxFile));
+    } catch (e) {
+      debugPrint('Error updating shared preferences: $e');
     }
   }
 
-  Future<OrgDocument> documentByIdentifier(String identifier) async => parser
-      .parse(
-        await FilePickerWritable().readFile(
-          identifier: identifier,
-          reader: (fileInfo, file) => file.readAsString(),
-        ),
-      )
-      .value;
+  Future<OrgFilesState> _initOrgFilesState() async {
+    try {
+      final prefs = SharedPreferencesAsync();
+      final files = await prefs.getString("agendaFiles");
+      final inboxFileString = await prefs.getString("inboxFile");
+      final inboxFile = (inboxFileString == null || inboxFileString == "null")
+          ? null
+          : FileInfo.fromJson((jsonDecode(inboxFileString)));
+
+      if (files == null && inboxFile == null) {
+        return OrgFilesState.initial();
+      } else if (files == null) {
+        final documentsMap = <FileInfo, OrgDocument>{};
+        if (inboxFile != null) {
+          try {
+            documentsMap[inboxFile] = await documentByIdentifier(
+              inboxFile.identifier,
+            );
+          } catch (e) {
+            debugPrint('Error loading inbox file: $e');
+          }
+        }
+        return OrgFilesState(
+          inboxFile: inboxFile,
+          todoStates: state.todoStates,
+          filePaths: {},
+          documentsMap: documentsMap,
+        );
+      } else {
+        final jsonObject = jsonDecode(files) as List<dynamic>;
+        final fileInfos = jsonObject
+            .map((info) => FileInfo.fromJson(info))
+            .toSet();
+        final documentsMap = <FileInfo, OrgDocument>{};
+        
+        for (var fileInfo in fileInfos) {
+          try {
+            documentsMap[fileInfo] = await documentByIdentifier(fileInfo.identifier);
+          } catch (e) {
+            debugPrint('Error loading file $fileInfo: $e');
+          }
+        }
+
+        if (inboxFile != null && !fileInfos.contains(inboxFile)) {
+          try {
+            documentsMap[inboxFile] = await documentByIdentifier(
+              inboxFile.identifier,
+            );
+          } catch (e) {
+            debugPrint('Error loading inbox file: $e');
+          }
+        }
+
+        return OrgFilesState(
+          filePaths: fileInfos,
+          documentsMap: documentsMap,
+          inboxFile: inboxFile,
+          todoStates: state.todoStates,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error initializing org files state: $e');
+      return OrgFilesState.initial();
+    }
+  }
+
+  Future<OrgDocument> documentByIdentifier(String identifier) async {
+    try {
+      final content = await FilePickerWritable().readFile(
+        identifier: identifier,
+        reader: (fileInfo, file) => file.readAsString(),
+      );
+      final parseResult = parser.parse(content);
+      return parseResult.value;
+    } catch (e) {
+      debugPrint('Error parsing document with identifier $identifier: $e');
+      rethrow;
+    }
+  }
 }

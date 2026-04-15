@@ -14,11 +14,15 @@ class StartingDayCubit extends Cubit<StartingDayOfWeek> {
   }
 
   Future<void> setInititalStartingDay() async {
-    emit(
-      StartingDayOfWeek.values[(await SharedPreferencesAsync().getInt(
-            "startingDay",
-          ) ??
-          0)],
-    );
+    try {
+      final dayValue = (await SharedPreferencesAsync().getInt("startingDay")) ?? 0;
+      if (dayValue >= 0 && dayValue < StartingDayOfWeek.values.length) {
+        emit(StartingDayOfWeek.values[dayValue]);
+      } else {
+        emit(StartingDayOfWeek.monday);
+      }
+    } catch (e) {
+      emit(StartingDayOfWeek.monday);
+    }
   }
 }
