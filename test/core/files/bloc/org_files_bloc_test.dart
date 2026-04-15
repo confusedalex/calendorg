@@ -155,7 +155,7 @@ void main() {
         );
       });
     });
-    test("Merging of maps works", () async {
+    test("AllEvents contains all events of the org files", () async {
       final file1 = FileInfo(
         identifier: "file-identifier-1",
         persistable: true,
