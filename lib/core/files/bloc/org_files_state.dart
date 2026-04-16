@@ -11,12 +11,12 @@ class OrgFilesState {
   final Set<FileInfo> filePaths;
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? inboxFile;
-  final OrgTodoStates todoStates;
+  final OrgTodoStatesWithIgnored todoStates;
   late final Map<String, List<Event>> allEvents = documentsMap.entries.fold(
     {},
     (acc, cur) {
       final copyAcc = {...acc};
-      parseEvents(cur.key, cur.value).forEach((k, v) {
+      parseEvents(cur.key, cur.value, []).forEach((k, v) {
         acc.containsKey(k)
             ? copyAcc[k] = [...?copyAcc[k], ...v]
             : copyAcc[k] = v;
@@ -29,7 +29,11 @@ class OrgFilesState {
   factory OrgFilesState.initial() => OrgFilesState(
     filePaths: {},
     documentsMap: {},
-    todoStates: OrgTodoStates(done: ["DONE"], todo: ["TODO"]),
+    todoStates: OrgTodoStatesWithIgnored(
+      todo: ["TODO"],
+      done: ["DONE"],
+      ignored: [],
+    ),
   );
 
   List<Object?> get props => [filePaths, documentsMap];
@@ -50,7 +54,7 @@ class OrgFilesState {
   OrgFilesState copyWith({
     Set<FileInfo>? filePaths,
     Map<FileInfo, OrgDocument>? documentsMap,
-    OrgTodoStates? todoStates,
+    OrgTodoStatesWithIgnored? todoStates,
     ValueGetter<FileInfo?>? inboxFile,
     List<Event>? allEvents,
   }) {

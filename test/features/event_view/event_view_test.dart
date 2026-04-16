@@ -21,7 +21,11 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final event = parseEvents(MockFileInfo(), document).entries.first.value.first;
+  final event = parseEvents(
+    MockFileInfo(),
+    document,
+    [],
+  ).entries.first.value.first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
   final OrgFilesBloc orgFilesBloc = OrgFilesBloc();
 

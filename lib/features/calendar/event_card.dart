@@ -33,7 +33,7 @@ class EventCard extends StatelessWidget {
             ),
           ),
         ),
-        title: BlocBuilder<TodoStatesCubit, OrgTodoStates>(
+        title: BlocBuilder<TodoStatesCubit, OrgTodoStatesWithIgnored>(
           builder: (context, state) => Text.rich(
             TextSpan(
               children: [

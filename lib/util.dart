@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-Map<String, List<Event>> parseEvents(FileInfo fileInfo, OrgDocument document) {
+Map<String, List<Event>> parseEvents(
+  FileInfo fileInfo,
+  OrgDocument document,
+  List<String> ignoredTodoStates,
+) {
   final timestampRegEx = RegExp(r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]");
   final Map<String, List<Event>> eventMap = {};
 
   document.visitSections(((section) {
+    if (section.headline.keyword != null &&
+        ignoredTodoStates.contains(section.headline.keyword?.value)) {
+      return true;
+    }
     final List<OrgTimestamp> foundTimestamps = [];
     OrgPlanningEntry? scheduled;
     OrgPlanningEntry? deadline;

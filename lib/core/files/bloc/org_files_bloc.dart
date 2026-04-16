@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/event.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petitparser/petitparser.dart';
@@ -15,7 +17,7 @@ part 'org_files_state.dart';
 
 class OrgFilesBloc extends Bloc<OrgFilesEvent, OrgFilesState> {
   Parser get parser =>
-      OrgParserDefinition(todoStates: [state.todoStates]).build();
+      OrgParserDefinition(todoStates: [state.todoStates.todoStates]).build();
 
   OrgFilesBloc() : super(OrgFilesState.initial()) {
     on<OrgFilesEvent>((event, emit) async {

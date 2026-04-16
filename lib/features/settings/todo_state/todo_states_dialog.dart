@@ -5,18 +5,15 @@ import 'package:calendorg/features/settings/todo_state/todo_state_add_dialog_cub
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:org_parser/org_parser.dart';
 
 class TodoStatesDialog extends StatelessWidget {
   const TodoStatesDialog({super.key});
 
   @override
   Widget build(BuildContext context) =>
-      BlocConsumer<TodoStatesCubit, OrgTodoStates>(
+      BlocConsumer<TodoStatesCubit, OrgTodoStatesWithIgnored>(
         listener: (_, state) => context.read<OrgFilesBloc>().add(
-          OrgFilesChangeTodoStatesEvent(
-            OrgTodoStates(todo: state.todo, done: state.done),
-          ),
+          OrgFilesChangeTodoStatesEvent(state),
         ),
         builder: (context, state) {
           return AlertDialog(
@@ -26,22 +23,27 @@ class TodoStatesDialog extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ...["todo", "done"].mapIndexed(
+                  ...["todo", "done", "ignored"].mapIndexed(
                     (index, status) => Column(
                       children: [
                         Text(status.toUpperCase(), textAlign: TextAlign.start),
                         Divider(),
                         Wrap(
                           children: [
-                            ...(index == 1 ? state.done : state.todo).map(
-                              (todo) => Chip(
-                                label: Text(todo),
-                                deleteIcon: Icon(Icons.close),
-                                onDeleted: () => context
-                                    .read<TodoStatesCubit>()
-                                    .removeTodo(status, todo),
-                              ),
-                            ),
+                            ...(index == 2
+                                    ? state.ignored
+                                    : index == 1
+                                    ? state.todoStates.done
+                                    : state.todoStates.todo)
+                                .map(
+                                  (todo) => Chip(
+                                    label: Text(todo),
+                                    deleteIcon: Icon(Icons.close),
+                                    onDeleted: () => context
+                                        .read<TodoStatesCubit>()
+                                        .removeTodo(status, todo),
+                                  ),
+                                ),
                             TextButton(
                               onPressed: () => showDialog(
                                 context: context,

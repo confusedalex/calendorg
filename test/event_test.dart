@@ -14,7 +14,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final events = parseEvents(MockFileInfo(), document);
+  final events = parseEvents(MockFileInfo(), document, []);
   final event = events.entries.first.value.first;
 
   group('Events', () {

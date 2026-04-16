@@ -176,7 +176,11 @@ class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
   OrgFilesState get state => OrgFilesState(
     filePaths: {fileInfo},
     documentsMap: {fileInfo: document},
-    todoStates: OrgTodoStates(),
+    todoStates: OrgTodoStatesWithIgnored(
+      todo: ["TODO"],
+      done: ["DONE"],
+      ignored: [],
+    ),
   );
 
   @override

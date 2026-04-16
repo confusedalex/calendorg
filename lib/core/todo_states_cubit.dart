@@ -5,10 +5,16 @@ import 'package:flutter/foundation.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final defaultTodoStates = OrgTodoStates(todo: ["TODO"], done: ["DONE"]);
+final defaultTodoStates = OrgTodoStatesWithIgnored(
+  todo: ["TODO"],
+  done: ["DONE"],
+  ignored: [],
+);
 
-class TodoStatesCubit extends Cubit<OrgTodoStates> {
-  TodoStatesCubit() : super(defaultTodoStates);
+class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
+  TodoStatesCubit() : super(defaultTodoStates) {
+    loadFromPrefs();
+  }
 
   Future<void> loadFromPrefs() async {
     try {
@@ -19,12 +25,14 @@ class TodoStatesCubit extends Cubit<OrgTodoStates> {
       final List<String> done = List.from(
         jsonDecode(prefs.getString("doneStates") ?? "[]"),
       );
-
-      emit(
-        todo.isEmpty && done.isEmpty
-            ? defaultTodoStates
-            : OrgTodoStates(todo: todo, done: done),
+      final List<String> ignored = List.from(
+        jsonDecode(prefs.getString("ignoredStates") ?? "[]"),
       );
+
+      final states = todo.isEmpty && done.isEmpty
+          ? defaultTodoStates
+          : OrgTodoStatesWithIgnored(todo: todo, done: done, ignored: ignored);
+      emit(states);
     } catch (e) {
       emit(defaultTodoStates);
     }
@@ -32,9 +40,29 @@ class TodoStatesCubit extends Cubit<OrgTodoStates> {
 
   void addTodo(String status, String keyword) {
     if (status == "todo") {
-      emit(OrgTodoStates(done: state.done, todo: [...state.todo, keyword]));
+      emit(
+        OrgTodoStatesWithIgnored(
+          todo: [...state.todo, keyword],
+          done: state.done,
+          ignored: state.ignored,
+        ),
+      );
     } else if (status == "done") {
-      emit(OrgTodoStates(todo: state.todo, done: [...state.done, keyword]));
+      emit(
+        OrgTodoStatesWithIgnored(
+          todo: state.todo,
+          done: [...state.done, keyword],
+          ignored: state.ignored,
+        ),
+      );
+    } else if (status == "ignored") {
+      emit(
+        OrgTodoStatesWithIgnored(
+          todo: state.todo,
+          done: state.done,
+          ignored: [...state.ignored, keyword],
+        ),
+      );
     }
     saveToPrefs();
   }
@@ -42,16 +70,26 @@ class TodoStatesCubit extends Cubit<OrgTodoStates> {
   void removeTodo(String status, String keyword) {
     if (status == "todo") {
       emit(
-        OrgTodoStates(
+        OrgTodoStatesWithIgnored(
+          todo: state.todo.where((e) => e != keyword).toList(),
           done: state.done,
-          todo: state.todo.where((e) => e != keyword),
+          ignored: state.ignored,
         ),
       );
     } else if (status == "done") {
       emit(
-        OrgTodoStates(
+        OrgTodoStatesWithIgnored(
           todo: state.todo,
-          done: state.done.where((e) => e != keyword),
+          done: state.done.where((e) => e != keyword).toList(),
+          ignored: state.ignored,
+        ),
+      );
+    } else if (status == "ignored") {
+      emit(
+        OrgTodoStatesWithIgnored(
+          todo: state.todo,
+          done: state.done,
+          ignored: state.ignored.where((e) => e != keyword).toList(),
         ),
       );
     }
@@ -63,8 +101,23 @@ class TodoStatesCubit extends Cubit<OrgTodoStates> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("todoStates", jsonEncode(state.todo));
       await prefs.setString("doneStates", jsonEncode(state.done));
+      await prefs.setString("ignoredStates", jsonEncode(state.ignored));
     } catch (e) {
       debugPrint('Error saving todo states: $e');
     }
   }
+}
+
+class OrgTodoStatesWithIgnored {
+  final List<String> todo;
+  final List<String> done;
+  final List<String> ignored;
+  OrgTodoStates get todoStates =>
+      OrgTodoStates(todo: [...todo, ...ignored], done: done);
+
+  OrgTodoStatesWithIgnored({
+    required this.todo,
+    required this.done,
+    required this.ignored,
+  });
 }

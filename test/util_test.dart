@@ -3,6 +3,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
+import 'package:petitparser/petitparser.dart';
 
 void main() {
   final markup = """
@@ -28,7 +29,7 @@ CLOSED: [2025-05-02 10:00]
 Just some text.
 """;
   final document = OrgDocument.parse(markup);
-  final events = parseEvents(MockFileInfo(), document);
+  final events = parseEvents(MockFileInfo(), document, []);
   final meetupEvent = events.entries.first.value.first;
 
   group('Util', () {
@@ -56,7 +57,7 @@ Just some text.
 DEADLINE: <2025-05-04>
 """;
       final document = OrgDocument.parse(markup);
-      final events = parseEvents(MockFileInfo(), document);
+      final events = parseEvents(MockFileInfo(), document, []);
 
       expect(events.entries, hasLength(1));
     });
@@ -243,6 +244,50 @@ DEADLINE: <2025-05-04>
           expect(result, isNull);
         },
       );
+    });
+    group("ignored todo states", () {
+      test("OTHER will be ignored", () {
+        final markup = """
+* TODO install emacs
+<2025-01-01>
+* OTHER install emacs
+<2025-01-02>
+""";
+
+        final Parser parser = OrgParserDefinition(
+          todoStates: [
+            OrgTodoStates(todo: ["TODO", "OTHER"], done: ["DONE"]),
+          ],
+        ).build();
+        final document = parser.parse(markup).value as OrgDocument;
+        final events = parseEvents(MockFileInfo(), document, ["OTHER"]);
+
+        expect(events.length, equals(1));
+      });
+      test("Nested TODOs of OTHER are still valid", () {
+        final markup = """
+* TODO install emacs
+<2025-01-01>
+* OTHER install emacs
+<2025-01-02>
+** TODO nested todo
+<2025-01-03>
+** OTHER another other
+<2025-01-04>
+*** TODO nested nested todo
+<2025-01-05>
+""";
+
+        final Parser parser = OrgParserDefinition(
+          todoStates: [
+            OrgTodoStates(todo: ["TODO", "OTHER"], done: ["DONE"]),
+          ],
+        ).build();
+        final document = parser.parse(markup).value as OrgDocument;
+        final events = parseEvents(MockFileInfo(), document, ["OTHER"]);
+
+        expect(events.length, equals(3));
+      });
     });
   });
 }

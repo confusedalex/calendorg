@@ -28,6 +28,6 @@ final class OrgFilesReplaceNodes extends OrgFilesEvent {
 }
 
 final class OrgFilesChangeTodoStatesEvent extends OrgFilesEvent {
-  final OrgTodoStates todoStates;
+  final OrgTodoStatesWithIgnored todoStates;
   OrgFilesChangeTodoStatesEvent(this.todoStates);
 }

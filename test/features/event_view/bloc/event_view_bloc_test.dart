@@ -35,7 +35,7 @@ void main() {
     orgFilesBloc = MockOrgFilesBloc();
     when(() => orgFilesBloc.add(any())).thenReturn(null);
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
-    event = parseEvents(FakeFileInfo(), document).entries.first.value.first;
+    event = parseEvents(FakeFileInfo(), document, []).entries.first.value.first;
     timestamp = event.timestamps.first;
   });
 
@@ -74,6 +74,7 @@ void main() {
           FakeFileInfo(),
           OrgDocument.parse("""* Math Exam
           <2025-10-10>"""),
+          [],
         ).entries.first.value.first,
         timestamp,
       ),

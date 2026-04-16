@@ -24,7 +24,11 @@ class TodoStateAddDialog extends StatelessWidget {
               validator: (value) => validate(
                 value,
                 "TODO State",
-                notIn: [...states.todo, ...states.done],
+                notIn: [
+                  ...states.todoStates.todo,
+                  ...states.todoStates.done,
+                  ...states.ignored,
+                ],
               ),
             ),
             actions: [
