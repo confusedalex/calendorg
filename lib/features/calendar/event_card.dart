@@ -58,11 +58,26 @@ class EventCard extends StatelessWidget {
               textAlign: TextAlign.left,
               textScaler: TextScaler.linear(0.9),
             ),
-            Text(
-              event.tags.isNotEmpty ? ":${event.tags.join(":")}:" : '',
-              textAlign: TextAlign.right,
-              textScaler: TextScaler.linear(0.9),
-            ),
+            if (event.scheduled != null)
+              Text(
+                'SCHEDULED: ${(event.scheduled?.value as OrgTimestamp).toMarkup()}',
+                textAlign: TextAlign.left,
+                textScaler: TextScaler.linear(0.85),
+                style: TextStyle(color: Colors.amber),
+              ),
+            if (event.deadline != null)
+              Text(
+                'DEADLINE: ${(event.deadline?.value as OrgTimestamp).toMarkup()}',
+                textAlign: TextAlign.left,
+                textScaler: TextScaler.linear(0.85),
+                style: TextStyle(color: Colors.red),
+              ),
+            if (event.tags.isNotEmpty)
+              Text(
+                ":${event.tags.join(":")}:",
+                textAlign: TextAlign.right,
+                textScaler: TextScaler.linear(0.9),
+              ),
           ],
         ),
         onTap: () => showDialog(
