@@ -35,7 +35,7 @@ class TodoStateAddDialog extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    context.read<TodoStatesCubit>().addTodo("todo", state);
+                    context.read<TodoStatesCubit>().addTodo(status, state);
                     Navigator.pop(context);
                   }
                 },
