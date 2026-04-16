@@ -19,7 +19,6 @@ class EventCard extends StatelessWidget {
     final keyword = event.section.headline.keyword;
     final todoStates = context.read<TodoStatesCubit>().state;
     final eventIsDone = todoStates.done.contains(keyword?.value);
-    final brightness = MediaQuery.of(context).platformBrightness;
 
     return Card(
       child: ListTile(
@@ -35,8 +34,8 @@ class EventCard extends StatelessWidget {
           ),
         ),
         title: BlocBuilder<TodoStatesCubit, OrgTodoStates>(
-          builder: (context, state) => RichText(
-            text: TextSpan(
+          builder: (context, state) => Text.rich(
+            TextSpan(
               children: [
                 TextSpan(
                   text: keyword == null ? "" : "${keyword.value} ",
@@ -46,12 +45,7 @@ class EventCard extends StatelessWidget {
                           color: eventIsDone ? Colors.green : Colors.red,
                         ),
                 ),
-                TextSpan(
-                  text: event.title,
-                  style: TextStyle(
-                    color: _colorByEvent(event, eventIsDone, brightness),
-                  ),
-                ),
+                TextSpan(text: event.title),
               ],
             ),
           ),
@@ -84,23 +78,5 @@ class EventCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color? _colorByEvent(Event event, bool eventIsDone, Brightness brightness) {
-    if (eventIsDone) return Colors.green;
-    if (event.deadline != null &&
-        (event.deadline?.value as OrgTimestamp).startDateTime ==
-            timestamp.startDateTime) {
-      return Colors.red;
-    }
-    if (event.scheduled != null &&
-        (event.scheduled?.value as OrgTimestamp).startDateTime ==
-            timestamp.startDateTime) {
-      return Colors.amber;
-    }
-    return switch (brightness) {
-      Brightness.dark => Colors.white,
-      Brightness.light => Colors.black,
-    };
   }
 }
