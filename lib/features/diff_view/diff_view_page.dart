@@ -29,7 +29,7 @@ class DiffViewPage extends StatelessWidget {
               ) {
                 return file.readAsString();
               });
-              if (content != null) {
+              if (content != null && context.mounted) {
                 context.read<DiffViewCubit>().changeOldText(content);
               }
             } catch (e) {

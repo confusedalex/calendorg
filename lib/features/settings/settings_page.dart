@@ -78,7 +78,7 @@ class SettingsPage extends StatelessWidget {
                 ) async {
                   return fileInfo;
                 });
-                if (fileInfo != null) {
+                if (fileInfo != null && context.mounted) {
                   context.read<OrgFilesBloc>().add(
                     OrgFilesChangeInboxFileEvent(fileInfo),
                   );
