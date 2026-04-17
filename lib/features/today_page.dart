@@ -7,23 +7,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Widget todayPage() => BlocBuilder<OrgFilesBloc, OrgFilesState>(
   builder: (context, state) => SingleChildScrollView(
     child: Column(
-      children: state
-          .eventsByDateWithTimestamps(DateTime.now())
-          .entries
-          .fold<List<EventCard>>(
-            [],
-            (acc, entry) => [
-              ...acc,
-              ...entry.value.map(
-                (timestamp) => EventCard(entry.key, timestamp),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Next 3 days",
+          style: Theme.of(context).textTheme.headlineMedium,
+          textAlign: TextAlign.left,
+        ),
+        ...state
+            .eventsByDateWithTimestamps(DateTime.now())
+            .entries
+            .fold<List<EventCard>>(
+              [],
+              (acc, entry) => [
+                ...acc,
+                ...entry.value.map(
+                  (timestamp) => EventCard(entry.key, timestamp),
+                ),
+              ],
+            )
+            .sorted(
+              (a, b) => (a).timestamp.startDateTime.compareTo(
+                (b).timestamp.startDateTime,
               ),
-            ],
-          )
-          .sorted(
-            (a, b) => (a).timestamp.startDateTime.compareTo(
-              (b).timestamp.startDateTime,
             ),
-          ),
+      ],
     ),
   ),
 );
