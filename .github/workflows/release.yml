@@ -1,0 +1,40 @@
+name: build and release
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+          version: 3.38.0
+          cache-sdk: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build release
+        run: flutter build apk --release
+
+      - name: Upload release artifact
+        uses: softprops/action-gh-release@v3
+        with:
+          files: build/app/outputs/flutter-apk/app-release.apk
+          prerelease: ${{ startsWith(github.ref, 'refs/tags/v') && contains(github.ref, '-') }}
