@@ -1,16 +1,18 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/event_parser_service.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
+import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
-import 'package:calendorg/util.dart';
+import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:calendorg/features/event_view/event_view.dart';
+
+import '../settings/settings_page_test.dart';
 
 void main() {
   final markup = """
@@ -21,13 +23,14 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final event = parseEvents(
-    MockFileInfo(),
-    document,
-    [],
-  ).entries.first.value.first;
+  final event = EventParserService()
+      .parseEventsFromDocument(MockFileInfo(), document, [])
+      .entries
+      .first
+      .value
+      .first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
-  final OrgFilesBloc orgFilesBloc = OrgFilesBloc();
+  final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());
 
   Future<void> initWidget(dynamic tester) async {
     await tester.pumpWidget(
@@ -41,7 +44,7 @@ void main() {
               ),
               BlocProvider(
                 create: (context) =>
-                    EventViewBloc(orgFilesBloc, event, event.timestamps.first),
+                    EventViewBloc(orgFilesCubit, event, event.timestamps.first),
               ),
             ],
             child: EventView(),

@@ -1,12 +1,19 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/event.dart';
 import 'package:calendorg/features/settings/todo_state/todo_state_add_dialog.dart';
+import 'package:file_picker_writable/src/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:calendorg/features/settings/todo_state/todo_states_dialog.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:org_parser/src/org/model.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+
+import '../settings_page_test.dart';
 
 void main() {
   setUp(() {
@@ -21,7 +28,9 @@ void main() {
           body: MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => TodoStatesCubit()),
-              BlocProvider(create: (context) => OrgFilesBloc()),
+              BlocProvider(
+                create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
+              ),
             ],
             child: TodoStatesDialog(),
           ),
@@ -113,4 +122,14 @@ void main() {
       expect(find.byType(TodoStateAddDialog), findsOne);
     });
   });
+}
+
+class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
+  @override
+  Map<String, List<Event>> parseAllEvents(
+    Map<FileInfo, OrgDocument> documentsMap,
+    List<String> ignoredTodoStates,
+  ) {
+    return {};
+  }
 }

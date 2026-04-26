@@ -1,4 +1,5 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 void main() {
   group('Settings Page Test', () {
@@ -25,7 +27,9 @@ void main() {
           home: Scaffold(
             body: MultiBlocProvider(
               providers: [
-                BlocProvider(create: (context) => OrgFilesBloc()),
+                BlocProvider(
+                  create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
+                ),
                 BlocProvider(create: (context) => ThemeBloc()),
                 BlocProvider(create: (context) => TagColorsCubit()),
                 BlocProvider(create: (context) => TodoStatesCubit()),
@@ -108,3 +112,5 @@ void main() {
     });
   });
 }
+
+class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}

@@ -1,5 +1,6 @@
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/event_parser_service.dart';
 import 'package:calendorg/core/floating_action_button_cubit.dart';
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -40,10 +41,10 @@ void main() {
     final schoolTagColor = TagColor("school", Colors.orange);
     final homeTagColor = TagColor("@home", Colors.lightGreen);
     final workTagColor = TagColor("@work", Colors.yellow);
-    late OrgFilesBloc orgFilesBloc;
+    late OrgFilesCubit orgFilesCubit;
     late CalendarBloc calendarBloc;
 
-    orgFilesBloc = MockOrgFilesBloc(document);
+    orgFilesCubit = MockOrgFilesBloc(document);
 
     setUp(() {
       calendarBloc = CalendarBloc(DateTime(2025, 05, 17));
@@ -55,7 +56,7 @@ void main() {
           home: Scaffold(
             body: MultiBlocProvider(
               providers: [
-                BlocProvider.value(value: orgFilesBloc),
+                BlocProvider.value(value: orgFilesCubit),
                 BlocProvider.value(value: calendarBloc),
                 BlocProvider(create: (context) => StartingDayCubit()),
                 BlocProvider(create: (context) => TodoStatesCubit()),
@@ -166,7 +167,7 @@ void main() {
   });
 }
 
-class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
+class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
   final fileInfo = MockFileInfo();
   final OrgDocument document;
 
@@ -180,6 +181,11 @@ class MockOrgFilesBloc extends Mock implements OrgFilesBloc {
       todo: ["TODO"],
       done: ["DONE"],
       ignored: [],
+    ),
+    allEvents: EventParserService().parseEventsFromDocument(
+      fileInfo,
+      document,
+      [],
     ),
   );
 

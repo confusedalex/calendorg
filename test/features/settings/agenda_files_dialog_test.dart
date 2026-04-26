@@ -1,4 +1,4 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+
+import 'settings_page_test.dart';
 
 void main() {
   group("Agenda Files Dialog", () {
@@ -22,7 +24,7 @@ void main() {
 
           home: Scaffold(
             body: BlocProvider(
-              create: (context) => OrgFilesBloc(),
+              create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
               child: AgendaFilesDialog(),
             ),
           ),
