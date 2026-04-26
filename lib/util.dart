@@ -23,7 +23,7 @@ Map<String, List<Event>> parseEvents(
     bool returnIfSectionFound = false;
     int ignoreNTimestamps = 0;
 
-    final containsTimestamp =
+    final containsTimestampInHeadline =
         section.headline.rawTitle?.contains(timestampRegEx) ?? false;
 
     var headline =
@@ -35,7 +35,7 @@ Map<String, List<Event>> parseEvents(
 
     final tags = section.tagsWithInheritance(document);
 
-    section.visitWithBlacklist([OrgProperty], (OrgNode node) {
+    section.visitWithBlacklist([OrgProperty, OrgDrawer], (OrgNode node) {
       switch (node) {
         case OrgSection():
           return returnIfSectionFound ? false : returnIfSectionFound = true;
@@ -56,17 +56,17 @@ Map<String, List<Event>> parseEvents(
           // be just part of this range
           ignoreNTimestamps = 2;
 
-          foundTimestamps.add(node);
+          if (node.isActive) foundTimestamps.add(node);
           break;
 
         case OrgSimpleTimestamp():
           if (ignoreNTimestamps > 0) break;
-          foundTimestamps.add(node);
+          if (node.isActive) foundTimestamps.add(node);
 
           break;
 
         case OrgTimeRangeTimestamp():
-          foundTimestamps.add(node);
+          if (node.isActive) foundTimestamps.add(node);
           break;
       }
       return true;
@@ -75,7 +75,7 @@ Map<String, List<Event>> parseEvents(
     if (foundTimestamps.isNotEmpty) {
       final event = Event(
         section: section,
-        containsTimestampInHeadline: containsTimestamp,
+        containsTimestampInHeadline: containsTimestampInHeadline,
         fileInfo: fileInfo,
         title: headline,
         tags: tags,

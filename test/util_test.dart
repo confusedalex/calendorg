@@ -27,6 +27,13 @@ CLOSED: [2025-05-02 10:00]
 :CREATED: [2026-01-06 Tue 23:59]
 :END:
 Just some text.
+** DONE Buy Notebook                               :@computer:@shopping:
+CLOSED: [2026-04-24 Fri 11:25]
+:LOGBOOK:
+- State "TODO"       from "WAIT"       [2026-04-14 Tue 12:59]
+- State "WAIT"       from "TODO"       [2026-04-07 Tue 22:58] \\
+  Waiting on answer
+:END:
 """;
   final document = OrgDocument.parse(markup);
   final events = parseEvents(MockFileInfo(), document, []);
@@ -47,8 +54,14 @@ Just some text.
     });
 
     test("Deadline entry gets parsed correctly", () {
-      final installEmacsEvent = events.entries.last.value.first;
-      expect(installEmacsEvent.deadline, isNotNull);
+      final markup = """
+** TODO install emacs
+DEADLINE: <2025-05-04>
+""";
+      final document = OrgDocument.parse(markup);
+      final events = parseEvents(MockFileInfo(), document, []);
+
+      expect(events.entries.first.value.first.deadline, isNotNull);
     });
 
     test("Parsing single TODO works", () {
