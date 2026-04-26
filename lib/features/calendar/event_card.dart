@@ -1,4 +1,4 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/event.dart';
@@ -83,10 +83,10 @@ class EventCard extends StatelessWidget {
         onTap: () => showDialog(
           context: context,
           builder: (_) => BlocProvider.value(
-            value: context.read<OrgFilesBloc>(),
+            value: context.read<OrgFilesCubit>(),
             child: BlocProvider(
               create: (context) =>
-                  EventViewBloc(context.read<OrgFilesBloc>(), event, timestamp),
+                  EventViewBloc(context.read<OrgFilesCubit>(), event, timestamp),
               child: EventView(),
             ),
           ),

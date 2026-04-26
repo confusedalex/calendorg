@@ -1,5 +1,10 @@
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
+import 'package:calendorg/core/files/services/org_file_service.dart';
+import 'package:calendorg/core/files/services/org_files_repository.dart';
+import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/floating_action_button_cubit.dart';
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/calendar/calendar_page.dart';
@@ -48,7 +53,17 @@ class Calendorg extends StatelessWidget {
                 create: (context) => TodoStatesCubit()..loadFromPrefs(),
               ),
               BlocProvider(
-                create: (context) => OrgFilesBloc()..add(OrgFilesInit()),
+                create: (context) {
+                  final parserService = OrgParserService();
+                  return OrgFilesCubit(
+                    OrgFilesRepository(
+                      fileService: OrgFileService(parserService),
+                      eventParser: EventParserService(),
+                      persistence: OrgFilePersistenceService(),
+                      parserService: parserService,
+                    ),
+                  )..init(context.read<TodoStatesCubit>().state);
+                },
               ),
               BlocProvider(create: (context) => FloatingActionButtonCubit()),
               if (kDebugMode)

@@ -1,4 +1,4 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/features/diff_view/cubit/diff_view_cubit.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class DiffViewPage extends StatelessWidget {
       (DiffViewCubit cubit) => cubit.state.oldText,
     );
     final newText = context.select(
-      (OrgFilesBloc bloc) =>
+      (OrgFilesCubit bloc) =>
           bloc.state.documentsMap.entries.firstOrNull?.value.toMarkup(),
     );
 

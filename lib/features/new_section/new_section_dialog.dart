@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/new_section/cubit/new_section_cubit.dart';
@@ -17,7 +17,7 @@ class NewSectionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = context.select((NewSectionCubit bloc) => bloc.state.title);
     final inboxFile = context.select(
-      (OrgFilesBloc bloc) => bloc.state.inboxFile,
+      (OrgFilesCubit bloc) => bloc.state.inboxFile,
     );
     final timestamp = context.select(
       (NewSectionCubit bloc) => bloc.state.timestamp,

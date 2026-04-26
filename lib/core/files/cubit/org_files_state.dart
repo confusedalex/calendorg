@@ -1,10 +1,11 @@
-part of 'org_files_bloc.dart';
+part of 'org_files_cubit.dart';
 
 class OrgFilesState {
   OrgFilesState({
     required this.filePaths,
     required this.documentsMap,
     required this.todoStates,
+    required this.allEvents,
     this.inboxFile,
   });
 
@@ -12,19 +13,7 @@ class OrgFilesState {
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? inboxFile;
   final OrgTodoStatesWithIgnored todoStates;
-  late final Map<String, List<Event>> allEvents = documentsMap.entries.fold(
-    {},
-    (acc, cur) {
-      final copyAcc = {...acc};
-      parseEvents(cur.key, cur.value, []).forEach((k, v) {
-        acc.containsKey(k)
-            ? copyAcc[k] = [...?copyAcc[k], ...v]
-            : copyAcc[k] = v;
-      });
-
-      return copyAcc;
-    },
-  );
+  final Map<String, List<Event>> allEvents;
 
   factory OrgFilesState.initial() => OrgFilesState(
     filePaths: {},
@@ -34,9 +23,10 @@ class OrgFilesState {
       done: ["DONE"],
       ignored: [],
     ),
+    allEvents: {},
   );
 
-  List<Object?> get props => [filePaths, documentsMap];
+  List<Object?> get props => [filePaths, documentsMap, allEvents];
 
   List<Event> eventsByDate(DateTime date) {
     return allEvents[date.toIso8601String().split("T")[0]] ?? [];
@@ -51,17 +41,19 @@ class OrgFilesState {
 
         return timestampsByDate.isEmpty ? acc : {...acc, cur: timestampsByDate};
       });
+
   OrgFilesState copyWith({
     Set<FileInfo>? filePaths,
     Map<FileInfo, OrgDocument>? documentsMap,
     OrgTodoStatesWithIgnored? todoStates,
+    Map<String, List<Event>>? allEvents,
     ValueGetter<FileInfo?>? inboxFile,
-    List<Event>? allEvents,
   }) {
     return OrgFilesState(
       filePaths: filePaths ?? this.filePaths,
       documentsMap: documentsMap ?? this.documentsMap,
       todoStates: todoStates ?? this.todoStates,
+      allEvents: allEvents ?? this.allEvents,
       inboxFile: inboxFile != null ? inboxFile() : this.inboxFile,
     );
   }

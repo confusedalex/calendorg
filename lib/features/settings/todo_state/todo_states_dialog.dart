@@ -1,4 +1,4 @@
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/settings/todo_state/todo_state_add_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/todo_state_add_dialog_cubit.dart';
@@ -12,9 +12,7 @@ class TodoStatesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       BlocConsumer<TodoStatesCubit, OrgTodoStatesWithIgnored>(
-        listener: (_, state) => context.read<OrgFilesBloc>().add(
-          OrgFilesChangeTodoStatesEvent(state),
-        ),
+        listener: (_, state) => context.read<OrgFilesCubit>().changeTodoStates(state),
         builder: (context, state) {
           return AlertDialog(
             title: Text("TODO states"),

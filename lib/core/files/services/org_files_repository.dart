@@ -1,0 +1,110 @@
+import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
+import 'package:calendorg/core/files/services/org_file_service.dart';
+import 'package:calendorg/core/files/services/org_parser_service.dart';
+import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/event.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:org_parser/org_parser.dart';
+
+class OrgFilesRepository {
+  final OrgFileService _fileService;
+  final EventParserService _eventParser;
+  final OrgFilePersistenceService _persistence;
+  final OrgParserService _parserService;
+
+  OrgFilesRepository({
+    required OrgFileService fileService,
+    required EventParserService eventParser,
+    required OrgFilePersistenceService persistence,
+    required OrgParserService parserService,
+  }) : _fileService = fileService,
+       _eventParser = eventParser,
+       _persistence = persistence,
+       _parserService = parserService;
+
+  Future<InitialState> loadInitialState(
+    OrgTodoStatesWithIgnored todoStates,
+  ) async {
+    final (fileInfos, inboxFile) = await _persistence.loadFilePreferences();
+    final documentsMap = <FileInfo, OrgDocument>{};
+
+    for (final fileInfo in {...fileInfos, if (inboxFile != null) inboxFile}) {
+      try {
+        documentsMap[fileInfo] = await _fileService.documentByIdentifier(
+          fileInfo.identifier,
+        );
+      } catch (e) {
+        debugPrint('Error loading file: $e');
+      }
+    }
+
+    return InitialState(
+      fileInfos: fileInfos,
+      inboxFile: inboxFile,
+      documentsMap: documentsMap,
+      todoStates: todoStates,
+    );
+  }
+
+  Map<String, List<Event>> parseAllEvents(
+    Map<FileInfo, OrgDocument> documentsMap,
+    List<String> ignoredTodoStates,
+  ) {
+    final allEvents = <String, List<Event>>{};
+    for (final entry in documentsMap.entries) {
+      final events = _eventParser.parseEventsFromDocument(
+        entry.key,
+        entry.value,
+        ignoredTodoStates,
+      );
+      for (final MapEntry(key: dateKey, value: eventList) in events.entries) {
+        allEvents[dateKey] = [...?allEvents[dateKey], ...eventList];
+      }
+    }
+    return allEvents;
+  }
+
+  Future<OrgDocument> loadDocument(FileInfo fileInfo) async {
+    return _fileService.documentByIdentifier(fileInfo.identifier);
+  }
+
+  Future<void> saveFileList(Set<FileInfo> fileInfos) async {
+    return _persistence.saveFileList(fileInfos);
+  }
+
+  Future<void> saveInboxFile(FileInfo? fileInfo) async {
+    return _persistence.saveInboxFile(fileInfo);
+  }
+
+  void updateTodoStates(OrgTodoStatesWithIgnored states) {
+    _parserService.invalidateCache(states);
+  }
+
+  Future<OrgDocument> replaceNodesAndSave(
+    FileInfo fileInfo,
+    OrgDocument oldDocument,
+    List<(OrgNode, OrgNode)> replacements,
+  ) async {
+    return _fileService.replaceNodesAndSave(
+      fileInfo.identifier,
+      oldDocument,
+      replacements,
+    );
+  }
+}
+
+class InitialState {
+  final Set<FileInfo> fileInfos;
+  final FileInfo? inboxFile;
+  final Map<FileInfo, OrgDocument> documentsMap;
+  final OrgTodoStatesWithIgnored todoStates;
+
+  InitialState({
+    required this.fileInfos,
+    required this.inboxFile,
+    required this.documentsMap,
+    required this.todoStates,
+  });
+}

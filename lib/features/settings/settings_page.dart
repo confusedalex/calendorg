@@ -1,5 +1,5 @@
 import 'package:calendorg/core/floating_action_button_cubit.dart';
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files_dialog.dart';
@@ -55,14 +55,14 @@ class SettingsPage extends StatelessWidget {
             builder: (_) => MultiBlocProvider(
               providers: [
                 BlocProvider.value(value: context.read<TodoStatesCubit>()),
-                BlocProvider.value(value: context.read<OrgFilesBloc>()),
+                BlocProvider.value(value: context.read<OrgFilesCubit>()),
               ],
               child: const TodoStatesDialog(),
             ),
           ),
         ),
         Divider(height: 1),
-        BlocBuilder<OrgFilesBloc, OrgFilesState>(
+        BlocBuilder<OrgFilesCubit, OrgFilesState>(
           builder: (context, state) => ListTile(
             leading: Icon(Icons.inbox),
             title: Text("Inbox File"),
@@ -79,9 +79,7 @@ class SettingsPage extends StatelessWidget {
                   return fileInfo;
                 });
                 if (fileInfo != null && context.mounted) {
-                  context.read<OrgFilesBloc>().add(
-                    OrgFilesChangeInboxFileEvent(fileInfo),
-                  );
+                  context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
                 }
               } catch (e) {
                 if (context.mounted) {
@@ -100,7 +98,7 @@ class SettingsPage extends StatelessWidget {
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<OrgFilesBloc>(context),
+              value: BlocProvider.of<OrgFilesCubit>(context),
               child: const AgendaFilesDialog(),
             ),
           ),

@@ -1,5 +1,5 @@
 import 'package:calendorg/core/floating_action_button_cubit.dart';
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/features/calendar/bloc/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/event_markers.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
@@ -27,7 +27,7 @@ class CalendarView extends StatelessWidget {
     final StartingDayOfWeek startingDay = context.select(
       (StartingDayCubit bloc) => bloc.state,
     );
-    final eventsByDate = context.read<OrgFilesBloc>().state.eventsByDate;
+    final eventsByDate = context.read<OrgFilesCubit>().state.eventsByDate;
 
     context.read<FloatingActionButtonCubit>().changeButton(
       FloatingActionButton(
@@ -35,7 +35,7 @@ class CalendarView extends StatelessWidget {
           context: context,
           builder: (_) => MultiBlocProvider(
             providers: [
-              BlocProvider.value(value: context.read<OrgFilesBloc>()),
+              BlocProvider.value(value: context.read<OrgFilesCubit>()),
               BlocProvider(create: (context) => NewSectionCubit(null, null)),
             ],
             child: NewSectionDialog(dateTime: selectedDate),
@@ -78,7 +78,7 @@ class CalendarView extends StatelessWidget {
           child: ListView(
             children:
                 context
-                    .read<OrgFilesBloc>()
+                    .read<OrgFilesCubit>()
                     .state
                     .eventsByDateWithTimestamps(focusedDay)
                     .entries

@@ -1,7 +1,7 @@
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'dart:io';
 
-import 'package:calendorg/core/files/bloc/org_files_bloc.dart';
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class AgendaFilesDialog extends StatelessWidget {
     void onPressed(FileInfo? fileInfo) {
       if (!validateFile(fileInfo)) return;
       if (!validateFileName(fileInfo?.fileName)) return;
-      context.read<OrgFilesBloc>().add(OrgFilesAddFilePath(fileInfo));
+      context.read<OrgFilesCubit>().addFilePath(fileInfo);
     }
 
     return [
@@ -89,7 +89,7 @@ class AgendaFilesDialog extends StatelessWidget {
           CloseButton(),
         ],
       ), // Agenda Files
-      content: BlocBuilder<OrgFilesBloc, OrgFilesState>(
+      content: BlocBuilder<OrgFilesCubit, OrgFilesState>(
         builder: (_, state) => SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
           child: ListView.builder(
@@ -104,8 +104,8 @@ class AgendaFilesDialog extends StatelessWidget {
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.close),
-                  onPressed: () => context.read<OrgFilesBloc>().add(
-                    OrgFilesRemoveFilePath(fileInfo),
+                  onPressed: () => context.read<OrgFilesCubit>().removeFilePath(
+                    fileInfo,
                   ),
                 ),
               );
@@ -113,7 +113,7 @@ class AgendaFilesDialog extends StatelessWidget {
           ),
         ),
       ),
-      actions: buttons(context.read<OrgFilesBloc>().state, context),
+      actions: buttons(context.read<OrgFilesCubit>().state, context),
     );
   }
 }
