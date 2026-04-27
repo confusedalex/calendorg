@@ -13,8 +13,6 @@ import 'package:org_parser/src/org/model.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
-import '../settings_page_test.dart';
-
 void main() {
   setUp(() {
     SharedPreferencesAsyncPlatform.instance =
