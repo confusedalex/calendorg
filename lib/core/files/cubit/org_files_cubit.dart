@@ -50,6 +50,15 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           documentsMap: {...state.documentsMap, fileInfo: document},
         ),
       );
+
+      emit(
+        state.copyWith(
+          allEvents: _repository.parseAllEvents(
+            state.documentsMap,
+            state.todoStates.ignored,
+          ),
+        ),
+      );
     } catch (e) {
       debugPrint('Error adding file: $e');
     }
