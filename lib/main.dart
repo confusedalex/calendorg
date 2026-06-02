@@ -62,7 +62,9 @@ class Calendorg extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) {
-                  final parserService = OrgParserService();
+                  final parserService = OrgParserService(
+                    context.read<TodoStatesCubit>().state,
+                  );
                   return OrgFilesCubit(
                     OrgFilesRepository(
                       fileService: OrgFileService(parserService),

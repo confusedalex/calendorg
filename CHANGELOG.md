@@ -3,6 +3,7 @@
 ### Changed
 - Directly parse file when adding it to the agenda files. Therefore the events are directly displayed.
 - Await loading of todoStates so their availability is guaranteed.
+- Use loaded todoStates for the first event parsing. 
 
 ## [1.0.2] - 2026-04-27
 ### Changed
