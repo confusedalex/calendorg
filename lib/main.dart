@@ -20,9 +20,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final todoStatesCubit = TodoStatesCubit();
+  await todoStatesCubit.loadFromPrefs();
+
   runApp(
-    BlocProvider(create: (context) => ThemeBloc(), child: const Calendorg()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ThemeBloc()),
+        BlocProvider.value(value: todoStatesCubit),
+      ],
+      child: const Calendorg(),
+    ),
   );
 }
 
@@ -48,9 +59,6 @@ class Calendorg extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) => TagColorsCubit()..setInitialTagColor(),
-              ),
-              BlocProvider(
-                create: (context) => TodoStatesCubit()..loadFromPrefs(),
               ),
               BlocProvider(
                 create: (context) {
