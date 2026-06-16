@@ -24,7 +24,7 @@ jobs:
         uses: flutter-actions/setup-flutter@v4
         with:
           channel: stable
-          version: 3.38.0
+          version: 3.41.0
           cache-sdk: true
 
       - name: Install dependencies
