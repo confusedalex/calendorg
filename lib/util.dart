@@ -120,3 +120,13 @@ extension StartDateTime on OrgTimestamp {
 extension DateTimesFromRange on OrgDateRangeTimestamp {
   List<DateTime> get datetimes => dateTimesFromOrgDateRange(this, [], null);
 }
+
+List<DateTime> dateRange(DateTime start, DateTime end) {
+  final dates = <DateTime>[];
+  var current = start;
+  while (current.isBefore(end) || isSameDay(current, end)) {
+    dates.add(current);
+    current = current.add(Duration(days: 1));
+  }
+  return dates;
+}
