@@ -1,5 +1,5 @@
 # Changelog
-## [Unreleased]
+## [1.1.0] - 2026-06-16
 ### Added
 - Debug page to the settings menu, which helps developers to look into the internals of the App.
 ### Changed
