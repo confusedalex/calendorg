@@ -3,6 +3,7 @@ import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files_dialog.dart';
+import 'package:calendorg/features/settings/debug_page.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';
@@ -12,6 +13,7 @@ import 'package:calendorg/features/settings/todo_state/todo_states_dialog.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -112,6 +114,20 @@ class SettingsPage extends StatelessWidget {
             builder: (_) => BlocProvider.value(
               value: BlocProvider.of<ThemeBloc>(context),
               child: const ThemeDialog(),
+            ),
+          ),
+        ),
+        Divider(height: 1),
+        ListTile(
+          leading: Icon(Icons.bug_report),
+          title: Text("Debug"),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<TagColorsCubit>(context),
+                child: DebugPage(),
+              ),
             ),
           ),
         ),

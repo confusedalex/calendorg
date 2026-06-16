@@ -1,5 +1,7 @@
 # Changelog
 ## [Unreleased]
+### Added
+- Debug page to the settings menu, which helps developers to look into the internals of the App.
 ### Changed
 - Directly parse file when adding it to the agenda files. Therefore the events are directly displayed.
 - Await loading of todoStates so their availability is guaranteed.
