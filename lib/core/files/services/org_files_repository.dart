@@ -30,7 +30,7 @@ class OrgFilesRepository {
     final (fileInfos, inboxFile) = await _persistence.loadFilePreferences();
     final documentsMap = <FileInfo, OrgDocument>{};
 
-    for (final fileInfo in {...fileInfos, if (inboxFile != null) inboxFile}) {
+    for (final fileInfo in {...fileInfos, ?inboxFile}) {
       try {
         documentsMap[fileInfo] = await _fileService.documentByIdentifier(
           fileInfo.identifier,
