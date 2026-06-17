@@ -5,6 +5,8 @@ import 'package:org_parser/org_parser.dart';
 part 'new_section_state.dart';
 
 class NewSectionCubit extends Cubit<NewSectionState> {
+  final formKey = GlobalKey<FormState>();
+
   NewSectionCubit(String? title, OrgTimestamp? timestamp)
     : super(NewSectionState(title: title, timestamp: timestamp));
 

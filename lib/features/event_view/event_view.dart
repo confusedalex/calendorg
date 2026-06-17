@@ -1,6 +1,7 @@
 import 'package:calendorg/features/date_picker/bloc/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/date_picker.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
+import 'package:calendorg/features/shared/editor_dialog_shell.dart';
 import 'package:calendorg/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,35 @@ import 'package:org_parser/org_parser.dart';
 
 class EventView extends StatelessWidget {
   const EventView({super.key});
+
+  String _previewMarkup(EventViewState state) {
+    if (state.oldEvent.containsTimestampInHeadline) {
+      return '* ${state.newEvent.title} ${state.newTimestamp.toMarkup()}';
+    }
+
+    return '* ${state.newEvent.title}\n${state.newTimestamp.toMarkup()}';
+  }
+
+  void _openDatePicker(BuildContext context, OrgTimestamp timestamp) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => DatePickerBloc(DatePickerState.initial(timestamp)),
+            ),
+            BlocProvider.value(value: context.read<EventViewBloc>()),
+          ],
+          child: DatePicker((timestamp) {
+            context.read<EventViewBloc>().add(
+              EventViewChangeTimestamp(timestamp),
+            );
+          }),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,78 +47,119 @@ class EventView extends StatelessWidget {
     final timestamp = context.select(
       (EventViewBloc bloc) => bloc.state.newTimestamp,
     );
+    final preview = context.select(
+      (EventViewBloc bloc) => _previewMarkup(bloc.state),
+    );
+    final bloc = context.read<EventViewBloc>();
 
-    void handleDatePickerSet(OrgTimestamp timestamp) =>
-        context.read<EventViewBloc>().add(EventViewChangeTimestamp(timestamp));
-
-    return AlertDialog(
-      title: Row(children: [Text("Edit Event")]),
-      content: SingleChildScrollView(
-        child: Column(
-          spacing: 20,
-          children: [
-            TextFormField(
-              key: Key("TitleField"),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                helperText: "Event Title",
-              ),
-              initialValue: title,
-              autovalidateMode: AutovalidateMode.always,
-              onChanged: (value) => context.read<EventViewBloc>().add(
-                EventViewTitleChangeEvent(value),
-              ),
-              validator: (value) => validate(value, "Event Name"),
+    return EditorDialogShell(
+      title: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(12),
             ),
-            BlocBuilder<EventViewBloc, EventViewState>(
-              builder: (context, state) {
-                return TextButton(
+            child: Icon(
+              Icons.event_available,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [Text("Edit event")],
+            ),
+          ),
+        ],
+      ),
+      content: Form(
+        key: bloc.formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 16,
+            children: [
+              SizedBox(height: 0),
+              TextFormField(
+                key: Key("TitleField"),
+                decoration: InputDecoration(
+                  labelText: "Event title",
+                  prefixIcon: Icon(Icons.title),
+                  border: OutlineInputBorder(),
+                  filled: true,
+                ),
+                initialValue: title,
+                autovalidateMode: AutovalidateMode.always,
+                onChanged: (value) => context.read<EventViewBloc>().add(
+                  EventViewTitleChangeEvent(value),
+                ),
+                validator: (value) => validate(value, "Event title"),
+              ),
+              Text("When", style: Theme.of(context).textTheme.labelLarge),
+              Material(
+                color: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest.withOpacity(0.55),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: InkWell(
                   key: Key("datePickerButton"),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              create: (_) => DatePickerBloc(
-                                DatePickerState.initial(timestamp),
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => _openDatePicker(context, timestamp),
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Icon(Icons.schedule),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Change date and time",
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
-                            ),
-                            BlocProvider.value(
-                              value: context.read<EventViewBloc>(),
-                            ),
-                          ],
-                          child: DatePicker(handleDatePickerSet),
-                        );
-                      },
-                    );
-                  },
-                  child: Text(timestamp.toMarkup()),
-                );
-              },
-            ),
-          ],
+                              SizedBox(height: 4),
+                              Text(
+                                timestamp.toMarkup(),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(Icons.chevron_right),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              key: Key("CancelButton"),
-              onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              key: Key("SaveButton"),
-              onPressed: () {
-                context.read<EventViewBloc>().add(EventViewSaveEvent());
-                Navigator.pop(context);
-              },
-              child: Text("Save"),
-            ),
-          ],
+        TextButton(
+          key: Key("CancelButton"),
+          onPressed: () => Navigator.pop(context),
+          child: Text("Cancel"),
+        ),
+        FilledButton.icon(
+          key: Key("SaveButton"),
+          onPressed: () {
+            if (!(bloc.formKey.currentState?.validate() ?? false)) return;
+            context.read<EventViewBloc>().add(EventViewSaveEvent());
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.save),
+          label: Text("Save"),
         ),
       ],
     );

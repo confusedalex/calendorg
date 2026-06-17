@@ -8,8 +8,13 @@ part 'event_view_event.dart';
 part 'event_view_state.dart';
 
 class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
-  EventViewBloc(OrgFilesCubit orgFilesCubit, Event event, OrgTimestamp timestamp)
-    : super(EventViewState.inital(event, timestamp)) {
+  final formKey = GlobalKey<FormState>();
+
+  EventViewBloc(
+    OrgFilesCubit orgFilesCubit,
+    Event event,
+    OrgTimestamp timestamp,
+  ) : super(EventViewState.inital(event, timestamp)) {
     on<EventViewEvent>(
       (event, emit) => switch (event) {
         EventViewTitleChangeEvent() => emit(
