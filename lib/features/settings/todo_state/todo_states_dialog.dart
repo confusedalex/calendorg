@@ -17,7 +17,6 @@ class TodoStatesDialog extends StatelessWidget {
             context.read<OrgFilesCubit>().changeTodoStates(state),
         builder: (context, state) {
           return DialogShell(
-            actions: [],
             title: "TODO states",
             titleIcon: Icons.check,
             content: SizedBox(

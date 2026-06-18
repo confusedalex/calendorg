@@ -12,7 +12,7 @@ class DialogShell extends StatelessWidget {
     required this.title,
     required this.titleIcon,
     required this.content,
-    required this.actions,
+    this.actions = const [],
     this.widthFactor = 0.75,
   });
 
