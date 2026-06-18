@@ -6,6 +6,7 @@ class DialogShell extends StatelessWidget {
   final Widget content;
   final List<Widget> actions;
   final double widthFactor;
+  final bool showClose;
 
   const DialogShell({
     super.key,
@@ -14,6 +15,7 @@ class DialogShell extends StatelessWidget {
     required this.content,
     this.actions = const [],
     this.widthFactor = 0.75,
+    this.showClose = false,
   });
 
   @override
@@ -46,6 +48,7 @@ class DialogShell extends StatelessWidget {
               children: [Text(title)],
             ),
           ),
+          if (showClose) CloseButton(),
         ],
       ),
       content: SizedBox(
