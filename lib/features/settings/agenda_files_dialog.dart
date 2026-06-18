@@ -1,3 +1,4 @@
+import 'package:calendorg/features/shared/editor_dialog_shell.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'dart:io';
 
@@ -81,14 +82,10 @@ class AgendaFilesDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Row(
-        children: [
-          Text(CalendorgLocalizations.of(context).agenda_files),
-          Spacer(),
-          CloseButton(),
-        ],
-      ), // Agenda Files
+    return DialogShell(
+      title: CalendorgLocalizations.of(context).agenda_files,
+      titleIcon: Icons.file_copy,
+      showClose: true,
       content: BlocBuilder<OrgFilesCubit, OrgFilesState>(
         builder: (_, state) => SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
@@ -104,9 +101,8 @@ class AgendaFilesDialog extends StatelessWidget {
                 ),
                 trailing: IconButton(
                   icon: Icon(Icons.close),
-                  onPressed: () => context.read<OrgFilesCubit>().removeFilePath(
-                    fileInfo,
-                  ),
+                  onPressed: () =>
+                      context.read<OrgFilesCubit>().removeFilePath(fileInfo),
                 ),
               );
             },
