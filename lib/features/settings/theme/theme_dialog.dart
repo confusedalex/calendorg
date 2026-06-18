@@ -1,4 +1,5 @@
 import 'package:calendorg/features/settings/theme/bloc/theme_bloc.dart';
+import 'package:calendorg/features/shared/editor_dialog_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,8 +11,10 @@ class ThemeDialog extends StatelessWidget {
     builder: (context, state) {
       void changeTheme(ThemeMode? theme) =>
           context.read<ThemeBloc>().add(ThemeSwitchEvent(theme!));
-      return AlertDialog(
-        title: Row(children: [Text("Themes"), Spacer(), CloseButton()]),
+      return DialogShell(
+        title: "Choose Theme",
+        titleIcon: Icons.sunny,
+        showClose: true,
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.75,
           child: ListView(
