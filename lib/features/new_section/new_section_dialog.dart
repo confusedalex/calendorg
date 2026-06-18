@@ -46,32 +46,9 @@ class NewSectionDialog extends StatelessWidget {
     );
     final bloc = context.read<NewSectionCubit>();
 
-    return EditorDialogShell(
-      title: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              Icons.title,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            ),
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text("Add heading")],
-            ),
-          ),
-          CloseButton(),
-        ],
-      ),
+    return DialogShell(
+      title: "Add Event",
+      titleIcon: Icons.title,
       content: inboxFile == null
           ? Text("You need to set an inbox file")
           : Form(

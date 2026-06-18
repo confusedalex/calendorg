@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-class EditorDialogShell extends StatelessWidget {
-  final Widget title;
+class DialogShell extends StatelessWidget {
+  final String title;
+  final IconData titleIcon;
   final Widget content;
   final List<Widget> actions;
   final double widthFactor;
 
-  const EditorDialogShell({
+  const DialogShell({
     super.key,
     required this.title,
+    required this.titleIcon,
     required this.content,
     required this.actions,
     this.widthFactor = 0.75,
@@ -22,7 +24,30 @@ class EditorDialogShell extends StatelessWidget {
       contentPadding: EdgeInsets.fromLTRB(24, 0, 24, 8),
       actionsPadding: EdgeInsets.fromLTRB(24, 0, 24, 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      title: title,
+      title: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              titleIcon,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [Text(title)],
+            ),
+          ),
+        ],
+      ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * widthFactor,
         child: content,

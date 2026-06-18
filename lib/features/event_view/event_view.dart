@@ -52,31 +52,9 @@ class EventView extends StatelessWidget {
     );
     final bloc = context.read<EventViewBloc>();
 
-    return EditorDialogShell(
-      title: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              Icons.event_available,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            ),
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text("Edit event")],
-            ),
-          ),
-        ],
-      ),
+    return DialogShell(
+      title: "Edit Event",
+      titleIcon: Icons.event_available,
       content: Form(
         key: bloc.formKey,
         child: SingleChildScrollView(

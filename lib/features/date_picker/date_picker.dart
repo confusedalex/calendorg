@@ -26,32 +26,9 @@ class DatePicker extends StatelessWidget {
         SizedBox(),
       ],
     );
-    return EditorDialogShell(
-      title: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              Icons.date_range,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text("Select Date")],
-            ),
-          ),
-        ],
-      ),
-
+    return DialogShell(
+      title: "Select Date",
+      titleIcon: Icons.date_range,
       content: BlocBuilder<DatePickerBloc, DatePickerState>(
         builder: (context, state) => Table(
           columnWidths: {1: FractionColumnWidth(0.25)},
