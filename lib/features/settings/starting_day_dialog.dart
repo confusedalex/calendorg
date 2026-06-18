@@ -1,4 +1,5 @@
 import 'package:calendorg/core/starting_day_cubit.dart';
+import 'package:calendorg/features/shared/editor_dialog_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -10,8 +11,10 @@ class StartingDateDialog extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<StartingDayCubit, StartingDayOfWeek>(
         builder: (context, state) {
-          return AlertDialog(
-            title: Text("Starting Day"),
+          return DialogShell(
+            title: "Starting Day",
+            titleIcon: Icons.calendar_month,
+            showClose: true,
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
               child: ListView(
