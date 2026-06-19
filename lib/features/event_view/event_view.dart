@@ -10,14 +10,6 @@ import 'package:org_parser/org_parser.dart';
 class EventView extends StatelessWidget {
   const EventView({super.key});
 
-  String _previewMarkup(EventViewState state) {
-    if (state.oldEvent.containsTimestampInHeadline) {
-      return '* ${state.newEvent.title} ${state.newTimestamp.toMarkup()}';
-    }
-
-    return '* ${state.newEvent.title}\n${state.newTimestamp.toMarkup()}';
-  }
-
   void _openDatePicker(BuildContext context, OrgTimestamp timestamp) {
     showDialog(
       context: context,
@@ -46,9 +38,6 @@ class EventView extends StatelessWidget {
     );
     final timestamp = context.select(
       (EventViewBloc bloc) => bloc.state.newTimestamp,
-    );
-    final preview = context.select(
-      (EventViewBloc bloc) => _previewMarkup(bloc.state),
     );
     final bloc = context.read<EventViewBloc>();
 
