@@ -13,7 +13,6 @@ import 'package:calendorg/features/settings/todo_state/todo_states_dialog.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
