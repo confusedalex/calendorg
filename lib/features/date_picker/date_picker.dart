@@ -71,7 +71,7 @@ class DatePicker extends StatelessWidget {
                   key: Key("datepicker_starttimecheckbox"),
                   value: state.startTimeActive,
                   onChanged: (value) => context.read<DatePickerBloc>().add(
-                    DatePickerStartTimeActiveChanged(value!),
+                    DatePickerStartTimeActiveChanged(value),
                   ),
                 ),
               ],
@@ -102,10 +102,9 @@ class DatePicker extends StatelessWidget {
                 ),
                 Switch(
                   key: Key("datepicker_enddatecheckbox"),
-                  // semanticLabel: state.endDateActive.toString(),
                   value: state.endDateActive,
                   onChanged: (value) => context.read<DatePickerBloc>().add(
-                    DatePickerEndDateActiveChanged(value!),
+                    DatePickerEndDateActiveChanged(value),
                   ),
                 ),
               ],
@@ -127,11 +126,10 @@ class DatePicker extends StatelessWidget {
 
                 Switch(
                   key: Key("datepicker_endtimecheckbox"),
-                  // semanticLabel: state.endTimeActive.toString(),
                   value: state.endTimeActive,
                   onChanged: state.endDateActive || state.startTimeActive
                       ? (value) => context.read<DatePickerBloc>().add(
-                          DatePickerEndTimeActiveChanged(value!),
+                          DatePickerEndTimeActiveChanged(value),
                         )
                       : null,
                 ),
