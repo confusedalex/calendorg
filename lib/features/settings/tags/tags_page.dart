@@ -50,7 +50,7 @@ class _TagsPageState extends State<TagsPage> {
               ),
             )
             .toList(),
-        onReorder: (oldIndex, newIndex) =>
+        onReorderItem: (oldIndex, newIndex) =>
             context.read<TagColorsCubit>().reorder(oldIndex, newIndex),
       ),
     ),

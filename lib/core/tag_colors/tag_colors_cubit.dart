@@ -33,7 +33,6 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) newIndex -= 1;
     final currentList = [...state];
     final oldTagColor = currentList[oldIndex];
     currentList.removeAt(oldIndex);

@@ -103,7 +103,7 @@ Future<void> main() async {
       cubit.addTagColor(homeTagColor);
 
       expect(cubit.state.first, schoolTagColor);
-      cubit.reorder(0, 2);
+      cubit.reorder(0, 1);
       expect(cubit.state.first, homeTagColor);
     });
 
