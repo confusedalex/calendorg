@@ -15,22 +15,24 @@ class DebugPage extends StatelessWidget {
             onTap: () async {
               final prefs = await SharedPreferencesAsync().getAll();
 
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: prefs.entries
-                          .map(
-                            (e) => Text(
-                              "${e.key}:${e.value.toString().replaceAll(RegExp('"identifier":".+?",'), '')}",
-                            ),
-                          )
-                          .toList(),
+              if (context.mounted) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: prefs.entries
+                            .map(
+                              (e) => Text(
+                                "${e.key}:${e.value.toString().replaceAll(RegExp('"identifier":".+?",'), '')}",
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
-                ),
-              );
+                );
+              }
             },
           ),
         ],
