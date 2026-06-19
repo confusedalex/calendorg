@@ -107,33 +107,31 @@ class _HomePageState extends State<HomePage> {
     ];
     return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
       builder: (context, state) {
-        return SafeArea(
-          child: Scaffold(
-            body: pages[index],
-            bottomNavigationBar: NavigationBar(
-              onDestinationSelected: (value) => setState(() {
-                index = value;
-              }),
-              selectedIndex: index,
-              destinations: [
-                if (kDebugMode)
-                  NavigationDestination(
-                    icon: Icon(Icons.compare_arrows),
-                    label: 'Diff',
-                  ),
-                NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
+        return Scaffold(
+          body: SafeArea(child: pages[index]),
+          bottomNavigationBar: NavigationBar(
+            onDestinationSelected: (value) => setState(() {
+              index = value;
+            }),
+            selectedIndex: index,
+            destinations: [
+              if (kDebugMode)
                 NavigationDestination(
-                  icon: Icon(Icons.calendar_today),
-                  label: 'Calendar',
+                  icon: Icon(Icons.compare_arrows),
+                  label: 'Diff',
                 ),
-                NavigationDestination(
-                  icon: Icon(Icons.settings),
-                  label: 'Settings',
-                ),
-              ],
-            ),
-            floatingActionButton: state,
+              NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_today),
+                label: 'Calendar',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.settings),
+                label: 'Settings',
+              ),
+            ],
           ),
+          floatingActionButton: state,
         );
       },
     );
