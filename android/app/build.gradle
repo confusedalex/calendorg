@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "dev.confusedalex.calendorg"
-    compileSdk = 36
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
