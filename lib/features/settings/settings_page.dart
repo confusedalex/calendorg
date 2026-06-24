@@ -124,7 +124,7 @@ class SettingsPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<TagColorsCubit>(context),
+                value: BlocProvider.of<OrgFilesCubit>(context),
                 child: DebugPage(),
               ),
             ),

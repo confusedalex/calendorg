@@ -1,4 +1,6 @@
+import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DebugPage extends StatelessWidget {
@@ -34,6 +36,53 @@ class DebugPage extends StatelessWidget {
                 );
               }
             },
+          ),
+          BlocBuilder<OrgFilesCubit, OrgFilesState>(
+            builder: (context, state) => ListTile(
+              title: Text("Show loaded FilePaths"),
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: state.filePaths
+                          .map((e) => Text(e.toString()))
+                          .toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          BlocBuilder<OrgFilesCubit, OrgFilesState>(
+            builder: (context, state) => ListTile(
+              title: Text("Show loaded Documents"),
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: state.documentsMap.entries
+                          .map((e) => Text(e.value.toMarkup()))
+                          .toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          BlocBuilder<OrgFilesCubit, OrgFilesState>(
+            builder: (context, state) => ListTile(
+              title: Text("Show loaded events"),
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: SingleChildScrollView(
+                    child: Text(state.allEvents.entries.toString()),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
