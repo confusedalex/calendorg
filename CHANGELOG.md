@@ -1,4 +1,7 @@
 # Changelog
+## 1.3.0 - 2026-06-25
+### Added
+- Include more debug information
 ## 1.2.0 - 2026-06-19
 ### Changed
 - UI improvements in dialogs. Dialogs now show icons and the dialog itself is rounded.
