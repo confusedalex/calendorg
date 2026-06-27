@@ -1,4 +1,10 @@
 # Changelog
+## 1.3.1 - 2026-06-27
+I forgot to bump the the version number for 1.3.0, therefore this is
+more of a fixup.
+
+### Removed
+- Unused permission
 ## 1.3.0 - 2026-06-25
 ### Added
 - Include more debug information
