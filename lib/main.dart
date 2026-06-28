@@ -106,32 +106,52 @@ class _HomePageState extends State<HomePage> {
       SettingsPage(),
     ];
     return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
-      builder: (context, state) {
-        return Scaffold(
-          body: SafeArea(child: pages[index]),
-          bottomNavigationBar: NavigationBar(
-            onDestinationSelected: (value) => setState(() {
-              index = value;
-            }),
-            selectedIndex: index,
-            destinations: [
-              if (kDebugMode)
-                NavigationDestination(
-                  icon: Icon(Icons.compare_arrows),
-                  label: 'Diff',
-                ),
-              NavigationDestination(icon: Icon(Icons.list), label: 'Events'),
-              NavigationDestination(
-                icon: Icon(Icons.calendar_today),
-                label: 'Calendar',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-            ],
-          ),
-          floatingActionButton: state,
+      builder: (context, buttonState) {
+        return BlocBuilder<OrgFilesCubit, OrgFilesState>(
+          builder: (context, filesState) {
+            switch (filesState.status) {
+              case OrgFilesStatus.loading:
+                return Scaffold(
+                  body: SafeArea(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                );
+              case OrgFilesStatus.failure:
+                return Scaffold(
+                  body: SafeArea(child: Text(filesState.errors.toString())),
+                );
+              case OrgFilesStatus.success:
+                return Scaffold(
+                  body: SafeArea(child: pages[index]),
+                  bottomNavigationBar: NavigationBar(
+                    onDestinationSelected: (value) => setState(() {
+                      index = value;
+                    }),
+                    selectedIndex: index,
+                    destinations: [
+                      if (kDebugMode)
+                        NavigationDestination(
+                          icon: Icon(Icons.compare_arrows),
+                          label: 'Diff',
+                        ),
+                      NavigationDestination(
+                        icon: Icon(Icons.list),
+                        label: 'Events',
+                      ),
+                      NavigationDestination(
+                        icon: Icon(Icons.calendar_today),
+                        label: 'Calendar',
+                      ),
+                      NavigationDestination(
+                        icon: Icon(Icons.settings),
+                        label: 'Settings',
+                      ),
+                    ],
+                  ),
+                  floatingActionButton: buttonState,
+                );
+            }
+          },
         );
       },
     );

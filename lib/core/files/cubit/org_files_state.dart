@@ -1,8 +1,12 @@
 part of 'org_files_cubit.dart';
 
-class OrgFilesState {
+enum OrgFilesStatus { loading, success, failure }
+
+final class OrgFilesState {
   OrgFilesState({
     required this.directory,
+    required this.status,
+    required this.errors,
     required this.filePaths,
     required this.documentsMap,
     required this.todoStates,
@@ -11,6 +15,8 @@ class OrgFilesState {
   });
 
   final DirectoryInfo? directory;
+  final OrgFilesStatus status;
+  final List<String> errors;
   final Set<FileInfo> filePaths;
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? inboxFile;
@@ -19,6 +25,8 @@ class OrgFilesState {
 
   factory OrgFilesState.initial() => OrgFilesState(
     directory: null,
+    status: OrgFilesStatus.loading,
+    errors: [],
     filePaths: {},
     documentsMap: {},
     todoStates: OrgTodoStatesWithIgnored(
@@ -47,6 +55,8 @@ class OrgFilesState {
 
   OrgFilesState copyWith({
     ValueGetter<DirectoryInfo?>? directory,
+    OrgFilesStatus? status,
+    List<String>? errors,
     Set<FileInfo>? filePaths,
     Map<FileInfo, OrgDocument>? documentsMap,
     OrgTodoStatesWithIgnored? todoStates,
@@ -55,6 +65,8 @@ class OrgFilesState {
   }) {
     return OrgFilesState(
       directory: directory != null ? directory() : this.directory,
+      status: status ?? this.status,
+      errors: errors ?? this.errors,
       filePaths: filePaths ?? this.filePaths,
       documentsMap: documentsMap ?? this.documentsMap,
       todoStates: todoStates ?? this.todoStates,
