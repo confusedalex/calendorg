@@ -21,6 +21,33 @@ class AgendaFilesDialog extends StatelessWidget {
       return true;
     }
 
+    Future<bool> validateFileDirectory(
+      FileInfo? fileInfo,
+      DirectoryInfo? dirInfo,
+    ) async {
+      if (fileInfo == null) return false;
+      if (dirInfo == null) return false;
+      if (fileInfo.fileName == null && fileInfo.fileName is String) {
+        return false;
+      }
+      try {
+        final relative = await FilePickerWritable().resolveRelativePath(
+          directoryIdentifier: dirInfo.identifier,
+          relativePath: fileInfo.fileName as String,
+        );
+        final isSameFile = relative.uri == fileInfo.uri;
+        if (!isSameFile) {
+          sendError(
+            context,
+            "File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.",
+          );
+        }
+        return isSameFile;
+      } catch (e) {
+        return false;
+      }
+    }
+
     bool validateFileName(String? fileName) {
       if (fileName == null ||
           state.filePaths.any((it) => it.fileName == fileName)) {
@@ -60,8 +87,14 @@ class AgendaFilesDialog extends StatelessWidget {
       }
     }
 
-    void onPressed(FileInfo? fileInfo) {
+    void onPressed(FileInfo? fileInfo) async {
       if (!validateFile(fileInfo)) return;
+      if (!(await validateFileDirectory(
+        fileInfo,
+        context.read<OrgFilesCubit>().state.directory,
+      ))) {
+        return;
+      }
       if (!validateFileName(fileInfo?.fileName)) return;
       context.read<OrgFilesCubit>().addFilePath(fileInfo);
     }
