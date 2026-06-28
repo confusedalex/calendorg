@@ -63,37 +63,6 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         Divider(height: 1),
-        BlocBuilder<OrgFilesCubit, OrgFilesState>(
-          builder: (context, state) => ListTile(
-            leading: Icon(Icons.inbox),
-            title: Text("Inbox File"),
-            trailing: Text(
-              state.inboxFile?.fileName ?? "Not set",
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            onTap: () async {
-              try {
-                final fileInfo = await FilePickerWritable().openFile((
-                  fileInfo,
-                  file,
-                ) async {
-                  return fileInfo;
-                });
-                if (fileInfo != null && context.mounted) {
-                  context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error selecting file: $e')),
-                  );
-                }
-              }
-            },
-          ),
-        ),
-        Divider(height: 1),
-        Divider(height: 1),
         ListTile(
           leading: Icon(Icons.brightness_4),
           title: Text("Theme"),

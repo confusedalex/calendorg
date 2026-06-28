@@ -15,7 +15,7 @@ class AgendaPage extends StatelessWidget {
         builder: (context, state) => Column(
           children: [
             ListTile(
-              leading: Icon(Icons.inbox),
+              leading: Icon(Icons.folder_open),
               title: Text("Pick org directory"),
               trailing: Text(
                 state.directory?.fileName ?? "Not set",
@@ -40,7 +40,35 @@ class AgendaPage extends StatelessWidget {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.folder),
+              enabled: state.directory != null,
+              leading: Icon(Icons.inbox),
+              title: Text("Inbox File"),
+              trailing: Text(
+                state.inboxFile?.fileName ?? "Not set",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              onTap: () async {
+                try {
+                  final fileInfo = await FilePickerWritable().openFile((
+                    fileInfo,
+                    file,
+                  ) async {
+                    return fileInfo;
+                  });
+                  if (fileInfo != null && context.mounted) {
+                    context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error selecting file: $e')),
+                    );
+                  }
+                }
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.folder_copy),
               title: Text("Agenda Files"),
               enabled: state.directory != null,
               onTap: () => showDialog(
