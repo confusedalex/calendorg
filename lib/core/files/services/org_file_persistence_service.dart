@@ -25,7 +25,7 @@ class OrgFilePersistenceService {
     }
   }
 
-  Future<void> saveInboxFile(FileInfo? fileInfo) async {
+  Future<void> saveInboxFile(FileInfo fileInfo) async {
     try {
       await _prefs.setString("inboxFile", jsonEncode(fileInfo));
     } catch (e) {

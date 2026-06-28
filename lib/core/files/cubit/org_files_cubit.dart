@@ -84,16 +84,14 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     }
   }
 
-  Future<void> changeInboxFile(FileInfo? fileInfo) async {
+  Future<void> changeInboxFile(FileInfo fileInfo) async {
     try {
       await _repository.saveInboxFile(fileInfo);
 
       final documentsMap = {...state.documentsMap}..remove(state.inboxFile);
 
-      if (fileInfo != null) {
-        final document = await _repository.loadDocument(fileInfo);
-        documentsMap[fileInfo] = document;
-      }
+      final document = await _repository.loadDocument(fileInfo);
+      documentsMap[fileInfo] = document;
 
       emit(
         state.copyWith(inboxFile: () => fileInfo, documentsMap: documentsMap),

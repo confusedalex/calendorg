@@ -81,7 +81,7 @@ class OrgFilesRepository {
     return _persistence.saveFileList(fileInfos);
   }
 
-  Future<void> saveInboxFile(FileInfo? fileInfo) async {
+  Future<void> saveInboxFile(FileInfo fileInfo) async {
     return _persistence.saveInboxFile(fileInfo);
   }
 
