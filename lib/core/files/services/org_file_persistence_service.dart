@@ -18,7 +18,10 @@ class OrgFilePersistenceService {
 
   Future<void> saveFileList(Set<FileInfo> fileInfos) async {
     try {
-      await _prefs.setString("agendaFiles", jsonEncode(fileInfos.toList()));
+      await _prefs.setStringList(
+        "agendaFiles",
+        fileInfos.map((e) => e.fileName).whereType<String>().toList(),
+      );
     } catch (e) {
       debugPrint('Error saving file list: $e');
       rethrow;
@@ -27,7 +30,7 @@ class OrgFilePersistenceService {
 
   Future<void> saveInboxFile(FileInfo fileInfo) async {
     try {
-      await _prefs.setString("inboxFile", jsonEncode(fileInfo));
+      await _prefs.setString("inboxFile", fileInfo.fileName ?? "null");
     } catch (e) {
       debugPrint('Error saving inbox file: $e');
       rethrow;
@@ -37,23 +40,43 @@ class OrgFilePersistenceService {
   Future<(Set<FileInfo>, FileInfo?, DirectoryInfo?)>
   loadFilePreferences() async {
     try {
-      final filesString = await _prefs.getString("agendaFiles");
+      final filesString = await _prefs.getStringList("agendaFiles");
       final inboxFileString = await _prefs.getString("inboxFile");
       final directoryString = await _prefs.getString("agendaDirectory");
 
-      final fileInfos = filesString == null
-          ? <FileInfo>{}
-          : (jsonDecode(filesString) as List<dynamic>)
-                .map((info) => FileInfo.fromJson(info))
-                .toSet();
-
-      final inboxFile = (inboxFileString == null || inboxFileString == "null")
+      final inboxName =
+          (inboxFileString == null ||
+              inboxFileString == "null" ||
+              inboxFileString == "")
           ? null
-          : FileInfo.fromJson(jsonDecode(inboxFileString));
+          : inboxFileString;
 
       final dirInfo = (directoryString == null || directoryString == "null")
           ? null
           : DirectoryInfo.fromJsonString(directoryString);
+
+      if (dirInfo == null) {
+        return (<FileInfo>{}, null, null);
+      }
+
+      final FileInfo? inboxFile = inboxName != null
+          ? (await FilePickerWritable().resolveRelativePath(
+                  directoryIdentifier: dirInfo.identifier,
+                  relativePath: inboxName,
+                ))
+                as FileInfo
+          : null;
+
+      final Set<FileInfo> fileInfos = filesString != null
+          ? (await Future.wait(
+              filesString.whereType<String>().map(
+                (s) => FilePickerWritable().resolveRelativePath(
+                  directoryIdentifier: dirInfo.identifier,
+                  relativePath: s,
+                ),
+              ),
+            )).cast<FileInfo>().toSet()
+          : {};
 
       return (fileInfos, inboxFile, dirInfo);
     } catch (e) {
