@@ -1,4 +1,11 @@
 # Changelog
+## 1.4.0 - 2026-06-29
+### Added
+- Loading animation while org files are loaded
+### Changed
+- Completely overhauled the file picking workings. Instead of picking
+  içgndividual files, you have to pick a org files directory first, and
+  then pick the individual files from this directory.
 ## 1.3.1 - 2026-06-27
 I forgot to bump the the version number for 1.3.0, therefore this is
 more of a fixup.
