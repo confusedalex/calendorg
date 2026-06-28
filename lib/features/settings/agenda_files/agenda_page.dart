@@ -11,10 +11,10 @@ class AgendaPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          BlocBuilder<OrgFilesCubit, OrgFilesState>(
-            builder: (context, state) => ListTile(
+      body: BlocBuilder<OrgFilesCubit, OrgFilesState>(
+        builder: (context, state) => Column(
+          children: [
+            ListTile(
               leading: Icon(Icons.inbox),
               title: Text("Pick org directory"),
               trailing: Text(
@@ -26,8 +26,9 @@ class AgendaPage extends StatelessWidget {
                   final dirInfo = await FilePickerWritable().openDirectory();
 
                   if (dirInfo == null) throw Error();
-
-                  context.read<OrgFilesCubit>().setOrgDirectory(dirInfo);
+                  if (context.mounted) {
+                    context.read<OrgFilesCubit>().setOrgDirectory(dirInfo);
+                  }
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -37,19 +38,21 @@ class AgendaPage extends StatelessWidget {
                 }
               },
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.folder),
-            title: Text("Agenda Files"),
-            onTap: () => showDialog(
-              context: context,
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<OrgFilesCubit>(context),
-                child: const AgendaFilesDialog(),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.folder),
+              title: Text("Agenda Files"),
+              enabled: state.directory != null,
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<OrgFilesCubit>(context),
+                  child: const AgendaFilesDialog(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
