@@ -4,7 +4,7 @@ import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/features/settings/agenda_files_dialog.dart';
+import 'package:calendorg/features/settings/agenda_files/agenda_files_dialog.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';
