@@ -68,6 +68,7 @@ class TestOrgFilesCubit extends OrgFilesCubit {
   factory TestOrgFilesCubit.withInboxFile(FileInfo inboxFile) {
     return TestOrgFilesCubit._(
       OrgFilesState(
+        directory: null,
         filePaths: {inboxFile},
         documentsMap: {inboxFile: OrgDocument.parse('')},
         todoStates: OrgTodoStatesWithIgnored(

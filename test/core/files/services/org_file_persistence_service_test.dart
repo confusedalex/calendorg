@@ -27,8 +27,8 @@ void main() {
       service.saveFileList(fileInfos);
 
       expect(
-        await SharedPreferencesAsync().getString("agendaFiles"),
-        equals(jsonEncode(fileInfos.toList())),
+        await SharedPreferencesAsync().getStringList("agendaFiles"),
+        equals(fileInfos.map((e) => e.fileName).toList()),
       );
     });
     test('should throw error when fails', () {});

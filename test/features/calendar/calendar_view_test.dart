@@ -175,6 +175,7 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
 
   @override
   OrgFilesState get state => OrgFilesState(
+    directory: null,
     filePaths: {fileInfo},
     documentsMap: {fileInfo: document},
     todoStates: OrgTodoStatesWithIgnored(
