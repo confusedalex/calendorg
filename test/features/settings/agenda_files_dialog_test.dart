@@ -1,5 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/features/settings/agenda_files_dialog.dart';
+import 'package:calendorg/features/settings/agenda_files/agenda_files_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

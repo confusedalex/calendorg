@@ -22,6 +22,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       );
       emit(
         OrgFilesState(
+          directory: result.dirInfo,
           filePaths: result.fileInfos,
           documentsMap: result.documentsMap,
           inboxFile: result.inboxFile,
@@ -33,6 +34,12 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       debugPrint('Error initializing org files: $e');
       emit(OrgFilesState.initial());
     }
+  }
+
+  Future<void> setOrgDirectory(DirectoryInfo dirInfo) async {
+    await _repository.saveDirectory(dirInfo);
+
+    emit(state.copyWith(directory: () => dirInfo));
   }
 
   Future<void> addFilePath(FileInfo? fileInfo) async {
@@ -77,16 +84,14 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     }
   }
 
-  Future<void> changeInboxFile(FileInfo? fileInfo) async {
+  Future<void> changeInboxFile(FileInfo fileInfo) async {
     try {
       await _repository.saveInboxFile(fileInfo);
 
       final documentsMap = {...state.documentsMap}..remove(state.inboxFile);
 
-      if (fileInfo != null) {
-        final document = await _repository.loadDocument(fileInfo);
-        documentsMap[fileInfo] = document;
-      }
+      final document = await _repository.loadDocument(fileInfo);
+      documentsMap[fileInfo] = document;
 
       emit(
         state.copyWith(inboxFile: () => fileInfo, documentsMap: documentsMap),

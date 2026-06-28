@@ -5,6 +5,7 @@ import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/event.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:org_parser/org_parser.dart';
 
@@ -27,7 +28,8 @@ class OrgFilesRepository {
   Future<InitialState> loadInitialState(
     OrgTodoStatesWithIgnored todoStates,
   ) async {
-    final (fileInfos, inboxFile) = await _persistence.loadFilePreferences();
+    final (fileInfos, inboxFile, dirInfo) = await _persistence
+        .loadFilePreferences();
     final documentsMap = <FileInfo, OrgDocument>{};
 
     for (final fileInfo in {...fileInfos, ?inboxFile}) {
@@ -41,6 +43,7 @@ class OrgFilesRepository {
     }
 
     return InitialState(
+      dirInfo: dirInfo,
       fileInfos: fileInfos,
       inboxFile: inboxFile,
       documentsMap: documentsMap,
@@ -66,6 +69,10 @@ class OrgFilesRepository {
     return allEvents;
   }
 
+  Future<void> saveDirectory(DirectoryInfo dirInfo) async {
+    return _persistence.saveDirectory(dirInfo);
+  }
+
   Future<OrgDocument> loadDocument(FileInfo fileInfo) async {
     return _fileService.documentByIdentifier(fileInfo.identifier);
   }
@@ -74,7 +81,7 @@ class OrgFilesRepository {
     return _persistence.saveFileList(fileInfos);
   }
 
-  Future<void> saveInboxFile(FileInfo? fileInfo) async {
+  Future<void> saveInboxFile(FileInfo fileInfo) async {
     return _persistence.saveInboxFile(fileInfo);
   }
 
@@ -96,12 +103,14 @@ class OrgFilesRepository {
 }
 
 class InitialState {
+  final DirectoryInfo? dirInfo;
   final Set<FileInfo> fileInfos;
   final FileInfo? inboxFile;
   final Map<FileInfo, OrgDocument> documentsMap;
   final OrgTodoStatesWithIgnored todoStates;
 
   InitialState({
+    required this.dirInfo,
     required this.fileInfos,
     required this.inboxFile,
     required this.documentsMap,

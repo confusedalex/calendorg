@@ -2,7 +2,7 @@ import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/features/settings/agenda_files_dialog.dart';
+import 'package:calendorg/features/settings/agenda_files/agenda_page.dart';
 import 'package:calendorg/features/settings/debug_page.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
@@ -63,48 +63,6 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         Divider(height: 1),
-        BlocBuilder<OrgFilesCubit, OrgFilesState>(
-          builder: (context, state) => ListTile(
-            leading: Icon(Icons.inbox),
-            title: Text("Inbox File"),
-            trailing: Text(
-              state.inboxFile?.fileName ?? "Not set",
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            onTap: () async {
-              try {
-                final fileInfo = await FilePickerWritable().openFile((
-                  fileInfo,
-                  file,
-                ) async {
-                  return fileInfo;
-                });
-                if (fileInfo != null && context.mounted) {
-                  context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error selecting file: $e')),
-                  );
-                }
-              }
-            },
-          ),
-        ),
-        Divider(height: 1),
-        ListTile(
-          leading: Icon(Icons.folder),
-          title: Text("Agenda Files"),
-          onTap: () => showDialog(
-            context: context,
-            builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<OrgFilesCubit>(context),
-              child: const AgendaFilesDialog(),
-            ),
-          ),
-        ),
-        Divider(height: 1),
         ListTile(
           leading: Icon(Icons.brightness_4),
           title: Text("Theme"),
@@ -126,6 +84,19 @@ class SettingsPage extends StatelessWidget {
               builder: (_) => BlocProvider.value(
                 value: BlocProvider.of<OrgFilesCubit>(context),
                 child: DebugPage(),
+              ),
+            ),
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.folder),
+          title: Text("Agenda Files"),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<OrgFilesCubit>(context),
+                child: AgendaPage(),
               ),
             ),
           ),
