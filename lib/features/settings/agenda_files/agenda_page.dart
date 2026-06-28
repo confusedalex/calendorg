@@ -1,4 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/features/settings/agenda_files/agenda_files_dialog.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +36,17 @@ class AgendaPage extends StatelessWidget {
                   }
                 }
               },
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.folder),
+            title: Text("Agenda Files"),
+            onTap: () => showDialog(
+              context: context,
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<OrgFilesCubit>(context),
+                child: const AgendaFilesDialog(),
+              ),
             ),
           ),
         ],
