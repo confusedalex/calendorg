@@ -2,6 +2,7 @@ part of 'org_files_cubit.dart';
 
 class OrgFilesState {
   OrgFilesState({
+    required this.directory,
     required this.filePaths,
     required this.documentsMap,
     required this.todoStates,
@@ -9,6 +10,7 @@ class OrgFilesState {
     this.inboxFile,
   });
 
+  final DirectoryInfo? directory;
   final Set<FileInfo> filePaths;
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? inboxFile;
@@ -16,6 +18,7 @@ class OrgFilesState {
   final Map<String, List<Event>> allEvents;
 
   factory OrgFilesState.initial() => OrgFilesState(
+    directory: null,
     filePaths: {},
     documentsMap: {},
     todoStates: OrgTodoStatesWithIgnored(
@@ -43,6 +46,7 @@ class OrgFilesState {
       });
 
   OrgFilesState copyWith({
+    ValueGetter<DirectoryInfo?>? directory,
     Set<FileInfo>? filePaths,
     Map<FileInfo, OrgDocument>? documentsMap,
     OrgTodoStatesWithIgnored? todoStates,
@@ -50,6 +54,7 @@ class OrgFilesState {
     ValueGetter<FileInfo?>? inboxFile,
   }) {
     return OrgFilesState(
+      directory: directory != null ? directory() : this.directory,
       filePaths: filePaths ?? this.filePaths,
       documentsMap: documentsMap ?? this.documentsMap,
       todoStates: todoStates ?? this.todoStates,

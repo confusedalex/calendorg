@@ -7,6 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OrgFilePersistenceService {
   final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
 
+  Future<void> saveDirectory(DirectoryInfo directoryInfo) async {
+    try {
+      await _prefs.setString("agendaDirectory", jsonEncode(directoryInfo));
+    } catch (e) {
+      debugPrint('Error saving file list: $e');
+      rethrow;
+    }
+  }
+
   Future<void> saveFileList(Set<FileInfo> fileInfos) async {
     try {
       await _prefs.setString("agendaFiles", jsonEncode(fileInfos.toList()));
@@ -25,10 +34,12 @@ class OrgFilePersistenceService {
     }
   }
 
-  Future<(Set<FileInfo>, FileInfo?)> loadFilePreferences() async {
+  Future<(Set<FileInfo>, FileInfo?, DirectoryInfo?)>
+  loadFilePreferences() async {
     try {
       final filesString = await _prefs.getString("agendaFiles");
       final inboxFileString = await _prefs.getString("inboxFile");
+      final directoryString = await _prefs.getString("agendaDirectory");
 
       final fileInfos = filesString == null
           ? <FileInfo>{}
@@ -40,10 +51,14 @@ class OrgFilePersistenceService {
           ? null
           : FileInfo.fromJson(jsonDecode(inboxFileString));
 
-      return (fileInfos, inboxFile);
+      final dirInfo = (directoryString == null || directoryString == "null")
+          ? null
+          : DirectoryInfo.fromJsonString(directoryString);
+
+      return (fileInfos, inboxFile, dirInfo);
     } catch (e) {
       debugPrint('Error loading preferences: $e');
-      return (<FileInfo>{}, null);
+      return (<FileInfo>{}, null, null);
     }
   }
 }

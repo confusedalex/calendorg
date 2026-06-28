@@ -3,6 +3,7 @@ import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files/agenda_files_dialog.dart';
+import 'package:calendorg/features/settings/agenda_files/agenda_page.dart';
 import 'package:calendorg/features/settings/debug_page.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
@@ -126,6 +127,19 @@ class SettingsPage extends StatelessWidget {
               builder: (_) => BlocProvider.value(
                 value: BlocProvider.of<OrgFilesCubit>(context),
                 child: DebugPage(),
+              ),
+            ),
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.folder),
+          title: Text("Agenda Files"),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<OrgFilesCubit>(context),
+                child: AgendaPage(),
               ),
             ),
           ),

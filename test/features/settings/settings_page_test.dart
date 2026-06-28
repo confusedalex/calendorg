@@ -5,6 +5,7 @@ import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files/agenda_files_dialog.dart';
+import 'package:calendorg/features/settings/agenda_files/agenda_page.dart';
 import 'package:calendorg/features/settings/settings_page.dart';
 import 'package:calendorg/features/settings/starting_day_dialog.dart';
 import 'package:calendorg/features/settings/tags/tags_page.dart';
@@ -73,7 +74,7 @@ void main() {
 
       expect(find.byType(ThemeDialog), findsOneWidget);
     });
-    testWidgets("Agenda Files Dialog will open", (tester) async {
+    testWidgets("Agenda Files Page will open", (tester) async {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
@@ -81,7 +82,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.byType(AgendaFilesDialog), findsOneWidget);
+      expect(find.byType(AgendaPage), findsOneWidget);
     });
     testWidgets("TODO States Dialog will open", (tester) async {
       await pumpWidget(tester);
