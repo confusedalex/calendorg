@@ -1,5 +1,6 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files/agenda_files_dialog.dart';
+import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,15 +56,30 @@ class AgendaPage extends StatelessWidget {
                   ) async {
                     return fileInfo;
                   });
-                  if (fileInfo != null && context.mounted) {
+
+                  if (fileInfo == null) return;
+                  if (state.directory == null) return;
+                  if (fileInfo.fileName == null &&
+                      fileInfo.fileName is String) {
+                    return;
+                  }
+                  final relative = await FilePickerWritable()
+                      .resolveRelativePath(
+                        directoryIdentifier: state.directory!.identifier,
+                        relativePath: fileInfo.fileName as String,
+                      );
+                  final isSameFile = relative.uri == fileInfo.uri;
+                  if (!isSameFile) {
+                    sendError(
+                      context,
+                      "File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.",
+                    );
+                  }
+                  if (context.mounted) {
                     context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
                   }
                 } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error selecting file: $e')),
-                    );
-                  }
+                  sendError(context, "Error loading file: {$e}");
                 }
               },
             ),
