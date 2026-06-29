@@ -25,23 +25,45 @@ class AgendaFilesDialog extends StatelessWidget {
       FileInfo? fileInfo,
       DirectoryInfo? dirInfo,
     ) async {
-      if (fileInfo == null) return false;
-      if (dirInfo == null) return false;
-      if (fileInfo.fileName == null && fileInfo.fileName is String) {
-        return false;
-      }
+      if (fileInfo == null || dirInfo == null) return false;
+      if (fileInfo.fileName == null) return false;
+
+      sendErr() => sendError(
+        context,
+        "File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.",
+      );
+
       try {
-        final relative = await FilePickerWritable().resolveRelativePath(
-          directoryIdentifier: dirInfo.identifier,
-          relativePath: fileInfo.fileName as String,
-        );
-        final isSameFile = relative.uri == fileInfo.uri;
-        if (!isSameFile) {
-          sendError(
-            context,
-            "File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.",
+        final filePicker = FilePickerWritable();
+        late final EntityInfo relative;
+
+        try {
+          relative = await filePicker.resolveRelativePath(
+            directoryIdentifier: dirInfo.identifier,
+            relativePath: fileInfo.fileName as String,
           );
+        } catch (e) {
+          sendErr();
+          return false;
         }
+
+        final relativeSize = await filePicker.readFile(
+          identifier: relative.identifier,
+          reader: (_, file) async => file.length(),
+        );
+        final pickedSize = await filePicker.readFile(
+          identifier: fileInfo.identifier,
+          reader: (_, file) async => file.length(),
+        );
+
+        print("${relativeSize}, ${pickedSize}");
+
+        final isSameFile = relativeSize == pickedSize;
+
+        if (!isSameFile) {
+          sendErr();
+        }
+
         return isSameFile;
       } catch (e) {
         return false;

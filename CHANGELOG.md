@@ -1,4 +1,7 @@
 # Changelog
+## 1.4.1 - 2026-06-29
+### Changed
+- Changed algorithm for comparing files, because the former method didn't work on android :(
 ## 1.4.0 - 2026-06-29
 ### Added
 - Loading animation while org files are loaded
