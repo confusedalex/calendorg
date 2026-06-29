@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/confusedalex/calendorg/refs/heads/main/assets/calendorg.png" style="border-radius: 50%; width: 20%;">
+  <img src="https://raw.githubusercontent.com/confusedalex/calendorg/refs/heads/main/assets/calendorg-round.png" style="width: 20%;">
   
   <h1>calendorg</h1>
   
