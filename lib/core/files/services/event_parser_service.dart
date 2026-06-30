@@ -130,7 +130,7 @@ class EventParserService {
 
   List<String> _getDateKeys(OrgTimestamp timestamp) {
     String dateTimeToIso(DateTime dateTime) =>
-        dateTime.toIso8601String().split("T")[0];
+        dateTime.toIso8601String().substring(0, 10);
 
     return switch (timestamp) {
       OrgSimpleTimestamp() => [dateTimeToIso(timestamp.startDateTime)],
