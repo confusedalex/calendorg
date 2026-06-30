@@ -13,7 +13,7 @@ class OrgFileService {
 
   Future<OrgDocument> documentByIdentifier(String identifier) async {
     try {
-      final content = await FilePickerWritable().readFile(
+      final content = await _filePicker.readFile(
         identifier: identifier,
         reader: (fileInfo, file) => file.readAsString(),
       );
