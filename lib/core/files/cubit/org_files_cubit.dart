@@ -16,7 +16,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   Future<void> init(OrgTodoStatesWithIgnored todoStates) async {
     try {
       final result = await _repository.loadInitialState(todoStates);
-      final allEvents = _repository.parseAllEvents(
+      final allEvents = await _repository.parseAllEvents(
         result.documentsMap,
         todoStates.ignored,
       );
@@ -62,7 +62,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
       emit(
         state.copyWith(
-          allEvents: _repository.parseAllEvents(
+          allEvents: await _repository.parseAllEvents(
             state.documentsMap,
             state.todoStates.ignored,
           ),
@@ -116,7 +116,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
         newDocuments,
       );
 
-      final allEvents = _repository.parseAllEvents(
+      final allEvents = await _repository.parseAllEvents(
         documentsMap,
         todoStates.ignored,
       );

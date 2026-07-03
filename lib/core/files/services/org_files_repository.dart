@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:calendorg/core/files/services/event_parser_service.dart';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_file_service.dart';
@@ -58,25 +60,29 @@ class OrgFilesRepository {
     );
   }
 
-  Map<String, List<Event>> parseAllEvents(
+  Future<Map<String, List<Event>>> parseAllEvents(
     Map<FileInfo, OrgDocument> documentsMap,
     List<String> ignoredTodoStates,
-  ) {
+  ) async {
+    final perFileEvents = await Future.wait(
+      documentsMap.entries.map(
+        (entry) => Isolate.run(
+          () => EventParserService().parseEventsFromDocument(
+            entry.key,
+            entry.value,
+            ignoredTodoStates.toSet(),
+          ),
+        ),
+      ),
+    );
+
     final allEvents = <String, List<Event>>{};
-    for (final entry in documentsMap.entries) {
-      final events = _eventParser.parseEventsFromDocument(
-        entry.key,
-        entry.value,
-        ignoredTodoStates.toSet(),
-      );
+    for (final events in perFileEvents) {
       for (final MapEntry(key: dateKey, value: eventList) in events.entries) {
         (allEvents[dateKey] ??= []).addAll(eventList);
       }
     }
-    return allEvents;
-  }
-      }
-    }
+
     return allEvents;
   }
 
