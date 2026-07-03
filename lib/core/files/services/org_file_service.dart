@@ -42,17 +42,17 @@ class OrgFileService {
     OrgDocument oldDocument,
     List<(OrgNode, OrgNode)> replacements,
   ) async {
-    final newDoc = replacements
-        .fold<OrgZipper>(
-          oldDocument.edit(),
-          (builder, nodes) =>
-              builder.find(nodes.$1)?.replace(nodes.$2) as OrgZipper,
-        )
-        .commit();
+    final newDoc =
+        replacements
+                .fold<OrgZipper>(
+                  oldDocument.edit(),
+                  (builder, nodes) =>
+                      builder.find(nodes.$1)?.replace(nodes.$2) as OrgZipper,
+                )
+                .commit()
+            as OrgDocument;
 
-    await saveDocument(fileIdentifier, newDoc as OrgDocument);
-
-    final parseResult = _parserService.getParser().parse(newDoc.toMarkup());
-    return parseResult.value;
+    await saveDocument(fileIdentifier, newDoc);
+    return newDoc;
   }
 }
