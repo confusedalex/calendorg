@@ -17,7 +17,7 @@ void main() {
   final events = EventParserService().parseEventsFromDocument(
     MockFileInfo(),
     document,
-    [],
+    {},
   );
   final event = events.entries.first.value.first;
 

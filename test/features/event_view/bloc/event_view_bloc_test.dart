@@ -38,7 +38,7 @@ void main() {
     ).thenAnswer((_) async {});
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
     event = EventParserService()
-        .parseEventsFromDocument(FakeFileInfo(), document, [])
+        .parseEventsFromDocument(FakeFileInfo(), document, {})
         .entries
         .first
         .value
@@ -82,7 +82,7 @@ void main() {
               FakeFileInfo(),
               OrgDocument.parse("""* Math Exam
           <2025-10-10>"""),
-              [],
+              {},
             )
             .entries
             .first

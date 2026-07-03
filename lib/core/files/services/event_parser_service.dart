@@ -11,7 +11,7 @@ class EventParserService {
   Map<String, List<Event>> parseEventsFromDocument(
     FileInfo fileInfo,
     OrgDocument document,
-    List<String> ignoredTodoStates,
+    Set<String> ignoredTodoStates,
   ) {
     final Map<String, List<Event>> eventMap = {};
 
@@ -27,7 +27,7 @@ class EventParserService {
       for (final timestamp in event.timestamps) {
         final dateKeys = _getDateKeys(timestamp);
         for (final dateKey in dateKeys) {
-          eventMap[dateKey] = [...?eventMap[dateKey], event];
+          (eventMap[dateKey] ??= []).add(event);
         }
       }
 
@@ -65,7 +65,7 @@ class EventParserService {
     bool returnIfSectionFound = false;
     int ignoreNTimestamps = 0;
 
-    section.visitWithBlacklist([OrgProperty, OrgDrawer], (OrgNode node) {
+    section.visitWithBlacklist({OrgProperty, OrgDrawer}, (OrgNode node) {
       switch (node) {
         case OrgSection():
           return returnIfSectionFound ? false : returnIfSectionFound = true;
@@ -143,7 +143,7 @@ class EventParserService {
 
 extension VisitBlacklist on OrgNode {
   bool visitWithBlacklist<T extends OrgNode>(
-    List blacklist,
+    Set<Type> blacklist,
     bool Function(T) visitor,
   ) {
     final self = this;
@@ -152,13 +152,11 @@ extension VisitBlacklist on OrgNode {
         return false;
       }
     }
-    final children = [...?this.children]
-      ..removeWhere((e) => blacklist.contains(e.runtimeType));
-    if (children.isNotEmpty) {
+    final children = this.children;
+    if (children != null) {
       for (final child in children) {
-        if (!child.visitWithBlacklist<T>(blacklist, visitor)) {
-          return false;
-        }
+        if (blacklist.contains(child.runtimeType)) continue;
+        if (!child.visitWithBlacklist<T>(blacklist, visitor)) return false;
       }
     }
     return true;

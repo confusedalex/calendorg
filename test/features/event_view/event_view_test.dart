@@ -24,7 +24,7 @@ void main() {
 """;
   final document = OrgDocument.parse(markup);
   final event = EventParserService()
-      .parseEventsFromDocument(MockFileInfo(), document, [])
+      .parseEventsFromDocument(MockFileInfo(), document, {})
       .entries
       .first
       .value

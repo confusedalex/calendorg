@@ -67,10 +67,14 @@ class OrgFilesRepository {
       final events = _eventParser.parseEventsFromDocument(
         entry.key,
         entry.value,
-        ignoredTodoStates,
+        ignoredTodoStates.toSet(),
       );
       for (final MapEntry(key: dateKey, value: eventList) in events.entries) {
-        allEvents[dateKey] = [...?allEvents[dateKey], ...eventList];
+        (allEvents[dateKey] ??= []).addAll(eventList);
+      }
+    }
+    return allEvents;
+  }
       }
     }
     return allEvents;

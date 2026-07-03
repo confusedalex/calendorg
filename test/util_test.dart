@@ -40,7 +40,7 @@ CLOSED: [2026-04-24 Fri 11:25]
   final events = EventParserService().parseEventsFromDocument(
     MockFileInfo(),
     document,
-    [],
+    {},
   );
   final meetupEvent = events.entries.first.value.first;
 
@@ -67,7 +67,7 @@ DEADLINE: <2025-05-04>
       final events = EventParserService().parseEventsFromDocument(
         MockFileInfo(),
         document,
-        [],
+        {},
       );
 
       expect(events.entries.first.value.first.deadline, isNotNull);
@@ -82,7 +82,7 @@ DEADLINE: <2025-05-04>
       final events = EventParserService().parseEventsFromDocument(
         MockFileInfo(),
         document,
-        [],
+        {},
       );
 
       expect(events.entries, hasLength(1));
@@ -289,7 +289,7 @@ DEADLINE: <2025-05-04>
         final events = EventParserService().parseEventsFromDocument(
           MockFileInfo(),
           document,
-          ["OTHER"],
+          {"OTHER"},
         );
 
         expect(events.length, equals(1));
@@ -317,7 +317,7 @@ DEADLINE: <2025-05-04>
         final events = EventParserService().parseEventsFromDocument(
           MockFileInfo(),
           document,
-          ["OTHER"],
+          {"OTHER"},
         );
 
         expect(events.length, equals(3));
