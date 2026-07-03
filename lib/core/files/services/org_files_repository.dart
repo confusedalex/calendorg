@@ -13,7 +13,6 @@ import 'package:org_parser/org_parser.dart';
 
 class OrgFilesRepository {
   final OrgFileService _fileService;
-  final EventParserService _eventParser;
   final OrgFilePersistenceService _persistence;
   final OrgParserService _parserService;
 
@@ -23,7 +22,6 @@ class OrgFilesRepository {
     required OrgFilePersistenceService persistence,
     required OrgParserService parserService,
   }) : _fileService = fileService,
-       _eventParser = eventParser,
        _persistence = persistence,
        _parserService = parserService;
 

@@ -1,9 +1,6 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/event_parser_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
-import 'package:calendorg/event.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:org_parser/org_parser.dart';
 import 'package:test/test.dart';
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
