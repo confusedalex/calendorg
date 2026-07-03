@@ -1,4 +1,7 @@
 # Changelog
+## 1.4.3 - 2026-07-03
+### Changed
+- Replaced the loading spinner with a simpler loading indicator
 ## 1.4.2 - 2026-07-03
 ### Changed
 - Allow org file to be read in parallel, which should speed up the app
