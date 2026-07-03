@@ -17,8 +17,7 @@ class OrgFileService {
         identifier: identifier,
         reader: (fileInfo, file) => file.readAsString(),
       );
-      final parseResult = _parserService.getParser().parse(content);
-      return parseResult.value;
+      return _parserService.parseContentInBackground(content);
     } catch (e) {
       debugPrint('Error parsing document with identifier $identifier: $e');
       rethrow;

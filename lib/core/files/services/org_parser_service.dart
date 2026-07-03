@@ -1,28 +1,37 @@
+import 'dart:isolate';
+
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:petitparser/petitparser.dart';
 
 class OrgParserService {
-  Parser? _parser;
   late OrgTodoStatesWithIgnored _currentTodoStates;
 
   OrgParserService([OrgTodoStatesWithIgnored? todoStates]) {
-    _currentTodoStates = todoStates ??
-        OrgTodoStatesWithIgnored(
-          todo: ["TODO"],
-          done: ["DONE"],
-          ignored: [],
-        );
+    _currentTodoStates =
+        todoStates ??
+        OrgTodoStatesWithIgnored(todo: ["TODO"], done: ["DONE"], ignored: []);
   }
 
-  Parser getParser() {
-    return _parser ??= OrgParserDefinition(
-      todoStates: [_currentTodoStates.todoStates],
-    ).build();
+  Future<OrgDocument> parseContentInBackground(String content) {
+    final todoStates = _currentTodoStates.todoStates;
+    return Isolate.run(
+      () => _parseOrgDocument(content, todoStates.todo, todoStates.done),
+    );
   }
 
   void invalidateCache(OrgTodoStatesWithIgnored newStates) {
     _currentTodoStates = newStates;
-    _parser = null;
   }
+}
+
+OrgDocument _parseOrgDocument(
+  String content,
+  List<String> todoStates,
+  List<String> doneStates,
+) {
+  final parser = OrgParserDefinition(
+    todoStates: [OrgTodoStates(todo: todoStates, done: doneStates)],
+  ).build();
+  final parseResult = parser.parse(content);
+  return parseResult.value as OrgDocument;
 }

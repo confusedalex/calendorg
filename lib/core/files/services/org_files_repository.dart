@@ -30,17 +30,24 @@ class OrgFilesRepository {
   ) async {
     final (fileInfos, inboxFile, dirInfo) = await _persistence
         .loadFilePreferences();
-    final documentsMap = <FileInfo, OrgDocument>{};
-
-    for (final fileInfo in {...fileInfos, ?inboxFile}) {
-      try {
-        documentsMap[fileInfo] = await _fileService.documentByIdentifier(
-          fileInfo.identifier,
-        );
-      } catch (e) {
-        debugPrint('Error loading file: $e');
-      }
-    }
+    final fileInfosToLoad = [...fileInfos, ?inboxFile];
+    final loadedDocuments = await Future.wait(
+      fileInfosToLoad.map((fileInfo) async {
+        try {
+          final document = await _fileService.documentByIdentifier(
+            fileInfo.identifier,
+          );
+          return document;
+        } catch (e) {
+          debugPrint('Error loading file: $e');
+          return null;
+        }
+      }),
+    );
+    final documentsMap = Map<FileInfo, OrgDocument>.fromIterables(
+      fileInfosToLoad,
+      loadedDocuments.whereType<OrgDocument>(),
+    );
 
     return InitialState(
       dirInfo: dirInfo,
