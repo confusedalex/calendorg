@@ -1,4 +1,7 @@
 # Changelog
+## 1.4.2 - 2026-07-03
+### Changed
+- Allow org file to be read in parallel, which should speed up the app
 ## 1.4.1 - 2026-06-29
 ### Changed
 - Changed algorithm for comparing files, because the former method didn't work on android :(
