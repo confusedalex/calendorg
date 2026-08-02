@@ -24,7 +24,13 @@ class EventParserService {
       final event = _extractEventFromSection(document, section, fileInfo);
       if (event == null) return true;
 
-      for (final timestamp in event.timestamps) {
+      for (final timestamp in {
+        ...event.timestamps,
+        if (event.scheduled?.value != null)
+          event.scheduled!.value as OrgTimestamp,
+        if (event.deadline?.value != null)
+          event.deadline!.value as OrgTimestamp,
+      }) {
         final dateKeys = _getDateKeys(timestamp);
         for (final dateKey in dateKeys) {
           (eventMap[dateKey] ??= []).add(event);
@@ -42,12 +48,19 @@ class EventParserService {
     FileInfo fileInfo,
   ) {
     final foundTimestamps = _extractTimestamps(section);
-    if (foundTimestamps.isEmpty) return null;
-
     final headline = _sanitizeHeadline(section);
     final planning = _extractPlanningEntries(section);
+    final keyword = section.headline.keyword?.value;
+
+    if (foundTimestamps.isEmpty &&
+        planning.$1 == null &&
+        planning.$2 == null &&
+        keyword == null) {
+      return null;
+    }
 
     return Event(
+      todoKeyword: keyword,
       section: section,
       containsTimestampInHeadline: _containsTimestampInHeadline(section),
       fileInfo: fileInfo,
@@ -65,7 +78,9 @@ class EventParserService {
     bool returnIfSectionFound = false;
     int ignoreNTimestamps = 0;
 
-    section.visitWithBlacklist({OrgProperty, OrgDrawer}, (OrgNode node) {
+    section.visitWithBlacklist({OrgProperty, OrgDrawer, OrgPlanningEntry}, (
+      OrgNode node,
+    ) {
       switch (node) {
         case OrgSection():
           return returnIfSectionFound ? false : returnIfSectionFound = true;
@@ -113,14 +128,21 @@ class EventParserService {
     OrgPlanningEntry? scheduled;
     OrgPlanningEntry? deadline;
 
-    section.visit((OrgPlanningEntry entry) {
-      switch (entry.keyword.content) {
-        case "SCHEDULED:":
-          scheduled = entry;
-          break;
-        case "DEADLINE:":
-          deadline = entry;
-          break;
+    bool returnIfSectionFound = false;
+
+    section.visit((OrgNode node) {
+      switch (node) {
+        case OrgSection():
+          return returnIfSectionFound ? false : returnIfSectionFound = true;
+        case OrgPlanningEntry():
+          switch (node.keyword.content) {
+            case "SCHEDULED:":
+              scheduled = node;
+              break;
+            case "DEADLINE:":
+              deadline = node;
+              break;
+          }
       }
       return true;
     });
