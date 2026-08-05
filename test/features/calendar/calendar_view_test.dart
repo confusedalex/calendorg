@@ -1,5 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -76,7 +76,7 @@ void main() {
       );
     }
 
-    testWidgets('Calendar should show marker for every tag occurance at day', (
+    testWidgets('Calendar should show marker for every tag occurrence at day', (
       tester,
     ) async {
       await pumpWidgetToTester(tester);
@@ -185,7 +185,7 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
       done: ["DONE"],
       ignored: [],
     ),
-    allEvents: EventParserService().parseEventsFromDocument(
+    allEvents: EventParserService().parseEntriesFromDocument(
       fileInfo,
       document,
       {},

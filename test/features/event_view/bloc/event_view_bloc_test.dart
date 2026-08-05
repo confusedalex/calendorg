@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/event_parser_service.dart';
-import 'package:calendorg/entities/org_entry/event.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:mocktail/mocktail.dart';
@@ -38,7 +38,7 @@ void main() {
     ).thenAnswer((_) async {});
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
     event = EventParserService()
-        .parseEventsFromDocument(FakeFileInfo(), document, {})
+        .parseEntriesFromDocument(FakeFileInfo(), document, {})
         .entries
         .first
         .value
@@ -78,7 +78,7 @@ void main() {
       build: () => EventViewBloc(
         orgFilesCubit,
         EventParserService()
-            .parseEventsFromDocument(
+            .parseEntriesFromDocument(
               FakeFileInfo(),
               OrgDocument.parse("""* Math Exam
           <2025-10-10>"""),

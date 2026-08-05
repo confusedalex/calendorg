@@ -53,7 +53,7 @@ void main() {
         ).thenAnswer((_) async => FakeOrgDocument());
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
-          () => repository.parseAllEvents(any(), any()),
+          () => repository.parseAllEntries(any(), any()),
         ).thenAnswer((_) async => {});
 
         await cubit.addFilePath(FakeFileInfo());
@@ -72,7 +72,7 @@ void main() {
           ).thenAnswer((_) async => FakeOrgDocument());
           when(() => repository.saveFileList(any())).thenAnswer((_) async {});
           when(
-            () => repository.parseAllEvents(any(), any()),
+            () => repository.parseAllEntries(any(), any()),
           ).thenAnswer((_) async => {});
 
           await cubit.addFilePath(fakeFileInfo);

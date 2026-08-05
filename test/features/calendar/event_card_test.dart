@@ -1,5 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -29,7 +29,7 @@ void main() {
 """;
   final document = OrgDocument.parse(markup);
   final event = EventParserService()
-      .parseEventsFromDocument(MockFileInfo(), document, {})
+      .parseEntriesFromDocument(MockFileInfo(), document, {})
       .entries
       .first
       .value

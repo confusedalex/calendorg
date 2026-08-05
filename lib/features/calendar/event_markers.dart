@@ -1,12 +1,12 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/entities/org_entry/event.dart';
+import 'package:calendorg/entities/occurrence/occurrence.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventMarkers extends StatelessWidget {
-  final List<OrgEntry> eventList;
-  const EventMarkers({super.key, required this.eventList});
+  final List<Occurrence> occurrences;
+  const EventMarkers({super.key, required this.occurrences});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,9 @@ class EventMarkers extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 1,
-            children: eventList
+            children: occurrences
+                .map((o) => o.entry)
+                .toSet()
                 .map(context.read<TagColorsCubit>().getTagColor)
                 .toSet()
                 .map(

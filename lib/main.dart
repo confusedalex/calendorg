@@ -1,5 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';

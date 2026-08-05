@@ -10,7 +10,7 @@ final class OrgFilesState {
     required this.filePaths,
     required this.documentsMap,
     required this.todoStates,
-    required this.allEvents,
+    required this.entries,
     this.inboxFile,
   });
 
@@ -21,7 +21,7 @@ final class OrgFilesState {
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? inboxFile;
   final OrgTodoStatesWithIgnored todoStates;
-  final Map<String, List<OrgEntry>> allEvents;
+  final List<OrgEntry> entries;
 
   factory OrgFilesState.initial() => OrgFilesState(
     directory: null,
@@ -34,24 +34,25 @@ final class OrgFilesState {
       done: ["DONE"],
       ignored: [],
     ),
-    allEvents: {},
+    entries: [],
   );
 
-  List<Object?> get props => [filePaths, documentsMap, allEvents];
+  List<Object?> get props => [filePaths, documentsMap, entries];
 
-  List<OrgEntry> eventsByDate(DateTime date) {
-    return allEvents[date.toIso8601String().split("T")[0]] ?? [];
+  List<Occurrence> occurrencesInRange(DateTimeRange window) =>
+      entries
+          .expand<Occurrence>((entry) => occurrencesFor(entry, window))
+          .toList()
+        ..sort((a, b) => a.date.compareTo(b.date));
+
+  Map<String, List<Occurrence>> occurrencesByDateInRange(DateTimeRange window) {
+    final map = <String, List<Occurrence>>{};
+    for (final occurrence in occurrencesInRange(window)) {
+      final key = occurrence.date.toIso8601String().split('T')[0];
+      (map[key] ??= []).add(occurrence);
+    }
+    return map;
   }
-
-  Map<OrgEntry, List<OrgTimestamp>> eventsByDateWithTimestamps(DateTime date) =>
-      (allEvents[date.toIso8601String().split("T")[0]] ?? []).fold({}, (
-        acc,
-        cur,
-      ) {
-        final timestampsByDate = cur.timestampsByDateTime(date);
-
-        return timestampsByDate.isEmpty ? acc : {...acc, cur: timestampsByDate};
-      });
 
   OrgFilesState copyWith({
     ValueGetter<DirectoryInfo?>? directory,
@@ -60,7 +61,7 @@ final class OrgFilesState {
     Set<FileInfo>? filePaths,
     Map<FileInfo, OrgDocument>? documentsMap,
     OrgTodoStatesWithIgnored? todoStates,
-    Map<String, List<OrgEntry>>? allEvents,
+    List<OrgEntry>? entries,
     ValueGetter<FileInfo?>? inboxFile,
   }) {
     return OrgFilesState(
@@ -70,7 +71,7 @@ final class OrgFilesState {
       filePaths: filePaths ?? this.filePaths,
       documentsMap: documentsMap ?? this.documentsMap,
       todoStates: todoStates ?? this.todoStates,
-      allEvents: allEvents ?? this.allEvents,
+      entries: entries ?? this.entries,
       inboxFile: inboxFile != null ? inboxFile() : this.inboxFile,
     );
   }

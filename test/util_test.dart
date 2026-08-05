@@ -1,4 +1,4 @@
-import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -37,7 +37,7 @@ CLOSED: [2026-04-24 Fri 11:25]
 :END:
 """;
   final document = OrgDocument.parse(markup);
-  final events = EventParserService().parseEventsFromDocument(
+  final events = EventParserService().parseEntriesFromDocument(
     MockFileInfo(),
     document,
     {},
@@ -64,7 +64,7 @@ CLOSED: [2026-04-24 Fri 11:25]
 DEADLINE: <2025-05-04>
 """;
       final document = OrgDocument.parse(markup);
-      final events = EventParserService().parseEventsFromDocument(
+      final events = EventParserService().parseEntriesFromDocument(
         MockFileInfo(),
         document,
         {},
@@ -79,7 +79,7 @@ DEADLINE: <2025-05-04>
 DEADLINE: <2025-05-04>
 """;
       final document = OrgDocument.parse(markup);
-      final events = EventParserService().parseEventsFromDocument(
+      final events = EventParserService().parseEntriesFromDocument(
         MockFileInfo(),
         document,
         {},
@@ -286,7 +286,7 @@ DEADLINE: <2025-05-04>
           ],
         ).build();
         final document = parser.parse(markup).value as OrgDocument;
-        final events = EventParserService().parseEventsFromDocument(
+        final events = EventParserService().parseEntriesFromDocument(
           MockFileInfo(),
           document,
           {"OTHER"},
@@ -314,7 +314,7 @@ DEADLINE: <2025-05-04>
           ],
         ).build();
         final document = parser.parse(markup).value as OrgDocument;
-        final events = EventParserService().parseEventsFromDocument(
+        final events = EventParserService().parseEntriesFromDocument(
           MockFileInfo(),
           document,
           {"OTHER"},

@@ -1,7 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/entities/org_entry/event.dart';
+import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/features/settings/todo_state/todo_state_add_dialog.dart';
 import 'package:file_picker_writable/src/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +124,7 @@ void main() {
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
   @override
-  Future<Map<String, List<OrgEntry>>> parseAllEvents(
+  Future<Map<String, List<OrgEntry>>> parseAllEntries(
     Map<FileInfo, OrgDocument> documentsMap,
     List<String> ignoredTodoStates,
   ) async {

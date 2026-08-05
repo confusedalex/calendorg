@@ -1,4 +1,4 @@
-import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -14,7 +14,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final events = EventParserService().parseEventsFromDocument(
+  final events = EventParserService().parseEntriesFromDocument(
     MockFileInfo(),
     document,
     {},

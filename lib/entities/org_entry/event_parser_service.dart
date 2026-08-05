@@ -1,5 +1,4 @@
-import 'package:calendorg/entities/org_entry/event.dart';
-import 'package:calendorg/util.dart';
+import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 
@@ -8,12 +7,12 @@ class EventParserService {
     r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]",
   );
 
-  Map<String, List<OrgEntry>> parseEventsFromDocument(
+  List<OrgEntry> parseEntriesFromDocument(
     FileInfo fileInfo,
     OrgDocument document,
     Set<String> ignoredTodoStates,
   ) {
-    final Map<String, List<OrgEntry>> eventMap = {};
+    final List<OrgEntry> entries = [];
 
     document.visitSections(((section) {
       if (section.headline.keyword != null &&
@@ -22,24 +21,11 @@ class EventParserService {
       }
 
       final event = _extractEventFromSection(document, section, fileInfo);
-      if (event == null) return true;
-
-      for (final timestamp in {
-        ...event.timestamps,
-        if (event.scheduled?.value != null)
-          event.scheduled!.value as OrgTimestamp,
-        if (event.deadline?.value != null)
-          event.deadline!.value as OrgTimestamp,
-      }) {
-        final dateKeys = _getDateKeys(timestamp);
-        for (final dateKey in dateKeys) {
-          (eventMap[dateKey] ??= []).add(event);
-        }
-      }
+      if (event != null) entries.add(event);
 
       return true;
     }));
-    return eventMap;
+    return entries;
   }
 
   OrgEntry? _extractEventFromSection(
@@ -148,18 +134,6 @@ class EventParserService {
     });
 
     return (scheduled, deadline);
-  }
-
-  List<String> _getDateKeys(OrgTimestamp timestamp) {
-    String dateTimeToIso(DateTime dateTime) =>
-        dateTime.toIso8601String().substring(0, 10);
-
-    return switch (timestamp) {
-      OrgSimpleTimestamp() => [dateTimeToIso(timestamp.startDateTime)],
-      OrgTimeRangeTimestamp() => [dateTimeToIso(timestamp.startDateTime)],
-      OrgDateRangeTimestamp() =>
-        timestamp.datetimes.map((dt) => dateTimeToIso(dt)).toList(),
-    };
   }
 }
 

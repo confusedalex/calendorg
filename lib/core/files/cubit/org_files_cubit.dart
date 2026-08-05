@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/occurrence/occurrence.dart';
+import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
+import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 
 part 'org_files_state.dart';
@@ -16,7 +18,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   Future<void> init(OrgTodoStatesWithIgnored todoStates) async {
     try {
       final result = await _repository.loadInitialState(todoStates);
-      final allEvents = await _repository.parseAllEvents(
+      final entries = await _repository.parseAllEntries(
         result.documentsMap,
         todoStates.ignored,
       );
@@ -29,7 +31,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           documentsMap: result.documentsMap,
           inboxFile: result.inboxFile,
           todoStates: result.todoStates,
-          allEvents: allEvents,
+          entries: entries,
         ),
       );
     } catch (e) {
@@ -62,7 +64,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
       emit(
         state.copyWith(
-          allEvents: await _repository.parseAllEvents(
+          entries: await _repository.parseAllEntries(
             state.documentsMap,
             state.todoStates.ignored,
           ),
@@ -116,7 +118,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
         newDocuments,
       );
 
-      final allEvents = await _repository.parseAllEvents(
+      final entries = await _repository.parseAllEntries(
         documentsMap,
         todoStates.ignored,
       );
@@ -125,7 +127,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
         state.copyWith(
           todoStates: todoStates,
           documentsMap: documentsMap,
-          allEvents: allEvents,
+          entries: entries,
         ),
       );
     } catch (e) {

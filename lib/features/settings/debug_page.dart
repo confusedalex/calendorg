@@ -78,7 +78,7 @@ class DebugPage extends StatelessWidget {
                 context: context,
                 builder: (_) => AlertDialog(
                   content: SingleChildScrollView(
-                    child: Text(state.allEvents.entries.toString()),
+                    child: Text(state.entries.toString()),
                   ),
                 ),
               ),

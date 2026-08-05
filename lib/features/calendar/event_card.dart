@@ -1,7 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/entities/org_entry/event.dart';
+import 'package:calendorg/entities/occurrence/occurrence.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:calendorg/features/event_view/event_view.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +9,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
 
 class EventCard extends StatelessWidget {
-  final OrgEntry event;
-  final OrgTimestamp timestamp;
-  const EventCard(this.event, this.timestamp, {super.key});
+  final Occurrence occurrence;
+  const EventCard(this.occurrence, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final keyword = event.section.headline.keyword;
+    final keyword = occurrence.entry.section.headline.keyword;
     final todoStates = context.read<TodoStatesCubit>().state;
     final eventIsDone = todoStates.done.contains(keyword?.value);
 
@@ -28,7 +27,9 @@ class EventCard extends StatelessWidget {
               border: Border(
                 left: BorderSide(
                   width: 12,
-                  color: context.read<TagColorsCubit>().getTagColor(event),
+                  color: context.read<TagColorsCubit>().getTagColor(
+                    occurrence.entry,
+                  ),
                 ),
               ),
             ),
@@ -49,36 +50,36 @@ class EventCard extends StatelessWidget {
                                 color: eventIsDone ? Colors.green : Colors.red,
                               ),
                       ),
-                      TextSpan(text: event.title),
+                      TextSpan(text: occurrence.entry.title),
                     ],
                   ),
                 ),
                 Text(
-                  timestamp.toMarkup(),
+                  occurrence.timestamp.toMarkup(),
                   textAlign: TextAlign.left,
                   textScaler: const TextScaler.linear(0.9),
                 ),
-                if (event.scheduled != null)
+                if (occurrence.entry.scheduled != null)
                   Text(
-                    'SCHEDULED: ${(event.scheduled?.value as OrgTimestamp).toMarkup()}',
+                    'SCHEDULED: ${(occurrence.entry.scheduled?.value as OrgTimestamp).toMarkup()}',
                     textAlign: TextAlign.left,
                     textScaler: const TextScaler.linear(0.85),
                     style: const TextStyle(color: Colors.amber),
                   ),
-                if (event.deadline != null)
+                if (occurrence.entry.deadline != null)
                   Text(
-                    'DEADLINE: ${(event.deadline?.value as OrgTimestamp).toMarkup()}',
+                    'DEADLINE: ${(occurrence.entry.deadline?.value as OrgTimestamp).toMarkup()}',
                     textAlign: TextAlign.left,
                     textScaler: const TextScaler.linear(0.85),
                     style: const TextStyle(color: Colors.redAccent),
                   ),
-                if (event.tags.isNotEmpty)
+                if (occurrence.entry.tags.isNotEmpty)
                   Align(
                     alignment: Alignment.centerRight,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: Text(
-                        ":${event.tags.join(":")}:",
+                        ":${occurrence.entry.tags.join(":")}:",
                         textAlign: TextAlign.right,
                         textScaler: const TextScaler.linear(0.9),
                         style: TextStyle(color: Theme.of(context).hintColor),
@@ -95,8 +96,8 @@ class EventCard extends StatelessWidget {
               child: BlocProvider(
                 create: (context) => EventViewBloc(
                   context.read<OrgFilesCubit>(),
-                  event,
-                  timestamp,
+                  occurrence.entry,
+                  occurrence.timestamp,
                 ),
                 child: const EventView(),
               ),

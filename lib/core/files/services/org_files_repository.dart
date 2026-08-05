@@ -1,9 +1,9 @@
-import 'package:calendorg/core/files/services/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/entities/org_entry/event.dart';
+import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -56,13 +56,13 @@ class OrgFilesRepository {
     );
   }
 
-  Future<Map<String, List<OrgEntry>>> parseAllEvents(
+  Future<List<OrgEntry>> parseAllEntries(
     Map<FileInfo, OrgDocument> documentsMap,
     List<String> ignoredTodoStates,
   ) async {
     final perFileEvents = await Future.wait(
       documentsMap.entries.map((entry) async {
-        final parsedEvents = EventParserService().parseEventsFromDocument(
+        final parsedEvents = EventParserService().parseEntriesFromDocument(
           entry.key,
           entry.value,
           ignoredTodoStates.toSet(),
@@ -71,15 +71,7 @@ class OrgFilesRepository {
         return parsedEvents;
       }),
     );
-
-    final allEvents = <String, List<OrgEntry>>{};
-    for (final events in perFileEvents) {
-      for (final MapEntry(key: dateKey, value: eventList) in events.entries) {
-        (allEvents[dateKey] ??= []).addAll(eventList);
-      }
-    }
-
-    return allEvents;
+    return perFileEvents.expand((e) => e).toList();
   }
 
   Future<void> saveDirectory(DirectoryInfo dirInfo) async {

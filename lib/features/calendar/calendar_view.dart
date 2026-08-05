@@ -13,6 +13,16 @@ import 'package:table_calendar/table_calendar.dart';
 class CalendarView extends StatelessWidget {
   const CalendarView({super.key});
 
+  DateTimeRange visibleWindowFor(DateTime focusedDay) {
+    final firstOfMonth = DateTime(focusedDay.year, focusedDay.month, 1);
+    final lastOfMonth = DateTime(focusedDay.year, focusedDay.month + 1, 0);
+
+    return DateTimeRange(
+      start: firstOfMonth.subtract(const Duration(days: 7)),
+      end: lastOfMonth.add(const Duration(days: 7)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateTime focusedDay = context.select(
@@ -27,7 +37,11 @@ class CalendarView extends StatelessWidget {
     final StartingDayOfWeek startingDay = context.select(
       (StartingDayCubit bloc) => bloc.state,
     );
-    final eventsByDate = context.read<OrgFilesCubit>().state.eventsByDate;
+    final occurrencesByDate = context
+        .read<OrgFilesCubit>()
+        .state
+        .occurrencesByDateInRange(visibleWindowFor(focusedDay));
+    String dateKey(DateTime d) => d.toIso8601String().split('T')[0];
 
     context.read<FloatingActionButtonCubit>().changeButton(
       FloatingActionButton(
@@ -62,7 +76,7 @@ class CalendarView extends StatelessWidget {
           onFormatChanged: (format) => context.read<CalendarBloc>().add(
             CalendarChangeFormat(calendarFormat: format),
           ),
-          eventLoader: eventsByDate,
+          eventLoader: (day) => occurrencesByDate[dateKey(day)] ?? [],
           calendarBuilders: CalendarBuilders(
             markerBuilder: (context, day, events) {
               if (events.isEmpty ||
@@ -70,30 +84,22 @@ class CalendarView extends StatelessWidget {
                   isSameDay(day, DateTime.now())) {
                 return Container();
               }
-              return EventMarkers(eventList: eventsByDate(day));
+              return EventMarkers(
+                occurrences: occurrencesByDate[dateKey(day)] ?? [],
+              );
             },
           ),
         ),
         Expanded(
           child: ListView(
             children:
-                context
-                    .read<OrgFilesCubit>()
-                    .state
-                    .eventsByDateWithTimestamps(focusedDay)
-                    .entries
-                    .fold(
-                      [],
-                      (acc, entry) => [
-                        ...acc,
-                        ...entry.value.map(
-                          (timestamp) => EventCard(entry.key, timestamp),
-                        ),
-                      ],
-                    )
+                (occurrencesByDate[dateKey(focusedDay)] ?? [])
+                    .map((occurrence) => EventCard(occurrence))
+                    .toList()
                   ..sort(
-                    (a, b) => (a as EventCard).timestamp.startDateTime
-                        .compareTo((b as EventCard).timestamp.startDateTime),
+                    (a, b) => a.occurrence.timestamp.startDateTime.compareTo(
+                      b.occurrence.timestamp.startDateTime,
+                    ),
                   ),
           ),
         ),
