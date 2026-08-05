@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/event_parser_service.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:calendorg/features/event_view/bloc/event_view_bloc.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:mocktail/mocktail.dart';
@@ -23,7 +23,7 @@ void main() {
     [],
     ">",
   );
-  late Event event;
+  late OrgEntry event;
   late OrgTimestamp timestamp;
   late MockOrgFilesCubit orgFilesCubit;
 

@@ -4,7 +4,7 @@ final class CalendarState {
   final DateTime focusedDay;
   final DateTime selectedDate;
   final CalendarFormat calendarFormat;
-  final Map<Event, List<OrgTimestamp>> timestampsByEvent;
+  final Map<OrgEntry, List<OrgTimestamp>> timestampsByEvent;
 
   CalendarState({
     required this.focusedDay,
@@ -17,7 +17,7 @@ final class CalendarState {
     DateTime? focusedDay,
     DateTime? selectedDate,
     CalendarFormat? calendarFormat,
-    Map<Event, List<OrgTimestamp>>? timestampsByEvent,
+    Map<OrgEntry, List<OrgTimestamp>>? timestampsByEvent,
   }) {
     return CalendarState(
       focusedDay: focusedDay ?? this.focusedDay,

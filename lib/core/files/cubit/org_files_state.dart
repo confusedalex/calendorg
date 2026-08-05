@@ -21,7 +21,7 @@ final class OrgFilesState {
   final Map<FileInfo, OrgDocument> documentsMap;
   final FileInfo? inboxFile;
   final OrgTodoStatesWithIgnored todoStates;
-  final Map<String, List<Event>> allEvents;
+  final Map<String, List<OrgEntry>> allEvents;
 
   factory OrgFilesState.initial() => OrgFilesState(
     directory: null,
@@ -39,11 +39,11 @@ final class OrgFilesState {
 
   List<Object?> get props => [filePaths, documentsMap, allEvents];
 
-  List<Event> eventsByDate(DateTime date) {
+  List<OrgEntry> eventsByDate(DateTime date) {
     return allEvents[date.toIso8601String().split("T")[0]] ?? [];
   }
 
-  Map<Event, List<OrgTimestamp>> eventsByDateWithTimestamps(DateTime date) =>
+  Map<OrgEntry, List<OrgTimestamp>> eventsByDateWithTimestamps(DateTime date) =>
       (allEvents[date.toIso8601String().split("T")[0]] ?? []).fold({}, (
         acc,
         cur,
@@ -60,7 +60,7 @@ final class OrgFilesState {
     Set<FileInfo>? filePaths,
     Map<FileInfo, OrgDocument>? documentsMap,
     OrgTodoStatesWithIgnored? todoStates,
-    Map<String, List<Event>>? allEvents,
+    Map<String, List<OrgEntry>>? allEvents,
     ValueGetter<FileInfo?>? inboxFile,
   }) {
     return OrgFilesState(

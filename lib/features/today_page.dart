@@ -1,5 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:calendorg/features/calendar/event_card.dart';
 import 'package:calendorg/util.dart';
 import 'package:collection/collection.dart';
@@ -14,7 +14,7 @@ Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
 
     final events = dateRange(now, endDate)
         .fold(
-          <Event, List<OrgTimestamp>>{},
+          <OrgEntry, List<OrgTimestamp>>{},
           (acc, cur) => {...acc, ...state.eventsByDateWithTimestamps(cur)},
         )
         .entries

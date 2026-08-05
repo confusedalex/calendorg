@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 
@@ -12,7 +12,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
 
   EventViewBloc(
     OrgFilesCubit orgFilesCubit,
-    Event event,
+    OrgEntry event,
     OrgTimestamp timestamp,
   ) : super(EventViewState.inital(event, timestamp)) {
     on<EventViewEvent>(

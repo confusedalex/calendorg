@@ -3,7 +3,7 @@ import 'package:calendorg/core/files/services/org_file_persistence_service.dart'
 import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +56,7 @@ class OrgFilesRepository {
     );
   }
 
-  Future<Map<String, List<Event>>> parseAllEvents(
+  Future<Map<String, List<OrgEntry>>> parseAllEvents(
     Map<FileInfo, OrgDocument> documentsMap,
     List<String> ignoredTodoStates,
   ) async {
@@ -72,7 +72,7 @@ class OrgFilesRepository {
       }),
     );
 
-    final allEvents = <String, List<Event>>{};
+    final allEvents = <String, List<OrgEntry>>{};
     for (final events in perFileEvents) {
       for (final MapEntry(key: dateKey, value: eventList) in events.entries) {
         (allEvents[dateKey] ??= []).addAll(eventList);

@@ -1,4 +1,4 @@
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
@@ -8,12 +8,12 @@ class EventParserService {
     r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]",
   );
 
-  Map<String, List<Event>> parseEventsFromDocument(
+  Map<String, List<OrgEntry>> parseEventsFromDocument(
     FileInfo fileInfo,
     OrgDocument document,
     Set<String> ignoredTodoStates,
   ) {
-    final Map<String, List<Event>> eventMap = {};
+    final Map<String, List<OrgEntry>> eventMap = {};
 
     document.visitSections(((section) {
       if (section.headline.keyword != null &&
@@ -42,7 +42,7 @@ class EventParserService {
     return eventMap;
   }
 
-  Event? _extractEventFromSection(
+  OrgEntry? _extractEventFromSection(
     OrgDocument document,
     OrgSection section,
     FileInfo fileInfo,
@@ -59,7 +59,7 @@ class EventParserService {
       return null;
     }
 
-    return Event(
+    return OrgEntry(
       todoKeyword: keyword,
       section: section,
       containsTimestampInHeadline: _containsTimestampInHeadline(section),

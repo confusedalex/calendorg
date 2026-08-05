@@ -4,7 +4,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class Event {
+class OrgEntry {
   String? todoKeyword;
   bool containsTimestampInHeadline;
   OrgSection section;
@@ -39,7 +39,7 @@ class Event {
       )
       .toList();
 
-  Event({
+  OrgEntry({
     required this.todoKeyword,
     required this.containsTimestampInHeadline,
     required this.section,
@@ -52,7 +52,7 @@ class Event {
     this.description,
   });
 
-  Event copyWith({
+  OrgEntry copyWith({
     ValueGetter<String?>? todoKeyword,
     bool? containsTimestampInHeadline,
     OrgSection? section,
@@ -64,7 +64,7 @@ class Event {
     ValueGetter<OrgPlanningEntry?>? deadline,
     ValueGetter<String?>? description,
   }) {
-    return Event(
+    return OrgEntry(
       todoKeyword: todoKeyword != null ? todoKeyword() : this.todoKeyword,
       containsTimestampInHeadline:
           containsTimestampInHeadline ?? this.containsTimestampInHeadline,

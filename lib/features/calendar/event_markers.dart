@@ -1,11 +1,11 @@
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventMarkers extends StatelessWidget {
-  final List<Event> eventList;
+  final List<OrgEntry> eventList;
   const EventMarkers({super.key, required this.eventList});
 
   @override

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -118,7 +118,7 @@ Future<void> main() async {
   });
 }
 
-class FakeEvent extends Fake implements Event {
+class FakeEvent extends Fake implements OrgEntry {
   @override
   List<String> tags;
 

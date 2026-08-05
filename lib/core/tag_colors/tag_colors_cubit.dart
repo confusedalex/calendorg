@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:calendorg/event.dart';
+import 'package:calendorg/entities/org_entry/event.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +66,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
         .color;
   }
 
-  Color getTagColor(Event event) => state
+  Color getTagColor(OrgEntry event) => state
       .firstWhere(
         (tagColor) => (event).tags.contains(tagColor.tag),
         orElse: () => TagColor("", Colors.blue),

@@ -8,12 +8,12 @@ class EventViewState {
     required this.newTimestamp,
   });
 
-  final Event oldEvent;
-  final Event newEvent;
+  final OrgEntry oldEvent;
+  final OrgEntry newEvent;
   final OrgTimestamp oldTimestamp;
   final OrgTimestamp newTimestamp;
 
-  factory EventViewState.inital(Event event, OrgTimestamp timestamp) =>
+  factory EventViewState.inital(OrgEntry event, OrgTimestamp timestamp) =>
       EventViewState(
         oldEvent: event,
         newEvent: event,
@@ -22,8 +22,8 @@ class EventViewState {
       );
 
   EventViewState copyWith({
-    Event? oldEvent,
-    Event? newEvent,
+    OrgEntry? oldEvent,
+    OrgEntry? newEvent,
     OrgTimestamp? oldTimestamp,
     OrgTimestamp? newTimestamp,
   }) {
