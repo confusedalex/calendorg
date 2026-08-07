@@ -1,4 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
 import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -28,12 +29,13 @@ void main() {
 <2025-05-27>
 """;
   final document = OrgDocument.parse(markup);
-  final event = EventParserService()
+  final entry = EventParserService()
       .parseEntriesFromDocument(MockFileInfo(), document, {})
-      .entries
-      .first
-      .value
       .first;
+  final occurrence = occurrencesFor(
+    entry,
+    DateTimeRange(start: DateTime(2025, 5, 1), end: DateTime(2025, 5, 30)),
+  ).first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
   final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());
 
@@ -50,7 +52,7 @@ void main() {
               BlocProvider(create: (context) => TodoStatesCubit()),
               BlocProvider(create: (context) => orgFilesCubit),
             ],
-            child: EventCard(event, event.timestamps.first),
+            child: EventCard(occurrence),
           ),
         ),
       ),
@@ -64,7 +66,7 @@ void main() {
       testWidgets("EventCard display correct title", (tester) async {
         await initWidget(tester);
 
-        expect(find.text(event.title, findRichText: true), findsOneWidget);
+        expect(find.text(entry.title, findRichText: true), findsOneWidget);
       });
       testWidgets('EventCard displays correct TagColor', (tester) async {
         await initWidget(tester);
@@ -83,7 +85,7 @@ void main() {
       testWidgets("EventCard display correct time", (tester) async {
         await initWidget(tester);
 
-        expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
+        expect(find.text(occurrence.timestamp.toMarkup()), findsOneWidget);
       });
     });
     testWidgets("EventCard tap will open EventView", (tester) async {
@@ -93,11 +95,8 @@ void main() {
             body: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) => EventViewBloc(
-                    orgFilesCubit,
-                    event,
-                    event.timestamps.first,
-                  ),
+                  create: (context) =>
+                      EventViewBloc(orgFilesCubit, entry, occurrence.timestamp),
                 ),
                 BlocProvider(create: (context) => TodoStatesCubit()),
                 BlocProvider(
@@ -106,7 +105,7 @@ void main() {
                 ),
                 BlocProvider(create: (context) => orgFilesCubit),
               ],
-              child: EventCard(event, event.timestamps.first),
+              child: EventCard(occurrence),
             ),
           ),
         ),

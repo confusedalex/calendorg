@@ -78,7 +78,7 @@ class TestOrgFilesCubit extends OrgFilesCubit {
           done: ['DONE'],
           ignored: [],
         ),
-        allEvents: {},
+        entries: [],
         inboxFile: inboxFile,
       ),
     );

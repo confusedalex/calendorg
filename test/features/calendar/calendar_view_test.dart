@@ -185,7 +185,7 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
       done: ["DONE"],
       ignored: [],
     ),
-    allEvents: EventParserService().parseEntriesFromDocument(
+    entries: EventParserService().parseEntriesFromDocument(
       fileInfo,
       document,
       {},

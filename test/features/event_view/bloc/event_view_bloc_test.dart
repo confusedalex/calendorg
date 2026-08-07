@@ -23,7 +23,7 @@ void main() {
     [],
     ">",
   );
-  late OrgEntry event;
+  late OrgEntry entry;
   late OrgTimestamp timestamp;
   late MockOrgFilesCubit orgFilesCubit;
 
@@ -37,19 +37,16 @@ void main() {
       () => orgFilesCubit.replaceNodes(any(), any()),
     ).thenAnswer((_) async {});
     final document = OrgDocument.parse("* Math exam <2025-05-15>");
-    event = EventParserService()
+    entry = EventParserService()
         .parseEntriesFromDocument(FakeFileInfo(), document, {})
-        .entries
-        .first
-        .value
         .first;
-    timestamp = event.timestamps.first;
+    timestamp = entry.timestamps.first;
   });
 
   group("Event View Bloc", () {
     blocTest(
       "Chaning title works",
-      build: () => EventViewBloc(orgFilesCubit, event, timestamp),
+      build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) => bloc.add(EventViewTitleChangeEvent("History exam")),
       expect: () => [
         TypeMatcher<EventViewState>().having(
@@ -62,7 +59,7 @@ void main() {
 
     blocTest<EventViewBloc, EventViewState>(
       'emits correct timestamp when Timestamp is changed in title',
-      build: () => EventViewBloc(orgFilesCubit, event, timestamp),
+      build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
       expect: () => [
         TypeMatcher<EventViewState>().having(
@@ -84,9 +81,6 @@ void main() {
           <2025-10-10>"""),
               {},
             )
-            .entries
-            .first
-            .value
             .first,
         timestamp,
       ),
@@ -102,7 +96,7 @@ void main() {
 
     blocTest<EventViewBloc, EventViewState>(
       'emits correct state when EventViewSaveEvent is triggered',
-      build: () => EventViewBloc(orgFilesCubit, event, timestamp),
+      build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) {
         bloc.add(EventViewTitleChangeEvent("History exam"));
         bloc.add(EventViewChangeTimestamp(newTimestamp));
@@ -115,7 +109,7 @@ void main() {
 
     blocTest<EventViewBloc, EventViewState>(
       'save does not emit event when no changes',
-      build: () => EventViewBloc(orgFilesCubit, event, timestamp),
+      build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) => bloc.add(EventViewSaveEvent()),
       expect: () => [],
     );

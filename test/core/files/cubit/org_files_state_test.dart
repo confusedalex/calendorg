@@ -37,7 +37,7 @@ void main() {
         final repository = MockOrgFilesRepository();
         final cubit = OrgFilesCubit(repository);
 
-        expect(cubit.state.allEvents, isEmpty);
+        expect(cubit.state.entries, isEmpty);
       });
       test('initial state should have null directory', () {
         final repository = MockOrgFilesRepository();

@@ -54,7 +54,7 @@ void main() {
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
           () => repository.parseAllEntries(any(), any()),
-        ).thenAnswer((_) async => {});
+        ).thenAnswer((_) async => []);
 
         await cubit.addFilePath(FakeFileInfo());
 
@@ -73,7 +73,7 @@ void main() {
           when(() => repository.saveFileList(any())).thenAnswer((_) async {});
           when(
             () => repository.parseAllEntries(any(), any()),
-          ).thenAnswer((_) async => {});
+          ).thenAnswer((_) async => []);
 
           await cubit.addFilePath(fakeFileInfo);
 

@@ -23,11 +23,8 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final event = EventParserService()
+  final entry = EventParserService()
       .parseEntriesFromDocument(MockFileInfo(), document, {})
-      .entries
-      .first
-      .value
       .first;
   final meetupTagColor = TagColor("meetups", Colors.pink);
   final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());
@@ -44,7 +41,7 @@ void main() {
               ),
               BlocProvider(
                 create: (context) =>
-                    EventViewBloc(orgFilesCubit, event, event.timestamps.first),
+                    EventViewBloc(orgFilesCubit, entry, entry.timestamps.first),
               ),
             ],
             child: EventView(),
@@ -61,7 +58,7 @@ void main() {
       await initWidget(tester);
 
       expect(find.byKey(Key("TitleField")), findsOneWidget);
-      expect(find.text(event.title), findsOneWidget);
+      expect(find.text(entry.title), findsOneWidget);
     });
     group("date picker", () {
       testWidgets('EventView shows date picker Button', (tester) async {
@@ -72,7 +69,7 @@ void main() {
       testWidgets('Date Picker button shows timestamp', (tester) async {
         await initWidget(tester);
 
-        expect(find.text(event.timestamps.first.toMarkup()), findsOneWidget);
+        expect(find.text(entry.timestamps.first.toMarkup()), findsOneWidget);
       });
       testWidgets('Date Picker button open datePickerDialog', (tester) async {
         await initWidget(tester);

@@ -37,24 +37,20 @@ CLOSED: [2026-04-24 Fri 11:25]
 :END:
 """;
   final document = OrgDocument.parse(markup);
-  final events = EventParserService().parseEntriesFromDocument(
+  final entries = EventParserService().parseEntriesFromDocument(
     MockFileInfo(),
     document,
     {},
   );
-  final meetupEvent = events.entries.first.value.first;
+  final meetupEntry = entries.first;
 
   group('Util', () {
-    test("9 Map entries should be found", () {
-      expect(events.length, 9);
-    });
-
-    test("6 OrgNodes expected in event", () {
-      expect(meetupEvent.timestamps.length, 6);
+    test("6 timestamps found in meetup entry", () {
+      expect(meetupEntry.timestamps.length, 6);
     });
 
     test("Scheduled entry gets parsed correctly", () {
-      final uninstallVimEvent = events.entries.first.value.last;
+      final uninstallVimEvent = entries.take(2).last;
       expect(uninstallVimEvent.scheduled, isNotNull);
     });
 
@@ -224,7 +220,7 @@ DEADLINE: <2025-05-04>
     group("dateTimesFromOrgDateRange", () {
       test("Parse OrgDateRangeTimestamp", () {
         final dateTimes = dateTimesFromOrgDateRange(
-          meetupEvent.timestamps.last as OrgDateRangeTimestamp,
+          meetupEntry.timestamps.last as OrgDateRangeTimestamp,
           [],
           null,
         );

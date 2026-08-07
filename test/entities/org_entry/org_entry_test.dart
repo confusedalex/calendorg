@@ -1,5 +1,7 @@
+import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
 import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
@@ -14,12 +16,9 @@ void main() {
 <2025-05-01>--<2025-05-03>
 """;
   final document = OrgDocument.parse(markup);
-  final events = EventParserService().parseEntriesFromDocument(
-    MockFileInfo(),
-    document,
-    {},
-  );
-  final event = events.entries.first.value.first;
+  final entry = EventParserService()
+      .parseEntriesFromDocument(MockFileInfo(), document, {})
+      .first;
 
   group('Events', () {
     test("All DateTimes found from event", () {
@@ -33,7 +32,7 @@ void main() {
           DateTime(2025, 05, 1),
           DateTime(2025, 05, 2),
           DateTime(2025, 05, 3),
-        ].map((date) => event.timestampsByDateTime(date).length),
+        ].map((date) => entry.timestampsByDateTime(date).length),
         everyElement(1),
       );
 
@@ -43,43 +42,43 @@ void main() {
           DateTime(2025, 05, 25),
           DateTime(2024, 05, 08),
           DateTime(2025),
-        ].map((date) => event.timestampsByDateTime(date).length),
+        ].map((date) => entry.timestampsByDateTime(date).length),
         everyElement(0),
       );
     });
 
     test("Only DateTimes at the same date should match", () {
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 01, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 01, 00, 00, 00)).length,
         equals(1),
       );
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 01, 23, 59, 59)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 01, 23, 59, 59)).length,
         equals(1),
       );
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 02, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 02, 00, 00, 00)).length,
         equals(1),
       );
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 02, 23, 59, 59)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 02, 23, 59, 59)).length,
         equals(1),
       );
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 03, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 03, 00, 00, 00)).length,
         equals(1),
       );
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 03, 23, 59, 59)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 03, 23, 59, 59)).length,
         equals(1),
       );
 
       expect(
-        event.timestampsByDateTime(DateTime(2024, 04, 30, 23, 59, 59)).length,
+        entry.timestampsByDateTime(DateTime(2024, 04, 30, 23, 59, 59)).length,
         equals(0),
       );
       expect(
-        event.timestampsByDateTime(DateTime(2025, 05, 04, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 04, 00, 00, 00)).length,
         equals(0),
       );
     });

@@ -124,10 +124,10 @@ void main() {
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
   @override
-  Future<Map<String, List<OrgEntry>>> parseAllEntries(
+  Future<List<OrgEntry>> parseAllEntries(
     Map<FileInfo, OrgDocument> documentsMap,
     List<String> ignoredTodoStates,
   ) async {
-    return {};
+    return [];
   }
 }
