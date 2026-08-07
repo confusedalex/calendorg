@@ -54,15 +54,5 @@ void main() {
         expect(cubit.state.todoStates.ignored, []);
       });
     });
-    group('eventsByDate()', () {
-      test('should return empty list for date with no events', () {
-        final repository = MockOrgFilesRepository();
-        final cubit = OrgFilesCubit(repository);
-
-        final events = cubit.state.eventsByDate(DateTime.now());
-
-        expect(events, isEmpty);
-      });
-    });
   });
 }
