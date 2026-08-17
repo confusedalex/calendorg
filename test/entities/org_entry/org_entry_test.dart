@@ -1,7 +1,5 @@
-import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
 import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
