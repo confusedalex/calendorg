@@ -116,7 +116,7 @@ class DatePicker extends StatelessWidget {
                 OutlinedButton(
                   key: const Key('datepicker_endtimebutton'),
                   onPressed:
-                      state.endTimeActive == true &&
+                      state.endTimeActive &&
                           (state.endDateActive || state.startTimeActive)
                       ? () => context
                             .read<DatePickerBloc>()
