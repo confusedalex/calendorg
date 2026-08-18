@@ -54,9 +54,10 @@ class NewSectionDialog extends StatelessWidget {
                     ),
                     Text('When', style: Theme.of(context).textTheme.labelLarge),
                     Material(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surfaceContainerHighest
+                          .withValues(alpha: 0.55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -136,7 +137,7 @@ class NewSectionDialog extends StatelessWidget {
 
                     if (!context.mounted) return;
                     Navigator.pop(context);
-                  } catch (e) {
+                  } on Exception catch (e) {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Error saving section: $e')),

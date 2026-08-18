@@ -35,7 +35,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           entries: entries,
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error initializing org files: $e');
       emit(OrgFilesState.initial());
     }
@@ -71,7 +71,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           ),
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error adding file: $e');
     }
   }
@@ -84,7 +84,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       await _repository.saveFileList(filePaths);
 
       emit(state.copyWith(filePaths: filePaths, documentsMap: documentsMap));
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error removing file: $e');
     }
   }
@@ -101,7 +101,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       emit(
         state.copyWith(inboxFile: () => fileInfo, documentsMap: documentsMap),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error changing inbox file: $e');
     }
   }
@@ -131,7 +131,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           entries: entries,
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error changing todo states: $e');
     }
   }
@@ -155,7 +155,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           documentsMap: {...state.documentsMap, fileInfo: newDocument},
         ),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error replacing nodes: $e');
     }
   }

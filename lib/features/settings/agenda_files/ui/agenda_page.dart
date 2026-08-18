@@ -31,7 +31,7 @@ class AgendaPage extends StatelessWidget {
                   if (context.mounted) {
                     context.read<OrgFilesCubit>().setOrgDirectory(dirInfo);
                   }
-                } catch (e) {
+                } on Exception catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Error selecting file: $e')),
@@ -79,7 +79,7 @@ class AgendaPage extends StatelessWidget {
                   if (context.mounted) {
                     context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
                   }
-                } catch (e) {
+                } on Exception catch (e) {
                   sendError(context, 'Error loading file: {$e}');
                 }
               },

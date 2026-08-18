@@ -36,7 +36,7 @@ class OrgFilesRepository {
             fileInfo.identifier,
           );
           return document;
-        } catch (e) {
+        } on Exception catch (e) {
           debugPrint('Error loading file: $e');
           return null;
         }

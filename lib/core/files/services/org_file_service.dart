@@ -19,7 +19,7 @@ class OrgFileService {
         reader: (fileInfo, file) => file.readAsString(),
       );
       return _parserService.parseContentInBackground(content);
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error parsing document with identifier $identifier: $e');
       rethrow;
     }
@@ -32,7 +32,7 @@ class OrgFileService {
         writer: (file) async =>
             file.writeAsString(document.toMarkup(), mode: FileMode.writeOnly),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving document: $e');
       rethrow;
     }

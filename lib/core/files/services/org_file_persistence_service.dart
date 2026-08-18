@@ -10,7 +10,7 @@ class OrgFilePersistenceService {
   Future<void> saveDirectory(DirectoryInfo directoryInfo) async {
     try {
       await _prefs.setString('agendaDirectory', jsonEncode(directoryInfo));
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving file list: $e');
       rethrow;
     }
@@ -22,7 +22,7 @@ class OrgFilePersistenceService {
         'agendaFiles',
         fileInfos.map((e) => e.fileName).whereType<String>().toList(),
       );
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving file list: $e');
       rethrow;
     }
@@ -31,7 +31,7 @@ class OrgFilePersistenceService {
   Future<void> saveInboxFile(FileInfo fileInfo) async {
     try {
       await _prefs.setString('inboxFile', fileInfo.fileName ?? 'null');
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving inbox file: $e');
       rethrow;
     }
@@ -79,7 +79,7 @@ class OrgFilePersistenceService {
           : {};
 
       return (fileInfos, inboxFile, dirInfo);
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error loading preferences: $e');
       return (<FileInfo>{}, null, null);
     }

@@ -73,7 +73,9 @@ class OrgParserService {
     );
 
     try {
-      final response = await responsePort.first.timeout(const Duration(seconds: 30));
+      final response = await responsePort.first.timeout(
+        const Duration(seconds: 30),
+      );
 
       if (response is OrgDocument) return response;
       if (response is String) throw StateError('Worker error: $response');
@@ -129,7 +131,7 @@ void _parserWorkerMain(SendPort mainSendPort) {
 
       print('Parse succeeded in ${stopwatch.elapsedMilliseconds}ms ');
       request.replyPort.send(parseResult.value as OrgDocument);
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       stopwatch.stop();
       print(
         'Parse failed after ${stopwatch.elapsedMilliseconds}ms: $e\n$stack',

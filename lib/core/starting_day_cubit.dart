@@ -22,7 +22,7 @@ class StartingDayCubit extends Cubit<StartingDayOfWeek> {
       } else {
         emit(StartingDayOfWeek.monday);
       }
-    } catch (e) {
+    } on Exception {
       emit(StartingDayOfWeek.monday);
     }
   }

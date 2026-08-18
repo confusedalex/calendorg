@@ -33,7 +33,7 @@ class DiffViewPage extends StatelessWidget {
               if (content != null && context.mounted) {
                 context.read<DiffViewCubit>().changeOldText(content);
               }
-            } catch (e) {
+            } on Exception catch (e) {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Error reading file: $e')),

@@ -33,7 +33,7 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
           ? defaultTodoStates
           : OrgTodoStatesWithIgnored(todo: todo, done: done, ignored: ignored);
       emit(states);
-    } catch (e) {
+    } on Exception catch (e) {
       emit(defaultTodoStates);
     }
   }
@@ -102,7 +102,7 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
       await prefs.setString('todoStates', jsonEncode(state.todo));
       await prefs.setString('doneStates', jsonEncode(state.done));
       await prefs.setString('ignoredStates', jsonEncode(state.ignored));
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Error saving todo states: $e');
     }
   }

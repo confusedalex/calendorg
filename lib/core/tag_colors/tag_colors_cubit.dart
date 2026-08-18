@@ -25,7 +25,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
       return (jsonDecode(prefs.getString('tagColors') ?? '[]') as List)
           .map((tagColor) => TagColor.fromJson(tagColor))
           .toList();
-    } catch (e) {
+    } on Exception catch (e) {
       return [];
     }
   }

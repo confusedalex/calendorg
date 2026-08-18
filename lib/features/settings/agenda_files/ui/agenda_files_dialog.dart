@@ -43,7 +43,7 @@ class AgendaFilesDialog extends StatelessWidget {
             directoryIdentifier: dirInfo.identifier,
             relativePath: fileInfo.fileName!,
           );
-        } catch (e) {
+        } on Exception {
           sendErr();
           return false;
         }
@@ -64,7 +64,7 @@ class AgendaFilesDialog extends StatelessWidget {
         }
 
         return isSameFile;
-      } catch (e) {
+      } on Exception {
         return false;
       }
     }
@@ -86,7 +86,7 @@ class AgendaFilesDialog extends StatelessWidget {
         return await FilePickerWritable().openFile((fileInfo, file) async {
           return fileInfo;
         });
-      } catch (e) {
+      } on Exception catch (e) {
         if (context.mounted) {
           sendError(context, 'Error selecting file: $e');
         }
@@ -100,7 +100,7 @@ class AgendaFilesDialog extends StatelessWidget {
           writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
           fileName: 'agenda.org',
         );
-      } catch (e) {
+      } on Exception catch (e) {
         if (context.mounted) {
           sendError(context, 'Error creating file: $e');
         }
