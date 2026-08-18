@@ -69,7 +69,7 @@ class EventParserService {
     ) {
       switch (node) {
         case OrgSection():
-          return returnIfSectionFound ? false : returnIfSectionFound = true;
+          return !returnIfSectionFound && (returnIfSectionFound = true);
 
         case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will
@@ -119,7 +119,7 @@ class EventParserService {
     section.visit((OrgNode node) {
       switch (node) {
         case OrgSection():
-          return returnIfSectionFound ? false : returnIfSectionFound = true;
+          return !returnIfSectionFound && (returnIfSectionFound = true);
         case OrgPlanningEntry():
           switch (node.keyword.content) {
             case 'SCHEDULED:':
