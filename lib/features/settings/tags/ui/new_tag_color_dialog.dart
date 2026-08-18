@@ -18,7 +18,7 @@ class NewTagColorDialog extends StatelessWidget {
     return Form(
       key: formKey,
       child: AlertDialog(
-        title: Text('Add new Tag'),
+        title: const Text('Add new Tag'),
         content: SingleChildScrollView(
           child: Column(
             children: [
@@ -44,7 +44,7 @@ class NewTagColorDialog extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            key: Key('newtag_savebutton'),
+            key: const Key('newtag_savebutton'),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 tagColorsCubit.addTagColor(
@@ -53,7 +53,7 @@ class NewTagColorDialog extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
-            child: Text('save'),
+            child: const Text('save'),
           ),
         ],
       ),

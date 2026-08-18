@@ -36,7 +36,7 @@ void main() {
                 BlocProvider(create: (context) => StartingDayCubit()),
                 BlocProvider(create: (context) => FloatingActionButtonCubit()),
               ],
-              child: SettingsPage(),
+              child: const SettingsPage(),
             ),
           ),
         ),

@@ -19,7 +19,7 @@ void main() {
       test('OrgSimpleTimestamp without time parses correctly', () {
         expect(
           bloc.state,
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -36,12 +36,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         );
       });
@@ -55,7 +55,7 @@ void main() {
 
         expect(
           bloc.state,
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -72,12 +72,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 13, minute: 21)),
+                equals(const TimeOfDay(hour: 13, minute: 21)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         );
       });
@@ -91,7 +91,7 @@ void main() {
 
         expect(
           bloc.state,
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -108,12 +108,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 13, minute: 21)),
+                equals(const TimeOfDay(hour: 13, minute: 21)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 14, minute: 56)),
+                equals(const TimeOfDay(hour: 14, minute: 56)),
               ),
         );
       });
@@ -127,7 +127,7 @@ void main() {
 
         expect(
           bloc.state,
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -148,12 +148,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         );
       });
@@ -168,7 +168,7 @@ void main() {
 
           expect(
             bloc.state,
-            TypeMatcher<DatePickerState>()
+            const TypeMatcher<DatePickerState>()
                 .having(
                   (state) => state.startDate,
                   'startDate',
@@ -193,12 +193,12 @@ void main() {
                 .having(
                   (state) => state.startTimeDuration,
                   'startTimeDuration',
-                  equals(TimeOfDay(hour: 14, minute: 36)),
+                  equals(const TimeOfDay(hour: 14, minute: 36)),
                 )
                 .having(
                   (state) => state.endTimeDuration,
                   'endTimeDuration',
-                  equals(TimeOfDay(hour: 12, minute: 00)),
+                  equals(const TimeOfDay(hour: 12, minute: 00)),
                 ),
           );
         },
@@ -214,7 +214,7 @@ void main() {
 
           expect(
             bloc.state,
-            TypeMatcher<DatePickerState>()
+            const TypeMatcher<DatePickerState>()
                 .having(
                   (state) => state.startDate,
                   'startDate',
@@ -235,12 +235,12 @@ void main() {
                 .having(
                   (state) => state.startTimeDuration,
                   'startTimeDuration',
-                  equals(TimeOfDay(hour: 12, minute: 00)),
+                  equals(const TimeOfDay(hour: 12, minute: 00)),
                 )
                 .having(
                   (state) => state.endTimeDuration,
                   'endTimeDuration',
-                  equals(TimeOfDay(hour: 9, minute: 31)),
+                  equals(const TimeOfDay(hour: 9, minute: 31)),
                 ),
           );
         },
@@ -256,7 +256,7 @@ void main() {
 
           expect(
             bloc.state,
-            TypeMatcher<DatePickerState>()
+            const TypeMatcher<DatePickerState>()
                 .having(
                   (state) => state.startDate,
                   'startDate',
@@ -277,12 +277,12 @@ void main() {
                 .having(
                   (state) => state.startTimeDuration,
                   'startTimeDuration',
-                  equals(TimeOfDay(hour: 19, minute: 56)),
+                  equals(const TimeOfDay(hour: 19, minute: 56)),
                 )
                 .having(
                   (state) => state.endTimeDuration,
                   'endTimeDuration',
-                  equals(TimeOfDay(hour: 9, minute: 31)),
+                  equals(const TimeOfDay(hour: 9, minute: 31)),
                 ),
           );
         },
@@ -312,7 +312,7 @@ void main() {
         act: (bloc) =>
             bloc.add(DatePickerStartDateChanged(DateTime(2010, 01, 05))),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -333,7 +333,7 @@ void main() {
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(DatePickerEndDateActiveChanged(true)),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -355,7 +355,7 @@ void main() {
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(DatePickerEndDateActiveChanged(false)),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -377,7 +377,7 @@ void main() {
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(DatePickerStartTimeActiveChanged(true)),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -398,7 +398,7 @@ void main() {
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(DatePickerStartTimeActiveChanged(false)),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -419,7 +419,7 @@ void main() {
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(DatePickerEndTimeActiveChanged(true)),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -440,7 +440,7 @@ void main() {
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(DatePickerEndTimeActiveChanged(false)),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -460,10 +460,10 @@ void main() {
         'Setting StartTime works',
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(
-          DatePickerTimeChanged(TimeOfDay(hour: 14, minute: 50), 'start'),
+          DatePickerTimeChanged(const TimeOfDay(hour: 14, minute: 50), 'start'),
         ),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -479,7 +479,7 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 14, minute: 50)),
+                equals(const TimeOfDay(hour: 14, minute: 50)),
               ),
         ],
       );
@@ -487,10 +487,10 @@ void main() {
         'Setting StartTime works',
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(
-          DatePickerTimeChanged(TimeOfDay(hour: 14, minute: 50), 'start'),
+          DatePickerTimeChanged(const TimeOfDay(hour: 14, minute: 50), 'start'),
         ),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -506,12 +506,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 14, minute: 50)),
+                equals(const TimeOfDay(hour: 14, minute: 50)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         ],
       );
@@ -520,10 +520,10 @@ void main() {
         'Setting EndTime works',
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(
-          DatePickerTimeChanged(TimeOfDay(hour: 12, minute: 50), 'end'),
+          DatePickerTimeChanged(const TimeOfDay(hour: 12, minute: 50), 'end'),
         ),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -539,12 +539,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 50)),
+                equals(const TimeOfDay(hour: 12, minute: 50)),
               ),
         ],
       );
@@ -555,7 +555,7 @@ void main() {
         act: (bloc) =>
             bloc.add(DatePickerEndDateChanged(DateTime(2026, 02))),
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -575,12 +575,12 @@ void main() {
               .having(
                 (state) => state.startTimeDuration,
                 'startTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
                 (state) => state.endTimeDuration,
                 'endTimeDuration',
-                equals(TimeOfDay(hour: 12, minute: 00)),
+                equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         ],
       );
@@ -594,7 +594,7 @@ void main() {
             ..add(DatePickerEndTimeActiveChanged(true));
         },
         expect: () => [
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
@@ -607,7 +607,7 @@ void main() {
                 'startTimeActive',
                 isTrue,
               ),
-          TypeMatcher<DatePickerState>()
+          const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',

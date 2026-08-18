@@ -25,7 +25,7 @@ void main() {
           home: Scaffold(
             body: BlocProvider(
               create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
-              child: AgendaFilesDialog(),
+              child: const AgendaFilesDialog(),
             ),
           ),
         ),

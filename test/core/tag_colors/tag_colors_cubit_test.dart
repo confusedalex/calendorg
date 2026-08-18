@@ -19,7 +19,7 @@ Future<void> main() async {
     final cubit = TagColorsCubit()..setInitialTagColor();
 
     // wait for async to finish, I don't know how to do this better :/
-    await Future.delayed(Duration(milliseconds: 10));
+    await Future.delayed(const Duration(milliseconds: 10));
 
     return cubit;
   }

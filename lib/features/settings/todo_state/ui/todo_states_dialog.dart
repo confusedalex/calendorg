@@ -28,7 +28,7 @@ class TodoStatesDialog extends StatelessWidget {
                     (index, status) => Column(
                       children: [
                         Text(status.toUpperCase(), textAlign: TextAlign.start),
-                        Divider(),
+                        const Divider(),
                         Wrap(
                           children: [
                             ...(index == 2
@@ -39,7 +39,7 @@ class TodoStatesDialog extends StatelessWidget {
                                 .map(
                                   (todo) => Chip(
                                     label: Text(todo),
-                                    deleteIcon: Icon(Icons.close),
+                                    deleteIcon: const Icon(Icons.close),
                                     onDeleted: () => context
                                         .read<TodoStatesCubit>()
                                         .removeTodo(status, todo),
@@ -61,7 +61,7 @@ class TodoStatesDialog extends StatelessWidget {
                                   child: TodoStateAddDialog(status: status),
                                 ),
                               ),
-                              child: Icon(Icons.add),
+                              child: const Icon(Icons.add),
                             ),
                           ],
                         ),

@@ -9,8 +9,8 @@ final class DatePickerState {
     endTimeDuration,
     required this.endDateActive,
     this.endDate,
-  }) : startTimeDuration = startTimeDuration ?? TimeOfDay(hour: 12, minute: 00),
-       endTimeDuration = endTimeDuration ?? TimeOfDay(hour: 12, minute: 00);
+  }) : startTimeDuration = startTimeDuration ?? const TimeOfDay(hour: 12, minute: 00),
+       endTimeDuration = endTimeDuration ?? const TimeOfDay(hour: 12, minute: 00);
 
   DateTime startDate;
   DateTime? endDate;

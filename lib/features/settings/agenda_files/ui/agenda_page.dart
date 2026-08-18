@@ -16,8 +16,8 @@ class AgendaPage extends StatelessWidget {
         builder: (context, state) => Column(
           children: [
             ListTile(
-              leading: Icon(Icons.folder_open),
-              title: Text('Pick org directory'),
+              leading: const Icon(Icons.folder_open),
+              title: const Text('Pick org directory'),
               trailing: Text(
                 state.directory?.fileName ?? 'Not set',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -39,11 +39,11 @@ class AgendaPage extends StatelessWidget {
                 }
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               enabled: state.directory != null,
-              leading: Icon(Icons.inbox),
-              title: Text('Inbox File'),
+              leading: const Icon(Icons.inbox),
+              title: const Text('Inbox File'),
               trailing: Text(
                 state.inboxFile?.fileName ?? 'Not set',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -84,8 +84,8 @@ class AgendaPage extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.folder_copy),
-              title: Text('Agenda Files'),
+              leading: const Icon(Icons.folder_copy),
+              title: const Text('Agenda Files'),
               enabled: state.directory != null,
               onTap: () => showDialog(
                 context: context,

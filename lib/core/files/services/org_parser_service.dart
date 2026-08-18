@@ -71,7 +71,7 @@ class OrgParserService {
     );
 
     try {
-      final response = await responsePort.first.timeout(Duration(seconds: 30));
+      final response = await responsePort.first.timeout(const Duration(seconds: 30));
 
       if (response is OrgDocument) return response;
       if (response is String) throw StateError('Worker error: $response');
@@ -87,7 +87,7 @@ class OrgParserService {
       'Invalidating parser cache, new states: '
       '${newStates.todoStates.todo} / ${newStates.todoStates.done}',
     );
-    _workerSendPort.send(_CacheInvalidateMessage());
+    _workerSendPort.send(const _CacheInvalidateMessage());
   }
 }
 

@@ -22,8 +22,8 @@ class SettingsPage extends StatelessWidget {
     return ListView(
       children: [
         ListTile(
-          leading: Icon(Icons.palette),
-          title: Text('Tag Colors'),
+          leading: const Icon(Icons.palette),
+          title: const Text('Tag Colors'),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -34,10 +34,10 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(height: 1),
+        const Divider(height: 1),
         ListTile(
-          leading: Icon(Icons.calendar_today),
-          title: Text('Starting Day of Week'),
+          leading: const Icon(Icons.calendar_today),
+          title: const Text('Starting Day of Week'),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -46,10 +46,10 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(height: 1),
+        const Divider(height: 1),
         ListTile(
-          leading: Icon(Icons.check_circle),
-          title: Text('TODO States'),
+          leading: const Icon(Icons.check_circle),
+          title: const Text('TODO States'),
           onTap: () => showDialog(
             context: context,
             builder: (_) => MultiBlocProvider(
@@ -61,10 +61,10 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(height: 1),
+        const Divider(height: 1),
         ListTile(
-          leading: Icon(Icons.brightness_4),
-          title: Text('Theme'),
+          leading: const Icon(Icons.brightness_4),
+          title: const Text('Theme'),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -73,29 +73,29 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(height: 1),
+        const Divider(height: 1),
         ListTile(
-          leading: Icon(Icons.bug_report),
-          title: Text('Debug'),
+          leading: const Icon(Icons.bug_report),
+          title: const Text('Debug'),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
                 value: BlocProvider.of<OrgFilesCubit>(context),
-                child: DebugPage(),
+                child: const DebugPage(),
               ),
             ),
           ),
         ),
         ListTile(
-          leading: Icon(Icons.folder),
-          title: Text('Agenda Files'),
+          leading: const Icon(Icons.folder),
+          title: const Text('Agenda Files'),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => BlocProvider.value(
                 value: BlocProvider.of<OrgFilesCubit>(context),
-                child: AgendaPage(),
+                child: const AgendaPage(),
               ),
             ),
           ),

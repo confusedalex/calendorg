@@ -65,11 +65,11 @@ class _TagsPageState extends State<TagsPage> {
               ),
               BlocProvider(create: (context) => NewTagColorCubit()),
             ],
-            child: NewTagColorDialog(),
+            child: const NewTagColorDialog(),
           ),
         );
       },
-      label: Text('Add'),
+      label: const Text('Add'),
     ),
   );
 }

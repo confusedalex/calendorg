@@ -55,7 +55,7 @@ class CalendarView extends StatelessWidget {
             child: NewSectionDialog(dateTime: selectedDate),
           ),
         ),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
 

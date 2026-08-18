@@ -25,7 +25,7 @@ class StartingDateDialog extends StatelessWidget {
                     onChanged: (day) => context
                         .read<StartingDayCubit>()
                         .changeStartingDayOfWeek(day!),
-                    child: Column(
+                    child: const Column(
                       children: [
                         RadioListTile(
                           title: Text('Monday'),

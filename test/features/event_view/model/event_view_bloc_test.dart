@@ -49,7 +49,7 @@ void main() {
       build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) => bloc.add(EventViewTitleChangeEvent('History exam')),
       expect: () => [
-        TypeMatcher<EventViewState>().having(
+        const TypeMatcher<EventViewState>().having(
           (state) => state.newEvent.title,
           'Title',
           equals('History exam'),
@@ -62,7 +62,7 @@ void main() {
       build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
       expect: () => [
-        TypeMatcher<EventViewState>().having(
+        const TypeMatcher<EventViewState>().having(
           (state) => state.newTimestamp,
           'timestamp',
           equals(newTimestamp),
@@ -86,7 +86,7 @@ void main() {
       ),
       act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
       expect: () => [
-        TypeMatcher<EventViewState>().having(
+        const TypeMatcher<EventViewState>().having(
           (state) => state.newTimestamp,
           'timestamp',
           equals(newTimestamp),

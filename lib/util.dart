@@ -13,7 +13,7 @@ void sendError(BuildContext context, String error) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         error,
       ),
       backgroundColor: Colors.red,
@@ -84,11 +84,11 @@ List<DateTime> dateTimesFromOrgDateRange(
   DateTime? date,
 ) {
   if (date != null &&
-      isSameDay(timestamp.endDateTime.add(Duration(days: 1)), date)) {
+      isSameDay(timestamp.endDateTime.add(const Duration(days: 1)), date)) {
     return list;
   }
   if (date == null) {
-    final next = timestamp.startDateTime.add(Duration(days: 1));
+    final next = timestamp.startDateTime.add(const Duration(days: 1));
     return dateTimesFromOrgDateRange(timestamp, [
       timestamp.startDateTime,
     ], next);
@@ -96,13 +96,13 @@ List<DateTime> dateTimesFromOrgDateRange(
   return dateTimesFromOrgDateRange(timestamp, [
     ...list,
     date,
-  ], date.add(Duration(days: 1)));
+  ], date.add(const Duration(days: 1)));
 }
 
 DateTime beforeMidnight(DateTime date) =>
-    date.subtract(Duration(days: 1)).copyWith(hour: 23, minute: 59, second: 59);
+    date.subtract(const Duration(days: 1)).copyWith(hour: 23, minute: 59, second: 59);
 DateTime afterMidnight(DateTime date) =>
-    date.add(Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
+    date.add(const Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
 
 extension GetTimeOfDay on OrgTime {
   TimeOfDay get timeOfDay =>
@@ -126,7 +126,7 @@ List<DateTime> dateRange(DateTime start, DateTime end) {
   var current = start;
   while (current.isBefore(end) || isSameDay(current, end)) {
     dates.add(current);
-    current = current.add(Duration(days: 1));
+    current = current.add(const Duration(days: 1));
   }
   return dates;
 }

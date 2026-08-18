@@ -28,10 +28,10 @@ class EventView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 16,
             children: [
-              SizedBox(height: 0),
+              const SizedBox(height: 0),
               TextFormField(
-                key: Key('TitleField'),
-                decoration: InputDecoration(
+                key: const Key('TitleField'),
+                decoration: const InputDecoration(
                   labelText: 'Event title',
                   prefixIcon: Icon(Icons.title),
                   border: OutlineInputBorder(),
@@ -53,15 +53,15 @@ class EventView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: InkWell(
-                  key: Key('datePickerButton'),
+                  key: const Key('datePickerButton'),
                   borderRadius: BorderRadius.circular(16),
                   onTap: () => openDatePicker(context, timestamp),
                   child: Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        Icon(Icons.schedule),
-                        SizedBox(width: 12),
+                        const Icon(Icons.schedule),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class EventView extends StatelessWidget {
                                 'Change date and time',
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 timestamp.toMarkup(),
                                 style: Theme.of(context).textTheme.bodyMedium,
@@ -79,7 +79,7 @@ class EventView extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Icon(Icons.chevron_right),
+                        const Icon(Icons.chevron_right),
                       ],
                     ),
                   ),
@@ -91,19 +91,19 @@ class EventView extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          key: Key('CancelButton'),
+          key: const Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         FilledButton.icon(
-          key: Key('SaveButton'),
+          key: const Key('SaveButton'),
           onPressed: () {
             if (!(bloc.formKey.currentState?.validate() ?? false)) return;
             context.read<EventViewBloc>().add(EventViewSaveEvent());
             Navigator.pop(context);
           },
-          icon: Icon(Icons.save),
-          label: Text('Save'),
+          icon: const Icon(Icons.save),
+          label: const Text('Save'),
         ),
       ],
     );

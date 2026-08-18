@@ -69,7 +69,7 @@ void main() {
                   ]),
                 ),
               ],
-              child: CalendarView(),
+              child: const CalendarView(),
             ),
           ),
         ),
@@ -128,7 +128,7 @@ void main() {
         isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 17)),
         isTrue,
       );
-      await tester.tap(find.byKey(Key('CellContent-2025-5-16')));
+      await tester.tap(find.byKey(const Key('CellContent-2025-5-16')));
       expect(
         isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
         isTrue,

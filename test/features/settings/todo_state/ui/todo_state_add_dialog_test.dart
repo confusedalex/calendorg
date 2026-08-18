@@ -15,7 +15,7 @@ void main() {
               BlocProvider(create: (context) => TodoStatesCubit()),
               BlocProvider(create: (context) => TodoStateAddDialogCubit()),
             ],
-            child: TodoStateAddDialog(status: 'todo'),
+            child: const TodoStateAddDialog(status: 'todo'),
           ),
         ),
       ),

@@ -40,7 +40,7 @@ class DiffViewPage extends StatelessWidget {
               }
             }
           },
-          child: Text('select'),
+          child: const Text('select'),
         ),
       );
     }

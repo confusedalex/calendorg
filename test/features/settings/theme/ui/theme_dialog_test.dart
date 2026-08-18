@@ -29,7 +29,7 @@ void main() {
         MaterialApp(
           home: BlocProvider.value(
             value: bloc,
-            child: Scaffold(body: ThemeDialog()),
+            child: const Scaffold(body: ThemeDialog()),
           ),
         ),
       );
@@ -62,7 +62,7 @@ void main() {
       testWidgets('Switching to light theme works', (tester) async {
         await pumpWidgetToTester(tester);
 
-        await tester.tap(find.byKey(Key('ThemeRadioLightTheme')));
+        await tester.tap(find.byKey(const Key('ThemeRadioLightTheme')));
 
         await tester.pumpAndSettle();
 

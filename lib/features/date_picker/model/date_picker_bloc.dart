@@ -81,7 +81,7 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
   Future<void> datePickerTimePressed(BuildContext context, String type) async {
     final TimeOfDay? time = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: 12, minute: 00),
+      initialTime: const TimeOfDay(hour: 12, minute: 00),
     );
 
     if (time == null) return;

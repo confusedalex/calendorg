@@ -30,7 +30,7 @@ class NewSectionDialog extends StatelessWidget {
       title: 'Add Event',
       titleIcon: Icons.title,
       content: inboxFile == null
-          ? Text('You need to set an inbox file')
+          ? const Text('You need to set an inbox file')
           : Form(
               key: bloc.formKey,
               child: SingleChildScrollView(
@@ -38,10 +38,10 @@ class NewSectionDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 16,
                   children: [
-                    SizedBox(height: 0),
+                    const SizedBox(height: 0),
                     TextFormField(
-                      key: Key('titleField'),
-                      decoration: InputDecoration(
+                      key: const Key('titleField'),
+                      decoration: const InputDecoration(
                         labelText: 'Heading title',
                         prefixIcon: Icon(Icons.title),
                         border: OutlineInputBorder(),
@@ -61,18 +61,18 @@ class NewSectionDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: InkWell(
-                        key: Key('datePickerButton'),
+                        key: const Key('datePickerButton'),
                         borderRadius: BorderRadius.circular(16),
                         onTap: () => openDatePicker(
                           context,
                           timestamp?.startDateTime ?? dateTime,
                         ),
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.schedule),
-                              SizedBox(width: 12),
+                              const Icon(Icons.schedule),
+                              const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +86,7 @@ class NewSectionDialog extends StatelessWidget {
                                         context,
                                       ).textTheme.titleMedium,
                                     ),
-                                    SizedBox(height: 4),
+                                    const SizedBox(height: 4),
                                     Text(
                                       timestamp?.toMarkup() ??
                                           'No date selected',
@@ -97,7 +97,7 @@ class NewSectionDialog extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              Icon(Icons.chevron_right),
+                              const Icon(Icons.chevron_right),
                             ],
                           ),
                         ),
@@ -109,12 +109,12 @@ class NewSectionDialog extends StatelessWidget {
             ),
       actions: [
         TextButton(
-          key: Key('CancelButton'),
+          key: const Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         FilledButton.icon(
-          key: Key('SaveButton'),
+          key: const Key('SaveButton'),
           onPressed: inboxFile != null && timestamp != null
               ? () async {
                   if (!(bloc.formKey.currentState?.validate() ?? false)) return;
@@ -144,8 +144,8 @@ class NewSectionDialog extends StatelessWidget {
                   }
                 }
               : null,
-          icon: Icon(Icons.save),
-          label: Text('Save'),
+          icon: const Icon(Icons.save),
+          label: const Text('Save'),
         ),
       ],
     );

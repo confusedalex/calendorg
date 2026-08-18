@@ -26,7 +26,7 @@ void main() {
         MaterialApp(
           home: BlocProvider(
             create: (context) => cubit,
-            child: Scaffold(body: TagsPage()),
+            child: const Scaffold(body: TagsPage()),
           ),
         ),
       );
@@ -50,12 +50,12 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('newtag_savebutton')));
+      await tester.tap(find.byKey(const Key('newtag_savebutton')));
       await tester.pumpAndSettle();
 
       expect(
         cubit.state,
-        containsOnce(TagColor('test tag', Color(0xff043052))),
+        containsOnce(TagColor('test tag', const Color(0xff043052))),
       );
       expect(cubit.state, containsOnce(schoolTagColor));
     });
@@ -64,9 +64,9 @@ void main() {
       await pumpWidgetToTester(tester, cubit);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('school')));
+      await tester.tap(find.byKey(const Key('school')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key('edittag_deletebutton')));
+      await tester.tap(find.byKey(const Key('edittag_deletebutton')));
 
       expect(cubit.state, isEmpty);
     });
@@ -75,7 +75,7 @@ void main() {
       await pumpWidgetToTester(tester, cubit);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('school')));
+      await tester.tap(find.byKey(const Key('school')));
       await tester.pumpAndSettle();
 
       final Offset center = tester.getCenter(find.byType(ColorWheelPicker));
@@ -86,11 +86,11 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('edittag_savebutton')));
+      await tester.tap(find.byKey(const Key('edittag_savebutton')));
       await tester.pumpAndSettle();
 
       expect(cubit.state, isNot(contains(schoolTagColor)));
-      expect(cubit.state, contains(TagColor('school', Color(0xff523304))));
+      expect(cubit.state, contains(TagColor('school', const Color(0xff523304))));
     });
 
     testWidgets('Moving tags word', (tester) async {
@@ -104,7 +104,7 @@ void main() {
 
       await tester.drag(
         find.descendant(
-          of: find.byKey(Key('school')),
+          of: find.byKey(const Key('school')),
           matching: find.byType(ReorderableDragStartListener),
         ),
         const Offset(0, 1000),

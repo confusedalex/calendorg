@@ -23,7 +23,7 @@ void main() {
         MaterialApp(
           home: BlocProvider(
             create: (context) => cubit,
-            child: Scaffold(body: StartingDateDialog()),
+            child: const Scaffold(body: StartingDateDialog()),
           ),
         ),
       );

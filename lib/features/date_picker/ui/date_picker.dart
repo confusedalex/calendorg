@@ -23,7 +23,7 @@ class DatePicker extends StatelessWidget {
     TableRow titleRow(String title) => TableRow(
       children: [
         Text(title, textAlign: TextAlign.center),
-        SizedBox(),
+        const SizedBox(),
       ],
     );
     return DialogShell(
@@ -31,13 +31,13 @@ class DatePicker extends StatelessWidget {
       titleIcon: Icons.date_range,
       content: BlocBuilder<DatePickerBloc, DatePickerState>(
         builder: (context, state) => Table(
-          columnWidths: {1: FractionColumnWidth(0.25)},
+          columnWidths: {1: const FractionColumnWidth(0.25)},
           children: [
             titleRow('Start Date'),
             TableRow(
               children: [
                 OutlinedButton(
-                  key: Key('datepicker_startdatebutton'),
+                  key: const Key('datepicker_startdatebutton'),
                   onPressed: () =>
                       context.read<DatePickerBloc>().datePickerDatePressed(
                         context,
@@ -52,14 +52,14 @@ class DatePicker extends StatelessWidget {
                     ).toMarkup(),
                   ),
                 ),
-                SizedBox(),
+                const SizedBox(),
               ],
             ),
             titleRow('Start Time'),
             TableRow(
               children: [
                 OutlinedButton(
-                  key: Key('datepicker_starttimebutton'),
+                  key: const Key('datepicker_starttimebutton'),
                   onPressed: state.startTimeActive
                       ? () => context
                             .read<DatePickerBloc>()
@@ -68,7 +68,7 @@ class DatePicker extends StatelessWidget {
                   child: Text(state.startTimeDuration.format(context)),
                 ),
                 Switch(
-                  key: Key('datepicker_starttimecheckbox'),
+                  key: const Key('datepicker_starttimecheckbox'),
                   value: state.startTimeActive,
                   onChanged: (value) => context.read<DatePickerBloc>().add(
                     DatePickerStartTimeActiveChanged(value),
@@ -80,7 +80,7 @@ class DatePicker extends StatelessWidget {
             TableRow(
               children: [
                 OutlinedButton(
-                  key: Key('datepicker_enddatebutton'),
+                  key: const Key('datepicker_enddatebutton'),
                   onPressed: state.endDateActive
                       ? () => context
                             .read<DatePickerBloc>()
@@ -101,7 +101,7 @@ class DatePicker extends StatelessWidget {
                   ),
                 ),
                 Switch(
-                  key: Key('datepicker_enddatecheckbox'),
+                  key: const Key('datepicker_enddatecheckbox'),
                   value: state.endDateActive,
                   onChanged: (value) => context.read<DatePickerBloc>().add(
                     DatePickerEndDateActiveChanged(value),
@@ -113,7 +113,7 @@ class DatePicker extends StatelessWidget {
             TableRow(
               children: [
                 OutlinedButton(
-                  key: Key('datepicker_endtimebutton'),
+                  key: const Key('datepicker_endtimebutton'),
                   onPressed:
                       state.endTimeActive == true &&
                           (state.endDateActive || state.startTimeActive)
@@ -125,7 +125,7 @@ class DatePicker extends StatelessWidget {
                 ),
 
                 Switch(
-                  key: Key('datepicker_endtimecheckbox'),
+                  key: const Key('datepicker_endtimecheckbox'),
                   value: state.endTimeActive,
                   onChanged: state.endDateActive || state.startTimeActive
                       ? (value) => context.read<DatePickerBloc>().add(
@@ -140,18 +140,18 @@ class DatePicker extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          key: Key('CancelButton'),
+          key: const Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         FilledButton.icon(
-          key: Key('SetButton'),
+          key: const Key('SetButton'),
           onPressed: () {
             handleSave(timestamp);
             Navigator.pop(context);
           },
-          icon: Icon(Icons.check),
-          label: Text('Set'),
+          icon: const Icon(Icons.check),
+          label: const Text('Set'),
         ),
       ],
     );

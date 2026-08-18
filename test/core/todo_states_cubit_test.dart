@@ -53,7 +53,7 @@ void main() {
 
         final cubit = TodoStatesCubit()..loadFromPrefs();
 
-        await Future.delayed(Duration(milliseconds: 10));
+        await Future.delayed(const Duration(milliseconds: 10));
         return cubit;
       }
 

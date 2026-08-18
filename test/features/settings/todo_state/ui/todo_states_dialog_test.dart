@@ -30,7 +30,7 @@ void main() {
                 create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
               ),
             ],
-            child: TodoStatesDialog(),
+            child: const TodoStatesDialog(),
           ),
         ),
       ),

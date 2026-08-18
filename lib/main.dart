@@ -80,7 +80,7 @@ class Calendorg extends StatelessWidget {
               if (kDebugMode)
                 BlocProvider(create: (context) => DiffViewCubit()),
             ],
-            child: HomePage(),
+            child: const HomePage(),
           ),
         );
       },
@@ -101,10 +101,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List pages = [
-      if (kDebugMode) DiffViewPage(),
+      if (kDebugMode) const DiffViewPage(),
       todayPage(),
       CalendarPage(DateTime.now()),
-      SettingsPage(),
+      const SettingsPage(),
     ];
     return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
       builder: (context, buttonState) {
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (filesState.status == OrgFilesStatus.loading)
-                        LinearProgressIndicator(),
+                        const LinearProgressIndicator(),
                       NavigationBar(
                         onDestinationSelected: (value) => setState(() {
                           index = value;
@@ -126,19 +126,19 @@ class _HomePageState extends State<HomePage> {
                         selectedIndex: index,
                         destinations: [
                           if (kDebugMode)
-                            NavigationDestination(
+                            const NavigationDestination(
                               icon: Icon(Icons.compare_arrows),
                               label: 'Diff',
                             ),
-                          NavigationDestination(
+                          const NavigationDestination(
                             icon: Icon(Icons.list),
                             label: 'Events',
                           ),
-                          NavigationDestination(
+                          const NavigationDestination(
                             icon: Icon(Icons.calendar_today),
                             label: 'Calendar',
                           ),
-                          NavigationDestination(
+                          const NavigationDestination(
                             icon: Icon(Icons.settings),
                             label: 'Settings',
                           ),

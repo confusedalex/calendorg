@@ -26,7 +26,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.byKey(Key('datepicker_startdatebutton')), findsOne);
+    expect(find.byKey(const Key('datepicker_startdatebutton')), findsOne);
   });
 
   testWidgets('start date button shows datepicker', (tester) async {
@@ -46,7 +46,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(Key('datepicker_startdatebutton')));
+    await tester.tap(find.byKey(const Key('datepicker_startdatebutton')));
 
     await tester.pumpAndSettle();
 
@@ -72,7 +72,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(Key('datepicker_enddatebutton')));
+    await tester.tap(find.byKey(const Key('datepicker_enddatebutton')));
 
     await tester.pumpAndSettle();
 
@@ -98,9 +98,9 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(Key('datepicker_enddatecheckbox')));
+    await tester.tap(find.byKey(const Key('datepicker_enddatecheckbox')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('datepicker_enddatebutton')));
+    await tester.tap(find.byKey(const Key('datepicker_enddatebutton')));
     await tester.pumpAndSettle();
 
     expect(find.byType(CalendarDatePicker), findsOneWidget);
@@ -125,7 +125,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(Key('datepicker_starttimebutton')));
+    await tester.tap(find.byKey(const Key('datepicker_starttimebutton')));
 
     await tester.pumpAndSettle();
 
@@ -151,9 +151,9 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(Key('datepicker_starttimecheckbox')));
+    await tester.tap(find.byKey(const Key('datepicker_starttimecheckbox')));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('datepicker_starttimebutton')));
+    await tester.tap(find.byKey(const Key('datepicker_starttimebutton')));
     await tester.pumpAndSettle();
 
     expect(find.byType(TimePickerDialog), findsOneWidget);

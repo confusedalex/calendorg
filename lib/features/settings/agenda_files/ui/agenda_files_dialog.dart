@@ -153,7 +153,7 @@ class AgendaFilesDialog extends StatelessWidget {
                       CalendorgLocalizations.of(context).file_name_couldnt_load,
                 ),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () =>
                       context.read<OrgFilesCubit>().removeFilePath(fileInfo),
                 ),

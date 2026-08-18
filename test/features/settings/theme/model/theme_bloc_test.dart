@@ -15,7 +15,7 @@ void main() {
       build: () => ThemeBloc(),
       act: (bloc) => bloc.add(ThemeSwitchEvent(ThemeMode.light)),
       expect: () => [
-        TypeMatcher<ThemeMode>().having(
+        const TypeMatcher<ThemeMode>().having(
           (state) => state,
           'Theme',
           equals(ThemeMode.light),

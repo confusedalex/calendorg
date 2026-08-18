@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
   builder: (context, state) {
     final now = DateTime.now();
-    final endDate = now.add(Duration(days: 3));
+    final endDate = now.add(const Duration(days: 3));
     final occurrences = state.occurrencesInRange(
       DateTimeRange(start: now, end: endDate),
     );
@@ -16,7 +16,7 @@ Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Text(
               'Next 3 days',
               style: Theme.of(context).textTheme.headlineMedium,

@@ -41,18 +41,18 @@ void main() {
       await pumpWidget(tester);
 
       expect(find.text('Add Event'), findsOneWidget);
-      expect(find.byKey(Key('titleField')), findsOneWidget);
-      expect(find.byKey(Key('datePickerButton')), findsOneWidget);
-      expect(find.byKey(Key('CancelButton')), findsOneWidget);
-      expect(find.byKey(Key('SaveButton')), findsOneWidget);
+      expect(find.byKey(const Key('titleField')), findsOneWidget);
+      expect(find.byKey(const Key('datePickerButton')), findsOneWidget);
+      expect(find.byKey(const Key('CancelButton')), findsOneWidget);
+      expect(find.byKey(const Key('SaveButton')), findsOneWidget);
       expect(find.text('No date selected'), findsOneWidget);
 
       final saveButton = tester.widget<FilledButton>(
-        find.byKey(Key('SaveButton')),
+        find.byKey(const Key('SaveButton')),
       );
       expect(saveButton.onPressed, isNull);
 
-      await tester.tap(find.byKey(Key('datePickerButton')));
+      await tester.tap(find.byKey(const Key('datePickerButton')));
       await tester.pumpAndSettle();
 
       expect(find.byType(DatePicker), findsOneWidget);

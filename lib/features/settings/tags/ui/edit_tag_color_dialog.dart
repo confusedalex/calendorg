@@ -13,7 +13,7 @@ class EditTagColorDialog extends StatefulWidget {
 }
 
 class _EditTagColorDialogState extends State<EditTagColorDialog> {
-  Color selectedColor = Color(0x00000000);
+  Color selectedColor = const Color(0x00000000);
 
   @override
   Widget build(BuildContext context) => AlertDialog(
@@ -33,22 +33,22 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
     ),
     actions: [
       TextButton(
-        key: Key('edittag_deletebutton'),
+        key: const Key('edittag_deletebutton'),
         onPressed: () {
           context.read<TagColorsCubit>().removeTagColor(widget.tagColor.tag);
           Navigator.of(context).pop();
         },
-        child: Text('delete'),
+        child: const Text('delete'),
       ),
       TextButton(
-        key: Key('edittag_savebutton'),
+        key: const Key('edittag_savebutton'),
         onPressed: () {
           context.read<TagColorsCubit>().addTagColor(
             TagColor(widget.tagColor.tag, selectedColor),
           );
           Navigator.of(context).pop();
         },
-        child: Text('save'),
+        child: const Text('save'),
       ),
     ],
   );

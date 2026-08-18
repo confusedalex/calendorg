@@ -23,7 +23,7 @@ class ThemeDialog extends StatelessWidget {
               RadioGroup(
                 groupValue: state,
                 onChanged: changeTheme,
-                child: Column(
+                child: const Column(
                   children: [
                     RadioListTile(
                       title: Text('dark'),

@@ -44,7 +44,7 @@ void main() {
                     EventViewBloc(orgFilesCubit, entry, entry.timestamps.first),
               ),
             ],
-            child: EventView(),
+            child: const EventView(),
           ),
         ),
       ),
@@ -57,14 +57,14 @@ void main() {
     testWidgets('EventView shows event title', (tester) async {
       await initWidget(tester);
 
-      expect(find.byKey(Key('TitleField')), findsOneWidget);
+      expect(find.byKey(const Key('TitleField')), findsOneWidget);
       expect(find.text(entry.title), findsOneWidget);
     });
     group('date picker', () {
       testWidgets('EventView shows date picker Button', (tester) async {
         await initWidget(tester);
 
-        expect(find.byKey(Key('datePickerButton')), findsOneWidget);
+        expect(find.byKey(const Key('datePickerButton')), findsOneWidget);
       });
       testWidgets('Date Picker button shows timestamp', (tester) async {
         await initWidget(tester);
@@ -74,7 +74,7 @@ void main() {
       testWidgets('Date Picker button open datePickerDialog', (tester) async {
         await initWidget(tester);
 
-        await tester.tap(find.byKey(Key('datePickerButton')));
+        await tester.tap(find.byKey(const Key('datePickerButton')));
 
         await tester.pumpAndSettle();
 

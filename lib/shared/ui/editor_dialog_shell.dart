@@ -21,10 +21,10 @@ class DialogShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      insetPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      titlePadding: EdgeInsets.fromLTRB(24, 24, 24, 12),
-      contentPadding: EdgeInsets.fromLTRB(24, 0, 24, 8),
-      actionsPadding: EdgeInsets.fromLTRB(24, 0, 24, 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+      contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       title: Row(
         children: [
@@ -40,7 +40,7 @@ class DialogShell extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -48,7 +48,7 @@ class DialogShell extends StatelessWidget {
               children: [Text(title)],
             ),
           ),
-          if (showClose) CloseButton(),
+          if (showClose) const CloseButton(),
         ],
       ),
       content: SizedBox(

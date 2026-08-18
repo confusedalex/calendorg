@@ -21,7 +21,7 @@ void main() {
       act: (bloc) =>
           bloc.add(CalendarChangeFormat(calendarFormat: CalendarFormat.week)),
       expect: () => [
-        TypeMatcher<CalendarState>().having(
+        const TypeMatcher<CalendarState>().having(
           (state) => state.calendarFormat,
           'Calendar Format',
           equals(CalendarFormat.week),
@@ -36,7 +36,7 @@ void main() {
         CalendarChangeSelectedDateEvent(selectedDate: DateTime(2025, 05, 16)),
       ),
       expect: () => [
-        TypeMatcher<CalendarState>().having(
+        const TypeMatcher<CalendarState>().having(
           (state) => state.selectedDate,
           'selected Date',
           equals(DateTime(2025, 05, 16)),
