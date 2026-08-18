@@ -131,12 +131,12 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 12, 04, 00, 00)),
+                equals(DateTime(2025, 12, 04)),
               )
               .having(
                 (state) => state.endDate,
                 'endDate',
-                equals(DateTime(2026, 01, 07, 00, 00)),
+                equals(DateTime(2026, 01, 07)),
               )
               .having((state) => state.endDateActive, 'endDateActive', isTrue)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -177,7 +177,7 @@ void main() {
                 .having(
                   (state) => state.endDate,
                   'endDate',
-                  equals(DateTime(2026, 01, 07, 00, 00)),
+                  equals(DateTime(2026, 01, 07)),
                 )
                 .having((state) => state.endDateActive, 'endDateActive', isTrue)
                 .having(
@@ -218,7 +218,7 @@ void main() {
                 .having(
                   (state) => state.startDate,
                   'startDate',
-                  equals(DateTime(2025, 12, 04, 00, 00)),
+                  equals(DateTime(2025, 12, 04)),
                 )
                 .having(
                   (state) => state.endDate,
@@ -337,7 +337,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endDateActive, 'endDateActive', isTrue)
@@ -359,7 +359,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endDateActive, 'endDateActive', isFalse)
@@ -381,7 +381,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -402,7 +402,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -423,7 +423,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isTrue)
@@ -444,7 +444,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -467,7 +467,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -494,7 +494,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -527,7 +527,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -553,18 +553,18 @@ void main() {
         'Setting EndDate works',
         build: () => datePickerBloc,
         act: (bloc) =>
-            bloc.add(DatePickerEndDateChanged(DateTime(2026, 02, 01))),
+            bloc.add(DatePickerEndDateChanged(DateTime(2026, 02))),
         expect: () => [
           TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having(
                 (state) => state.endDate,
                 'endDate',
-                equals(DateTime(2026, 02, 01)),
+                equals(DateTime(2026, 02)),
               )
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
               .having(
@@ -598,7 +598,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isFalse)
@@ -611,7 +611,7 @@ void main() {
               .having(
                 (state) => state.startDate,
                 'startDate',
-                equals(DateTime(2025, 05, 01)),
+                equals(DateTime(2025, 05)),
               )
               .having((state) => state.endDate, 'endDate', isNull)
               .having((state) => state.endTimeActive, 'endTimeActive', isTrue)

@@ -55,7 +55,6 @@ class EventParserService {
       timestamps: foundTimestamps,
       scheduled: planning.$1,
       deadline: planning.$2,
-      description: null,
     );
   }
 

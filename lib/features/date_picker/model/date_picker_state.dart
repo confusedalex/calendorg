@@ -53,7 +53,6 @@ final class DatePickerState {
           startTimeActive: true,
           endTimeActive: true,
           endDateActive: false,
-          endDate: null,
           startTimeDuration: timestamp.timeStart.timeOfDay,
           endTimeDuration: timestamp.timeEnd.timeOfDay,
         );
@@ -66,9 +65,6 @@ final class DatePickerState {
         startTimeActive: false,
         endTimeActive: false,
         endDateActive: false,
-        endDate: null,
-        endTimeDuration: null,
-        startTimeDuration: null,
       );
 
   DatePickerState copyWith({

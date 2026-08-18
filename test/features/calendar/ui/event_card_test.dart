@@ -34,7 +34,7 @@ void main() {
       .first;
   final occurrence = occurrencesFor(
     entry,
-    DateTimeRange(start: DateTime(2025, 5, 1), end: DateTime(2025, 5, 30)),
+    DateTimeRange(start: DateTime(2025, 5), end: DateTime(2025, 5, 30)),
   ).first;
   final meetupTagColor = TagColor('meetups', Colors.pink);
   final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());

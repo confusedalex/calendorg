@@ -27,7 +27,7 @@ void main() {
           DateTime(2025, 05, 08),
           DateTime(2025, 05, 28),
           DateTime(2025, 05, 15),
-          DateTime(2025, 05, 1),
+          DateTime(2025, 05),
           DateTime(2025, 05, 2),
           DateTime(2025, 05, 3),
         ].map((date) => entry.timestampsByDateTime(date).length),
@@ -47,7 +47,7 @@ void main() {
 
     test('Only DateTimes at the same date should match', () {
       expect(
-        entry.timestampsByDateTime(DateTime(2025, 05, 01, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05)).length,
         equals(1),
       );
       expect(
@@ -55,7 +55,7 @@ void main() {
         equals(1),
       );
       expect(
-        entry.timestampsByDateTime(DateTime(2025, 05, 02, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 02)).length,
         equals(1),
       );
       expect(
@@ -63,7 +63,7 @@ void main() {
         equals(1),
       );
       expect(
-        entry.timestampsByDateTime(DateTime(2025, 05, 03, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 03)).length,
         equals(1),
       );
       expect(
@@ -76,7 +76,7 @@ void main() {
         equals(0),
       );
       expect(
-        entry.timestampsByDateTime(DateTime(2025, 05, 04, 00, 00, 00)).length,
+        entry.timestampsByDateTime(DateTime(2025, 05, 04)).length,
         equals(0),
       );
     });

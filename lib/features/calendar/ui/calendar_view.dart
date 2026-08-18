@@ -14,7 +14,7 @@ class CalendarView extends StatelessWidget {
   const CalendarView({super.key});
 
   DateTimeRange visibleWindowFor(DateTime focusedDay) {
-    final firstOfMonth = DateTime(focusedDay.year, focusedDay.month, 1);
+    final firstOfMonth = DateTime(focusedDay.year, focusedDay.month);
     final lastOfMonth = DateTime(focusedDay.year, focusedDay.month + 1, 0);
 
     return DateTimeRange(

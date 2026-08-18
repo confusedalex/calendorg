@@ -93,7 +93,7 @@ DEADLINE: <2025-05-04>
         },
       );
       test('DateTime Time should return correct OrgSimpleTimestamp', () {
-        final dateTime = DateTime(2025, 12, 31, 15, 00);
+        final dateTime = DateTime(2025, 12, 31, 15);
 
         final timestamp = dateTimeToSimpleTimestamp(dateTime, true, true);
 
@@ -104,8 +104,8 @@ DEADLINE: <2025-05-04>
       test(
         'Two Datetimes with times should return correct OrgTimeRangeTimestamp',
         () {
-          final start = DateTime(2025, 05, 15, 11, 0);
-          final end = DateTime(2025, 05, 15, 17, 0);
+          final start = DateTime(2025, 05, 15, 11);
+          final end = DateTime(2025, 05, 15, 17);
 
           final timestamp = dateTimeToTimeRangeTimestamp(
             start,
@@ -121,7 +121,7 @@ DEADLINE: <2025-05-04>
       test(
         'Datimes spanning von 00:00 to 23:59 should still return correct OrgTimeRangeTimestamp',
         () {
-          final start = DateTime(2025, 12, 31, 0, 0);
+          final start = DateTime(2025, 12, 31);
           final end = DateTime(2025, 12, 31, 23, 59);
 
           final timestamp = dateTimeToTimeRangeTimestamp(
@@ -140,8 +140,8 @@ DEADLINE: <2025-05-04>
       test(
         'Two Datetimes with times should return correct OrgDateRangeTimestamp',
         () {
-          final start = DateTime(2025, 05, 15, 11, 0);
-          final end = DateTime(2025, 05, 16, 17, 0);
+          final start = DateTime(2025, 05, 15, 11);
+          final end = DateTime(2025, 05, 16, 17);
 
           var timestamp = dateTimeToTimeRangeTimestamp(
             start,
@@ -187,7 +187,7 @@ DEADLINE: <2025-05-04>
       test(
         'Datimes spanning von 00:00 to 23:59 should still return correct OrgTimeRangeTimestamp',
         () {
-          final start = DateTime(2025, 12, 31, 0, 0);
+          final start = DateTime(2025, 12, 31);
           final end = DateTime(2025, 12, 31, 23, 59);
 
           final timestamp = dateTimeToTimeRangeTimestamp(
@@ -209,7 +209,7 @@ DEADLINE: <2025-05-04>
           [],
           null,
         );
-        expect(dateTimes, containsOnce(DateTime(2025, 05, 01)));
+        expect(dateTimes, containsOnce(DateTime(2025, 05)));
         expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
         expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
       });
