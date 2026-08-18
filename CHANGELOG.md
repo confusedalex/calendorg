@@ -1,4 +1,7 @@
 # Changelog
+## 1.4.4 - 2026-08-19
+### Changed
+- Run file parsing in one persistent threads, not one thread for each file. Should improve performance.
 ## 1.4.3 - 2026-07-03
 ### Changed
 - Replaced the loading spinner with a simpler loading indicator
