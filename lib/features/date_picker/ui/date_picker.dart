@@ -1,9 +1,10 @@
-import '../model/date_picker_bloc.dart';
-import '../../../shared/ui/editor_dialog_shell.dart';
-import '../../../util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
+
+import '../../../shared/ui/editor_dialog_shell.dart';
+import '../../../util.dart';
+import '../model/date_picker_bloc.dart';
 
 class DatePicker extends StatelessWidget {
   final void Function(OrgTimestamp timestamp) handleSave;

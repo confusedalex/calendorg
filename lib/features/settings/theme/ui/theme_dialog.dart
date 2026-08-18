@@ -1,7 +1,8 @@
-import '../model/theme_bloc.dart';
-import '../../../../shared/ui/editor_dialog_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../shared/ui/editor_dialog_shell.dart';
+import '../model/theme_bloc.dart';
 
 class ThemeDialog extends StatelessWidget {
   const ThemeDialog({super.key});

@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import '../../../entities/org_entry/org_entry.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../../entities/org_entry/org_entry.dart';
 
 part 'calendar_event.dart';
 part 'calendar_state.dart';

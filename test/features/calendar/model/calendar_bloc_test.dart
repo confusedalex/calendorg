@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test/test.dart';
-import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
 
 void main() {
   group('CalendarBloc tests', () {

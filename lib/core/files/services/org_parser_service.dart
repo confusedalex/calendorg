@@ -1,7 +1,9 @@
 import 'dart:isolate';
-import '../../todo_states_cubit.dart';
+
 import 'package:org_parser/org_parser.dart';
 import 'package:petitparser/petitparser.dart';
+
+import '../../todo_states_cubit.dart';
 
 class _ParseRequest {
   final SendPort replyPort;

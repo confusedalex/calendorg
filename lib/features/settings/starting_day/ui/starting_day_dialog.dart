@@ -1,8 +1,9 @@
-import '../../../../core/starting_day_cubit.dart';
-import '../../../../shared/ui/editor_dialog_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../../../core/starting_day_cubit.dart';
+import '../../../../shared/ui/editor_dialog_shell.dart';
 
 class StartingDateDialog extends StatelessWidget {
   const StartingDateDialog({super.key});

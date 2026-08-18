@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test/test.dart';
-import 'package:calendorg/core/starting_day_cubit.dart';
 
 void main() {
   group('Starting Day Cubit Tests', () {

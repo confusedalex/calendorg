@@ -1,8 +1,9 @@
-import 'occurrence.dart';
-import '../org_entry/org_entry.dart';
-import '../../util.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:org_parser/org_parser.dart';
+
+import '../../util.dart';
+import '../org_entry/org_entry.dart';
+import 'occurrence.dart';
 
 List<Occurrence> occurrencesFor(OrgEntry entry, DateTimeRange window) {
   final occurrences = <Occurrence>[];

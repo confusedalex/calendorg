@@ -1,12 +1,12 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
+import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/ui/calendar_view.dart';
-import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 void main() {
   group('CalendarWidget', () {

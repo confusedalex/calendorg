@@ -1,24 +1,24 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'core/files/cubit/org_files_cubit.dart';
-import 'entities/org_entry/event_parser_service.dart';
 import 'core/files/services/org_file_persistence_service.dart';
 import 'core/files/services/org_file_service.dart';
 import 'core/files/services/org_files_repository.dart';
 import 'core/files/services/org_parser_service.dart';
 import 'core/floating_action_button_cubit.dart';
+import 'core/starting_day_cubit.dart';
 import 'core/tag_colors/tag_colors_cubit.dart';
 import 'core/todo_states_cubit.dart';
 import 'features/calendar/ui/calendar_page.dart';
 import 'features/diff_view/model/diff_view_cubit.dart';
 import 'features/diff_view/ui/diff_view_page.dart';
-import 'features/today_page/ui/today_page.dart';
 import 'features/settings/settings_overview/ui/settings_page.dart';
-import 'core/starting_day_cubit.dart';
 import 'features/settings/theme/model/theme_bloc.dart';
+import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
 import 'theme.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

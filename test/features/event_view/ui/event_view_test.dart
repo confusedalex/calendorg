@@ -1,7 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
+import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
 import 'package:calendorg/features/event_view/model/event_view_bloc.dart';
 import 'package:calendorg/features/event_view/ui/event_view.dart';

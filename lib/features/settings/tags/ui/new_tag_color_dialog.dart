@@ -1,10 +1,11 @@
-import '../../../../core/tag_colors/tag_color.dart';
-import '../../../../core/tag_colors/tag_colors_cubit.dart';
-import '../model/new_tag_color_cubit.dart';
-import '../../../../util.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/tag_colors/tag_color.dart';
+import '../../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../../util.dart';
+import '../model/new_tag_color_cubit.dart';
 
 class NewTagColorDialog extends StatelessWidget {
   const NewTagColorDialog({super.key});

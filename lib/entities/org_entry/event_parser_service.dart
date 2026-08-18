@@ -1,6 +1,7 @@
-import 'org_entry.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
+
+import 'org_entry.dart';
 
 class EventParserService {
   static final _timestampRegExp = RegExp(

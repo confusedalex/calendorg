@@ -1,9 +1,10 @@
-import '../../../../core/files/cubit/org_files_cubit.dart';
-import 'agenda_files_dialog.dart';
-import '../../../../util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../util.dart';
+import 'agenda_files_dialog.dart';
 
 class AgendaPage extends StatelessWidget {
   const AgendaPage({super.key});

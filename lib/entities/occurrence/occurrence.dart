@@ -1,5 +1,6 @@
-import '../org_entry/org_entry.dart';
 import 'package:org_parser/org_parser.dart';
+
+import '../org_entry/org_entry.dart';
 
 enum OccurrenceKind { timestamp, scheduled, deadline }
 

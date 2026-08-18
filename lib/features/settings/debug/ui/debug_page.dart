@@ -1,7 +1,8 @@
-import '../../../../core/files/cubit/org_files_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../core/files/cubit/org_files_cubit.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});

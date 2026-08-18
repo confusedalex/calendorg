@@ -1,14 +1,15 @@
-import '../../../core/floating_action_button_cubit.dart';
-import '../../../core/files/cubit/org_files_cubit.dart';
-import '../model/calendar_bloc.dart';
-import 'event_markers.dart';
-import 'event_card.dart';
-import '../../../core/starting_day_cubit.dart';
-import '../../new_section/model/new_section_cubit.dart';
-import '../../new_section/ui/new_section_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../../core/files/cubit/org_files_cubit.dart';
+import '../../../core/floating_action_button_cubit.dart';
+import '../../../core/starting_day_cubit.dart';
+import '../../new_section/model/new_section_cubit.dart';
+import '../../new_section/ui/new_section_dialog.dart';
+import '../model/calendar_bloc.dart';
+import 'event_card.dart';
+import 'event_markers.dart';
 
 class CalendarView extends StatelessWidget {
   const CalendarView({super.key});

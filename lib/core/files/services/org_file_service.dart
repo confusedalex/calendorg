@@ -1,9 +1,10 @@
 import 'dart:io';
 
-import 'org_parser_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:org_parser/org_parser.dart';
+
+import 'org_parser_service.dart';
 
 class OrgFileService {
   final OrgParserService _parserService;

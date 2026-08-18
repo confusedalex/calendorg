@@ -1,8 +1,9 @@
-import '../../../core/tag_colors/tag_colors_cubit.dart';
-import '../../../entities/occurrence/occurrence.dart';
-import '../../../core/tag_colors/tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/tag_colors/tag_color.dart';
+import '../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../entities/occurrence/occurrence.dart';
 
 class EventMarkers extends StatelessWidget {
   final List<Occurrence> occurrences;

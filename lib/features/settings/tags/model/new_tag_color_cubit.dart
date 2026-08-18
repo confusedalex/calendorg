@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'new_tag_color_state.dart';
 import 'package:flutter/material.dart';
+
+import 'new_tag_color_state.dart';
 
 class NewTagColorCubit extends Cubit<NewTagColorState> {
   NewTagColorCubit() : super(NewTagColorState(color: Colors.blue, text: ''));

@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:calendorg/features/settings/theme/model/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:test/test.dart';
-import 'package:calendorg/features/settings/theme/model/theme_bloc.dart';
 
 void main() {
   group('Theme Bloc', () {

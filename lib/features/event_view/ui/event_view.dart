@@ -1,9 +1,10 @@
-import '../lib/openDatePicker.dart';
-import '../model/event_view_bloc.dart';
-import '../../../shared/ui/editor_dialog_shell.dart';
-import '../../../util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../shared/ui/editor_dialog_shell.dart';
+import '../../../util.dart';
+import '../lib/openDatePicker.dart';
+import '../model/event_view_bloc.dart';
 
 class EventView extends StatelessWidget {
   const EventView({super.key});
