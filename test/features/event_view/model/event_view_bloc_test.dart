@@ -77,8 +77,9 @@ void main() {
         EventParserService()
             .parseEntriesFromDocument(
               FakeFileInfo(),
-              OrgDocument.parse('''* Math Exam
-          <2025-10-10>'''),
+              OrgDocument.parse('''
+* Math Exam
+<2025-10-10>'''),
               {},
             )
             .first,
