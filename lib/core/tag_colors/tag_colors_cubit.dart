@@ -70,7 +70,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
 
   Color getTagColor(OrgEntry event) => state
       .firstWhere(
-        (tagColor) => (event).tags.contains(tagColor.tag),
+        (tagColor) => event.tags.contains(tagColor.tag),
         orElse: () => TagColor('', Colors.blue),
       )
       .color;

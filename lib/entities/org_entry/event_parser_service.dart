@@ -15,7 +15,7 @@ class EventParserService {
   ) {
     final List<OrgEntry> entries = [];
 
-    document.visitSections(((section) {
+    document.visitSections((section) {
       if (section.headline.keyword != null &&
           ignoredTodoStates.contains(section.headline.keyword?.value)) {
         return true;
@@ -25,7 +25,7 @@ class EventParserService {
       if (event != null) entries.add(event);
 
       return true;
-    }));
+    });
     return entries;
   }
 
