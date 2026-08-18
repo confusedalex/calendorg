@@ -17,7 +17,6 @@ class OrgFilesRepository {
 
   OrgFilesRepository({
     required OrgFileService fileService,
-    required EventParserService eventParser,
     required OrgFilePersistenceService persistence,
     required OrgParserService parserService,
   }) : _fileService = fileService,

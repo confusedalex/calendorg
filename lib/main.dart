@@ -69,7 +69,6 @@ class Calendorg extends StatelessWidget {
                   return OrgFilesCubit(
                     OrgFilesRepository(
                       fileService: OrgFileService(parserService),
-                      eventParser: EventParserService(),
                       persistence: OrgFilePersistenceService(),
                       parserService: parserService,
                     ),
