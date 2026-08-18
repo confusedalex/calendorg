@@ -56,7 +56,7 @@ class NewSectionDialog extends StatelessWidget {
                     Material(
                       color: Theme.of(
                         context,
-                      ).colorScheme.surfaceContainerHighest.withOpacity(0.55),
+                      ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
