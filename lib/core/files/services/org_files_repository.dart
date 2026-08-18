@@ -99,7 +99,7 @@ class OrgFilesRepository {
     OrgDocument oldDocument,
     List<(OrgNode, OrgNode)> replacements,
   ) async {
-    return await _fileService.replaceNodesAndSave(
+    return _fileService.replaceNodesAndSave(
       fileInfo.identifier,
       oldDocument,
       replacements,
