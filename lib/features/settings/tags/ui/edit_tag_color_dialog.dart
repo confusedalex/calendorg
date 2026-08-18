@@ -14,7 +14,7 @@ class EditTagColorDialog extends StatefulWidget {
 }
 
 class _EditTagColorDialogState extends State<EditTagColorDialog> {
-  Color selectedColor = const Color(0x00000000);
+  var selectedColor = const Color(0x00000000);
 
   @override
   Widget build(BuildContext context) => AlertDialog(

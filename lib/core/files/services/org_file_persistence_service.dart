@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrgFilePersistenceService {
-  final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+  final _prefs = SharedPreferencesAsync();
 
   Future<void> saveDirectory(DirectoryInfo directoryInfo) async {
     try {

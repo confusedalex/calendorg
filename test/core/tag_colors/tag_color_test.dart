@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 void main() {
   group(TagColor, () {
     test('toString returns string as expected', () {
-      final TagColor tagColor = TagColor('@home', Colors.green);
+      final tagColor = TagColor('@home', Colors.green);
 
       expect(
         tagColor.toString(),
@@ -13,8 +13,8 @@ void main() {
       );
     });
     test('Two equal TagColors should be equal', () {
-      final TagColor a = TagColor('@home', Colors.green);
-      final TagColor b = TagColor('@home', Colors.green);
+      final a = TagColor('@home', Colors.green);
+      final b = TagColor('@home', Colors.green);
       expect(a, equals(b));
       expect(a.hashCode, b.hashCode);
     });

@@ -8,7 +8,7 @@ import 'org_parser_service.dart';
 
 class OrgFileService {
   final OrgParserService _parserService;
-  final FilePickerWritable _filePicker = FilePickerWritable();
+  final _filePicker = FilePickerWritable();
 
   OrgFileService(this._parserService);
 

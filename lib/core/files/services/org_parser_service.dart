@@ -24,7 +24,7 @@ class _CacheInvalidateMessage {
 }
 
 class OrgParserService {
-  bool _started = false;
+  var _started = false;
   late SendPort _workerSendPort;
   late OrgTodoStatesWithIgnored _currentTodoStates;
 

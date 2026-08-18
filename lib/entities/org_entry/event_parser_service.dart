@@ -61,8 +61,8 @@ class EventParserService {
 
   List<OrgTimestamp> _extractTimestamps(OrgSection section) {
     final List<OrgTimestamp> foundTimestamps = [];
-    bool returnIfSectionFound = false;
-    int ignoreNTimestamps = 0;
+    var returnIfSectionFound = false;
+    var ignoreNTimestamps = 0;
 
     section.visitWithBlacklist({OrgProperty, OrgDrawer, OrgPlanningEntry}, (
       OrgNode node,
@@ -114,7 +114,7 @@ class EventParserService {
     OrgPlanningEntry? scheduled;
     OrgPlanningEntry? deadline;
 
-    bool returnIfSectionFound = false;
+    var returnIfSectionFound = false;
 
     section.visit((OrgNode node) {
       switch (node) {

@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final TagColor schoolTagColor = TagColor('school', Colors.orange);
+final schoolTagColor = TagColor('school', Colors.orange);
 
 void main() {
   group('TagsPage', () {
@@ -94,7 +94,7 @@ void main() {
     });
 
     testWidgets('Moving tags word', (tester) async {
-      final TagColor meetupTag = TagColor('meetups', Colors.purple);
+      final meetupTag = TagColor('meetups', Colors.purple);
       cubit.addTagColor(meetupTag);
 
       expect(cubit.state, containsAllInOrder([schoolTagColor, meetupTag]));
