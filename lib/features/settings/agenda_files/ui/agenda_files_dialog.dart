@@ -108,7 +108,7 @@ class AgendaFilesDialog extends StatelessWidget {
       }
     }
 
-    void onPressed(FileInfo? fileInfo) async {
+    Future<void> onPressed(FileInfo? fileInfo) async {
       if (!validateFile(fileInfo)) return;
       if (!(await validateFileDirectory(
         fileInfo,
