@@ -30,8 +30,8 @@ final class OrgFilesState {
     filePaths: {},
     documentsMap: {},
     todoStates: OrgTodoStatesWithIgnored(
-      todo: ["TODO"],
-      done: ["DONE"],
+      todo: ['TODO'],
+      done: ['DONE'],
       ignored: [],
     ),
     entries: [],

@@ -40,13 +40,13 @@ class DiffViewPage extends StatelessWidget {
               }
             }
           },
-          child: Text("select"),
+          child: Text('select'),
         ),
       );
     }
 
     return SingleChildScrollView(
-      child: PrettyDiffText(oldText: oldText, newText: newText ?? "Loading..."),
+      child: PrettyDiffText(oldText: oldText, newText: newText ?? 'Loading...'),
     );
   }
 }

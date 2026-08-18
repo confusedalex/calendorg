@@ -44,60 +44,60 @@ void main() {
     }
 
     group('Tag Colors', () {
-      testWidgets("Find Tag Colors Button", (tester) async {
+      testWidgets('Find Tag Colors Button', (tester) async {
         await pumpWidget(tester);
 
         await tester.pumpAndSettle();
 
-        expect(find.text("Tag Colors"), findsOneWidget);
+        expect(find.text('Tag Colors'), findsOneWidget);
       });
 
-      testWidgets("Tapping Button open Dialog", (tester) async {
+      testWidgets('Tapping Button open Dialog', (tester) async {
         await pumpWidget(tester);
 
         await tester.pumpAndSettle();
-        await tester.tap(find.text("Tag Colors"));
+        await tester.tap(find.text('Tag Colors'));
 
         await tester.pumpAndSettle();
 
         expect(find.byType(TagsPage), findsOneWidget);
       });
     });
-    testWidgets("Theme Dialog will open", (tester) async {
+    testWidgets('Theme Dialog will open', (tester) async {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text("Theme"));
+      await tester.tap(find.text('Theme'));
 
       await tester.pumpAndSettle();
 
       expect(find.byType(ThemeDialog), findsOneWidget);
     });
-    testWidgets("Agenda Files Page will open", (tester) async {
+    testWidgets('Agenda Files Page will open', (tester) async {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text("Agenda Files"));
+      await tester.tap(find.text('Agenda Files'));
 
       await tester.pumpAndSettle();
 
       expect(find.byType(AgendaPage), findsOneWidget);
     });
-    testWidgets("TODO States Dialog will open", (tester) async {
+    testWidgets('TODO States Dialog will open', (tester) async {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text("TODO States"));
+      await tester.tap(find.text('TODO States'));
 
       await tester.pumpAndSettle();
 
       expect(find.byType(TodoStatesDialog), findsOneWidget);
     });
-    testWidgets("Starting Day Dialog will open", (tester) async {
+    testWidgets('Starting Day Dialog will open', (tester) async {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text("Starting Day of Week"));
+      await tester.tap(find.text('Starting Day of Week'));
 
       await tester.pumpAndSettle();
 

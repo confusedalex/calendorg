@@ -8,7 +8,7 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
-  group("starting_day_dialog_test", () {
+  group('starting_day_dialog_test', () {
     late StartingDayCubit cubit;
 
     setUp(() {
@@ -29,11 +29,11 @@ void main() {
       );
     }
 
-    group("Monday button", () {
+    group('Monday button', () {
       testWidgets('Dialog should contain button for monday', (tester) async {
         await pumpWidgetToTester(tester);
 
-        expect(find.text("Monday"), findsOne);
+        expect(find.text('Monday'), findsOne);
       });
 
       testWidgets('States changes to monday, when pressing monday', (
@@ -41,24 +41,24 @@ void main() {
       ) async {
         await pumpWidgetToTester(tester);
 
-        await tester.tap(find.text("Monday"));
+        await tester.tap(find.text('Monday'));
 
         expect(cubit.state, equals(StartingDayOfWeek.monday));
       });
     });
 
-    group("Sunday button", () {
+    group('Sunday button', () {
       testWidgets('Dialog should contain button for sunday', (tester) async {
         await pumpWidgetToTester(tester);
 
-        expect(find.text("Sunday"), findsOne);
+        expect(find.text('Sunday'), findsOne);
       });
       testWidgets(
         'Cubit state should change to sunday, when pressing sunday tile',
         (tester) async {
           await pumpWidgetToTester(tester);
 
-          await tester.tap(find.text("Sunday"));
+          await tester.tap(find.text('Sunday'));
 
           expect(cubit.state, equals(StartingDayOfWeek.sunday));
         },

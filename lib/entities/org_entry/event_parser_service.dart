@@ -4,7 +4,7 @@ import 'package:org_parser/org_parser.dart';
 
 class EventParserService {
   static final _timestampRegExp = RegExp(
-    r"[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]",
+    r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]',
   );
 
   List<OrgEntry> parseEntriesFromDocument(
@@ -99,7 +99,7 @@ class EventParserService {
 
   String _sanitizeHeadline(OrgSection section) {
     var headline =
-        section.headline.rawTitle?.replaceAll(_timestampRegExp, "") ?? '';
+        section.headline.rawTitle?.replaceAll(_timestampRegExp, '') ?? '';
 
     if (section.tags.isNotEmpty) {
       headline = headline.substring(0, headline.length - 1);
@@ -122,10 +122,10 @@ class EventParserService {
           return returnIfSectionFound ? false : returnIfSectionFound = true;
         case OrgPlanningEntry():
           switch (node.keyword.content) {
-            case "SCHEDULED:":
+            case 'SCHEDULED:':
               scheduled = node;
               break;
-            case "DEADLINE:":
+            case 'DEADLINE:':
               deadline = node;
               break;
           }

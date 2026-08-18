@@ -18,14 +18,14 @@ void main() {
   group('saveFileList()', () {
     test('should write fileInfos to agendaFiles preference', () async {
       final Set<FileInfo> fileInfos = {
-        fakeFileInfo("notes"),
-        fakeFileInfo("work"),
+        fakeFileInfo('notes'),
+        fakeFileInfo('work'),
       };
 
       service.saveFileList(fileInfos);
 
       expect(
-        await SharedPreferencesAsync().getStringList("agendaFiles"),
+        await SharedPreferencesAsync().getStringList('agendaFiles'),
         equals(fileInfos.map((e) => e.fileName).toList()),
       );
     });
@@ -34,8 +34,8 @@ void main() {
 }
 
 FileInfo fakeFileInfo(String name) => FileInfo(
-  identifier: "$name-identifier",
+  identifier: '$name-identifier',
   persistable: true,
-  uri: "$name-uri",
-  fileName: "$name.org",
+  uri: '$name-uri',
+  fileName: '$name.org',
 );

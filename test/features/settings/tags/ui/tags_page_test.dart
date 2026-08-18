@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final TagColor schoolTagColor = TagColor("school", Colors.orange);
+final TagColor schoolTagColor = TagColor('school', Colors.orange);
 
 void main() {
   group('TagsPage', () {
@@ -32,7 +32,7 @@ void main() {
       );
     }
 
-    testWidgets("creating tag works", (tester) async {
+    testWidgets('creating tag works', (tester) async {
       await pumpWidgetToTester(tester, cubit);
       await tester.pumpAndSettle();
 
@@ -40,7 +40,7 @@ void main() {
 
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField), "test tag");
+      await tester.enterText(find.byType(TextField), 'test tag');
 
       final Offset center = tester.getCenter(find.byType(ColorWheelPicker));
       await tester.timedDragFrom(
@@ -50,32 +50,32 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key("newtag_savebutton")));
+      await tester.tap(find.byKey(Key('newtag_savebutton')));
       await tester.pumpAndSettle();
 
       expect(
         cubit.state,
-        containsOnce(TagColor("test tag", Color(0xff043052))),
+        containsOnce(TagColor('test tag', Color(0xff043052))),
       );
       expect(cubit.state, containsOnce(schoolTagColor));
     });
 
-    testWidgets("deleting tag works", (tester) async {
+    testWidgets('deleting tag works', (tester) async {
       await pumpWidgetToTester(tester, cubit);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key("school")));
+      await tester.tap(find.byKey(Key('school')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key("edittag_deletebutton")));
+      await tester.tap(find.byKey(Key('edittag_deletebutton')));
 
       expect(cubit.state, isEmpty);
     });
 
-    testWidgets("changing tag color works", (tester) async {
+    testWidgets('changing tag color works', (tester) async {
       await pumpWidgetToTester(tester, cubit);
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key("school")));
+      await tester.tap(find.byKey(Key('school')));
       await tester.pumpAndSettle();
 
       final Offset center = tester.getCenter(find.byType(ColorWheelPicker));
@@ -86,15 +86,15 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key("edittag_savebutton")));
+      await tester.tap(find.byKey(Key('edittag_savebutton')));
       await tester.pumpAndSettle();
 
       expect(cubit.state, isNot(contains(schoolTagColor)));
-      expect(cubit.state, contains(TagColor("school", Color(0xff523304))));
+      expect(cubit.state, contains(TagColor('school', Color(0xff523304))));
     });
 
-    testWidgets("Moving tags word", (tester) async {
-      final TagColor meetupTag = TagColor("meetups", Colors.purple);
+    testWidgets('Moving tags word', (tester) async {
+      final TagColor meetupTag = TagColor('meetups', Colors.purple);
       cubit.addTagColor(meetupTag);
 
       expect(cubit.state, containsAllInOrder([schoolTagColor, meetupTag]));
@@ -104,7 +104,7 @@ void main() {
 
       await tester.drag(
         find.descendant(
-          of: find.byKey(Key("school")),
+          of: find.byKey(Key('school')),
           matching: find.byType(ReorderableDragStartListener),
         ),
         const Offset(0, 1000),

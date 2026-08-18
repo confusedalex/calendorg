@@ -37,14 +37,14 @@ void main() {
     );
   }
 
-  group("todo_states_dialog_test", () {
-    group("finding chips", () {
+  group('todo_states_dialog_test', () {
+    group('finding chips', () {
       testWidgets('should find one todo chip', (tester) async {
         await pumpWidgetToTester(tester);
         await tester.pumpAndSettle();
 
         final todoChip = find.byWidgetPredicate(
-          (widget) => widget is Chip && (widget.label as Text).data == "TODO",
+          (widget) => widget is Chip && (widget.label as Text).data == 'TODO',
         );
 
         expect(todoChip, findsOne);
@@ -54,7 +54,7 @@ void main() {
         await tester.pumpAndSettle();
 
         final doneChip = find.byWidgetPredicate(
-          (widget) => widget is Chip && (widget.label as Text).data == "DONE",
+          (widget) => widget is Chip && (widget.label as Text).data == 'DONE',
         );
 
         expect(doneChip, findsOne);
@@ -74,7 +74,7 @@ void main() {
 
         expect(
           find.byWidgetPredicate(
-            (widget) => widget is Chip && (widget.label as Text).data == "DONE",
+            (widget) => widget is Chip && (widget.label as Text).data == 'DONE',
           ),
           findsNothing,
         );
@@ -91,7 +91,7 @@ void main() {
 
         expect(
           find.byWidgetPredicate(
-            (widget) => widget is Chip && (widget.label as Text).data == "TODO",
+            (widget) => widget is Chip && (widget.label as Text).data == 'TODO',
           ),
           findsNothing,
         );

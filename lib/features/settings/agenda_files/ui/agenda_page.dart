@@ -17,9 +17,9 @@ class AgendaPage extends StatelessWidget {
           children: [
             ListTile(
               leading: Icon(Icons.folder_open),
-              title: Text("Pick org directory"),
+              title: Text('Pick org directory'),
               trailing: Text(
-                state.directory?.fileName ?? "Not set",
+                state.directory?.fileName ?? 'Not set',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               onTap: () async {
@@ -43,9 +43,9 @@ class AgendaPage extends StatelessWidget {
             ListTile(
               enabled: state.directory != null,
               leading: Icon(Icons.inbox),
-              title: Text("Inbox File"),
+              title: Text('Inbox File'),
               trailing: Text(
-                state.inboxFile?.fileName ?? "Not set",
+                state.inboxFile?.fileName ?? 'Not set',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               onTap: () async {
@@ -72,20 +72,20 @@ class AgendaPage extends StatelessWidget {
                   if (!isSameFile) {
                     sendError(
                       context,
-                      "File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.",
+                      'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
                     );
                   }
                   if (context.mounted) {
                     context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
                   }
                 } catch (e) {
-                  sendError(context, "Error loading file: {$e}");
+                  sendError(context, 'Error loading file: {$e}');
                 }
               },
             ),
             ListTile(
               leading: Icon(Icons.folder_copy),
-              title: Text("Agenda Files"),
+              title: Text('Agenda Files'),
               enabled: state.directory != null,
               onTap: () => showDialog(
                 context: context,

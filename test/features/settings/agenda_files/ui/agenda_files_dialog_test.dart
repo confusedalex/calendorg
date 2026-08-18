@@ -10,7 +10,7 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import '../../settings_overview/ui/settings_page_test.dart';
 
 void main() {
-  group("Agenda Files Dialog", () {
+  group('Agenda Files Dialog', () {
     setUp(() {
       SharedPreferencesAsyncPlatform.instance =
           InMemorySharedPreferencesAsync.empty();
@@ -35,13 +35,13 @@ void main() {
     testWidgets('should find "select file" button', (tester) async {
       await pumpWidgetToTester(tester);
 
-      expect(find.text("select file"), findsOneWidget);
+      expect(find.text('select file'), findsOneWidget);
     });
 
     testWidgets('should find "create file" button', (tester) async {
       await pumpWidgetToTester(tester);
 
-      expect(find.text("create file"), findsOneWidget);
+      expect(find.text('create file'), findsOneWidget);
     });
   });
 }

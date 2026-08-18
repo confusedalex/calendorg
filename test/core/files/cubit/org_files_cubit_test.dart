@@ -14,7 +14,7 @@ class FakeFileInfo extends Fake implements FileInfo {}
 class FakeOrgDocument extends Fake implements OrgDocument {}
 
 void main() {
-  group("OrgFilesCubit", () {
+  group('OrgFilesCubit', () {
     setUpAll(() {
       registerFallbackValue(FakeDirectoryInfo());
       registerFallbackValue(FakeFileInfo());

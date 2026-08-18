@@ -18,7 +18,7 @@ Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
           Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              "Next 3 days",
+              'Next 3 days',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),

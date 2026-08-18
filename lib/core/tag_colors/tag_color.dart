@@ -12,7 +12,7 @@ class TagColor {
       color = Color(json['color'] as int);
 
   Map<String, dynamic> toJson() {
-    return {"tag": tag, "color": color.value32bit};
+    return {'tag': tag, 'color': color.value32bit};
   }
 
   @override
@@ -27,6 +27,6 @@ class TagColor {
 
   @override
   String toString() {
-    return "TagColor(tag: $tag, color: $color)";
+    return 'TagColor(tag: $tag, color: $color)';
   }
 }

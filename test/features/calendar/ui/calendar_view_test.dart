@@ -19,7 +19,7 @@ import 'package:table_calendar/src/widgets/format_button.dart';
 
 void main() {
   group('CalendarWidget', () {
-    final markup = """
+    final markup = '''
 * Heading 1
 ** orgmode meetup
 <2025-05-05>
@@ -35,12 +35,12 @@ void main() {
 <2025-05-08 11:00-13:00>
 <2025-05-08 11:00-13:00>
 <2025-05-28> <2025-05-15>
-""";
+''';
 
     final document = OrgDocument.parse(markup);
-    final schoolTagColor = TagColor("school", Colors.orange);
-    final homeTagColor = TagColor("@home", Colors.lightGreen);
-    final workTagColor = TagColor("@work", Colors.yellow);
+    final schoolTagColor = TagColor('school', Colors.orange);
+    final homeTagColor = TagColor('@home', Colors.lightGreen);
+    final workTagColor = TagColor('@work', Colors.yellow);
     late OrgFilesCubit orgFilesCubit;
     late CalendarBloc calendarBloc;
 
@@ -119,7 +119,7 @@ void main() {
       );
     });
 
-    testWidgets("Date will change", (tester) async {
+    testWidgets('Date will change', (tester) async {
       await pumpWidgetToTester(tester);
 
       await tester.pumpAndSettle();
@@ -128,13 +128,13 @@ void main() {
         isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 17)),
         isTrue,
       );
-      await tester.tap(find.byKey(Key("CellContent-2025-5-16")));
+      await tester.tap(find.byKey(Key('CellContent-2025-5-16')));
       expect(
         isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
         isTrue,
       );
     });
-    testWidgets("Changing calendar format works", (tester) async {
+    testWidgets('Changing calendar format works', (tester) async {
       await pumpWidgetToTester(tester);
       await tester.pumpAndSettle();
 
@@ -146,7 +146,7 @@ void main() {
       );
     });
     testWidgets(
-      "CalendarView shows eventCards for every event, when events are there",
+      'CalendarView shows eventCards for every event, when events are there',
       (tester) async {
         calendarBloc = CalendarBloc(DateTime(2025, 05, 05));
 
@@ -156,7 +156,7 @@ void main() {
         expect(find.byType(EventCard), findsNWidgets(3));
       },
     );
-    testWidgets("CalendarView shows no eventCards, when no events are there", (
+    testWidgets('CalendarView shows no eventCards, when no events are there', (
       tester,
     ) async {
       await pumpWidgetToTester(tester);
@@ -181,8 +181,8 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
     filePaths: {fileInfo},
     documentsMap: {fileInfo: document},
     todoStates: OrgTodoStatesWithIgnored(
-      todo: ["TODO"],
-      done: ["DONE"],
+      todo: ['TODO'],
+      done: ['DONE'],
       ignored: [],
     ),
     entries: EventParserService().parseEntriesFromDocument(

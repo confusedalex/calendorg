@@ -27,10 +27,10 @@ class NewSectionDialog extends StatelessWidget {
     final bloc = context.read<NewSectionCubit>();
 
     return DialogShell(
-      title: "Add Event",
+      title: 'Add Event',
       titleIcon: Icons.title,
       content: inboxFile == null
-          ? Text("You need to set an inbox file")
+          ? Text('You need to set an inbox file')
           : Form(
               key: bloc.formKey,
               child: SingleChildScrollView(
@@ -40,19 +40,19 @@ class NewSectionDialog extends StatelessWidget {
                   children: [
                     SizedBox(height: 0),
                     TextFormField(
-                      key: Key("titleField"),
+                      key: Key('titleField'),
                       decoration: InputDecoration(
-                        labelText: "Heading title",
+                        labelText: 'Heading title',
                         prefixIcon: Icon(Icons.title),
                         border: OutlineInputBorder(),
                         filled: true,
                       ),
-                      initialValue: title ?? "",
+                      initialValue: title ?? '',
                       autovalidateMode: AutovalidateMode.always,
                       onChanged: (value) => bloc.changeTitle(value),
-                      validator: (value) => validate(value, "Title"),
+                      validator: (value) => validate(value, 'Title'),
                     ),
-                    Text("When", style: Theme.of(context).textTheme.labelLarge),
+                    Text('When', style: Theme.of(context).textTheme.labelLarge),
                     Material(
                       color: Theme.of(
                         context,
@@ -61,7 +61,7 @@ class NewSectionDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: InkWell(
-                        key: Key("datePickerButton"),
+                        key: Key('datePickerButton'),
                         borderRadius: BorderRadius.circular(16),
                         onTap: () => openDatePicker(
                           context,
@@ -80,8 +80,8 @@ class NewSectionDialog extends StatelessWidget {
                                   children: [
                                     Text(
                                       timestamp == null
-                                          ? "Choose date and time"
-                                          : "Change date and time",
+                                          ? 'Choose date and time'
+                                          : 'Change date and time',
                                       style: Theme.of(
                                         context,
                                       ).textTheme.titleMedium,
@@ -89,7 +89,7 @@ class NewSectionDialog extends StatelessWidget {
                                     SizedBox(height: 4),
                                     Text(
                                       timestamp?.toMarkup() ??
-                                          "No date selected",
+                                          'No date selected',
                                       style: Theme.of(
                                         context,
                                       ).textTheme.bodyMedium,
@@ -109,12 +109,12 @@ class NewSectionDialog extends StatelessWidget {
             ),
       actions: [
         TextButton(
-          key: Key("CancelButton"),
+          key: Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: Text("Cancel"),
+          child: Text('Cancel'),
         ),
         FilledButton.icon(
-          key: Key("SaveButton"),
+          key: Key('SaveButton'),
           onPressed: inboxFile != null && timestamp != null
               ? () async {
                   if (!(bloc.formKey.currentState?.validate() ?? false)) return;
@@ -129,7 +129,7 @@ class NewSectionDialog extends StatelessWidget {
                     await FilePickerWritable().writeFile(
                       identifier: inboxFile.identifier,
                       writer: (file) async => file.writeAsString(
-                        "$oldFile \n* $title\n${timestamp.toMarkup()}",
+                        '$oldFile \n* $title\n${timestamp.toMarkup()}',
                         mode: FileMode.writeOnly,
                       ),
                     );
@@ -145,7 +145,7 @@ class NewSectionDialog extends StatelessWidget {
                 }
               : null,
           icon: Icon(Icons.save),
-          label: Text("Save"),
+          label: Text('Save'),
         ),
       ],
     );

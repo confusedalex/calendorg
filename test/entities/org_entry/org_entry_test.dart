@@ -5,21 +5,21 @@ import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
-  final markup = """
+  final markup = '''
 * Heading 1
 ** orgmode meetup <2025-05-05>
 <2025-05-06 11:00>
 <2025-05-08 11:00-13:00>
 <2025-05-28> <2025-05-15>
 <2025-05-01>--<2025-05-03>
-""";
+''';
   final document = OrgDocument.parse(markup);
   final entry = EventParserService()
       .parseEntriesFromDocument(MockFileInfo(), document, {})
       .first;
 
   group('Events', () {
-    test("All DateTimes found from event", () {
+    test('All DateTimes found from event', () {
       expect(
         [
           DateTime(2025, 05, 05),
@@ -45,7 +45,7 @@ void main() {
       );
     });
 
-    test("Only DateTimes at the same date should match", () {
+    test('Only DateTimes at the same date should match', () {
       expect(
         entry.timestampsByDateTime(DateTime(2025, 05, 01, 00, 00, 00)).length,
         equals(1),

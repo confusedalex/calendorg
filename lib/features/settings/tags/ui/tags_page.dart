@@ -69,7 +69,7 @@ class _TagsPageState extends State<TagsPage> {
           ),
         );
       },
-      label: Text("Add"),
+      label: Text('Add'),
     ),
   );
 }

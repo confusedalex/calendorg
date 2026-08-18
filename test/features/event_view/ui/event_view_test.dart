@@ -15,18 +15,18 @@ import 'package:org_parser/org_parser.dart';
 import '../../settings/settings_overview/ui/settings_page_test.dart';
 
 void main() {
-  final markup = """
+  final markup = '''
 * orgmode meetup :meetups:
 <2025-05-05>
 <2025-05-06 11:00>
 <2025-05-08 11:00-13:00>
 <2025-05-01>--<2025-05-03>
-""";
+''';
   final document = OrgDocument.parse(markup);
   final entry = EventParserService()
       .parseEntriesFromDocument(MockFileInfo(), document, {})
       .first;
-  final meetupTagColor = TagColor("meetups", Colors.pink);
+  final meetupTagColor = TagColor('meetups', Colors.pink);
   final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());
 
   Future<void> initWidget(dynamic tester) async {
@@ -57,14 +57,14 @@ void main() {
     testWidgets('EventView shows event title', (tester) async {
       await initWidget(tester);
 
-      expect(find.byKey(Key("TitleField")), findsOneWidget);
+      expect(find.byKey(Key('TitleField')), findsOneWidget);
       expect(find.text(entry.title), findsOneWidget);
     });
-    group("date picker", () {
+    group('date picker', () {
       testWidgets('EventView shows date picker Button', (tester) async {
         await initWidget(tester);
 
-        expect(find.byKey(Key("datePickerButton")), findsOneWidget);
+        expect(find.byKey(Key('datePickerButton')), findsOneWidget);
       });
       testWidgets('Date Picker button shows timestamp', (tester) async {
         await initWidget(tester);
@@ -74,7 +74,7 @@ void main() {
       testWidgets('Date Picker button open datePickerDialog', (tester) async {
         await initWidget(tester);
 
-        await tester.tap(find.byKey(Key("datePickerButton")));
+        await tester.tap(find.byKey(Key('datePickerButton')));
 
         await tester.pumpAndSettle();
 

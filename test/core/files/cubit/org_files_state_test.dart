@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
 
 void main() {
-  group("OrgFilesState", () {
+  group('OrgFilesState', () {
     test('', () async {});
     group('initial', () {
       test('initial state should be loading', () {
@@ -49,8 +49,8 @@ void main() {
         final repository = MockOrgFilesRepository();
         final cubit = OrgFilesCubit(repository);
 
-        expect(cubit.state.todoStates.todo, ["TODO"]);
-        expect(cubit.state.todoStates.done, ["DONE"]);
+        expect(cubit.state.todoStates.todo, ['TODO']);
+        expect(cubit.state.todoStates.done, ['DONE']);
         expect(cubit.state.todoStates.ignored, []);
       });
     });

@@ -17,14 +17,14 @@ class TodoStatesDialog extends StatelessWidget {
             context.read<OrgFilesCubit>().changeTodoStates(state),
         builder: (context, state) {
           return DialogShell(
-            title: "TODO states",
+            title: 'TODO states',
             titleIcon: Icons.check,
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ...["todo", "done", "ignored"].mapIndexed(
+                  ...['todo', 'done', 'ignored'].mapIndexed(
                     (index, status) => Column(
                       children: [
                         Text(status.toUpperCase(), textAlign: TextAlign.start),

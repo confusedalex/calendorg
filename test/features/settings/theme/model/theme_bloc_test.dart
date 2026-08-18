@@ -4,20 +4,20 @@ import 'package:test/test.dart';
 import 'package:calendorg/features/settings/theme/model/theme_bloc.dart';
 
 void main() {
-  group("Theme Bloc", () {
+  group('Theme Bloc', () {
     test(
-      "Initial state is dark",
+      'Initial state is dark',
       () => expect(ThemeBloc().state, equals(ThemeMode.system)),
     );
 
     blocTest(
-      "Switching theme works",
+      'Switching theme works',
       build: () => ThemeBloc(),
       act: (bloc) => bloc.add(ThemeSwitchEvent(ThemeMode.light)),
       expect: () => [
         TypeMatcher<ThemeMode>().having(
           (state) => state,
-          "Theme",
+          'Theme',
           equals(ThemeMode.light),
         ),
       ],

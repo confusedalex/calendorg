@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 void main() {
-  group("Theme Dialog", () {
+  group('Theme Dialog', () {
     late ThemeBloc bloc;
 
     setUpAll(() {
@@ -35,34 +35,34 @@ void main() {
       );
     }
 
-    group("find themes", () {
+    group('find themes', () {
       testWidgets('Find light theme', (tester) async {
         await pumpWidgetToTester(tester);
         expect(
-          find.widgetWithText(RadioListTile<ThemeMode>, "light"),
+          find.widgetWithText(RadioListTile<ThemeMode>, 'light'),
           findsOne,
         );
       });
 
       testWidgets('Find dark theme', (tester) async {
         await pumpWidgetToTester(tester);
-        expect(find.widgetWithText(RadioListTile<ThemeMode>, "dark"), findsOne);
+        expect(find.widgetWithText(RadioListTile<ThemeMode>, 'dark'), findsOne);
       });
 
       testWidgets('Find automatic theme', (tester) async {
         await pumpWidgetToTester(tester);
         expect(
-          find.widgetWithText(RadioListTile<ThemeMode>, "automatic"),
+          find.widgetWithText(RadioListTile<ThemeMode>, 'automatic'),
           findsOne,
         );
       });
     });
 
-    group("theme switching calls correct event", () {
+    group('theme switching calls correct event', () {
       testWidgets('Switching to light theme works', (tester) async {
         await pumpWidgetToTester(tester);
 
-        await tester.tap(find.byKey(Key("ThemeRadioLightTheme")));
+        await tester.tap(find.byKey(Key('ThemeRadioLightTheme')));
 
         await tester.pumpAndSettle();
 

@@ -29,7 +29,7 @@ class OrgParserService {
   OrgParserService([OrgTodoStatesWithIgnored? todoStates]) {
     _currentTodoStates =
         todoStates ??
-        OrgTodoStatesWithIgnored(todo: ["TODO"], done: ["DONE"], ignored: []);
+        OrgTodoStatesWithIgnored(todo: ['TODO'], done: ['DONE'], ignored: []);
   }
 
   Future<void> start() async {

@@ -22,11 +22,11 @@ void main() {
     );
   }
 
-  group("todo_state_add_dialog_test", () {
+  group('todo_state_add_dialog_test', () {
     testWidgets('cancel button closes dialog', (tester) async {
       await pumpWidgetToTester(tester);
 
-      await tester.tap(find.text("cancel"));
+      await tester.tap(find.text('cancel'));
       await tester.pumpAndSettle();
 
       expect(find.byType(TodoStateAddDialog), findsNothing);

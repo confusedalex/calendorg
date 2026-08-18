@@ -30,7 +30,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
       sendErr() => sendError(
         context,
-        "File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.",
+        'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
       );
 
       try {
@@ -97,7 +97,7 @@ class AgendaFilesDialog extends StatelessWidget {
       try {
         return await FilePickerWritable().openFileForCreate(
           writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
-          fileName: "agenda.org",
+          fileName: 'agenda.org',
         );
       } catch (e) {
         if (context.mounted) {

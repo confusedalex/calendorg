@@ -9,7 +9,7 @@ class OrgFilePersistenceService {
 
   Future<void> saveDirectory(DirectoryInfo directoryInfo) async {
     try {
-      await _prefs.setString("agendaDirectory", jsonEncode(directoryInfo));
+      await _prefs.setString('agendaDirectory', jsonEncode(directoryInfo));
     } catch (e) {
       debugPrint('Error saving file list: $e');
       rethrow;
@@ -19,7 +19,7 @@ class OrgFilePersistenceService {
   Future<void> saveFileList(Set<FileInfo> fileInfos) async {
     try {
       await _prefs.setStringList(
-        "agendaFiles",
+        'agendaFiles',
         fileInfos.map((e) => e.fileName).whereType<String>().toList(),
       );
     } catch (e) {
@@ -30,7 +30,7 @@ class OrgFilePersistenceService {
 
   Future<void> saveInboxFile(FileInfo fileInfo) async {
     try {
-      await _prefs.setString("inboxFile", fileInfo.fileName ?? "null");
+      await _prefs.setString('inboxFile', fileInfo.fileName ?? 'null');
     } catch (e) {
       debugPrint('Error saving inbox file: $e');
       rethrow;
@@ -40,18 +40,18 @@ class OrgFilePersistenceService {
   Future<(Set<FileInfo>, FileInfo?, DirectoryInfo?)>
   loadFilePreferences() async {
     try {
-      final filesString = await _prefs.getStringList("agendaFiles");
-      final inboxFileString = await _prefs.getString("inboxFile");
-      final directoryString = await _prefs.getString("agendaDirectory");
+      final filesString = await _prefs.getStringList('agendaFiles');
+      final inboxFileString = await _prefs.getString('inboxFile');
+      final directoryString = await _prefs.getString('agendaDirectory');
 
       final inboxName =
           (inboxFileString == null ||
-              inboxFileString == "null" ||
-              inboxFileString == "")
+              inboxFileString == 'null' ||
+              inboxFileString == '')
           ? null
           : inboxFileString;
 
-      final dirInfo = (directoryString == null || directoryString == "null")
+      final dirInfo = (directoryString == null || directoryString == 'null')
           ? null
           : DirectoryInfo.fromJsonString(directoryString);
 

@@ -19,7 +19,7 @@ class EventView extends StatelessWidget {
     final bloc = context.read<EventViewBloc>();
 
     return DialogShell(
-      title: "Edit Event",
+      title: 'Edit Event',
       titleIcon: Icons.event_available,
       content: Form(
         key: bloc.formKey,
@@ -30,9 +30,9 @@ class EventView extends StatelessWidget {
             children: [
               SizedBox(height: 0),
               TextFormField(
-                key: Key("TitleField"),
+                key: Key('TitleField'),
                 decoration: InputDecoration(
-                  labelText: "Event title",
+                  labelText: 'Event title',
                   prefixIcon: Icon(Icons.title),
                   border: OutlineInputBorder(),
                   filled: true,
@@ -42,9 +42,9 @@ class EventView extends StatelessWidget {
                 onChanged: (value) => context.read<EventViewBloc>().add(
                   EventViewTitleChangeEvent(value),
                 ),
-                validator: (value) => validate(value, "Event title"),
+                validator: (value) => validate(value, 'Event title'),
               ),
-              Text("When", style: Theme.of(context).textTheme.labelLarge),
+              Text('When', style: Theme.of(context).textTheme.labelLarge),
               Material(
                 color: Theme.of(
                   context,
@@ -53,7 +53,7 @@ class EventView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: InkWell(
-                  key: Key("datePickerButton"),
+                  key: Key('datePickerButton'),
                   borderRadius: BorderRadius.circular(16),
                   onTap: () => openDatePicker(context, timestamp),
                   child: Padding(
@@ -68,7 +68,7 @@ class EventView extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                "Change date and time",
+                                'Change date and time',
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                               SizedBox(height: 4),
@@ -91,19 +91,19 @@ class EventView extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          key: Key("CancelButton"),
+          key: Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: Text("Cancel"),
+          child: Text('Cancel'),
         ),
         FilledButton.icon(
-          key: Key("SaveButton"),
+          key: Key('SaveButton'),
           onPressed: () {
             if (!(bloc.formKey.currentState?.validate() ?? false)) return;
             context.read<EventViewBloc>().add(EventViewSaveEvent());
             Navigator.pop(context);
           },
           icon: Icon(Icons.save),
-          label: Text("Save"),
+          label: Text('Save'),
         ),
       ],
     );

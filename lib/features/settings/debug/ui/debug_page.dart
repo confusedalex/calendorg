@@ -13,7 +13,7 @@ class DebugPage extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
-            title: Text("Show SharedPreferences"),
+            title: Text('Show SharedPreferences'),
             onTap: () async {
               final prefs = await SharedPreferencesAsync().getAll();
 
@@ -39,7 +39,7 @@ class DebugPage extends StatelessWidget {
           ),
           BlocBuilder<OrgFilesCubit, OrgFilesState>(
             builder: (context, state) => ListTile(
-              title: Text("Show loaded FilePaths"),
+              title: Text('Show loaded FilePaths'),
               onTap: () => showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
@@ -56,7 +56,7 @@ class DebugPage extends StatelessWidget {
           ),
           BlocBuilder<OrgFilesCubit, OrgFilesState>(
             builder: (context, state) => ListTile(
-              title: Text("Show loaded Documents"),
+              title: Text('Show loaded Documents'),
               onTap: () => showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
@@ -73,7 +73,7 @@ class DebugPage extends StatelessWidget {
           ),
           BlocBuilder<OrgFilesCubit, OrgFilesState>(
             builder: (context, state) => ListTile(
-              title: Text("Show loaded events"),
+              title: Text('Show loaded events'),
               onTap: () => showDialog(
                 context: context,
                 builder: (_) => AlertDialog(

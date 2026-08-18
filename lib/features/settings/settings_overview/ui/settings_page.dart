@@ -23,7 +23,7 @@ class SettingsPage extends StatelessWidget {
       children: [
         ListTile(
           leading: Icon(Icons.palette),
-          title: Text("Tag Colors"),
+          title: Text('Tag Colors'),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -37,7 +37,7 @@ class SettingsPage extends StatelessWidget {
         Divider(height: 1),
         ListTile(
           leading: Icon(Icons.calendar_today),
-          title: Text("Starting Day of Week"),
+          title: Text('Starting Day of Week'),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -49,7 +49,7 @@ class SettingsPage extends StatelessWidget {
         Divider(height: 1),
         ListTile(
           leading: Icon(Icons.check_circle),
-          title: Text("TODO States"),
+          title: Text('TODO States'),
           onTap: () => showDialog(
             context: context,
             builder: (_) => MultiBlocProvider(
@@ -64,7 +64,7 @@ class SettingsPage extends StatelessWidget {
         Divider(height: 1),
         ListTile(
           leading: Icon(Icons.brightness_4),
-          title: Text("Theme"),
+          title: Text('Theme'),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -76,7 +76,7 @@ class SettingsPage extends StatelessWidget {
         Divider(height: 1),
         ListTile(
           leading: Icon(Icons.bug_report),
-          title: Text("Debug"),
+          title: Text('Debug'),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -89,7 +89,7 @@ class SettingsPage extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(Icons.folder),
-          title: Text("Agenda Files"),
+          title: Text('Agenda Files'),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(

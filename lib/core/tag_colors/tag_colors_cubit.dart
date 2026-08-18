@@ -20,7 +20,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   Future<List<TagColor>> loadTags() async {
     try {
       prefs = await SharedPreferences.getInstance();
-      return (jsonDecode(prefs.getString("tagColors") ?? "[]") as List)
+      return (jsonDecode(prefs.getString('tagColors') ?? '[]') as List)
           .map((tagColor) => TagColor.fromJson(tagColor))
           .toList();
     } catch (e) {
@@ -42,7 +42,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
 
   Future<void> saveTagsToPrefs(List<TagColor> tagColors) async {
     emit(tagColors);
-    await prefs.setString("tagColors", jsonEncode(tagColors));
+    await prefs.setString('tagColors', jsonEncode(tagColors));
   }
 
   Future<void> addTagColor(TagColor tagColor) async {
@@ -61,7 +61,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
     return state
         .firstWhere(
           (tagColor) => tagColor.tag == tagName,
-          orElse: () => TagColor("", Colors.blue),
+          orElse: () => TagColor('', Colors.blue),
         )
         .color;
   }
@@ -69,7 +69,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   Color getTagColor(OrgEntry event) => state
       .firstWhere(
         (tagColor) => (event).tags.contains(tagColor.tag),
-        orElse: () => TagColor("", Colors.blue),
+        orElse: () => TagColor('', Colors.blue),
       )
       .color;
 }

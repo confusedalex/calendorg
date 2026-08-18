@@ -4,7 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 String? validate(String? value, String object, {Iterable<String>? notIn}) {
   if (value == null || value.trim().isEmpty) return "$object can't be empty!";
-  if (notIn != null && notIn.contains(value)) return "$object already exists!";
+  if (notIn != null && notIn.contains(value)) return '$object already exists!';
 
   return null;
 }
@@ -22,18 +22,18 @@ void sendError(BuildContext context, String error) {
 }
 
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
-  final isoDate = dateTime.toIso8601String().split("T")[0].split("-");
+  final isoDate = dateTime.toIso8601String().split('T')[0].split('-');
   return (year: isoDate[0], month: isoDate[1], day: isoDate[2], dayName: null);
 }
 
 OrgTime dateTimeToOrgTime(DateTime dateTime) {
-  final isoTime = dateTime.toIso8601String().split("T")[1].split(":");
+  final isoTime = dateTime.toIso8601String().split('T')[1].split(':');
   return (hour: isoTime[0], minute: isoTime[1]);
 }
 
 (String, String) prefixAndSuffixFromBool(bool isActive) {
-  final prefix = isActive ? "<" : "[";
-  final suffix = isActive ? ">" : "]";
+  final prefix = isActive ? '<' : '[';
+  final suffix = isActive ? '>' : ']';
   return (prefix, suffix);
 }
 
@@ -74,7 +74,7 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
       includeEndTime,
       isActive,
     );
-    return OrgDateRangeTimestamp(start, "--", end);
+    return OrgDateRangeTimestamp(start, '--', end);
   }
 }
 

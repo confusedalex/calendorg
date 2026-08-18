@@ -12,7 +12,7 @@ class ThemeDialog extends StatelessWidget {
       void changeTheme(ThemeMode? theme) =>
           context.read<ThemeBloc>().add(ThemeSwitchEvent(theme!));
       return DialogShell(
-        title: "Choose Theme",
+        title: 'Choose Theme',
         titleIcon: Icons.sunny,
         showClose: true,
         content: SizedBox(
@@ -26,18 +26,18 @@ class ThemeDialog extends StatelessWidget {
                 child: Column(
                   children: [
                     RadioListTile(
-                      title: Text("dark"),
+                      title: Text('dark'),
                       value: ThemeMode.dark,
-                      key: Key("ThemeRadioDarkTheme"),
+                      key: Key('ThemeRadioDarkTheme'),
                     ),
                     RadioListTile(
-                      title: Text("light"),
-                      key: Key("ThemeRadioLightTheme"),
+                      title: Text('light'),
+                      key: Key('ThemeRadioLightTheme'),
                       value: ThemeMode.light,
                     ),
                     RadioListTile(
-                      title: Text("automatic"),
-                      key: Key("ThemeRadioGreenTheme"),
+                      title: Text('automatic'),
+                      key: Key('ThemeRadioGreenTheme'),
                       value: ThemeMode.system,
                     ),
                   ],

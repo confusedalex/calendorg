@@ -12,7 +12,7 @@ class StartingDateDialog extends StatelessWidget {
       BlocBuilder<StartingDayCubit, StartingDayOfWeek>(
         builder: (context, state) {
           return DialogShell(
-            title: "Starting Day",
+            title: 'Starting Day',
             titleIcon: Icons.calendar_month,
             showClose: true,
             content: SizedBox(
@@ -28,11 +28,11 @@ class StartingDateDialog extends StatelessWidget {
                     child: Column(
                       children: [
                         RadioListTile(
-                          title: Text("Monday"),
+                          title: Text('Monday'),
                           value: StartingDayOfWeek.monday,
                         ),
                         RadioListTile(
-                          title: Text("Sunday"),
+                          title: Text('Sunday'),
                           value: StartingDayOfWeek.sunday,
                         ),
                       ],

@@ -17,7 +17,7 @@ import 'package:org_parser/org_parser.dart';
 import '../../settings/settings_overview/ui/settings_page_test.dart';
 
 void main() {
-  final markup = """
+  final markup = '''
 * Heading 1
 ** orgmode meetup :meetups:
 <2025-05-05>
@@ -27,7 +27,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 ** School :school:
 <2025-05-27>
-""";
+''';
   final document = OrgDocument.parse(markup);
   final entry = EventParserService()
       .parseEntriesFromDocument(MockFileInfo(), document, {})
@@ -36,7 +36,7 @@ void main() {
     entry,
     DateTimeRange(start: DateTime(2025, 5, 1), end: DateTime(2025, 5, 30)),
   ).first;
-  final meetupTagColor = TagColor("meetups", Colors.pink);
+  final meetupTagColor = TagColor('meetups', Colors.pink);
   final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());
 
   Future<void> initWidget(dynamic tester) async {
@@ -63,7 +63,7 @@ void main() {
 
   group('EventCard', () {
     group('EventCard displays correct information', () {
-      testWidgets("EventCard display correct title", (tester) async {
+      testWidgets('EventCard display correct title', (tester) async {
         await initWidget(tester);
 
         expect(find.text(entry.title, findRichText: true), findsOneWidget);
@@ -82,13 +82,13 @@ void main() {
         expect(border, isNotNull);
         expect(border!.left.color, isSameColorAs(meetupTagColor.color));
       });
-      testWidgets("EventCard display correct time", (tester) async {
+      testWidgets('EventCard display correct time', (tester) async {
         await initWidget(tester);
 
         expect(find.text(occurrence.timestamp.toMarkup()), findsOneWidget);
       });
     });
-    testWidgets("EventCard tap will open EventView", (tester) async {
+    testWidgets('EventCard tap will open EventView', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

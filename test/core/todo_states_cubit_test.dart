@@ -3,52 +3,52 @@ import 'package:test/test.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 
 void main() {
-  group("todo_states_cubit_test", () {
+  group('todo_states_cubit_test', () {
     setUp(() {
       SharedPreferences.setMockInitialValues({});
     });
 
-    group("adding states", () {
-      test("adding TODO state works", () {
+    group('adding states', () {
+      test('adding TODO state works', () {
         final cubit = TodoStatesCubit();
 
-        cubit.addTodo("todo", "TOCALL");
+        cubit.addTodo('todo', 'TOCALL');
 
-        expect(cubit.state.todo, contains("TOCALL"));
+        expect(cubit.state.todo, contains('TOCALL'));
       });
 
-      test("adding DONE state works", () {
+      test('adding DONE state works', () {
         final cubit = TodoStatesCubit();
 
-        cubit.addTodo("done", "KILL");
+        cubit.addTodo('done', 'KILL');
 
-        expect(cubit.state.done, contains("KILL"));
-      });
-    });
-    group("removing states", () {
-      test("removing TODO state works", () {
-        final cubit = TodoStatesCubit();
-
-        cubit.addTodo("todo", "TOCALL");
-        cubit.removeTodo("todo", "TOCALL");
-
-        expect(cubit.state.todo, isNot(contains("TOCALL")));
-      });
-
-      test("removing DONE state works", () {
-        final cubit = TodoStatesCubit();
-
-        cubit.addTodo("done", "KILL");
-        cubit.removeTodo("done", "KILL");
-
-        expect(cubit.state.done, isNot(contains("KILL")));
+        expect(cubit.state.done, contains('KILL'));
       });
     });
-    group("loading from sharedPreferences", () {
+    group('removing states', () {
+      test('removing TODO state works', () {
+        final cubit = TodoStatesCubit();
+
+        cubit.addTodo('todo', 'TOCALL');
+        cubit.removeTodo('todo', 'TOCALL');
+
+        expect(cubit.state.todo, isNot(contains('TOCALL')));
+      });
+
+      test('removing DONE state works', () {
+        final cubit = TodoStatesCubit();
+
+        cubit.addTodo('done', 'KILL');
+        cubit.removeTodo('done', 'KILL');
+
+        expect(cubit.state.done, isNot(contains('KILL')));
+      });
+    });
+    group('loading from sharedPreferences', () {
       getCubit() async {
         SharedPreferences.setMockInitialValues({
-          "todoStates": '["TOREAD"]',
-          "doneStates": '["COMPLETED"]',
+          'todoStates': '["TOREAD"]',
+          'doneStates': '["COMPLETED"]',
         });
 
         final cubit = TodoStatesCubit()..loadFromPrefs();
@@ -57,15 +57,15 @@ void main() {
         return cubit;
       }
 
-      test("loading TODO state from sharedPreferences works", () async {
+      test('loading TODO state from sharedPreferences works', () async {
         final cubit = await getCubit();
 
-        expect(cubit.state.todo, contains("TOREAD"));
+        expect(cubit.state.todo, contains('TOREAD'));
       });
-      test("loading DONE state from sharedPreferences works", () async {
+      test('loading DONE state from sharedPreferences works', () async {
         final cubit = await getCubit();
 
-        expect(cubit.state.done, contains("COMPLETED"));
+        expect(cubit.state.done, contains('COMPLETED'));
       });
     });
   });

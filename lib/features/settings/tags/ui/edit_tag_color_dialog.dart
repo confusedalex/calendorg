@@ -17,7 +17,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text("Edit \"${widget.tagColor.tag}\" Tag"),
+    title: Text('Edit "${widget.tagColor.tag}" Tag'),
     content: SingleChildScrollView(
       child: ColorPicker(
         color: widget.tagColor.color,
@@ -33,22 +33,22 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
     ),
     actions: [
       TextButton(
-        key: Key("edittag_deletebutton"),
+        key: Key('edittag_deletebutton'),
         onPressed: () {
           context.read<TagColorsCubit>().removeTagColor(widget.tagColor.tag);
           Navigator.of(context).pop();
         },
-        child: Text("delete"),
+        child: Text('delete'),
       ),
       TextButton(
-        key: Key("edittag_savebutton"),
+        key: Key('edittag_savebutton'),
         onPressed: () {
           context.read<TagColorsCubit>().addTagColor(
             TagColor(widget.tagColor.tag, selectedColor),
           );
           Navigator.of(context).pop();
         },
-        child: Text("save"),
+        child: Text('save'),
       ),
     ],
   );

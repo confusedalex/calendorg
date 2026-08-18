@@ -43,7 +43,7 @@ class EventCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                     children: [
                       TextSpan(
-                        text: keyword == null ? "" : "${keyword.value} ",
+                        text: keyword == null ? '' : '${keyword.value} ',
                         style: keyword == null
                             ? const TextStyle()
                             : TextStyle(

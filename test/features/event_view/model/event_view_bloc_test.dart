@@ -12,16 +12,16 @@ class MockOrgFilesCubit extends Mock implements OrgFilesCubit {}
 
 class FakeFileInfo extends Fake implements FileInfo {
   @override
-  String get identifier => "MockIdentifier";
+  String get identifier => 'MockIdentifier';
 }
 
 void main() {
   final newTimestamp = OrgSimpleTimestamp(
-    "<",
-    (year: "2025", month: "05", day: "16", dayName: null),
+    '<',
+    (year: '2025', month: '05', day: '16', dayName: null),
     null,
     [],
-    ">",
+    '>',
   );
   late OrgEntry entry;
   late OrgTimestamp timestamp;
@@ -36,23 +36,23 @@ void main() {
     when(
       () => orgFilesCubit.replaceNodes(any(), any()),
     ).thenAnswer((_) async {});
-    final document = OrgDocument.parse("* Math exam <2025-05-15>");
+    final document = OrgDocument.parse('* Math exam <2025-05-15>');
     entry = EventParserService()
         .parseEntriesFromDocument(FakeFileInfo(), document, {})
         .first;
     timestamp = entry.timestamps.first;
   });
 
-  group("Event View Bloc", () {
+  group('Event View Bloc', () {
     blocTest(
-      "Chaning title works",
+      'Chaning title works',
       build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
-      act: (bloc) => bloc.add(EventViewTitleChangeEvent("History exam")),
+      act: (bloc) => bloc.add(EventViewTitleChangeEvent('History exam')),
       expect: () => [
         TypeMatcher<EventViewState>().having(
           (state) => state.newEvent.title,
-          "Title",
-          equals("History exam"),
+          'Title',
+          equals('History exam'),
         ),
       ],
     );
@@ -64,7 +64,7 @@ void main() {
       expect: () => [
         TypeMatcher<EventViewState>().having(
           (state) => state.newTimestamp,
-          "timestamp",
+          'timestamp',
           equals(newTimestamp),
         ),
       ],
@@ -77,8 +77,8 @@ void main() {
         EventParserService()
             .parseEntriesFromDocument(
               FakeFileInfo(),
-              OrgDocument.parse("""* Math Exam
-          <2025-10-10>"""),
+              OrgDocument.parse('''* Math Exam
+          <2025-10-10>'''),
               {},
             )
             .first,
@@ -88,7 +88,7 @@ void main() {
       expect: () => [
         TypeMatcher<EventViewState>().having(
           (state) => state.newTimestamp,
-          "timestamp",
+          'timestamp',
           equals(newTimestamp),
         ),
       ],
@@ -98,7 +98,7 @@ void main() {
       'emits correct state when EventViewSaveEvent is triggered',
       build: () => EventViewBloc(orgFilesCubit, entry, timestamp),
       act: (bloc) {
-        bloc.add(EventViewTitleChangeEvent("History exam"));
+        bloc.add(EventViewTitleChangeEvent('History exam'));
         bloc.add(EventViewChangeTimestamp(newTimestamp));
         bloc.add(EventViewSaveEvent());
       },
