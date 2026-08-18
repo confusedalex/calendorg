@@ -19,10 +19,6 @@ class _ParseRequest {
   });
 }
 
-class _CacheInvalidateMessage {
-  const _CacheInvalidateMessage();
-}
-
 class OrgParserService {
   var _started = false;
   late SendPort _workerSendPort;
@@ -85,13 +81,9 @@ class OrgParserService {
     }
   }
 
+  // ignore: use_setters_to_change_properties
   void invalidateCache(OrgTodoStatesWithIgnored newStates) {
     _currentTodoStates = newStates;
-    print(
-      'Invalidating parser cache, new states: '
-      '${newStates.todoStates.todo} / ${newStates.todoStates.done}',
-    );
-    _workerSendPort.send(const _CacheInvalidateMessage());
   }
 }
 
@@ -103,12 +95,6 @@ void _parserWorkerMain(SendPort mainSendPort) {
   receivePort.listen((message) {
     if (message == null) {
       receivePort.close();
-      return;
-    }
-
-    if (message is _CacheInvalidateMessage) {
-      print('Clearing parser cache (was ${parserCache.length} entries)');
-      parserCache.clear();
       return;
     }
 
