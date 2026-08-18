@@ -1,0 +1,17 @@
+[tools]
+flutter = "3.44.9"
+java = "temurin-17"
+
+[tasks]
+format = "flutter format"
+analyze = "flutter analyze --no-fatal-infos"
+test = "flutter test"
+"build:apk" = "flutter build apk --release"
+"build:apk-split" = "flutter build apk --release --split-per-abi"
+
+[tasks.ci]
+depends = ["analyze", "test"]
+
+[tasks.release]
+description = "Run the same build steps as release.yml (universal + split APKs)"
+depends = ["build:apk", "build:apk-splipt"]
