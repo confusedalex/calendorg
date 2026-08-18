@@ -77,17 +77,14 @@ class EventParserService {
           ignoreNTimestamps = 2;
 
           if (node.isActive) foundTimestamps.add(node);
-          break;
 
         case OrgSimpleTimestamp():
           if (ignoreNTimestamps > 0) break;
           if (node.isActive) foundTimestamps.add(node);
 
-          break;
 
         case OrgTimeRangeTimestamp():
           if (node.isActive) foundTimestamps.add(node);
-          break;
       }
       return true;
     });
@@ -124,10 +121,8 @@ class EventParserService {
           switch (node.keyword.content) {
             case 'SCHEDULED:':
               scheduled = node;
-              break;
             case 'DEADLINE:':
               deadline = node;
-              break;
           }
       }
       return true;
