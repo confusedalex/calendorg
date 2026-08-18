@@ -24,7 +24,7 @@ class NewTagColorDialog extends StatelessWidget {
           child: Column(
             children: [
               TextFormField(
-                onChanged: (value) => state.updateText(value),
+                onChanged: state.updateText,
                 validator: (value) => validate(
                   value,
                   'Tag Color',
@@ -33,7 +33,7 @@ class NewTagColorDialog extends StatelessWidget {
               ),
               ColorPicker(
                 color: state.state.color,
-                onColorChanged: (Color color) => state.updateColor(color),
+                onColorChanged: state.updateColor,
                 pickersEnabled: const <ColorPickerType, bool>{
                   ColorPickerType.primary: false,
                   ColorPickerType.accent: false,

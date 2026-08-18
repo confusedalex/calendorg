@@ -49,7 +49,7 @@ class NewSectionDialog extends StatelessWidget {
                       ),
                       initialValue: title ?? '',
                       autovalidateMode: AutovalidateMode.always,
-                      onChanged: (value) => bloc.changeTitle(value),
+                      onChanged: bloc.changeTitle,
                       validator: (value) => validate(value, 'Title'),
                     ),
                     Text('When', style: Theme.of(context).textTheme.labelLarge),

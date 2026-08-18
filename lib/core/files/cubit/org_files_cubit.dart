@@ -111,7 +111,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       _repository.updateTodoStates(todoStates);
 
       final newDocuments = await Future.wait(
-        state.filePaths.map((fileInfo) => _repository.loadDocument(fileInfo)),
+        state.filePaths.map(_repository.loadDocument),
       );
 
       final documentsMap = Map<FileInfo, OrgDocument>.fromIterables(

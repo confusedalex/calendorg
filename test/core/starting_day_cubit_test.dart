@@ -19,7 +19,7 @@ void main() {
 
     blocTest(
       'Switchting Starting Day works',
-      build: () => StartingDayCubit(),
+      build: StartingDayCubit.new,
       act: (bloc) => bloc.changeStartingDayOfWeek(StartingDayOfWeek.sunday),
       expect: () => [StartingDayOfWeek.sunday],
     );

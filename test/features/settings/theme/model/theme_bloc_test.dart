@@ -12,7 +12,7 @@ void main() {
 
     blocTest(
       'Switching theme works',
-      build: () => ThemeBloc(),
+      build: ThemeBloc.new,
       act: (bloc) => bloc.add(ThemeSwitchEvent(ThemeMode.light)),
       expect: () => [
         const TypeMatcher<ThemeMode>().having(

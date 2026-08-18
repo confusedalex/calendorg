@@ -23,7 +23,7 @@ Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
-          ...occurrences.map((o) => EventCard(o)),
+          ...occurrences.map(EventCard.new),
         ],
       ),
     );

@@ -95,7 +95,7 @@ class CalendarView extends StatelessWidget {
           child: ListView(
             children:
                 (occurrencesByDate[dateKey(focusedDay)] ?? [])
-                    .map((occurrence) => EventCard(occurrence))
+                    .map(EventCard.new)
                     .toList()
                   ..sort(
                     (a, b) => a.occurrence.timestamp.startDateTime.compareTo(
