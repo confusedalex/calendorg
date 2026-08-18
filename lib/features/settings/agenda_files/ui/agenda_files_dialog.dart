@@ -29,7 +29,7 @@ class AgendaFilesDialog extends StatelessWidget {
       if (fileInfo == null || dirInfo == null) return false;
       if (fileInfo.fileName == null) return false;
 
-      sendErr() => sendError(
+      void sendErr() => sendError(
         context,
         'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
       );

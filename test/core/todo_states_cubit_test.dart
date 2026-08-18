@@ -45,7 +45,7 @@ void main() {
       });
     });
     group('loading from sharedPreferences', () {
-      getCubit() async {
+      Future<TodoStatesCubit> getCubit() async {
         SharedPreferences.setMockInitialValues({
           'todoStates': '["TOREAD"]',
           'doneStates': '["COMPLETED"]',
