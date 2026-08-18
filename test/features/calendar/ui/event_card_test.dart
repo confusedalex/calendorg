@@ -76,7 +76,7 @@ void main() {
         );
 
         final container = tester.widget<Container>(containerFinder);
-        final decoration = container.decoration as BoxDecoration;
+        final decoration = container.decoration! as BoxDecoration;
         final border = decoration.border as Border?;
 
         expect(border, isNotNull);

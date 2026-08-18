@@ -37,7 +37,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
     if (state.oldEvent.containsTimestampInHeadline) {
       if (titleChanged || timestampChanged) {
         replacements.add((
-          state.oldEvent.section.headline.title as OrgNode,
+          state.oldEvent.section.headline.title! as OrgNode,
           OrgContent([OrgPlainText(state.newEvent.title), state.newTimestamp]),
         ));
       }
@@ -47,7 +47,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       }
       if (titleChanged) {
         replacements.add((
-          state.oldEvent.section.headline.title as OrgNode,
+          state.oldEvent.section.headline.title! as OrgNode,
           OrgContent([OrgPlainText(state.newEvent.title)]),
         ));
       }

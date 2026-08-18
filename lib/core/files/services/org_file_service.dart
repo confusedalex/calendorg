@@ -47,8 +47,7 @@ class OrgFileService {
         replacements
                 .fold<OrgZipper>(
                   oldDocument.edit(),
-                  (builder, nodes) =>
-                      builder.find(nodes.$1)?.replace(nodes.$2) as OrgZipper,
+                  (builder, nodes) => builder.find(nodes.$1)!.replace(nodes.$2),
                 )
                 .commit()
             as OrgDocument;

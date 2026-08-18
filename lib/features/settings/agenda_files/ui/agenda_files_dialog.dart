@@ -41,7 +41,7 @@ class AgendaFilesDialog extends StatelessWidget {
         try {
           relative = await filePicker.resolveRelativePath(
             directoryIdentifier: dirInfo.identifier,
-            relativePath: fileInfo.fileName as String,
+            relativePath: fileInfo.fileName!,
           );
         } catch (e) {
           sendErr();

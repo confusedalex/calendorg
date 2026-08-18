@@ -67,7 +67,7 @@ class AgendaPage extends StatelessWidget {
                   final relative = await FilePickerWritable()
                       .resolveRelativePath(
                         directoryIdentifier: state.directory!.identifier,
-                        relativePath: fileInfo.fileName as String,
+                        relativePath: fileInfo.fileName!,
                       );
                   final isSameFile = relative.uri == fileInfo.uri;
                   if (!isSameFile) {

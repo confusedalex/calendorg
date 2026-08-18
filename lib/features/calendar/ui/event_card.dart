@@ -62,14 +62,14 @@ class EventCard extends StatelessWidget {
                 ),
                 if (occurrence.entry.scheduled != null)
                   Text(
-                    'SCHEDULED: ${(occurrence.entry.scheduled?.value as OrgTimestamp).toMarkup()}',
+                    'SCHEDULED: ${(occurrence.entry.scheduled!.value as OrgTimestamp).toMarkup()}',
                     textAlign: TextAlign.left,
                     textScaler: const TextScaler.linear(0.85),
                     style: const TextStyle(color: Colors.amber),
                   ),
                 if (occurrence.entry.deadline != null)
                   Text(
-                    'DEADLINE: ${(occurrence.entry.deadline?.value as OrgTimestamp).toMarkup()}',
+                    'DEADLINE: ${(occurrence.entry.deadline!.value as OrgTimestamp).toMarkup()}',
                     textAlign: TextAlign.left,
                     textScaler: const TextScaler.linear(0.85),
                     style: const TextStyle(color: Colors.redAccent),
