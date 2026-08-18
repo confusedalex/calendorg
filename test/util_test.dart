@@ -7,7 +7,7 @@ import 'package:org_parser/org_parser.dart';
 import 'package:petitparser/petitparser.dart';
 
 void main() {
-  final markup = '''
+  const markup = '''
 * Heading 1
 ** orgmode meetup
 <2025-05-05>
@@ -55,7 +55,7 @@ CLOSED: [2026-04-24 Fri 11:25]
     });
 
     test('Deadline entry gets parsed correctly', () {
-      final markup = '''
+      const markup = '''
 ** TODO install emacs
 DEADLINE: <2025-05-04>
 ''';
@@ -254,7 +254,7 @@ DEADLINE: <2025-05-04>
     });
     group('ignored todo states', () {
       test('OTHER will be ignored', () {
-        final markup = '''
+        const markup = '''
 * TODO install emacs
 <2025-01-01>
 * OTHER install emacs
@@ -276,7 +276,7 @@ DEADLINE: <2025-05-04>
         expect(events.length, equals(1));
       });
       test('Nested TODOs of OTHER are still valid', () {
-        final markup = '''
+        const markup = '''
 * TODO install emacs
 <2025-01-01>
 * OTHER install emacs

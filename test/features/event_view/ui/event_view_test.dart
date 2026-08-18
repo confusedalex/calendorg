@@ -15,7 +15,7 @@ import 'package:org_parser/org_parser.dart';
 import '../../settings/settings_overview/ui/settings_page_test.dart';
 
 void main() {
-  final markup = '''
+  const markup = '''
 * orgmode meetup :meetups:
 <2025-05-05>
 <2025-05-06 11:00>

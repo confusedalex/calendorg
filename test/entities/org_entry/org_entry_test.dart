@@ -5,7 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
-  final markup = '''
+  const markup = '''
 * Heading 1
 ** orgmode meetup <2025-05-05>
 <2025-05-06 11:00>

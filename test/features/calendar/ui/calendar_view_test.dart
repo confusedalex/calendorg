@@ -19,7 +19,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 void main() {
   group('CalendarWidget', () {
-    final markup = '''
+    const markup = '''
 * Heading 1
 ** orgmode meetup
 <2025-05-05>
