@@ -25,7 +25,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
         onColorChanged: (Color color) => setState(() {
           selectedColor = color;
         }),
-        pickersEnabled: <ColorPickerType, bool>{
+        pickersEnabled: const <ColorPickerType, bool>{
           ColorPickerType.primary: false,
           ColorPickerType.accent: false,
           ColorPickerType.wheel: true,

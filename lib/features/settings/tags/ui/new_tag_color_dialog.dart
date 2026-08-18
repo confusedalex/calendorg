@@ -34,7 +34,7 @@ class NewTagColorDialog extends StatelessWidget {
               ColorPicker(
                 color: state.state.color,
                 onColorChanged: (Color color) => state.updateColor(color),
-                pickersEnabled: <ColorPickerType, bool>{
+                pickersEnabled: const <ColorPickerType, bool>{
                   ColorPickerType.primary: false,
                   ColorPickerType.accent: false,
                   ColorPickerType.wheel: true,

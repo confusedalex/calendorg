@@ -123,21 +123,21 @@ class _HomePageState extends State<HomePage> {
                           index = value;
                         }),
                         selectedIndex: index,
-                        destinations: [
+                        destinations: const [
                           if (kDebugMode)
-                            const NavigationDestination(
+                            NavigationDestination(
                               icon: Icon(Icons.compare_arrows),
                               label: 'Diff',
                             ),
-                          const NavigationDestination(
+                          NavigationDestination(
                             icon: Icon(Icons.list),
                             label: 'Events',
                           ),
-                          const NavigationDestination(
+                          NavigationDestination(
                             icon: Icon(Icons.calendar_today),
                             label: 'Calendar',
                           ),
-                          const NavigationDestination(
+                          NavigationDestination(
                             icon: Icon(Icons.settings),
                             label: 'Settings',
                           ),

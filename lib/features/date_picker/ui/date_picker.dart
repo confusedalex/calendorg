@@ -32,7 +32,7 @@ class DatePicker extends StatelessWidget {
       titleIcon: Icons.date_range,
       content: BlocBuilder<DatePickerBloc, DatePickerState>(
         builder: (context, state) => Table(
-          columnWidths: {1: const FractionColumnWidth(0.25)},
+          columnWidths: const {1: FractionColumnWidth(0.25)},
           children: [
             titleRow('Start Date'),
             TableRow(
