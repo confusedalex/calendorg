@@ -29,7 +29,7 @@ class OrgFileService {
     try {
       await _filePicker.writeFile(
         identifier: fileIdentifier,
-        writer: (file) async =>
+        writer: (file) =>
             file.writeAsString(document.toMarkup(), mode: FileMode.writeOnly),
       );
     } on Exception catch (e) {

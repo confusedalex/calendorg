@@ -74,19 +74,19 @@ class OrgFilesRepository {
     return perFileEvents.expand((e) => e).toList();
   }
 
-  Future<void> saveDirectory(DirectoryInfo dirInfo) async {
+  Future<void> saveDirectory(DirectoryInfo dirInfo) {
     return _persistence.saveDirectory(dirInfo);
   }
 
-  Future<OrgDocument> loadDocument(FileInfo fileInfo) async {
+  Future<OrgDocument> loadDocument(FileInfo fileInfo) {
     return _fileService.documentByIdentifier(fileInfo.identifier);
   }
 
-  Future<void> saveFileList(Set<FileInfo> fileInfos) async {
+  Future<void> saveFileList(Set<FileInfo> fileInfos) {
     return _persistence.saveFileList(fileInfos);
   }
 
-  Future<void> saveInboxFile(FileInfo fileInfo) async {
+  Future<void> saveInboxFile(FileInfo fileInfo) {
     return _persistence.saveInboxFile(fileInfo);
   }
 
@@ -98,7 +98,7 @@ class OrgFilesRepository {
     FileInfo fileInfo,
     OrgDocument oldDocument,
     List<(OrgNode, OrgNode)> replacements,
-  ) async {
+  ) {
     return _fileService.replaceNodesAndSave(
       fileInfo.identifier,
       oldDocument,

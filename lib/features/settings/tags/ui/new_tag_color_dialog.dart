@@ -46,9 +46,9 @@ class NewTagColorDialog extends StatelessWidget {
         actions: [
           TextButton(
             key: const Key('newtag_savebutton'),
-            onPressed: () {
+            onPressed: () async {
               if (formKey.currentState!.validate()) {
-                tagColorsCubit.addTagColor(
+                await tagColorsCubit.addTagColor(
                   TagColor(state.state.text, state.state.color),
                 );
                 Navigator.of(context).pop();

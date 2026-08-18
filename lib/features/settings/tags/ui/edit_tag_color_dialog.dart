@@ -35,16 +35,18 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
     actions: [
       TextButton(
         key: const Key('edittag_deletebutton'),
-        onPressed: () {
-          context.read<TagColorsCubit>().removeTagColor(widget.tagColor.tag);
+        onPressed: () async {
+          await context.read<TagColorsCubit>().removeTagColor(
+            widget.tagColor.tag,
+          );
           Navigator.of(context).pop();
         },
         child: const Text('delete'),
       ),
       TextButton(
         key: const Key('edittag_savebutton'),
-        onPressed: () {
-          context.read<TagColorsCubit>().addTagColor(
+        onPressed: () async {
+          await context.read<TagColorsCubit>().addTagColor(
             TagColor(widget.tagColor.tag, selectedColor),
           );
           Navigator.of(context).pop();

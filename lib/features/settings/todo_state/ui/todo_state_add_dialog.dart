@@ -38,9 +38,12 @@ class TodoStateAddDialog extends StatelessWidget {
                 child: const Text('cancel'),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    context.read<TodoStatesCubit>().addTodo(status, state);
+                    await context.read<TodoStatesCubit>().addTodo(
+                      status,
+                      state,
+                    );
                     Navigator.pop(context);
                   }
                 },

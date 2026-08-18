@@ -129,7 +129,7 @@ class NewSectionDialog extends StatelessWidget {
 
                     await FilePickerWritable().writeFile(
                       identifier: inboxFile.identifier,
-                      writer: (file) async => file.writeAsString(
+                      writer: (file) => file.writeAsString(
                         '$oldFile \n* $title\n${timestamp.toMarkup()}',
                         mode: FileMode.writeOnly,
                       ),

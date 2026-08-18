@@ -39,8 +39,8 @@ class _TagsPageState extends State<TagsPage> {
                     shape: BoxShape.circle,
                   ),
                 ),
-                onTap: () {
-                  showDialog(
+                onTap: () async {
+                  await showDialog(
                     context: context,
                     builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<TagColorsCubit>(context),
@@ -56,8 +56,8 @@ class _TagsPageState extends State<TagsPage> {
       ),
     ),
     floatingActionButton: FloatingActionButton.extended(
-      onPressed: () {
-        showDialog(
+      onPressed: () async {
+        await showDialog(
           context: context,
           builder: (_) => MultiBlocProvider(
             providers: [

@@ -50,11 +50,11 @@ class AgendaFilesDialog extends StatelessWidget {
 
         final relativeSize = await filePicker.readFile(
           identifier: relative.identifier,
-          reader: (_, file) async => file.length(),
+          reader: (_, file) => file.length(),
         );
         final pickedSize = await filePicker.readFile(
           identifier: fileInfo.identifier,
-          reader: (_, file) async => file.length(),
+          reader: (_, file) => file.length(),
         );
 
         final isSameFile = relativeSize == pickedSize;

@@ -7,7 +7,7 @@ class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
 
 void main() {
   group('OrgFilesState', () {
-    test('', () async {});
+    test('', () {});
     group('initial', () {
       test('initial state should be loading', () {
         final repository = MockOrgFilesRepository();

@@ -29,7 +29,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
     );
   }
 
-  void save(OrgFilesCubit cubit) {
+  Future<void> save(OrgFilesCubit cubit) async {
     final replacements = <(OrgNode, OrgNode)>[];
     final titleChanged = state.oldEvent.title != state.newEvent.title;
     final timestampChanged = state.oldTimestamp != state.newTimestamp;
@@ -53,6 +53,6 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       }
     }
 
-    cubit.replaceNodes(state.oldEvent.fileInfo, replacements);
+    await cubit.replaceNodes(state.oldEvent.fileInfo, replacements);
   }
 }

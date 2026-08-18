@@ -5,8 +5,11 @@ import '../../date_picker/model/date_picker_bloc.dart';
 import '../../date_picker/ui/date_picker.dart';
 import '../model/new_section_cubit.dart';
 
-void openDatePicker(BuildContext context, DateTime initialDateTime) {
-  showDialog(
+Future<void> openDatePicker(
+  BuildContext context,
+  DateTime initialDateTime,
+) async {
+  await showDialog(
     context: context,
     builder: (_) {
       return MultiBlocProvider(

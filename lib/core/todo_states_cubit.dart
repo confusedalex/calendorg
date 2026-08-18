@@ -33,12 +33,12 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
           ? defaultTodoStates
           : OrgTodoStatesWithIgnored(todo: todo, done: done, ignored: ignored);
       emit(states);
-    } on Exception catch (e) {
+    } on Exception {
       emit(defaultTodoStates);
     }
   }
 
-  void addTodo(String status, String keyword) {
+  Future<void> addTodo(String status, String keyword) async {
     if (status == 'todo') {
       emit(
         OrgTodoStatesWithIgnored(
@@ -64,10 +64,10 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
         ),
       );
     }
-    saveToPrefs();
+    await saveToPrefs();
   }
 
-  void removeTodo(String status, String keyword) {
+  Future<void> removeTodo(String status, String keyword) async {
     if (status == 'todo') {
       emit(
         OrgTodoStatesWithIgnored(
@@ -93,7 +93,7 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
         ),
       );
     }
-    saveToPrefs();
+    await saveToPrefs();
   }
 
   Future<void> saveToPrefs() async {

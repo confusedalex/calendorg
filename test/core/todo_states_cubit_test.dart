@@ -9,37 +9,39 @@ void main() {
     });
 
     group('adding states', () {
-      test('adding TODO state works', () {
+      test('adding TODO state works', () async {
         final cubit = TodoStatesCubit();
 
-        cubit.addTodo('todo', 'TOCALL');
+        await cubit.addTodo('todo', 'TOCALL');
 
         expect(cubit.state.todo, contains('TOCALL'));
       });
 
-      test('adding DONE state works', () {
+      test('adding DONE state works', () async {
         final cubit = TodoStatesCubit();
 
-        cubit.addTodo('done', 'KILL');
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        await cubit.addTodo('done', 'KILL');
 
         expect(cubit.state.done, contains('KILL'));
       });
     });
     group('removing states', () {
-      test('removing TODO state works', () {
+      test('removing TODO state works', () async {
         final cubit = TodoStatesCubit();
 
-        cubit.addTodo('todo', 'TOCALL');
-        cubit.removeTodo('todo', 'TOCALL');
+        await cubit.addTodo('todo', 'TOCALL');
+        await cubit.removeTodo('todo', 'TOCALL');
 
         expect(cubit.state.todo, isNot(contains('TOCALL')));
       });
 
-      test('removing DONE state works', () {
+      test('removing DONE state works', () async {
         final cubit = TodoStatesCubit();
 
-        cubit.addTodo('done', 'KILL');
-        cubit.removeTodo('done', 'KILL');
+        await cubit.addTodo('done', 'KILL');
+        await cubit.removeTodo('done', 'KILL');
 
         expect(cubit.state.done, isNot(contains('KILL')));
       });
