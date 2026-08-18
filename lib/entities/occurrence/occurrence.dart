@@ -1,4 +1,4 @@
-import 'package:calendorg/entities/org_entry/org_entry.dart';
+import '../org_entry/org_entry.dart';
 import 'package:org_parser/org_parser.dart';
 
 enum OccurrenceKind { timestamp, scheduled, deadline }

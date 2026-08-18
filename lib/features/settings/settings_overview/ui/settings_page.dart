@@ -1,15 +1,15 @@
-import 'package:calendorg/core/floating_action_button_cubit.dart';
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/features/settings/agenda_files/ui/agenda_page.dart';
-import 'package:calendorg/features/settings/debug/ui/debug_page.dart';
-import 'package:calendorg/features/settings/starting_day/ui/starting_day_dialog.dart';
-import 'package:calendorg/core/starting_day_cubit.dart';
-import 'package:calendorg/features/settings/tags/ui/tags_page.dart';
-import 'package:calendorg/features/settings/theme/model/theme_bloc.dart';
-import 'package:calendorg/features/settings/theme/ui/theme_dialog.dart';
-import 'package:calendorg/features/settings/todo_state/ui/todo_states_dialog.dart';
+import '../../../../core/floating_action_button_cubit.dart';
+import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../../core/todo_states_cubit.dart';
+import '../../agenda_files/ui/agenda_page.dart';
+import '../../debug/ui/debug_page.dart';
+import '../../starting_day/ui/starting_day_dialog.dart';
+import '../../../../core/starting_day_cubit.dart';
+import '../../tags/ui/tags_page.dart';
+import '../../theme/model/theme_bloc.dart';
+import '../../theme/ui/theme_dialog.dart';
+import '../../todo_state/ui/todo_states_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

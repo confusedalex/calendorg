@@ -1,4 +1,4 @@
-import 'package:calendorg/entities/org_entry/org_entry.dart';
+import 'org_entry.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 

@@ -1,6 +1,6 @@
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
-import 'package:calendorg/features/calendar/ui/calendar_view.dart';
+import '../../../core/files/cubit/org_files_cubit.dart';
+import '../model/calendar_bloc.dart';
+import 'calendar_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,9 +1,9 @@
-import 'package:calendorg/shared/ui/editor_dialog_shell.dart';
-import 'package:calendorg/l10n/calendorg_localizations.dart';
+import '../../../../shared/ui/editor_dialog_shell.dart';
+import '../../../../l10n/calendorg_localizations.dart';
 import 'dart:io';
 
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/util.dart';
+import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

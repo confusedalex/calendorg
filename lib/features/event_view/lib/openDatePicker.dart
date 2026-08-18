@@ -1,6 +1,6 @@
-import 'package:calendorg/features/date_picker/model/date_picker_bloc.dart';
-import 'package:calendorg/features/date_picker/ui/date_picker.dart';
-import 'package:calendorg/features/event_view/model/event_view_bloc.dart';
+import '../../date_picker/model/date_picker_bloc.dart';
+import '../../date_picker/ui/date_picker.dart';
+import '../model/event_view_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

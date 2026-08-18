@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:calendorg/features/settings/tags/model/new_tag_color_state.dart';
+import 'new_tag_color_state.dart';
 import 'package:flutter/material.dart';
 
 class NewTagColorCubit extends Cubit<NewTagColorState> {

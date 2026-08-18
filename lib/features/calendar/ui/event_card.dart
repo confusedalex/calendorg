@@ -1,9 +1,9 @@
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/entities/occurrence/occurrence.dart';
-import 'package:calendorg/features/event_view/model/event_view_bloc.dart';
-import 'package:calendorg/features/event_view/ui/event_view.dart';
+import '../../../core/files/cubit/org_files_cubit.dart';
+import '../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../core/todo_states_cubit.dart';
+import '../../../entities/occurrence/occurrence.dart';
+import '../../event_view/model/event_view_bloc.dart';
+import '../../event_view/ui/event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';

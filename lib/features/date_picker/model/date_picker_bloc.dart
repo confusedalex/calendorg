@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:calendorg/util.dart';
+import '../../../util.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 

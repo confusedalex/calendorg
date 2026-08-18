@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:calendorg/entities/org_entry/org_entry.dart';
-import 'package:calendorg/core/tag_colors/tag_color.dart';
+import '../../entities/org_entry/org_entry.dart';
+import 'tag_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';

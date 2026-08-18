@@ -1,6 +1,6 @@
-import 'package:calendorg/entities/occurrence/occurrence.dart';
-import 'package:calendorg/entities/org_entry/org_entry.dart';
-import 'package:calendorg/util.dart';
+import 'occurrence.dart';
+import '../org_entry/org_entry.dart';
+import '../../util.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:org_parser/org_parser.dart';
 

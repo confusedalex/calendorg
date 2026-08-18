@@ -1,8 +1,8 @@
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/features/settings/todo_state/ui/todo_state_add_dialog.dart';
-import 'package:calendorg/features/settings/todo_state/model/todo_state_add_dialog_cubit.dart';
-import 'package:calendorg/shared/ui/editor_dialog_shell.dart';
+import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/todo_states_cubit.dart';
+import 'todo_state_add_dialog.dart';
+import '../model/todo_state_add_dialog_cubit.dart';
+import '../../../../shared/ui/editor_dialog_shell.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

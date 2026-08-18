@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/features/new_section/model/new_section_cubit.dart';
-import 'package:calendorg/shared/ui/editor_dialog_shell.dart';
-import 'package:calendorg/util.dart';
+import '../../../core/files/cubit/org_files_cubit.dart';
+import '../model/new_section_cubit.dart';
+import '../../../shared/ui/editor_dialog_shell.dart';
+import '../../../util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:calendorg/features/new_section/lib/openDatePicker.dart';
+import '../lib/openDatePicker.dart';
 
 class NewSectionDialog extends StatelessWidget {
   final DateTime dateTime;

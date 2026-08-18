@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/entities/org_entry/org_entry.dart';
+import '../../../core/files/cubit/org_files_cubit.dart';
+import '../../../entities/org_entry/org_entry.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 

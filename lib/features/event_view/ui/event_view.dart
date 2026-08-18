@@ -1,7 +1,7 @@
-import 'package:calendorg/features/event_view/lib/openDatePicker.dart';
-import 'package:calendorg/features/event_view/model/event_view_bloc.dart';
-import 'package:calendorg/shared/ui/editor_dialog_shell.dart';
-import 'package:calendorg/util.dart';
+import '../lib/openDatePicker.dart';
+import '../model/event_view_bloc.dart';
+import '../../../shared/ui/editor_dialog_shell.dart';
+import '../../../util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

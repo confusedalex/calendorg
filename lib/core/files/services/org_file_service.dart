@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:calendorg/core/files/services/org_parser_service.dart';
+import 'org_parser_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:org_parser/org_parser.dart';
