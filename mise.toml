@@ -15,3 +15,6 @@ depends = ["analyze", "test"]
 [tasks.release]
 description = "Run the same build steps as release.yml (universal + split APKs)"
 depends = ["build:apk", "build:apk-splipt"]
+
+[settings]
+lockfile = true
