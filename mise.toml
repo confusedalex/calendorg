@@ -3,14 +3,15 @@ flutter = "3.44.9"
 java = "temurin-17"
 
 [tasks]
-format = "flutter format"
+format = "dart format -o none --set-exit-if-changed ./lib"
+"format:write" = "dart format"
 analyze = "flutter analyze --no-fatal-infos"
 test = "flutter test"
 "build:apk" = "flutter build apk --release"
 "build:apk-split" = "flutter build apk --release --split-per-abi"
 
 [tasks.ci]
-depends = ["analyze", "test"]
+depends = ["analyze", "test", "format"]
 
 [tasks.release]
 description = "Run the same build steps as release.yml (universal + split APKs)"
