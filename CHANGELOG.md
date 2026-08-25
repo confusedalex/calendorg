@@ -1,4 +1,7 @@
 # Changelog
+## 1.5.0 - 2026-08-25
+### Added
+- Now occurences also load on page change in the calendar view.
 ## 1.4.4 - 2026-08-19
 ### Changed
 - Run file parsing in one persistent threads, not one thread for each file. Should improve performance.
