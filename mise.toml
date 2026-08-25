@@ -1,6 +1,7 @@
 [tools]
 flutter = "3.44.9"
 java = "temurin-17"
+zizmor = "latest"
 
 [tasks]
 format = "dart format -o none --set-exit-if-changed ./lib"
