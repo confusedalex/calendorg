@@ -46,10 +46,7 @@ void main() {
     });
 
     test('Only DateTimes at the same date should match', () {
-      expect(
-        entry.timestampsByDateTime(DateTime(2025, 05)).length,
-        equals(1),
-      );
+      expect(entry.timestampsByDateTime(DateTime(2025, 05)).length, equals(1));
       expect(
         entry.timestampsByDateTime(DateTime(2025, 05, 01, 23, 59, 59)).length,
         equals(1),

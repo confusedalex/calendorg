@@ -13,7 +13,8 @@ class CalendarPage extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<OrgFilesCubit, OrgFilesState>(
         builder: (context, state) => BlocProvider(
-          create: (context) => CalendarBloc(initialSelectedDay),
+          create: (context) =>
+              CalendarBloc(initialSelectedDay, context.read<OrgFilesCubit>()),
           child: const CalendarView(),
         ),
       );

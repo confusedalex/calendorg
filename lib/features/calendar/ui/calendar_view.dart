@@ -14,34 +14,21 @@ import 'event_markers.dart';
 class CalendarView extends StatelessWidget {
   const CalendarView({super.key});
 
-  DateTimeRange visibleWindowFor(DateTime focusedDay) {
-    final firstOfMonth = DateTime(focusedDay.year, focusedDay.month);
-    final lastOfMonth = DateTime(focusedDay.year, focusedDay.month + 1, 0);
-
-    return DateTimeRange(
-      start: firstOfMonth.subtract(const Duration(days: 7)),
-      end: lastOfMonth.add(const Duration(days: 7)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final DateTime focusedDay = context.select(
+    final focusedDay = context.select(
       (CalendarBloc bloc) => bloc.state.focusedDay,
     );
-    final DateTime selectedDate = context.select(
+    final selectedDate = context.select(
       (CalendarBloc bloc) => bloc.state.selectedDate,
     );
-    final CalendarFormat calendarFormat = context.select(
+    final calendarFormat = context.select(
       (CalendarBloc bloc) => bloc.state.calendarFormat,
     );
-    final StartingDayOfWeek startingDay = context.select(
-      (StartingDayCubit bloc) => bloc.state,
+    final startingDay = context.select((StartingDayCubit bloc) => bloc.state);
+    final occurrencesByDate = context.select(
+      (CalendarBloc bloc) => bloc.state.occurrencesByDate,
     );
-    final occurrencesByDate = context
-        .read<OrgFilesCubit>()
-        .state
-        .occurrencesByDateInRange(visibleWindowFor(focusedDay));
     String dateKey(DateTime d) => d.toIso8601String().split('T')[0];
 
     context.read<FloatingActionButtonCubit>().changeButton(
@@ -66,6 +53,11 @@ class CalendarView extends StatelessWidget {
           firstDay: DateTime.utc(2010, 10, 16),
           lastDay: DateTime.utc(2030, 3, 14),
           focusedDay: focusedDay,
+          onPageChanged: (d) {
+            context.read<CalendarBloc>().add(
+              CalendarChangeFocusDateEvent(focusedDate: d),
+            );
+          },
           startingDayOfWeek: startingDay,
           selectedDayPredicate: (day) {
             return isSameDay(selectedDate, day);

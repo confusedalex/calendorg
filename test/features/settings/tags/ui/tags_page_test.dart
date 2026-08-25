@@ -90,7 +90,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(cubit.state, isNot(contains(schoolTagColor)));
-      expect(cubit.state, contains(TagColor('school', const Color(0xff523304))));
+      expect(
+        cubit.state,
+        contains(TagColor('school', const Color(0xff523304))),
+      );
     });
 
     testWidgets('Moving tags word', (tester) async {

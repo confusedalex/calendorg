@@ -47,7 +47,7 @@ void main() {
     orgFilesCubit = MockOrgFilesBloc(document);
 
     setUp(() {
-      calendarBloc = CalendarBloc(DateTime(2025, 05, 17));
+      calendarBloc = CalendarBloc(DateTime(2025, 05, 17), orgFilesCubit);
     });
 
     Future<void> pumpWidgetToTester(dynamic tester) async {
@@ -81,11 +81,21 @@ void main() {
     ) async {
       await pumpWidgetToTester(tester);
 
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 1)),
+      );
+      await tester.pumpAndSettle();
+
       expect(find.byType(CircleAvatar), findsNWidgets(11));
     });
 
     testWidgets('Calendar respects tag colors from model', (tester) async {
       await pumpWidgetToTester(tester);
+
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 1)),
+      );
+      await tester.pumpAndSettle();
 
       expect(
         find.byWidgetPredicate(
@@ -122,6 +132,9 @@ void main() {
     testWidgets('Date will change', (tester) async {
       await pumpWidgetToTester(tester);
 
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 1)),
+      );
       await tester.pumpAndSettle();
 
       expect(
@@ -148,9 +161,12 @@ void main() {
     testWidgets(
       'CalendarView shows eventCards for every event, when events are there',
       (tester) async {
-        calendarBloc = CalendarBloc(DateTime(2025, 05, 05));
+        calendarBloc = CalendarBloc(DateTime(2025, 05, 05), orgFilesCubit);
 
         await pumpWidgetToTester(tester);
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 1)),
+        );
         await tester.pumpAndSettle();
 
         expect(find.byType(EventCard), findsNWidgets(3));

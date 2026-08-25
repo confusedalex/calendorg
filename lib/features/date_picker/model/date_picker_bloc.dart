@@ -17,9 +17,7 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
           emit(
             state.copyWith(
               startTimeActive: event.startTimeActive,
-              endTimeActive:
-                  (!event.startTimeActive &&
-                      !state.endDateActive)
+              endTimeActive: (!event.startTimeActive && !state.endDateActive)
                   ? null
                   : state.endTimeActive,
             ),
@@ -30,9 +28,7 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
           emit(
             state.copyWith(
               endDateActive: event.endDateActive,
-              endTimeActive:
-                  (!event.endDateActive &&
-                      !state.startTimeActive)
+              endTimeActive: (!event.endDateActive && !state.startTimeActive)
                   ? null
                   : state.endTimeActive,
             ),

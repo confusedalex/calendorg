@@ -82,7 +82,6 @@ class EventParserService {
           if (ignoreNTimestamps > 0) break;
           if (node.isActive) foundTimestamps.add(node);
 
-
         case OrgTimeRangeTimestamp():
           if (node.isActive) foundTimestamps.add(node);
       }

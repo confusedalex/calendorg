@@ -552,8 +552,7 @@ void main() {
       blocTest(
         'Setting EndDate works',
         build: () => datePickerBloc,
-        act: (bloc) =>
-            bloc.add(DatePickerEndDateChanged(DateTime(2026, 02))),
+        act: (bloc) => bloc.add(DatePickerEndDateChanged(DateTime(2026, 02))),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(

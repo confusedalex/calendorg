@@ -13,7 +13,10 @@ void sendError(BuildContext context, String error) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
         error,
       ),
       backgroundColor: Colors.red,
@@ -99,10 +102,12 @@ List<DateTime> dateTimesFromOrgDateRange(
   ], date.add(const Duration(days: 1)));
 }
 
-DateTime beforeMidnight(DateTime date) =>
-    date.subtract(const Duration(days: 1)).copyWith(hour: 23, minute: 59, second: 59);
-DateTime afterMidnight(DateTime date) =>
-    date.add(const Duration(days: 1)).copyWith(hour: 00, minute: 00, second: 00);
+DateTime beforeMidnight(DateTime date) => date
+    .subtract(const Duration(days: 1))
+    .copyWith(hour: 23, minute: 59, second: 59);
+DateTime afterMidnight(DateTime date) => date
+    .add(const Duration(days: 1))
+    .copyWith(hour: 00, minute: 00, second: 00);
 
 extension GetTimeOfDay on OrgTime {
   TimeOfDay get timeOfDay =>
