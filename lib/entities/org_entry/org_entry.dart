@@ -1,11 +1,14 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../util.dart';
 
-class OrgEntry {
+part 'org_entry.mapper.dart';
+
+@MappableClass()
+class OrgEntry with OrgEntryMappable {
   String? todoKeyword;
   bool containsTimestampInHeadline;
   OrgSection section;
@@ -52,36 +55,4 @@ class OrgEntry {
     this.deadline,
     this.description,
   });
-
-  OrgEntry copyWith({
-    ValueGetter<String?>? todoKeyword,
-    bool? containsTimestampInHeadline,
-    OrgSection? section,
-    String? title,
-    FileInfo? fileInfo,
-    List<String>? tags,
-    List<OrgTimestamp>? timestamps,
-    ValueGetter<OrgPlanningEntry?>? scheduled,
-    ValueGetter<OrgPlanningEntry?>? deadline,
-    ValueGetter<String?>? description,
-  }) {
-    return OrgEntry(
-      todoKeyword: todoKeyword != null ? todoKeyword() : this.todoKeyword,
-      containsTimestampInHeadline:
-          containsTimestampInHeadline ?? this.containsTimestampInHeadline,
-      section: section ?? this.section,
-      title: title ?? this.title,
-      fileInfo: fileInfo ?? this.fileInfo,
-      tags: tags ?? this.tags,
-      timestamps: timestamps ?? this.timestamps,
-      scheduled: scheduled != null ? scheduled() : this.scheduled,
-      deadline: deadline != null ? deadline() : this.deadline,
-      description: description != null ? description() : this.description,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'Event{title=$title, tags=$tags}';
-  }
 }
