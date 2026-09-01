@@ -15,12 +15,6 @@ void main() {
 
         expect(cubit.state.status, OrgFilesStatus.loading);
       });
-      test('initial state should have empty errors', () {
-        final repository = MockOrgFilesRepository();
-        final cubit = OrgFilesCubit(repository);
-
-        expect(cubit.state.errors, isEmpty);
-      });
       test('initial state should have empty filePaths', () {
         final repository = MockOrgFilesRepository();
         final cubit = OrgFilesCubit(repository);

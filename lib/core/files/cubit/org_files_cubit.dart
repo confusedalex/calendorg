@@ -28,7 +28,6 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
         OrgFilesState(
           directory: result.dirInfo,
           status: OrgFilesStatus.success,
-          errors: [],
           filePaths: result.fileInfos,
           documentsMap: result.documentsMap,
           inboxFile: result.inboxFile,

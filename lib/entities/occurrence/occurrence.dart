@@ -9,14 +9,12 @@ class Occurrence {
   final DateTime date;
   final OccurrenceKind kind;
   final OrgTimestamp timestamp;
-  final bool isRepeaterInstance; // true if generated, not literally in the file
 
   Occurrence({
     required this.entry,
     required this.date,
     required this.kind,
     required this.timestamp,
-    this.isRepeaterInstance = false,
   });
 
   @override

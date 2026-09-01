@@ -60,12 +60,6 @@ class OrgEntryMapper extends ClassMapperBase<OrgEntry> {
     _$deadline,
     opt: true,
   );
-  static String? _$description(OrgEntry v) => v.description;
-  static const Field<OrgEntry, String> _f$description = Field(
-    'description',
-    _$description,
-    opt: true,
-  );
 
   @override
   final MappableFields<OrgEntry> fields = const {
@@ -76,7 +70,6 @@ class OrgEntryMapper extends ClassMapperBase<OrgEntry> {
     #timestamps: _f$timestamps,
     #scheduled: _f$scheduled,
     #deadline: _f$deadline,
-    #description: _f$description,
   };
 
   static OrgEntry _instantiate(DecodingData data) {
@@ -168,12 +161,6 @@ class OrgEntryCachedMapper extends SubClassMapperBase<OrgEntryCached> {
     'scheduled',
     _$scheduled,
   );
-  static String? _$description(OrgEntryCached v) => v.description;
-  static const Field<OrgEntryCached, String> _f$description = Field(
-    'description',
-    _$description,
-    mode: FieldMode.member,
-  );
 
   @override
   final MappableFields<OrgEntryCached> fields = const {
@@ -184,7 +171,6 @@ class OrgEntryCachedMapper extends SubClassMapperBase<OrgEntryCached> {
     #timestamps: _f$timestamps,
     #deadline: _f$deadline,
     #scheduled: _f$scheduled,
-    #description: _f$description,
   };
 
   @override
@@ -407,12 +393,6 @@ class OrgEntryLoadedMapper extends SubClassMapperBase<OrgEntryLoaded> {
     'fileInfo',
     _$fileInfo,
   );
-  static String? _$description(OrgEntryLoaded v) => v.description;
-  static const Field<OrgEntryLoaded, String> _f$description = Field(
-    'description',
-    _$description,
-    mode: FieldMode.member,
-  );
 
   @override
   final MappableFields<OrgEntryLoaded> fields = const {
@@ -425,13 +405,12 @@ class OrgEntryLoadedMapper extends SubClassMapperBase<OrgEntryLoaded> {
     #scheduled: _f$scheduled,
     #section: _f$section,
     #fileInfo: _f$fileInfo,
-    #description: _f$description,
   };
 
   @override
   final String discriminatorKey = 'type';
   @override
-  final dynamic discriminatorValue = 'cached';
+  final dynamic discriminatorValue = 'loaded';
   @override
   late final ClassMapperBase superMapper = OrgEntryMapper.ensureInitialized();
 

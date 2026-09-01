@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/material.dart';
-import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../entities/occurrence/occurence_getter.dart';
 import '../../../entities/occurrence/occurrence.dart';
-import '../../../entities/org_entry/org_entry.dart';
 
 part 'calendar_event.dart';
 part 'calendar_state.dart';

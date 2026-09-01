@@ -21,7 +21,6 @@ sealed class OrgEntry with OrgEntryMappable {
   List<OrgTimestamp> timestamps;
   OrgPlanningEntry? scheduled;
   OrgPlanningEntry? deadline;
-  late String? description;
 
   List<OrgTimestamp> get unifiedTimestamps => [
     ...timestamps,
@@ -54,7 +53,6 @@ sealed class OrgEntry with OrgEntryMappable {
     required this.timestamps,
     this.scheduled,
     this.deadline,
-    this.description,
   });
 }
 

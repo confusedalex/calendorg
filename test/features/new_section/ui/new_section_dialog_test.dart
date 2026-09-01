@@ -70,7 +70,6 @@ class TestOrgFilesCubit extends OrgFilesCubit {
       OrgFilesState(
         directory: null,
         status: OrgFilesStatus.success,
-        errors: [],
         filePaths: {inboxFile},
         documentsMap: {inboxFile: OrgDocument.parse('')},
         todoStates: OrgTodoStatesWithIgnored(
