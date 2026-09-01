@@ -12,9 +12,7 @@ final defaultTodoStates = OrgTodoStatesWithIgnored(
 );
 
 class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
-  TodoStatesCubit() : super(defaultTodoStates) {
-    loadFromPrefs();
-  }
+  TodoStatesCubit() : super(defaultTodoStates);
 
   Future<void> loadFromPrefs() async {
     try {
