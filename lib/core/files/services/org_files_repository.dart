@@ -16,12 +16,15 @@ class OrgFilesRepository {
   final OrgFileService _fileService;
   final OrgFilePersistenceService _persistence;
   final OrgParserService _parserService;
+  final EventParserService _eventParserService;
 
   OrgFilesRepository({
     required OrgFileService fileService,
     required OrgFilePersistenceService persistence,
     required OrgParserService parserService,
-  }) : _fileService = fileService,
+    required EventParserService eventParserService,
+  }) : _eventParserService = eventParserService,
+       _fileService = fileService,
        _persistence = persistence,
        _parserService = parserService;
 
@@ -67,17 +70,15 @@ class OrgFilesRepository {
     Map<FileInfo, OrgDocument> documentsMap,
     List<String> ignoredTodoStates,
   ) async {
-    final perFileEvents = await Future.wait(
-      documentsMap.entries.map((entry) async {
-        final parsedEvents = EventParserService().parseEntriesFromDocument(
-          entry.key,
-          entry.value,
-          ignoredTodoStates.toSet(),
-        );
+    final perFileEvents = documentsMap.entries.map((entry) {
+      final parsedEvents = _eventParserService.parseEntriesFromDocument(
+        entry.key,
+        entry.value,
+        ignoredTodoStates.toSet(),
+      );
 
-        return parsedEvents;
-      }),
-    );
+      return parsedEvents;
+    });
     return perFileEvents.expand((e) => e).toList();
   }
 
