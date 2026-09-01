@@ -81,27 +81,6 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
   }
 }
 
-List<DateTime> dateTimesFromOrgDateRange(
-  OrgDateRangeTimestamp timestamp,
-  List<DateTime> list,
-  DateTime? date,
-) {
-  if (date != null &&
-      isSameDay(timestamp.endDateTime.add(const Duration(days: 1)), date)) {
-    return list;
-  }
-  if (date == null) {
-    final next = timestamp.startDateTime.add(const Duration(days: 1));
-    return dateTimesFromOrgDateRange(timestamp, [
-      timestamp.startDateTime,
-    ], next);
-  }
-  return dateTimesFromOrgDateRange(timestamp, [
-    ...list,
-    date,
-  ], date.add(const Duration(days: 1)));
-}
-
 DateTime beforeMidnight(DateTime date) => date
     .subtract(const Duration(days: 1))
     .copyWith(hour: 23, minute: 59, second: 59);
@@ -123,7 +102,7 @@ extension StartDateTime on OrgTimestamp {
 }
 
 extension DateTimesFromRange on OrgDateRangeTimestamp {
-  List<DateTime> get datetimes => dateTimesFromOrgDateRange(this, [], null);
+  List<DateTime> get datetimes => dateRange(startDateTime, endDateTime);
 }
 
 List<DateTime> dateRange(DateTime start, DateTime end) {

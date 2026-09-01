@@ -203,11 +203,10 @@ DEADLINE: <2025-05-04>
       );
     });
     group('dateTimesFromOrgDateRange', () {
-      test('Parse OrgDateRangeTimestamp', () {
-        final dateTimes = dateTimesFromOrgDateRange(
-          meetupEntry.timestamps.last as OrgDateRangeTimestamp,
-          [],
-          null,
+      test('Parse dateRange', () {
+        final dateTimes = dateRange(
+          meetupEntry.timestamps.last.startDateTime,
+          meetupEntry.timestamps.last.endDateTime,
         );
         expect(dateTimes, containsOnce(DateTime(2025, 05)));
         expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
