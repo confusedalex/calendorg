@@ -83,7 +83,7 @@ class OrgEntryCached extends OrgEntry with OrgEntryCachedMappable {
   }
 }
 
-@MappableClass(discriminatorValue: 'cached')
+@MappableClass(discriminatorValue: 'loaded')
 class OrgEntryLoaded extends OrgEntry with OrgEntryLoadedMappable {
   final OrgSection section;
   final FileInfo fileInfo;
