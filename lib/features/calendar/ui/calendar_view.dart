@@ -31,21 +31,18 @@ class CalendarView extends StatelessWidget {
     );
     String dateKey(DateTime d) => d.toIso8601String().split('T')[0];
 
-    context.read<FloatingActionButtonCubit>().changeButton(
-      FloatingActionButton(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: context.read<OrgFilesCubit>()),
-              BlocProvider(create: (context) => NewSectionCubit(null, null)),
-            ],
-            child: NewSectionDialog(dateTime: selectedDate),
-          ),
+    context.read<FloatingActionButtonCubit>().changeOnClick(() async {
+      await showDialog(
+        context: context,
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<OrgFilesCubit>()),
+            BlocProvider(create: (context) => NewSectionCubit(null, null)),
+          ],
+          child: NewSectionDialog(dateTime: selectedDate),
         ),
-        child: const Icon(Icons.add),
-      ),
-    );
+      );
+    });
 
     return Column(
       children: [

@@ -1,8 +1,9 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-class FloatingActionButtonCubit extends Cubit<FloatingActionButton?> {
+import 'package:bloc/bloc.dart';
+
+class FloatingActionButtonCubit extends Cubit<VoidCallback?> {
   FloatingActionButtonCubit() : super(null);
 
-  void changeButton(FloatingActionButton? button) => emit(button);
+  void changeOnClick(VoidCallback? function) => emit(function);
 }

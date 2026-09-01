@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<FloatingActionButtonCubit>().changeButton(null);
+    context.read<FloatingActionButtonCubit>().changeOnClick(null);
     return ListView(
       children: [
         ListTile(

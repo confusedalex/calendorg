@@ -105,8 +105,8 @@ class _HomePageState extends State<HomePage> {
       CalendarPage(DateTime.now()),
       const SettingsPage(),
     ];
-    return BlocBuilder<FloatingActionButtonCubit, FloatingActionButton?>(
-      builder: (context, buttonState) {
+    return BlocBuilder<FloatingActionButtonCubit, Function?>(
+      builder: (context, actionButtonCallback) {
         return BlocBuilder<OrgFilesCubit, OrgFilesState>(
           builder: (context, filesState) {
             return Stack(
@@ -145,7 +145,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  floatingActionButton: buttonState,
+                  floatingActionButton: actionButtonCallback != null
+                      ? FloatingActionButton(onPressed: actionButtonCallback())
+                      : null,
                 ),
               ],
             );
