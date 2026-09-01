@@ -6,7 +6,6 @@ import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
 import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
-import 'package:calendorg/features/event_view/model/event_view_bloc.dart';
 import 'package:calendorg/features/event_view/ui/event_view.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';

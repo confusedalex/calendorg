@@ -39,26 +39,6 @@ final class OrgFilesState {
 
   List<Object?> get props => [filePaths, documentsMap, entries];
 
-  List<Occurrence> occurrencesInRange(DateTimeRange window) =>
-      entries
-          .expand<Occurrence>((entry) => occurrencesFor(entry, window))
-          .toList()
-        ..sort((a, b) => a.date.compareTo(b.date));
-
-  Future<Map<String, List<Occurrence>>> occurrencesByDateInRange(
-    DateTimeRange window,
-  ) {
-    final map = Isolate.run(() {
-      final map = <String, List<Occurrence>>{};
-      for (final occurrence in occurrencesInRange(window)) {
-        final key = occurrence.date.toIso8601String().split('T')[0];
-        (map[key] ??= []).add(occurrence);
-      }
-      return map;
-    });
-    return map;
-  }
-
   OrgFilesState copyWith({
     ValueGetter<DirectoryInfo?>? directory,
     OrgFilesStatus? status,

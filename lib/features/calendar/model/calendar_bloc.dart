@@ -7,6 +7,7 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
+import '../../../entities/occurrence/occurence_getter.dart';
 import '../../../entities/occurrence/occurrence.dart';
 import '../../../entities/org_entry/org_entry.dart';
 
@@ -44,7 +45,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     _OrgFilesChanged event,
     Emitter<CalendarState> emit,
   ) async {
-    final occurrences = await _orgFilesCubit.state.occurrencesByDateInRange(
+    final occurrences = await occurrencesByDateInRange(
+      _orgFilesCubit.state.entries,
       _visibleWindowFor(state.focusedDay),
     );
     emit(state.copyWith(occurrencesByDate: occurrences));
@@ -55,7 +57,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     Emitter<CalendarState> emit,
   ) async {
     emit(state.copyWith(focusedDay: event.focusedDate));
-    final occurrences = await _orgFilesCubit.state.occurrencesByDateInRange(
+    final occurrences = await occurrencesByDateInRange(
+      _orgFilesCubit.state.entries,
       _visibleWindowFor(event.focusedDate),
     );
     emit(state.copyWith(occurrencesByDate: occurrences));
