@@ -1,11 +1,12 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 
+@immutable
 class TagColor {
-  String tag;
-  Color color;
+  final String tag;
+  final Color color;
 
-  TagColor(this.tag, this.color);
+  const TagColor(this.tag, this.color);
 
   TagColor.fromJson(Map<String, dynamic> json)
     : tag = json['tag'] as String,

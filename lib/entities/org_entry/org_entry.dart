@@ -14,13 +14,13 @@ part 'org_entry.mapper.dart';
   includeCustomMappers: [OrgTimestampMapper(), OrgPlanningEntryMapper()],
 )
 sealed class OrgEntry with OrgEntryMappable {
-  String? todoKeyword;
-  bool containsTimestampInHeadline;
-  String title;
-  List<String> tags = [];
-  List<OrgTimestamp> timestamps;
-  OrgPlanningEntry? scheduled;
-  OrgPlanningEntry? deadline;
+  final String? todoKeyword;
+  final bool containsTimestampInHeadline;
+  final String title;
+  final List<String> tags;
+  final List<OrgTimestamp> timestamps;
+  final OrgPlanningEntry? scheduled;
+  final OrgPlanningEntry? deadline;
 
   List<OrgTimestamp> get unifiedTimestamps => [
     ...timestamps,

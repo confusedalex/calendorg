@@ -14,13 +14,13 @@ final class DatePickerState {
        endTimeDuration =
            endTimeDuration ?? const TimeOfDay(hour: 12, minute: 00);
 
-  DateTime startDate;
-  DateTime? endDate;
-  bool startTimeActive;
-  TimeOfDay startTimeDuration;
-  bool endTimeActive;
-  TimeOfDay endTimeDuration;
-  bool endDateActive;
+  final DateTime startDate;
+  final DateTime? endDate;
+  final bool startTimeActive;
+  final TimeOfDay startTimeDuration;
+  final bool endTimeActive;
+  final TimeOfDay endTimeDuration;
+  final bool endDateActive;
 
   factory DatePickerState.initial(OrgTimestamp timestamp) {
     switch (timestamp) {
