@@ -19,7 +19,7 @@ class DebugPage extends StatelessWidget {
               final prefs = await SharedPreferencesAsync().getAll();
 
               if (context.mounted) {
-                showDialog(
+                await showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
                     content: SingleChildScrollView(

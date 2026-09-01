@@ -66,7 +66,7 @@ Future<void> main() async {
       test('Correct color for event will be returned', () async {
         final cubit = await getTagColorsCubit();
 
-        final schoolEvent = FakeEvent(['school']);
+        final schoolEvent = FakeEntry(['school']);
 
         expect(
           cubit.getTagColor(schoolEvent),
@@ -79,7 +79,7 @@ Future<void> main() async {
         () async {
           final cubit = await getTagColorsCubit();
 
-          final homeEvent = FakeEvent(['@home']);
+          final homeEvent = FakeEntry(['@home']);
 
           expect(cubit.getTagColor(homeEvent), isSameColorAs(Colors.blue));
         },
@@ -91,7 +91,7 @@ Future<void> main() async {
           final cubit = await getTagColorsCubit();
           cubit.addTagColor(homeTagColor);
 
-          final event = FakeEvent(['@home', 'school']);
+          final event = FakeEntry(['@home', 'school']);
 
           expect(cubit.getTagColor(event), isSameColorAs(schoolTagColor.color));
         },
@@ -118,9 +118,9 @@ Future<void> main() async {
   });
 }
 
-class FakeEvent extends Fake implements OrgEntry {
+class FakeEntry extends Fake implements OrgEntryLoaded {
   @override
   List<String> tags;
 
-  FakeEvent(this.tags);
+  FakeEntry(this.tags);
 }

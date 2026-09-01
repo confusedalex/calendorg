@@ -4,6 +4,8 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../entities/org_entry/org_entry.dart';
+
 class OrgFilePersistenceService {
   final _prefs = SharedPreferencesAsync();
 
@@ -35,6 +37,24 @@ class OrgFilePersistenceService {
       debugPrint('Error saving inbox file: $e');
       rethrow;
     }
+  }
+
+  Future<void> saveEntriesCache(List<OrgEntryLoaded> entries) async {
+    try {
+      await _prefs.setStringList(
+        'entriesCache',
+        entries.map((e) => OrgEntryCached.fromLoaded(e).toJson()).toList(),
+      );
+    } on Exception catch (e) {
+      debugPrint('Error saving entries cache: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<OrgEntryCached>?>? loadCachedOrgEntries() async {
+    final entriesCacheString = await _prefs.getStringList('entriesCache');
+
+    return entriesCacheString?.map(OrgEntryCachedMapper.fromJson).toList();
   }
 
   Future<(Set<FileInfo>, FileInfo?, DirectoryInfo?)>

@@ -30,6 +30,9 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
   }
 
   Future<void> save(OrgFilesCubit cubit) async {
+    if (state.oldEvent is OrgEntryCached) throw Error();
+    final oldEvent = state.oldEvent as OrgEntryLoaded;
+
     final replacements = <(OrgNode, OrgNode)>[];
     final titleChanged = state.oldEvent.title != state.newEvent.title;
     final timestampChanged = state.oldTimestamp != state.newTimestamp;
@@ -37,7 +40,7 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
     if (state.oldEvent.containsTimestampInHeadline) {
       if (titleChanged || timestampChanged) {
         replacements.add((
-          state.oldEvent.section.headline.title! as OrgNode,
+          oldEvent.section.headline.title! as OrgNode,
           OrgContent([OrgPlainText(state.newEvent.title), state.newTimestamp]),
         ));
       }
@@ -47,12 +50,12 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
       }
       if (titleChanged) {
         replacements.add((
-          state.oldEvent.section.headline.title! as OrgNode,
+          oldEvent.section.headline.title! as OrgNode,
           OrgContent([OrgPlainText(state.newEvent.title)]),
         ));
       }
     }
 
-    await cubit.replaceNodes(state.oldEvent.fileInfo, replacements);
+    await cubit.replaceNodes(oldEvent.fileInfo, replacements);
   }
 }

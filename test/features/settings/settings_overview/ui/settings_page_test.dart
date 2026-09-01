@@ -106,4 +106,11 @@ void main() {
   });
 }
 
-class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
+class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
+  @override
+  OrgFilesState get state =>
+      OrgFilesState.initial().copyWith(status: OrgFilesStatus.success);
+
+  @override
+  Stream<OrgFilesState> get stream => Stream.value(state);
+}

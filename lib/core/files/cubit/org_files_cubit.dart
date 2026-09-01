@@ -18,13 +18,16 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
   OrgFilesCubit(this._repository) : super(OrgFilesState.initial());
 
+  Future<void> earlyInit() async {
+    final entries = await _repository.loadCachedEntries();
+    emit(state.copyWith(entries: entries?.toList() ?? []));
+  }
+
   Future<void> init(OrgTodoStatesWithIgnored todoStates) async {
     try {
+      await earlyInit();
+
       final result = await _repository.loadInitialState(todoStates);
-      final entries = await _repository.parseAllEntries(
-        result.documentsMap,
-        todoStates.ignored,
-      );
       emit(
         OrgFilesState(
           directory: result.dirInfo,
@@ -34,13 +37,24 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           documentsMap: result.documentsMap,
           inboxFile: result.inboxFile,
           todoStates: result.todoStates,
-          entries: entries,
+          entries: state.entries,
         ),
       );
     } on Exception catch (e) {
       debugPrint('Error initializing org files: $e');
       emit(OrgFilesState.initial());
     }
+    await parseFiles();
+  }
+
+  Future<void> parseFiles() async {
+    final entries = await _repository.parseAllEntries(
+      state.documentsMap,
+      state.todoStates.ignored,
+    );
+    emit(state.copyWith(entries: entries));
+
+    await _repository.cacheOrgEntries(state.entries as List<OrgEntryLoaded>);
   }
 
   Future<void> setOrgDirectory(DirectoryInfo dirInfo) async {
@@ -133,6 +147,12 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           entries: entries,
         ),
       );
+
+      if (state.status == OrgFilesStatus.success) {
+        await _repository.cacheOrgEntries(
+          state.entries as List<OrgEntryLoaded>,
+        );
+      }
     } on Exception catch (e) {
       debugPrint('Error changing todo states: $e');
     }

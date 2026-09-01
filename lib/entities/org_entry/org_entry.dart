@@ -4,16 +4,19 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../util.dart';
+import '../planning_entry.dart';
+import '../timestamp.dart';
 
 part 'org_entry.mapper.dart';
 
-@MappableClass()
-class OrgEntry with OrgEntryMappable {
+@MappableClass(
+  discriminatorKey: 'type',
+  includeCustomMappers: [OrgTimestampMapper(), OrgPlanningEntryMapper()],
+)
+sealed class OrgEntry with OrgEntryMappable {
   String? todoKeyword;
   bool containsTimestampInHeadline;
-  OrgSection section;
   String title;
-  FileInfo fileInfo;
   List<String> tags = [];
   List<OrgTimestamp> timestamps;
   OrgPlanningEntry? scheduled;
@@ -46,13 +49,54 @@ class OrgEntry with OrgEntryMappable {
   OrgEntry({
     required this.todoKeyword,
     required this.containsTimestampInHeadline,
-    required this.section,
     required this.title,
-    required this.fileInfo,
     required this.tags,
     required this.timestamps,
     this.scheduled,
     this.deadline,
     this.description,
+  });
+}
+
+@MappableClass(discriminatorValue: 'cached')
+class OrgEntryCached extends OrgEntry with OrgEntryCachedMappable {
+  OrgEntryCached({
+    required super.todoKeyword,
+    required super.containsTimestampInHeadline,
+    required super.title,
+    required super.tags,
+    required super.timestamps,
+    required super.deadline,
+    required super.scheduled,
+  });
+
+  factory OrgEntryCached.fromLoaded(OrgEntryLoaded entry) {
+    return OrgEntryCached(
+      todoKeyword: entry.todoKeyword,
+      containsTimestampInHeadline: entry.containsTimestampInHeadline,
+      title: entry.title,
+      tags: entry.tags,
+      timestamps: entry.timestamps,
+      deadline: entry.deadline,
+      scheduled: entry.scheduled,
+    );
+  }
+}
+
+@MappableClass(discriminatorValue: 'cached')
+class OrgEntryLoaded extends OrgEntry with OrgEntryLoadedMappable {
+  final OrgSection section;
+  final FileInfo fileInfo;
+
+  OrgEntryLoaded({
+    required super.todoKeyword,
+    required super.containsTimestampInHeadline,
+    required super.title,
+    required super.tags,
+    required super.timestamps,
+    required super.deadline,
+    required super.scheduled,
+    required this.section,
+    required this.fileInfo,
   });
 }

@@ -8,12 +8,12 @@ class EventParserService {
     r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]',
   );
 
-  List<OrgEntry> parseEntriesFromDocument(
+  List<OrgEntryLoaded> parseEntriesFromDocument(
     FileInfo fileInfo,
     OrgDocument document,
     Set<String> ignoredTodoStates,
   ) {
-    final List<OrgEntry> entries = [];
+    final List<OrgEntryLoaded> entries = [];
 
     document.visitSections((section) {
       if (section.headline.keyword != null &&
@@ -29,7 +29,7 @@ class EventParserService {
     return entries;
   }
 
-  OrgEntry? _extractEventFromSection(
+  OrgEntryLoaded? _extractEventFromSection(
     OrgDocument document,
     OrgSection section,
     FileInfo fileInfo,
@@ -46,7 +46,7 @@ class EventParserService {
       return null;
     }
 
-    return OrgEntry(
+    return OrgEntryLoaded(
       todoKeyword: keyword,
       section: section,
       containsTimestampInHeadline: _containsTimestampInHeadline(section),

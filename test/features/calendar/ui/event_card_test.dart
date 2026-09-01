@@ -1,4 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -11,10 +12,8 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
-
-import '../../settings/settings_overview/ui/settings_page_test.dart';
 
 void main() {
   const markup = '''
@@ -37,20 +36,25 @@ void main() {
     DateTimeRange(start: DateTime(2025, 5), end: DateTime(2025, 5, 30)),
   ).first;
   final meetupTagColor = TagColor('meetups', Colors.pink);
-  final orgFilesCubit = OrgFilesCubit(MockOrgFilesRepository());
 
-  Future<void> initWidget(dynamic tester) async {
+  Future<void> initWidget(
+    dynamic tester, {
+    List<BlocProvider<dynamic>>? extraProviders,
+    OrgFilesCubit? customOrgFilesCubit,
+  }) async {
+    final tagColorsCubit = TagColorsCubit.withInitialValue([meetupTagColor]);
+    final todoStatesCubit = TodoStatesCubit();
+    final orgFilesCubit = customOrgFilesCubit ?? FakeOrgFilesCubit();
+
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (context) =>
-                    TagColorsCubit.withInitialValue([meetupTagColor]),
-              ),
-              BlocProvider(create: (context) => TodoStatesCubit()),
-              BlocProvider(create: (context) => orgFilesCubit),
+              BlocProvider.value(value: tagColorsCubit),
+              BlocProvider.value(value: todoStatesCubit),
+              BlocProvider.value(value: orgFilesCubit),
+              ...?extraProviders,
             ],
             child: EventCard(occurrence),
           ),
@@ -89,32 +93,9 @@ void main() {
       });
     });
     testWidgets('EventCard tap will open EventView', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) =>
-                      EventViewBloc(orgFilesCubit, entry, occurrence.timestamp),
-                ),
-                BlocProvider(create: (context) => TodoStatesCubit()),
-                BlocProvider(
-                  create: (context) =>
-                      TagColorsCubit.withInitialValue([meetupTagColor]),
-                ),
-                BlocProvider(create: (context) => orgFilesCubit),
-              ],
-              child: EventCard(occurrence),
-            ),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
+      await initWidget(tester);
 
       await tester.tap(find.byType(EventCard));
-
       await tester.pumpAndSettle();
 
       expect(find.byType(EventView), findsOneWidget);
@@ -123,3 +104,25 @@ void main() {
 }
 
 class MockFileInfo extends Mock implements FileInfo {}
+
+class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
+
+class FakeOrgFilesCubit extends OrgFilesCubit {
+  FakeOrgFilesCubit() : super(MockOrgFilesRepository()) {
+    emit(
+      OrgFilesState(
+        directory: null,
+        status: OrgFilesStatus.success,
+        errors: [],
+        filePaths: {},
+        documentsMap: {},
+        todoStates: OrgTodoStatesWithIgnored(
+          todo: ['TODO'],
+          done: ['DONE'],
+          ignored: [],
+        ),
+        entries: [],
+      ),
+    );
+  }
+}

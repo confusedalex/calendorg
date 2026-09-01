@@ -1,3 +1,5 @@
+// ignore_for_file: strict_top_level_inference
+
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +24,10 @@ class OrgFilesRepository {
   }) : _fileService = fileService,
        _persistence = persistence,
        _parserService = parserService;
+
+  Future<List<OrgEntryCached>?> loadCachedEntries() async {
+    return await _persistence.loadCachedOrgEntries();
+  }
 
   Future<InitialState> loadInitialState(
     OrgTodoStatesWithIgnored todoStates,
@@ -53,6 +59,7 @@ class OrgFilesRepository {
       inboxFile: inboxFile,
       documentsMap: documentsMap,
       todoStates: todoStates,
+      entries: [],
     );
   }
 
@@ -90,6 +97,10 @@ class OrgFilesRepository {
     return _persistence.saveInboxFile(fileInfo);
   }
 
+  Future<void> cacheOrgEntries(List<OrgEntryLoaded> entries) {
+    return _persistence.saveEntriesCache(entries);
+  }
+
   void updateTodoStates(OrgTodoStatesWithIgnored states) {
     _parserService.invalidateCache(states);
   }
@@ -113,6 +124,7 @@ class InitialState {
   final FileInfo? inboxFile;
   final Map<FileInfo, OrgDocument> documentsMap;
   final OrgTodoStatesWithIgnored todoStates;
+  final Iterable<OrgEntryCached>? entries;
 
   InitialState({
     required this.dirInfo,
@@ -120,5 +132,6 @@ class InitialState {
     required this.inboxFile,
     required this.documentsMap,
     required this.todoStates,
+    required this.entries,
   });
 }

@@ -6,6 +6,7 @@ import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../core/todo_states_cubit.dart';
 import '../../../entities/occurrence/occurrence.dart';
+import '../../../util.dart';
 import '../../event_view/model/event_view_bloc.dart';
 import '../../event_view/ui/event_view.dart';
 
@@ -15,9 +16,10 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final keyword = occurrence.entry.section.headline.keyword;
+    final filesStatus = context.read<OrgFilesCubit>().state.status;
+    final keyword = occurrence.entry.todoKeyword;
     final todoStates = context.read<TodoStatesCubit>().state;
-    final eventIsDone = todoStates.done.contains(keyword?.value);
+    final eventIsDone = todoStates.done.contains(keyword);
 
     return SizedBox(
       width: double.infinity,
@@ -44,7 +46,7 @@ class EventCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                     children: [
                       TextSpan(
-                        text: keyword == null ? '' : '${keyword.value} ',
+                        text: keyword ?? '',
                         style: keyword == null
                             ? const TextStyle()
                             : TextStyle(
@@ -90,20 +92,29 @@ class EventCard extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () => showDialog(
-            context: context,
-            builder: (_) => BlocProvider.value(
-              value: context.read<OrgFilesCubit>(),
-              child: BlocProvider(
-                create: (context) => EventViewBloc(
-                  context.read<OrgFilesCubit>(),
-                  occurrence.entry,
-                  occurrence.timestamp,
-                ),
-                child: const EventView(),
-              ),
-            ),
-          ),
+          onTap: () async {
+            switch (filesStatus) {
+              case OrgFilesStatus.loading:
+                sendError(context, "Can't edit heading before loading!");
+              case OrgFilesStatus.success:
+                await showDialog(
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<OrgFilesCubit>(),
+                    child: BlocProvider(
+                      create: (context) => EventViewBloc(
+                        context.read<OrgFilesCubit>(),
+                        occurrence.entry,
+                        occurrence.timestamp,
+                      ),
+                      child: const EventView(),
+                    ),
+                  ),
+                );
+              case OrgFilesStatus.failure:
+                sendError(context, 'Some error has occured!');
+            }
+          },
         ),
       ),
     );
