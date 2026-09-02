@@ -10,12 +10,9 @@ class CalendarPage extends StatelessWidget {
   const CalendarPage(this.initialSelectedDay, {super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<OrgFilesCubit, OrgFilesState>(
-        builder: (context, state) => BlocProvider(
-          create: (context) =>
-              CalendarBloc(initialSelectedDay, context.read<OrgFilesCubit>()),
-          child: const CalendarView(),
-        ),
-      );
+  Widget build(BuildContext context) => BlocProvider(
+    create: (context) =>
+        CalendarBloc(initialSelectedDay, context.read<OrgFilesCubit>()),
+    child: const CalendarView(),
+  );
 }
