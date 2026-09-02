@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final List pages = [
       if (kDebugMode) const DiffViewPage(),
-      todayPage(),
+      const TodayPage(),
       CalendarPage(DateTime.now()),
       const SettingsPage(),
     ];

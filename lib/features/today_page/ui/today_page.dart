@@ -5,12 +5,18 @@ import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../entities/occurrence/occurrence_getter.dart';
 import '../../calendar/ui/event_card.dart';
 
-Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
-  builder: (context, state) {
+class TodayPage extends StatelessWidget {
+  const TodayPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final entries = context.select(
+      (OrgFilesCubit cubit) => cubit.state.entries,
+    );
     final now = DateTime.now();
     final endDate = now.add(const Duration(days: 3));
     final occurrences = occurrencesInRange(
-      state.entries,
+      entries,
       DateTimeRange(start: now, end: endDate),
     );
 
@@ -29,5 +35,5 @@ Widget todayPage() => BlocBuilder<OrgFilesCubit, OrgFilesState>(
         ],
       ),
     );
-  },
-);
+  }
+}
