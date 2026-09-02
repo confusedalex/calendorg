@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
@@ -41,10 +42,12 @@ class OrgFilePersistenceService {
 
   Future<void> saveEntriesCache(List<OrgEntryLoaded> entries) async {
     try {
-      await _prefs.setStringList(
-        'entriesCache',
-        entries.map((e) => OrgEntryCached.fromLoaded(e).toJson()).toList(),
+      final cached = entries.map(OrgEntryCached.fromLoaded).toList();
+      final json = await Isolate.run(
+        () => cached.map((e) => e.toJson()).toList(),
       );
+
+      await _prefs.setStringList('entriesCache', json);
     } on Exception catch (e) {
       debugPrint('Error saving entries cache: $e');
       rethrow;
@@ -53,8 +56,11 @@ class OrgFilePersistenceService {
 
   Future<List<OrgEntryCached>?>? loadCachedOrgEntries() async {
     final entriesCacheString = await _prefs.getStringList('entriesCache');
+    if (entriesCacheString == null) return null;
 
-    return entriesCacheString?.map(OrgEntryCachedMapper.fromJson).toList();
+    return Isolate.run(
+      () => entriesCacheString.map(OrgEntryCachedMapper.fromJson).toList(),
+    );
   }
 
   Future<(Set<FileInfo>, FileInfo?, DirectoryInfo?)>
