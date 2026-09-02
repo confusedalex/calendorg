@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../core/starting_day_cubit.dart';
+import '../../../entities/occurrence/occurrence_getter.dart';
 import '../../new_section/model/new_section_cubit.dart';
 import '../../new_section/ui/new_section_dialog.dart';
 import '../model/calendar_bloc.dart';
@@ -28,8 +29,6 @@ class CalendarView extends StatelessWidget {
     final occurrencesByDate = context.select(
       (CalendarBloc bloc) => bloc.state.occurrencesByDate,
     );
-    String dateKey(DateTime d) => d.toIso8601String().split('T')[0];
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<void>(

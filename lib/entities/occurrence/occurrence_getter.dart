@@ -7,11 +7,21 @@ import 'occurrence_generator.dart';
 List<Occurrence> occurrencesInRange(
   List<OrgEntry> entries,
   DateTimeRange window,
-) =>
-    entries
-        .expand<Occurrence>((entry) => occurrencesFor(entry, window))
-        .toList()
-      ..sort((a, b) => a.date.compareTo(b.date));
+) {
+  final start = dayKeyOf(window.start);
+  final end = dayKeyOf(window.end);
+
+  return entries
+      .expand<Occurrence>((entry) => occurrencesForInDays(entry, start, end))
+      .toList()
+    ..sort((a, b) => a.date.compareTo(b.date));
+}
+
+String dateKey(DateTime date) {
+  final month = date.month.toString().padLeft(2, '0');
+  final day = date.day.toString().padLeft(2, '0');
+  return '${date.year}-$month-$day';
+}
 
 Map<String, List<Occurrence>> occurrencesByDateInRange(
   List<OrgEntry> entries,
@@ -19,8 +29,7 @@ Map<String, List<Occurrence>> occurrencesByDateInRange(
 ) {
   final map = <String, List<Occurrence>>{};
   for (final occurrence in occurrencesInRange(entries, window)) {
-    final key = occurrence.date.toIso8601String().split('T')[0];
-    (map[key] ??= []).add(occurrence);
+    (map[dateKey(occurrence.date)] ??= []).add(occurrence);
   }
   return map;
 }
