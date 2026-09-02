@@ -15,24 +15,36 @@ class EventParserService {
   ) {
     final List<OrgEntryLoaded> entries = [];
 
-    document.visitSections((section) {
-      if (section.headline.keyword != null &&
-          ignoredTodoStates.contains(section.headline.keyword?.value)) {
-        return true;
+    // Walk the tree once and carry the tags of the parent sections down.
+    // OrgSection.tagsWithInheritance searches the whole document per section,
+    // which makes the total cost quadratic.
+    void visit(OrgSection section, List<String> inheritedTags) {
+      final tags = [...inheritedTags, ...section.tags];
+
+      final isIgnored =
+          section.headline.keyword != null &&
+          ignoredTodoStates.contains(section.headline.keyword?.value);
+
+      if (!isIgnored) {
+        final event = _extractEventFromSection(section, fileInfo, tags);
+        if (event != null) entries.add(event);
       }
 
-      final event = _extractEventFromSection(document, section, fileInfo);
-      if (event != null) entries.add(event);
+      for (final child in section.sections) {
+        visit(child, tags);
+      }
+    }
 
-      return true;
-    });
+    for (final section in document.sections) {
+      visit(section, const []);
+    }
     return entries;
   }
 
   OrgEntryLoaded? _extractEventFromSection(
-    OrgDocument document,
     OrgSection section,
     FileInfo fileInfo,
+    List<String> tags,
   ) {
     final foundTimestamps = _extractTimestamps(section);
     final headline = _sanitizeHeadline(section);
@@ -52,7 +64,7 @@ class EventParserService {
       containsTimestampInHeadline: _containsTimestampInHeadline(section),
       fileInfo: fileInfo,
       title: headline,
-      tags: section.tagsWithInheritance(document),
+      tags: tags,
       timestamps: foundTimestamps,
       scheduled: planning.$1,
       deadline: planning.$2,
