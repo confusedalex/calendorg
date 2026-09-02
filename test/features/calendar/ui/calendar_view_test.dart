@@ -1,5 +1,4 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -9,6 +8,7 @@ import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/ui/calendar_view.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
+import 'package:calendorg/features/new_section/ui/new_section_dialog.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +61,6 @@ void main() {
                 BlocProvider.value(value: calendarBloc),
                 BlocProvider(create: (context) => StartingDayCubit()),
                 BlocProvider(create: (context) => TodoStatesCubit()),
-                BlocProvider(create: (context) => FloatingActionButtonCubit()),
                 BlocProvider(
                   create: (context) => TagColorsCubit.withInitialValue([
                     schoolTagColor,
@@ -180,6 +179,20 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(EventCard), findsNothing);
+    });
+
+    testWidgets('the action button opens the new section dialog', (
+      tester,
+    ) async {
+      await pumpWidgetToTester(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NewSectionDialog), findsNothing);
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NewSectionDialog), findsOneWidget);
     });
   });
 }

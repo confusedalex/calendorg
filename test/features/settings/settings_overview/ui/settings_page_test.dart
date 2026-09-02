@@ -1,6 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
-import 'package:calendorg/core/floating_action_button_cubit.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -34,7 +33,6 @@ void main() {
                 BlocProvider(create: (context) => TagColorsCubit()),
                 BlocProvider(create: (context) => TodoStatesCubit()),
                 BlocProvider(create: (context) => StartingDayCubit()),
-                BlocProvider(create: (context) => FloatingActionButtonCubit()),
               ],
               child: const SettingsPage(),
             ),

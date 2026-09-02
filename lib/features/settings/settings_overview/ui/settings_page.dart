@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
-import '../../../../core/floating_action_button_cubit.dart';
 import '../../../../core/starting_day_cubit.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../core/todo_states_cubit.dart';
@@ -19,7 +18,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<FloatingActionButtonCubit>().changeOnClick(null);
     return ListView(
       children: [
         ListTile(

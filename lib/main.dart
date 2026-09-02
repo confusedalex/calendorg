@@ -7,7 +7,6 @@ import 'core/files/services/org_file_persistence_service.dart';
 import 'core/files/services/org_file_service.dart';
 import 'core/files/services/org_files_repository.dart';
 import 'core/files/services/org_parser_service.dart';
-import 'core/floating_action_button_cubit.dart';
 import 'core/starting_day_cubit.dart';
 import 'core/tag_colors/tag_colors_cubit.dart';
 import 'core/todo_states_cubit.dart';
@@ -77,7 +76,6 @@ class Calendorg extends StatelessWidget {
                   )..init(context.read<TodoStatesCubit>().state);
                 },
               ),
-              BlocProvider(create: (context) => FloatingActionButtonCubit()),
               if (kDebugMode)
                 BlocProvider(create: (context) => DiffViewCubit()),
             ],
@@ -107,53 +105,42 @@ class _HomePageState extends State<HomePage> {
       CalendarPage(DateTime.now()),
       const SettingsPage(),
     ];
-    return BlocBuilder<FloatingActionButtonCubit, Function?>(
-      builder: (context, actionButtonCallback) {
-        return BlocBuilder<OrgFilesCubit, OrgFilesState>(
-          builder: (context, filesState) {
-            return Stack(
-              children: [
-                Scaffold(
-                  body: SafeArea(child: pages[index]),
-                  bottomNavigationBar: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (filesState.status == OrgFilesStatus.loading)
-                        const LinearProgressIndicator(),
-                      NavigationBar(
-                        onDestinationSelected: (value) => setState(() {
-                          index = value;
-                        }),
-                        selectedIndex: index,
-                        destinations: const [
-                          if (kDebugMode)
-                            NavigationDestination(
-                              icon: Icon(Icons.compare_arrows),
-                              label: 'Diff',
-                            ),
-                          NavigationDestination(
-                            icon: Icon(Icons.list),
-                            label: 'Events',
-                          ),
-                          NavigationDestination(
-                            icon: Icon(Icons.calendar_today),
-                            label: 'Calendar',
-                          ),
-                          NavigationDestination(
-                            icon: Icon(Icons.settings),
-                            label: 'Settings',
-                          ),
-                        ],
-                      ),
-                    ],
+    return BlocBuilder<OrgFilesCubit, OrgFilesState>(
+      builder: (context, filesState) {
+        return Scaffold(
+          body: SafeArea(child: pages[index]),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (filesState.status == OrgFilesStatus.loading)
+                const LinearProgressIndicator(),
+              NavigationBar(
+                onDestinationSelected: (value) => setState(() {
+                  index = value;
+                }),
+                selectedIndex: index,
+                destinations: const [
+                  if (kDebugMode)
+                    NavigationDestination(
+                      icon: Icon(Icons.compare_arrows),
+                      label: 'Diff',
+                    ),
+                  NavigationDestination(
+                    icon: Icon(Icons.list),
+                    label: 'Events',
                   ),
-                  floatingActionButton: actionButtonCallback != null
-                      ? FloatingActionButton(onPressed: actionButtonCallback())
-                      : null,
-                ),
-              ],
-            );
-          },
+                  NavigationDestination(
+                    icon: Icon(Icons.calendar_today),
+                    label: 'Calendar',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.settings),
+                    label: 'Settings',
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );
