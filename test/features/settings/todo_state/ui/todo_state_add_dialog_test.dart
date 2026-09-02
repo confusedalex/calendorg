@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../helpers/preferences.dart';
+
 void main() {
   Future<void> pumpWidgetToTester(dynamic tester) async {
     await tester.pumpWidget(
@@ -13,7 +15,9 @@ void main() {
         home: Scaffold(
           body: MultiBlocProvider(
             providers: [
-              BlocProvider(create: (context) => TodoStatesCubit()),
+              BlocProvider(
+                create: (context) => TodoStatesCubit(inMemoryPreferences()),
+              ),
               BlocProvider(create: (context) => TodoStateAddDialogCubit()),
             ],
             child: const TodoStateAddDialog(status: TodoStatus.todo),

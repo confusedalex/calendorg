@@ -15,6 +15,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
 
+import '../../../helpers/preferences.dart';
+
 void main() {
   const markup = '''
 * Heading 1
@@ -42,8 +44,11 @@ void main() {
     List<BlocProvider<dynamic>>? extraProviders,
     OrgFilesCubit? customOrgFilesCubit,
   }) async {
-    final tagColorsCubit = TagColorsCubit.withInitialValue([meetupTagColor]);
-    final todoStatesCubit = TodoStatesCubit();
+    final tagColorsCubit = TagColorsCubit.withInitialValue(
+      inMemoryPreferences(),
+      [meetupTagColor],
+    );
+    final todoStatesCubit = TodoStatesCubit(inMemoryPreferences());
     final orgFilesCubit = customOrgFilesCubit ?? FakeOrgFilesCubit();
 
     await tester.pumpWidget(

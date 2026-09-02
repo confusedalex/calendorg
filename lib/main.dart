@@ -18,23 +18,28 @@ import 'features/settings/settings_overview/ui/settings_page.dart';
 import 'features/settings/theme/model/theme_bloc.dart';
 import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
+import 'shared/config/preferences_service.dart';
 import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final todoStatesCubit = TodoStatesCubit();
+  final preferences = PreferencesService();
+  final todoStatesCubit = TodoStatesCubit(preferences);
   await todoStatesCubit.loadFromPrefs();
   final parserService = OrgParserService(todoStatesCubit.state);
   await parserService.start();
 
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => ThemeBloc()),
-        BlocProvider.value(value: todoStatesCubit),
-      ],
-      child: Calendorg(parserService: parserService),
+    RepositoryProvider.value(
+      value: preferences,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => ThemeBloc()),
+          BlocProvider.value(value: todoStatesCubit),
+        ],
+        child: Calendorg(parserService: parserService),
+      ),
     ),
   );
 }
@@ -59,17 +64,22 @@ class Calendorg extends StatelessWidget {
             providers: [
               BlocProvider(
                 create: (context) =>
-                    StartingDayCubit()..setInititalStartingDay(),
+                    StartingDayCubit(context.read<PreferencesService>())
+                      ..setInititalStartingDay(),
               ),
               BlocProvider(
-                create: (context) => TagColorsCubit()..setInitialTagColor(),
+                create: (context) =>
+                    TagColorsCubit(context.read<PreferencesService>())
+                      ..setInitialTagColor(),
               ),
               BlocProvider(
                 create: (context) {
                   return OrgFilesCubit(
                     OrgFilesRepository(
                       fileService: OrgFileService(parserService),
-                      persistence: OrgFilePersistenceService(),
+                      persistence: OrgFilePersistenceService(
+                        context.read<PreferencesService>(),
+                      ),
                       parserService: parserService,
                       eventParserService: EventParserService(),
                     ),

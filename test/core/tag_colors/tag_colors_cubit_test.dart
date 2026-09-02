@@ -3,23 +3,25 @@ import 'dart:convert';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
+import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../helpers/preferences.dart';
 
 final schoolTagColor = TagColor('school', Colors.orange);
 final homeTagColor = TagColor('@home', Colors.green);
 
 Future<void> main() async {
+  late PreferencesService prefs;
+
   Future<TagColorsCubit> getTagColorsCubit() async {
-    SharedPreferences.setMockInitialValues({
+    prefs = inMemoryPreferences({
       'tagColors': jsonEncode([schoolTagColor]),
     });
 
-    final cubit = TagColorsCubit()..setInitialTagColor();
-
-    // wait for async to finish, I don't know how to do this better :/
-    await Future.delayed(const Duration(milliseconds: 10));
+    final cubit = TagColorsCubit(prefs);
+    await cubit.setInitialTagColor();
 
     return cubit;
   }
@@ -35,11 +37,11 @@ Future<void> main() async {
       final cubit = await getTagColorsCubit();
       final newTag = TagColor('new green tag', Colors.green);
 
-      cubit.addTagColor(TagColor('new green tag', Colors.green));
-      final tagsColorsFromPrefs =
-          (jsonDecode(cubit.prefs.getString('tagColors') ?? '[]') as List)
-              .map((tagColor) => TagColor.fromJson(tagColor))
-              .toList();
+      await cubit.addTagColor(TagColor('new green tag', Colors.green));
+      final stored = await prefs.getString(PrefKeys.tagColors) ?? '[]';
+      final tagsColorsFromPrefs = (jsonDecode(stored) as List)
+          .map((tagColor) => TagColor.fromJson(tagColor))
+          .toList();
 
       expect(cubit.state, containsAll([schoolTagColor, newTag]));
       expect(tagsColorsFromPrefs, containsAll([schoolTagColor, newTag]));
@@ -49,7 +51,7 @@ Future<void> main() async {
       final cubit = await getTagColorsCubit();
       final newSchoolTag = TagColor('school', Colors.green);
 
-      cubit.addTagColor(newSchoolTag);
+      await cubit.addTagColor(newSchoolTag);
 
       expect(cubit.state, contains(newSchoolTag));
     });
@@ -57,7 +59,7 @@ Future<void> main() async {
     test('deleting tag work', () async {
       final cubit = await getTagColorsCubit();
 
-      cubit.removeTagColor(schoolTagColor.tag);
+      await cubit.removeTagColor(schoolTagColor.tag);
 
       expect(cubit.state, isEmpty);
     });
@@ -89,7 +91,7 @@ Future<void> main() async {
         'When multiple matching tags, the tag closest to index 0 gets returned',
         () async {
           final cubit = await getTagColorsCubit();
-          cubit.addTagColor(homeTagColor);
+          await cubit.addTagColor(homeTagColor);
 
           final event = FakeEntry(['@home', 'school']);
 
@@ -100,10 +102,10 @@ Future<void> main() async {
 
     test('reordering will reorder correctly', () async {
       final cubit = await getTagColorsCubit();
-      cubit.addTagColor(homeTagColor);
+      await cubit.addTagColor(homeTagColor);
 
       expect(cubit.state.first, schoolTagColor);
-      cubit.reorder(0, 1);
+      await cubit.reorder(0, 1);
       expect(cubit.state.first, homeTagColor);
     });
 

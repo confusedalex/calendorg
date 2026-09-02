@@ -16,6 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../helpers/preferences.dart';
+
 void main() {
   group('Settings Page Test', () {
     Future<void> pumpWidget(WidgetTester tester) async {
@@ -30,9 +32,15 @@ void main() {
                   create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
                 ),
                 BlocProvider(create: (context) => ThemeBloc()),
-                BlocProvider(create: (context) => TagColorsCubit()),
-                BlocProvider(create: (context) => TodoStatesCubit()),
-                BlocProvider(create: (context) => StartingDayCubit()),
+                BlocProvider(
+                  create: (context) => TagColorsCubit(inMemoryPreferences()),
+                ),
+                BlocProvider(
+                  create: (context) => TodoStatesCubit(inMemoryPreferences()),
+                ),
+                BlocProvider(
+                  create: (context) => StartingDayCubit(inMemoryPreferences()),
+                ),
               ],
               child: const SettingsPage(),
             ),

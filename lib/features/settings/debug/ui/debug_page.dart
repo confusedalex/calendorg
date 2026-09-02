@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../shared/config/preferences_service.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -16,7 +15,7 @@ class DebugPage extends StatelessWidget {
           ListTile(
             title: const Text('Show SharedPreferences'),
             onTap: () async {
-              final prefs = await SharedPreferencesAsync().getAll();
+              final prefs = await context.read<PreferencesService>().getAll();
 
               if (context.mounted) {
                 await showDialog(

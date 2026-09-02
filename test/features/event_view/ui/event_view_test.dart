@@ -14,6 +14,8 @@ import 'package:org_parser/org_parser.dart';
 
 import '../../settings/settings_overview/ui/settings_page_test.dart';
 
+import '../../../helpers/preferences.dart';
+
 void main() {
   const markup = '''
 * orgmode meetup :meetups:
@@ -36,8 +38,10 @@ void main() {
           body: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) =>
-                    TagColorsCubit.withInitialValue([meetupTagColor]),
+                create: (context) => TagColorsCubit.withInitialValue(
+                  inMemoryPreferences(),
+                  [meetupTagColor],
+                ),
               ),
               BlocProvider(
                 create: (context) =>

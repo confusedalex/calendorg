@@ -2,27 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../entities/org_entry/org_entry.dart';
+import '../../shared/config/preferences_service.dart';
 import 'tag_color.dart';
 
 class TagColorsCubit extends Cubit<List<TagColor>> {
-  late final SharedPreferences prefs;
+  TagColorsCubit(this._prefs) : super([]);
+  TagColorsCubit.withInitialValue(this._prefs, super.initialState);
 
-  TagColorsCubit() : super([]);
-  TagColorsCubit.withInitialValue(super.initialState) {
-    loadPrefs();
-  }
-
-  Future<void> loadPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-  }
+  final PreferencesService _prefs;
 
   Future<List<TagColor>> loadTags() async {
     try {
-      prefs = await SharedPreferences.getInstance();
-      return (jsonDecode(prefs.getString('tagColors') ?? '[]') as List)
+      final stored = await _prefs.getString(PrefKeys.tagColors) ?? '[]';
+      return (jsonDecode(stored) as List)
           .map((tagColor) => TagColor.fromJson(tagColor))
           .toList();
     } on Exception {
@@ -44,7 +37,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
 
   Future<void> saveTagsToPrefs(List<TagColor> tagColors) async {
     emit(tagColors);
-    await prefs.setString('tagColors', jsonEncode(tagColors));
+    await _prefs.setString(PrefKeys.tagColors, jsonEncode(tagColors));
   }
 
   Future<void> addTagColor(TagColor tagColor) async {
@@ -63,7 +56,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
     return state
         .firstWhere(
           (tagColor) => tagColor.tag == tagName,
-          orElse: () => TagColor('', Colors.blue),
+          orElse: () => const TagColor('', Colors.blue),
         )
         .color;
   }
@@ -71,7 +64,7 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
   Color getTagColor(OrgEntry event) => state
       .firstWhere(
         (tagColor) => event.tags.contains(tagColor.tag),
-        orElse: () => TagColor('', Colors.blue),
+        orElse: () => const TagColor('', Colors.blue),
       )
       .color;
 }

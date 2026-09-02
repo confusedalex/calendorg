@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../entities/todo_states/todo_states.dart';
 import '../entities/todo_states/todo_states_ignored.dart';
+import '../shared/config/preferences_service.dart';
 
 final defaultTodoStates = OrgTodoStatesWithIgnored(
   todo: ['TODO'],
@@ -14,19 +13,20 @@ final defaultTodoStates = OrgTodoStatesWithIgnored(
 );
 
 class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
-  TodoStatesCubit() : super(defaultTodoStates);
+  TodoStatesCubit(this._prefs) : super(defaultTodoStates);
+
+  final PreferencesService _prefs;
 
   Future<void> loadFromPrefs() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
       final List<String> todo = List.from(
-        jsonDecode(prefs.getString('todoStates') ?? '[]'),
+        jsonDecode(await _prefs.getString(PrefKeys.todoStates) ?? '[]'),
       );
       final List<String> done = List.from(
-        jsonDecode(prefs.getString('doneStates') ?? '[]'),
+        jsonDecode(await _prefs.getString(PrefKeys.doneStates) ?? '[]'),
       );
       final List<String> ignored = List.from(
-        jsonDecode(prefs.getString('ignoredStates') ?? '[]'),
+        jsonDecode(await _prefs.getString(PrefKeys.ignoredStates) ?? '[]'),
       );
 
       final states = todo.isEmpty && done.isEmpty
@@ -100,10 +100,9 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
 
   Future<void> saveToPrefs() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('todoStates', jsonEncode(state.todo));
-      await prefs.setString('doneStates', jsonEncode(state.done));
-      await prefs.setString('ignoredStates', jsonEncode(state.ignored));
+      await _prefs.setString(PrefKeys.todoStates, jsonEncode(state.todo));
+      await _prefs.setString(PrefKeys.doneStates, jsonEncode(state.done));
+      await _prefs.setString(PrefKeys.ignoredStates, jsonEncode(state.ignored));
     } on Exception catch (e) {
       debugPrint('Error saving todo states: $e');
     }

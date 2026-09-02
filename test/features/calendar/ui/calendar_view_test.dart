@@ -18,6 +18,8 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/src/widgets/format_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../helpers/preferences.dart';
+
 void main() {
   group('CalendarWidget', () {
     const markup = '''
@@ -59,14 +61,17 @@ void main() {
               providers: [
                 BlocProvider.value(value: orgFilesCubit),
                 BlocProvider.value(value: calendarBloc),
-                BlocProvider(create: (context) => StartingDayCubit()),
-                BlocProvider(create: (context) => TodoStatesCubit()),
                 BlocProvider(
-                  create: (context) => TagColorsCubit.withInitialValue([
-                    schoolTagColor,
-                    homeTagColor,
-                    workTagColor,
-                  ]),
+                  create: (context) => StartingDayCubit(inMemoryPreferences()),
+                ),
+                BlocProvider(
+                  create: (context) => TodoStatesCubit(inMemoryPreferences()),
+                ),
+                BlocProvider(
+                  create: (context) => TagColorsCubit.withInitialValue(
+                    inMemoryPreferences(),
+                    [schoolTagColor, homeTagColor, workTagColor],
+                  ),
                 ),
               ],
               child: const CalendarView(),

@@ -5,7 +5,8 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../helpers/preferences.dart';
 
 final schoolTagColor = TagColor('school', Colors.orange);
 
@@ -14,8 +15,9 @@ void main() {
     late TagColorsCubit cubit;
 
     setUp(() {
-      SharedPreferences.setMockInitialValues({});
-      cubit = TagColorsCubit.withInitialValue([schoolTagColor]);
+      cubit = TagColorsCubit.withInitialValue(inMemoryPreferences(), [
+        schoolTagColor,
+      ]);
     });
 
     Future<void> pumpWidgetToTester(

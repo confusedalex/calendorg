@@ -5,21 +5,18 @@ import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
-import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+
+import '../../../helpers/preferences.dart';
 
 void main() {
   late OrgFilePersistenceService service;
-  late SharedPreferencesAsync prefs;
+  late PreferencesService prefs;
 
   setUp(() {
-    SharedPreferencesAsyncPlatform.instance =
-        InMemorySharedPreferencesAsync.empty();
-
-    service = OrgFilePersistenceService();
-    prefs = SharedPreferencesAsync();
+    prefs = inMemoryPreferences();
+    service = OrgFilePersistenceService(prefs);
   });
 
   group('OrgFilePersistenceService', () {
@@ -33,7 +30,7 @@ void main() {
         await service.saveFileList(fileInfos);
 
         expect(
-          await prefs.getStringList('agendaFiles'),
+          await prefs.getStringList(PrefKeys.agendaFiles),
           equals(fileInfos.map((e) => e.fileName).toList()),
         );
       });
@@ -45,7 +42,7 @@ void main() {
         await service.saveDirectory(directoryInfo);
 
         expect(
-          await prefs.getString('agendaDirectory'),
+          await prefs.getString(PrefKeys.agendaDirectory),
           jsonEncode(directoryInfo),
         );
       });
@@ -56,7 +53,7 @@ void main() {
 
         await service.saveInboxFile(inboxFile);
 
-        expect(await prefs.getString('inboxFile'), 'inbox.org');
+        expect(await prefs.getString(PrefKeys.inboxFile), 'inbox.org');
       });
     });
     group('saveEntriesCache()', () {
@@ -75,7 +72,7 @@ void main() {
         await service.saveEntriesCache(entries);
 
         expect(
-          await prefs.getStringList('entriesCache'),
+          await prefs.getStringList(PrefKeys.entriesCache),
           entries.map((e) => OrgEntryCached.fromLoaded(e).toJson()).toList(),
         );
       });

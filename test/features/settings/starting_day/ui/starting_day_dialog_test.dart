@@ -3,18 +3,16 @@ import 'package:calendorg/features/settings/starting_day/ui/starting_day_dialog.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
-import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../../../../helpers/preferences.dart';
 
 void main() {
   group('starting_day_dialog_test', () {
     late StartingDayCubit cubit;
 
     setUp(() {
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
-      cubit = StartingDayCubit()
+      cubit = StartingDayCubit(inMemoryPreferences())
         ..changeStartingDayOfWeek(StartingDayOfWeek.friday);
     });
 
