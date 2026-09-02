@@ -24,7 +24,10 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     );
     on<_OrgFilesChanged>(_onOrgFilesChanged, transformer: restartable());
 
-    _orgFilesSub = _orgFilesCubit.stream.listen((_) => add(_OrgFilesChanged()));
+    _orgFilesSub = _orgFilesCubit.stream
+        .map((state) => state.entries)
+        .distinct(identical)
+        .listen((_) => add(_OrgFilesChanged()));
     add(_OrgFilesChanged());
   }
   final OrgFilesCubit _orgFilesCubit;
@@ -39,10 +42,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     );
   }
 
-  void _onOrgFilesChanged(
-    _OrgFilesChanged event,
-    Emitter<CalendarState> emit,
-  ) {
+  void _onOrgFilesChanged(_OrgFilesChanged event, Emitter<CalendarState> emit) {
     final occurrences = occurrencesByDateInRange(
       _orgFilesCubit.state.entries,
       _visibleWindowFor(state.focusedDay),
