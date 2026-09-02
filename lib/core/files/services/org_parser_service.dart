@@ -3,7 +3,7 @@ import 'dart:isolate';
 import 'package:org_parser/org_parser.dart';
 import 'package:petitparser/petitparser.dart';
 
-import '../../todo_states_cubit.dart';
+import '../../../entities/todo_states/todo_states_ignored.dart';
 
 class _ParseRequest {
   final SendPort replyPort;

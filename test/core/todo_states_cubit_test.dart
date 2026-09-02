@@ -1,4 +1,5 @@
 import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/entities/todo_states/todo_states.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/test.dart';
 
@@ -12,7 +13,7 @@ void main() {
       test('adding TODO state works', () async {
         final cubit = TodoStatesCubit();
 
-        await cubit.addTodo('todo', 'TOCALL');
+        await cubit.addTodo(TodoStatus.todo, 'TOCALL');
 
         expect(cubit.state.todo, contains('TOCALL'));
       });
@@ -22,7 +23,7 @@ void main() {
 
         await Future<void>.delayed(const Duration(milliseconds: 10));
 
-        await cubit.addTodo('done', 'KILL');
+        await cubit.addTodo(TodoStatus.done, 'KILL');
 
         expect(cubit.state.done, contains('KILL'));
       });
@@ -31,8 +32,8 @@ void main() {
       test('removing TODO state works', () async {
         final cubit = TodoStatesCubit();
 
-        await cubit.addTodo('todo', 'TOCALL');
-        await cubit.removeTodo('todo', 'TOCALL');
+        await cubit.addTodo(TodoStatus.todo, 'TOCALL');
+        await cubit.removeTodo(TodoStatus.todo, 'TOCALL');
 
         expect(cubit.state.todo, isNot(contains('TOCALL')));
       });
@@ -40,8 +41,8 @@ void main() {
       test('removing DONE state works', () async {
         final cubit = TodoStatesCubit();
 
-        await cubit.addTodo('done', 'KILL');
-        await cubit.removeTodo('done', 'KILL');
+        await cubit.addTodo(TodoStatus.done, 'KILL');
+        await cubit.removeTodo(TodoStatus.done, 'KILL');
 
         expect(cubit.state.done, isNot(contains('KILL')));
       });

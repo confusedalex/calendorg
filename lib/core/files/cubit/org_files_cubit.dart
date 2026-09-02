@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/org_entry.dart';
-import '../../todo_states_cubit.dart';
+import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../services/org_files_repository.dart';
 
 part 'org_files_state.dart';

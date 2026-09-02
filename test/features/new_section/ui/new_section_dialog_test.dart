@@ -1,6 +1,6 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
 import 'package:calendorg/features/new_section/model/new_section_cubit.dart';
 import 'package:calendorg/features/new_section/ui/new_section_dialog.dart';

@@ -1,4 +1,5 @@
 import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/entities/todo_states/todo_states.dart';
 import 'package:calendorg/features/settings/todo_state/model/todo_state_add_dialog_cubit.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_state_add_dialog.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ void main() {
               BlocProvider(create: (context) => TodoStatesCubit()),
               BlocProvider(create: (context) => TodoStateAddDialogCubit()),
             ],
-            child: const TodoStateAddDialog(status: 'todo'),
+            child: const TodoStateAddDialog(status: TodoStatus.todo),
           ),
         ),
       ),

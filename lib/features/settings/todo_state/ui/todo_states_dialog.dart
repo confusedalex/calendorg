@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/todo_states_cubit.dart';
+import '../../../../entities/todo_states/todo_states.dart';
+import '../../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../model/todo_state_add_dialog_cubit.dart';
 import 'todo_state_add_dialog.dart';
@@ -25,10 +27,14 @@ class TodoStatesDialog extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  ...['todo', 'done', 'ignored'].mapIndexed(
+                  ...[
+                    TodoStatus.todo,
+                    TodoStatus.done,
+                    TodoStatus.ignored,
+                  ].mapIndexed(
                     (index, status) => Column(
                       children: [
-                        Text(status.toUpperCase(), textAlign: TextAlign.start),
+                        Text(status.name, textAlign: TextAlign.start),
                         const Divider(),
                         Wrap(
                           children: [

@@ -1,5 +1,3 @@
-// ignore_for_file: strict_top_level_inference
-
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -7,7 +5,7 @@ import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/event_parser_service.dart';
 import '../../../entities/org_entry/org_entry.dart';
-import '../../todo_states_cubit.dart';
+import '../../../entities/todo_states/todo_states_ignored.dart';
 import 'org_file_persistence_service.dart';
 import 'org_file_service.dart';
 import 'org_parser_service.dart';

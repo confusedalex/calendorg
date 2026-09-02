@@ -11,6 +11,7 @@ import 'core/floating_action_button_cubit.dart';
 import 'core/starting_day_cubit.dart';
 import 'core/tag_colors/tag_colors_cubit.dart';
 import 'core/todo_states_cubit.dart';
+import 'entities/org_entry/event_parser_service.dart';
 import 'features/calendar/ui/calendar_page.dart';
 import 'features/diff_view/model/diff_view_cubit.dart';
 import 'features/diff_view/ui/diff_view_page.dart';
@@ -71,6 +72,7 @@ class Calendorg extends StatelessWidget {
                       fileService: OrgFileService(parserService),
                       persistence: OrgFilePersistenceService(),
                       parserService: parserService,
+                      eventParserService: EventParserService(),
                     ),
                   )..init(context.read<TodoStatesCubit>().state);
                 },
