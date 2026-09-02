@@ -27,7 +27,6 @@ void main() {
     blocTest(
       'Changing CalendarFormat works',
       build: () => bloc,
-      skip: 1,
       act: (bloc) =>
           bloc.add(CalendarChangeFormat(calendarFormat: CalendarFormat.week)),
       expect: () => [
@@ -42,7 +41,6 @@ void main() {
     blocTest(
       'Changing selected Day works',
       build: () => bloc,
-      skip: 1,
       act: (bloc) => bloc.add(
         CalendarChangeSelectedDateEvent(selectedDate: DateTime(2025, 05, 16)),
       ),

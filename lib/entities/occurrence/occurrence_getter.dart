@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:flutter/material.dart';
 
 import '../org_entry/org_entry.dart';
@@ -15,17 +13,14 @@ List<Occurrence> occurrencesInRange(
         .toList()
       ..sort((a, b) => a.date.compareTo(b.date));
 
-Future<Map<String, List<Occurrence>>> occurrencesByDateInRange(
+Map<String, List<Occurrence>> occurrencesByDateInRange(
   List<OrgEntry> entries,
   DateTimeRange window,
 ) {
-  final map = Isolate.run(() {
-    final map = <String, List<Occurrence>>{};
-    for (final occurrence in occurrencesInRange(entries, window)) {
-      final key = occurrence.date.toIso8601String().split('T')[0];
-      (map[key] ??= []).add(occurrence);
-    }
-    return map;
-  });
+  final map = <String, List<Occurrence>>{};
+  for (final occurrence in occurrencesInRange(entries, window)) {
+    final key = occurrence.date.toIso8601String().split('T')[0];
+    (map[key] ??= []).add(occurrence);
+  }
   return map;
 }

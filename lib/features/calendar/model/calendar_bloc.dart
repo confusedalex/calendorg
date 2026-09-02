@@ -39,23 +39,23 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     );
   }
 
-  Future<void> _onOrgFilesChanged(
+  void _onOrgFilesChanged(
     _OrgFilesChanged event,
     Emitter<CalendarState> emit,
-  ) async {
-    final occurrences = await occurrencesByDateInRange(
+  ) {
+    final occurrences = occurrencesByDateInRange(
       _orgFilesCubit.state.entries,
       _visibleWindowFor(state.focusedDay),
     );
     emit(state.copyWith(occurrencesByDate: occurrences));
   }
 
-  Future<void> _onFocusDateChanged(
+  void _onFocusDateChanged(
     CalendarChangeFocusDateEvent event,
     Emitter<CalendarState> emit,
-  ) async {
+  ) {
     emit(state.copyWith(focusedDay: event.focusedDate));
-    final occurrences = await occurrencesByDateInRange(
+    final occurrences = occurrencesByDateInRange(
       _orgFilesCubit.state.entries,
       _visibleWindowFor(event.focusedDate),
     );
