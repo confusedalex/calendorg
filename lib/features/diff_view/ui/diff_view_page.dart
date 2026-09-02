@@ -14,9 +14,9 @@ class DiffViewPage extends StatelessWidget {
     final oldText = context.select(
       (DiffViewCubit cubit) => cubit.state.oldText,
     );
-    final newText = context.select(
+    final document = context.select(
       (OrgFilesCubit bloc) =>
-          bloc.state.documentsMap.entries.firstOrNull?.value.toMarkup(),
+          bloc.state.documentsMap.entries.firstOrNull?.value,
     );
 
     if (oldText == null) {
@@ -47,7 +47,10 @@ class DiffViewPage extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      child: PrettyDiffText(oldText: oldText, newText: newText ?? 'Loading...'),
+      child: PrettyDiffText(
+        oldText: oldText,
+        newText: document?.toMarkup() ?? 'Loading...',
+      ),
     );
   }
 }
