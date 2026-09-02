@@ -57,10 +57,12 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
           ),
         );
       case TodoStatus.ignored:
-        OrgTodoStatesWithIgnored(
-          todo: state.todo,
-          done: state.done,
-          ignored: [...state.ignored, keyword],
+        emit(
+          OrgTodoStatesWithIgnored(
+            todo: state.todo,
+            done: state.done,
+            ignored: [...state.ignored, keyword],
+          ),
         );
     }
     await saveToPrefs();
