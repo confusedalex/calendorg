@@ -1,4 +1,9 @@
 # Changelog
+## Unreleased
+### Added
+- Old calendar entries show until the new ones are loaded
+### Changed
+- Reduced loading times
 ## 1.5.0 - 2026-08-25
 ### Added
 - Now occurences also load on page change in the calendar view.
