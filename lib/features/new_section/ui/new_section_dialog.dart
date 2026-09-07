@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
+import '../../../core/files/services/org_file_service.dart';
 import '../../../shared/ui/editor_dialog_shell.dart';
 import '../../../util.dart';
 import '../lib/openDatePicker.dart';
@@ -17,6 +18,9 @@ class NewSectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final filePicker = context.select(
+      (OrgFileService service) => service.filePicker,
+    );
     final title = context.select((NewSectionCubit bloc) => bloc.state.title);
     final inboxFile = context.select(
       (OrgFilesCubit bloc) => bloc.state.inboxFile,
@@ -121,13 +125,13 @@ class NewSectionDialog extends StatelessWidget {
                   if (!(bloc.formKey.currentState?.validate() ?? false)) return;
 
                   try {
-                    final oldFile = await FilePickerWritable().readFile(
+                    final oldFile = await filePicker.readFile(
                       identifier: inboxFile.identifier,
                       reader: (FileInfo fileInfo, File file) =>
                           file.readAsString(),
                     );
 
-                    await FilePickerWritable().writeFile(
+                    await filePicker.writeFile(
                       identifier: inboxFile.identifier,
                       writer: (file) => file.writeAsString(
                         '$oldFile \n* $title\n${timestamp.toMarkup()}',

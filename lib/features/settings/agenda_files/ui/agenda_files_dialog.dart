@@ -5,12 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/files/services/org_file_service.dart';
 import '../../../../l10n/calendorg_localizations.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
 class AgendaFilesDialog extends StatelessWidget {
-  List<TextButton> buttons(OrgFilesState state, BuildContext context) {
+  const AgendaFilesDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final filePaths = context.select(
+      (OrgFilesCubit cubit) => cubit.state.filePaths,
+    );
+    final filePicker = context.select(
+      (OrgFileService service) => service.filePicker,
+    );
+    final orgFilesCubit = context.read<OrgFilesCubit>();
+
     bool validateFile(FileInfo? fileInfo) {
       if (fileInfo == null || fileInfo.fileName == null) {
         sendError(
@@ -35,7 +47,6 @@ class AgendaFilesDialog extends StatelessWidget {
       );
 
       try {
-        final filePicker = FilePickerWritable();
         late final EntityInfo relative;
 
         try {
@@ -70,8 +81,7 @@ class AgendaFilesDialog extends StatelessWidget {
     }
 
     bool validateFileName(String? fileName) {
-      if (fileName == null ||
-          state.filePaths.any((it) => it.fileName == fileName)) {
+      if (fileName == null || filePaths.any((it) => it.fileName == fileName)) {
         sendError(
           context,
           CalendorgLocalizations.of(context).file_already_exists,
@@ -83,7 +93,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     Future<FileInfo?> selectGetFileInfo() async {
       try {
-        return await FilePickerWritable().openFile((fileInfo, file) async {
+        return await filePicker.openFile((fileInfo, file) async {
           return fileInfo;
         });
       } on Exception catch (e) {
@@ -96,7 +106,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     Future<FileInfo?> createGetFileInfo() async {
       try {
-        return await FilePickerWritable().openFileForCreate(
+        return await filePicker.openFileForCreate(
           writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
           fileName: 'agenda.org',
         );
@@ -108,34 +118,34 @@ class AgendaFilesDialog extends StatelessWidget {
       }
     }
 
-    Future<void> onPressed(FileInfo? fileInfo) async {
+    Future<void> onPressed(
+      OrgFilesCubit orgFilesCubit,
+      FileInfo? fileInfo,
+    ) async {
       if (!validateFile(fileInfo)) return;
       if (!(await validateFileDirectory(
         fileInfo,
-        context.read<OrgFilesCubit>().state.directory,
+        orgFilesCubit.state.directory,
       ))) {
         return;
       }
       if (!validateFileName(fileInfo?.fileName)) return;
-      context.read<OrgFilesCubit>().addFilePath(fileInfo);
+      await orgFilesCubit.addFilePath(fileInfo);
     }
 
-    return [
+    final buttons = [
       TextButton(
-        onPressed: () async => onPressed(await selectGetFileInfo()),
+        onPressed: () async =>
+            onPressed(orgFilesCubit, await selectGetFileInfo()),
         child: Text(CalendorgLocalizations.of(context).select_file),
       ),
       TextButton(
-        onPressed: () async => onPressed(await createGetFileInfo()),
+        onPressed: () async =>
+            onPressed(orgFilesCubit, await createGetFileInfo()),
         child: Text(CalendorgLocalizations.of(context).create_file),
       ),
     ];
-  }
 
-  const AgendaFilesDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
     return DialogShell(
       title: CalendorgLocalizations.of(context).agenda_files,
       titleIcon: Icons.file_copy,
@@ -155,15 +165,14 @@ class AgendaFilesDialog extends StatelessWidget {
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),
-                  onPressed: () =>
-                      context.read<OrgFilesCubit>().removeFilePath(fileInfo),
+                  onPressed: () => orgFilesCubit.removeFilePath(fileInfo),
                 ),
               );
             },
           ),
         ),
       ),
-      actions: buttons(context.read<OrgFilesCubit>().state, context),
+      actions: buttons,
     );
   }
 }

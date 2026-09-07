@@ -1,8 +1,8 @@
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/files/services/org_file_service.dart';
 import '../../../../util.dart';
 import 'agenda_files_dialog.dart';
 
@@ -11,6 +11,10 @@ class AgendaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final filePicker = context.select(
+      (OrgFileService service) => service.filePicker,
+    );
+
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<OrgFilesCubit, OrgFilesState>(
@@ -25,7 +29,7 @@ class AgendaPage extends StatelessWidget {
               ),
               onTap: () async {
                 try {
-                  final dirInfo = await FilePickerWritable().openDirectory();
+                  final dirInfo = await filePicker.openDirectory();
 
                   if (dirInfo == null) throw Error();
                   if (context.mounted) {
@@ -51,7 +55,7 @@ class AgendaPage extends StatelessWidget {
               ),
               onTap: () async {
                 try {
-                  final fileInfo = await FilePickerWritable().openFile((
+                  final fileInfo = await filePicker.openFile((
                     fileInfo,
                     file,
                   ) async {
@@ -64,11 +68,10 @@ class AgendaPage extends StatelessWidget {
                       fileInfo.fileName is String) {
                     return;
                   }
-                  final relative = await FilePickerWritable()
-                      .resolveRelativePath(
-                        directoryIdentifier: state.directory!.identifier,
-                        relativePath: fileInfo.fileName!,
-                      );
+                  final relative = await filePicker.resolveRelativePath(
+                    directoryIdentifier: state.directory!.identifier,
+                    relativePath: fileInfo.fileName!,
+                  );
                   final isSameFile = relative.uri == fileInfo.uri;
                   if (!isSameFile) {
                     sendError(

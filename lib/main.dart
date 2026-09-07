@@ -29,16 +29,23 @@ void main() async {
   await todoStatesCubit.loadFromPrefs();
   final parserService = OrgParserService(todoStatesCubit.state);
   await parserService.start();
+  final fileService = OrgFileService(parserService);
 
   runApp(
-    RepositoryProvider.value(
-      value: preferences,
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: preferences),
+        RepositoryProvider.value(value: fileService),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => ThemeBloc()),
           BlocProvider.value(value: todoStatesCubit),
         ],
-        child: Calendorg(parserService: parserService),
+        child: Calendorg(
+          parserService: parserService,
+          fileService: fileService,
+        ),
       ),
     ),
   );
@@ -46,8 +53,13 @@ void main() async {
 
 class Calendorg extends StatelessWidget {
   final OrgParserService parserService;
+  final OrgFileService fileService;
 
-  const Calendorg({super.key, required this.parserService});
+  const Calendorg({
+    super.key,
+    required this.parserService,
+    required this.fileService,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +88,10 @@ class Calendorg extends StatelessWidget {
                 create: (context) {
                   return OrgFilesCubit(
                     OrgFilesRepository(
-                      fileService: OrgFileService(parserService),
+                      fileService: fileService,
                       persistence: OrgFilePersistenceService(
                         context.read<PreferencesService>(),
+                        fileService,
                       ),
                       parserService: parserService,
                       eventParserService: EventParserService(),

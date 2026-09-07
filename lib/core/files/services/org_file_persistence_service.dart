@@ -5,11 +5,12 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../shared/config/preferences_service.dart';
+import 'org_file_service.dart';
 
 class OrgFilePersistenceService {
-  OrgFilePersistenceService(this._prefs);
-
+  OrgFilePersistenceService(this._prefs, this._fileService);
   final PreferencesService _prefs;
+  final OrgFileService _fileService;
 
   Future<void> saveDirectory(DirectoryInfo directoryInfo) async {
     try {
@@ -92,7 +93,7 @@ class OrgFilePersistenceService {
       }
 
       final FileInfo? inboxFile = inboxName != null
-          ? (await FilePickerWritable().resolveRelativePath(
+          ? (await _fileService.filePicker.resolveRelativePath(
                   directoryIdentifier: dirInfo.identifier,
                   relativePath: inboxName,
                 ))
@@ -102,7 +103,7 @@ class OrgFilePersistenceService {
       final Set<FileInfo> fileInfos = filesString != null
           ? (await Future.wait(
               filesString.whereType<String>().map(
-                (s) => FilePickerWritable().resolveRelativePath(
+                (s) => _fileService.filePicker.resolveRelativePath(
                   directoryIdentifier: dirInfo.identifier,
                   relativePath: s,
                 ),

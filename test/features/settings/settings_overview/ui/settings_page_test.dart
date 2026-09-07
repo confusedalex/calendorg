@@ -1,5 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
+import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -22,27 +24,29 @@ void main() {
   group('Settings Page Test', () {
     Future<void> pumpWidget(WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
-          supportedLocales: CalendorgLocalizations.supportedLocales,
-          home: Scaffold(
-            body: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
-                ),
-                BlocProvider(create: (context) => ThemeBloc()),
-                BlocProvider(
-                  create: (context) => TagColorsCubit(inMemoryPreferences()),
-                ),
-                BlocProvider(
-                  create: (context) => TodoStatesCubit(inMemoryPreferences()),
-                ),
-                BlocProvider(
-                  create: (context) => StartingDayCubit(inMemoryPreferences()),
-                ),
-              ],
-              child: const SettingsPage(),
+        RepositoryProvider(
+          create: (context) => OrgFileService(OrgParserService()),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
+              ),
+              BlocProvider(create: (context) => ThemeBloc()),
+              BlocProvider(
+                create: (context) => TagColorsCubit(inMemoryPreferences()),
+              ),
+              BlocProvider(
+                create: (context) => TodoStatesCubit(inMemoryPreferences()),
+              ),
+              BlocProvider(
+                create: (context) => StartingDayCubit(inMemoryPreferences()),
+              ),
+            ],
+            child: MaterialApp(
+              localizationsDelegates:
+                  CalendorgLocalizations.localizationsDelegates,
+              supportedLocales: CalendorgLocalizations.supportedLocales,
+              home: const Scaffold(body: SettingsPage()),
             ),
           ),
         ),

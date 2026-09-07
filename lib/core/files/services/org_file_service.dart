@@ -8,13 +8,13 @@ import 'org_parser_service.dart';
 
 class OrgFileService {
   final OrgParserService _parserService;
-  final _filePicker = FilePickerWritable();
+  final filePicker = FilePickerWritable();
 
   OrgFileService(this._parserService);
 
   Future<OrgDocument> documentByIdentifier(String identifier) async {
     try {
-      final content = await _filePicker.readFile(
+      final content = await filePicker.readFile(
         identifier: identifier,
         reader: (fileInfo, file) => file.readAsString(),
       );
@@ -27,7 +27,7 @@ class OrgFileService {
 
   Future<void> saveDocument(String fileIdentifier, OrgDocument document) async {
     try {
-      await _filePicker.writeFile(
+      await filePicker.writeFile(
         identifier: fileIdentifier,
         writer: (file) =>
             file.writeAsString(document.toMarkup(), mode: FileMode.writeOnly),

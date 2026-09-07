@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
+import 'package:calendorg/core/files/services/org_file_service.dart';
+import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
+import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../helpers/preferences.dart';
@@ -16,7 +18,10 @@ void main() {
 
   setUp(() {
     prefs = inMemoryPreferences();
-    service = OrgFilePersistenceService(prefs);
+    service = OrgFilePersistenceService(
+      prefs,
+      OrgFileService(OrgParserService()),
+    );
   });
 
   group('OrgFilePersistenceService', () {
