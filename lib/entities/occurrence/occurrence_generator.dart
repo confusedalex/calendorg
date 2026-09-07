@@ -17,7 +17,6 @@ DayKey _dayKeyOfOrgDate(OrgDate date) =>
 DateTime _dateOfDayKey(DayKey key) =>
     DateTime(key ~/ 10000, key ~/ 100 % 100, key % 100);
 
-/// The day of a timestamp that is not a date range.
 DayKey? _dayKeyOfTimestamp(OrgTimestamp timestamp) => switch (timestamp) {
   OrgSimpleTimestamp() => _dayKeyOfOrgDate(timestamp.date),
   OrgTimeRangeTimestamp() => _dayKeyOfOrgDate(timestamp.date),
@@ -27,8 +26,6 @@ DayKey? _dayKeyOfTimestamp(OrgTimestamp timestamp) => switch (timestamp) {
 List<Occurrence> occurrencesFor(OrgEntry entry, DateTimeRange window) =>
     occurrencesForInDays(entry, dayKeyOf(window.start), dayKeyOf(window.end));
 
-/// Same as [occurrencesFor], but with the window already reduced to day keys.
-/// The caller does that once for all entries.
 List<Occurrence> occurrencesForInDays(
   OrgEntry entry,
   DayKey windowStart,

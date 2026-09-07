@@ -15,9 +15,6 @@ class EventParserService {
   ) {
     final List<OrgEntryLoaded> entries = [];
 
-    // Walk the tree once and carry the tags of the parent sections down.
-    // OrgSection.tagsWithInheritance searches the whole document per section,
-    // which makes the total cost quadratic.
     void visit(OrgSection section, List<String> inheritedTags) {
       final tags = [...inheritedTags, ...section.tags];
 
