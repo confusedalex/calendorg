@@ -14,6 +14,9 @@ class AgendaPage extends StatelessWidget {
     final filePicker = context.select(
       (OrgFileService service) => service.filePicker,
     );
+    final validateFileDirectory = context.select(
+      (OrgFileService service) => service.validateFileDirectory,
+    );
 
     return Scaffold(
       appBar: AppBar(),
@@ -62,25 +65,16 @@ class AgendaPage extends StatelessWidget {
                     return fileInfo;
                   });
 
-                  if (fileInfo == null) return;
-                  if (state.directory == null) return;
-                  if (fileInfo.fileName == null &&
-                      fileInfo.fileName is String) {
-                    return;
-                  }
-                  final relative = await filePicker.resolveRelativePath(
-                    directoryIdentifier: state.directory!.identifier,
-                    relativePath: fileInfo.fileName!,
+                  final valid = await validateFileDirectory(
+                    context,
+                    fileInfo,
+                    state.directory,
                   );
-                  final isSameFile = relative.uri == fileInfo.uri;
-                  if (!isSameFile) {
-                    sendError(
-                      context,
-                      'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
+
+                  if (valid && context.mounted) {
+                    await context.read<OrgFilesCubit>().changeInboxFile(
+                      fileInfo!,
                     );
-                  }
-                  if (context.mounted) {
-                    context.read<OrgFilesCubit>().changeInboxFile(fileInfo);
                   }
                 } on Exception catch (e) {
                   sendError(context, 'Error loading file: {$e}');

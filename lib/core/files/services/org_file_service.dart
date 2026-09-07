@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 
+import '../../../util.dart';
 import 'org_parser_service.dart';
 
 class OrgFileService {
@@ -54,5 +56,52 @@ class OrgFileService {
 
     await saveDocument(fileIdentifier, newDoc);
     return newDoc;
+  }
+
+  Future<bool> validateFileDirectory(
+    BuildContext context,
+    FileInfo? fileInfo,
+    DirectoryInfo? dirInfo,
+  ) async {
+    if (fileInfo == null || dirInfo == null) return false;
+    if (fileInfo.fileName == null) return false;
+
+    void sendErr() => sendError(
+      context,
+      'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
+    );
+
+    try {
+      late final EntityInfo relative;
+
+      try {
+        relative = await filePicker.resolveRelativePath(
+          directoryIdentifier: dirInfo.identifier,
+          relativePath: fileInfo.fileName!,
+        );
+      } on Exception {
+        sendErr();
+        return false;
+      }
+
+      final relativeSize = await filePicker.readFile(
+        identifier: relative.identifier,
+        reader: (_, file) => file.length(),
+      );
+      final pickedSize = await filePicker.readFile(
+        identifier: fileInfo.identifier,
+        reader: (_, file) => file.length(),
+      );
+
+      final isSameFile = relativeSize == pickedSize;
+
+      if (!isSameFile) {
+        sendErr();
+      }
+
+      return isSameFile;
+    } on Exception {
+      return false;
+    }
   }
 }

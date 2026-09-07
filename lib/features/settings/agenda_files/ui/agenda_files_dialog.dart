@@ -18,6 +18,9 @@ class AgendaFilesDialog extends StatelessWidget {
     final filePaths = context.select(
       (OrgFilesCubit cubit) => cubit.state.filePaths,
     );
+    final validateFileDirectory = context.select(
+      (OrgFileService service) => service.validateFileDirectory,
+    );
     final filePicker = context.select(
       (OrgFileService service) => service.filePicker,
     );
@@ -32,52 +35,6 @@ class AgendaFilesDialog extends StatelessWidget {
         return false;
       }
       return true;
-    }
-
-    Future<bool> validateFileDirectory(
-      FileInfo? fileInfo,
-      DirectoryInfo? dirInfo,
-    ) async {
-      if (fileInfo == null || dirInfo == null) return false;
-      if (fileInfo.fileName == null) return false;
-
-      void sendErr() => sendError(
-        context,
-        'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
-      );
-
-      try {
-        late final EntityInfo relative;
-
-        try {
-          relative = await filePicker.resolveRelativePath(
-            directoryIdentifier: dirInfo.identifier,
-            relativePath: fileInfo.fileName!,
-          );
-        } on Exception {
-          sendErr();
-          return false;
-        }
-
-        final relativeSize = await filePicker.readFile(
-          identifier: relative.identifier,
-          reader: (_, file) => file.length(),
-        );
-        final pickedSize = await filePicker.readFile(
-          identifier: fileInfo.identifier,
-          reader: (_, file) => file.length(),
-        );
-
-        final isSameFile = relativeSize == pickedSize;
-
-        if (!isSameFile) {
-          sendErr();
-        }
-
-        return isSameFile;
-      } on Exception {
-        return false;
-      }
     }
 
     bool validateFileName(String? fileName) {
@@ -124,6 +81,7 @@ class AgendaFilesDialog extends StatelessWidget {
     ) async {
       if (!validateFile(fileInfo)) return;
       if (!(await validateFileDirectory(
+        context,
         fileInfo,
         orgFilesCubit.state.directory,
       ))) {
