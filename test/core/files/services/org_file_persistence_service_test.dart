@@ -13,6 +13,8 @@ import 'package:org_parser/org_parser.dart';
 import '../../../helpers/preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late OrgFilePersistenceService service;
   late PreferencesService prefs;
 

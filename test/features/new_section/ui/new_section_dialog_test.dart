@@ -1,5 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
+import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
 import 'package:calendorg/features/new_section/model/new_section_cubit.dart';
@@ -23,12 +25,15 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: orgFilesCubit),
-                BlocProvider(create: (_) => NewSectionCubit(null, null)),
-              ],
-              child: NewSectionDialog(dateTime: DateTime(2025, 5, 17)),
+            body: RepositoryProvider(
+              create: (context) => OrgFileService(OrgParserService()),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: orgFilesCubit),
+                  BlocProvider(create: (_) => NewSectionCubit(null, null)),
+                ],
+                child: NewSectionDialog(dateTime: DateTime(2025, 5, 17)),
+              ),
             ),
           ),
         ),
