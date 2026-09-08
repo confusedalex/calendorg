@@ -6,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../util.dart';
 import '../planning_entry.dart';
 import '../timestamp.dart';
+import 'org_entry_locator.dart';
 
 part 'org_entry.mapper.dart';
 
@@ -14,6 +15,7 @@ part 'org_entry.mapper.dart';
   includeCustomMappers: [OrgTimestampMapper(), OrgPlanningEntryMapper()],
 )
 sealed class OrgEntry with OrgEntryMappable {
+  final OrgEntryLocator locator;
   final String? todoKeyword;
   final bool containsTimestampInHeadline;
   final String title;
@@ -46,6 +48,7 @@ sealed class OrgEntry with OrgEntryMappable {
       .toList();
 
   OrgEntry({
+    required this.locator,
     required this.todoKeyword,
     required this.containsTimestampInHeadline,
     required this.title,
@@ -59,6 +62,7 @@ sealed class OrgEntry with OrgEntryMappable {
 @MappableClass(discriminatorValue: 'cached')
 class OrgEntryCached extends OrgEntry with OrgEntryCachedMappable {
   OrgEntryCached({
+    required super.locator,
     required super.todoKeyword,
     required super.containsTimestampInHeadline,
     required super.title,
@@ -70,6 +74,7 @@ class OrgEntryCached extends OrgEntry with OrgEntryCachedMappable {
 
   factory OrgEntryCached.fromLoaded(OrgEntryLoaded entry) {
     return OrgEntryCached(
+      locator: entry.locator,
       todoKeyword: entry.todoKeyword,
       containsTimestampInHeadline: entry.containsTimestampInHeadline,
       title: entry.title,
@@ -87,6 +92,7 @@ class OrgEntryLoaded extends OrgEntry with OrgEntryLoadedMappable {
   final FileInfo fileInfo;
 
   OrgEntryLoaded({
+    required super.locator,
     required super.todoKeyword,
     required super.containsTimestampInHeadline,
     required super.title,

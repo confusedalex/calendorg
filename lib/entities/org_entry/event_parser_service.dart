@@ -2,6 +2,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 
 import 'org_entry.dart';
+import 'org_entry_locator.dart';
 
 class EventParserService {
   static final _timestampRegExp = RegExp(
@@ -15,26 +16,21 @@ class EventParserService {
   ) {
     final List<OrgEntryLoaded> entries = [];
 
-    void visit(OrgSection section, List<String> inheritedTags) {
-      final tags = [...inheritedTags, ...section.tags];
-
+    visitSections(document, (section, ancestors, locator) {
       final isIgnored =
           section.headline.keyword != null &&
           ignoredTodoStates.contains(section.headline.keyword?.value);
+      if (isIgnored) return;
 
-      if (!isIgnored) {
-        final event = _extractEventFromSection(section, fileInfo, tags);
-        if (event != null) entries.add(event);
-      }
+      final tags = [
+        ...ancestors.expand((ancestor) => ancestor.tags),
+        ...section.tags,
+      ];
 
-      for (final child in section.sections) {
-        visit(child, tags);
-      }
-    }
+      final event = _extractEventFromSection(section, fileInfo, tags, locator);
+      if (event != null) entries.add(event);
+    });
 
-    for (final section in document.sections) {
-      visit(section, const []);
-    }
     return entries;
   }
 
@@ -42,6 +38,7 @@ class EventParserService {
     OrgSection section,
     FileInfo fileInfo,
     List<String> tags,
+    OrgEntryLocator locator,
   ) {
     final foundTimestamps = _extractTimestamps(section);
     final headline = _sanitizeHeadline(section);
@@ -57,6 +54,7 @@ class EventParserService {
 
     return OrgEntryLoaded(
       todoKeyword: keyword,
+      locator: locator,
       section: section,
       containsTimestampInHeadline: _containsTimestampInHeadline(section),
       fileInfo: fileInfo,

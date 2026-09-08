@@ -21,6 +21,7 @@ class OrgEntryMapper extends ClassMapperBase<OrgEntry> {
       ]);
       OrgEntryCachedMapper.ensureInitialized();
       OrgEntryLoadedMapper.ensureInitialized();
+      OrgEntryLocatorMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -28,6 +29,11 @@ class OrgEntryMapper extends ClassMapperBase<OrgEntry> {
   @override
   final String id = 'OrgEntry';
 
+  static OrgEntryLocator _$locator(OrgEntry v) => v.locator;
+  static const Field<OrgEntry, OrgEntryLocator> _f$locator = Field(
+    'locator',
+    _$locator,
+  );
   static String? _$todoKeyword(OrgEntry v) => v.todoKeyword;
   static const Field<OrgEntry, String> _f$todoKeyword = Field(
     'todoKeyword',
@@ -63,6 +69,7 @@ class OrgEntryMapper extends ClassMapperBase<OrgEntry> {
 
   @override
   final MappableFields<OrgEntry> fields = const {
+    #locator: _f$locator,
     #todoKeyword: _f$todoKeyword,
     #containsTimestampInHeadline: _f$containsTimestampInHeadline,
     #title: _f$title,
@@ -100,10 +107,12 @@ mixin OrgEntryMappable {
 
 abstract class OrgEntryCopyWith<$R, $In extends OrgEntry, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  OrgEntryLocatorCopyWith<$R, OrgEntryLocator, OrgEntryLocator> get locator;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get tags;
   ListCopyWith<$R, OrgTimestamp, ObjectCopyWith<$R, OrgTimestamp, OrgTimestamp>>
   get timestamps;
   $R call({
+    OrgEntryLocator? locator,
     String? todoKeyword,
     bool? containsTimestampInHeadline,
     String? title,
@@ -123,6 +132,7 @@ class OrgEntryCachedMapper extends SubClassMapperBase<OrgEntryCached> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = OrgEntryCachedMapper._());
       OrgEntryMapper.ensureInitialized().addSubMapper(_instance!);
+      OrgEntryLocatorMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -130,6 +140,11 @@ class OrgEntryCachedMapper extends SubClassMapperBase<OrgEntryCached> {
   @override
   final String id = 'OrgEntryCached';
 
+  static OrgEntryLocator _$locator(OrgEntryCached v) => v.locator;
+  static const Field<OrgEntryCached, OrgEntryLocator> _f$locator = Field(
+    'locator',
+    _$locator,
+  );
   static String? _$todoKeyword(OrgEntryCached v) => v.todoKeyword;
   static const Field<OrgEntryCached, String> _f$todoKeyword = Field(
     'todoKeyword',
@@ -164,6 +179,7 @@ class OrgEntryCachedMapper extends SubClassMapperBase<OrgEntryCached> {
 
   @override
   final MappableFields<OrgEntryCached> fields = const {
+    #locator: _f$locator,
     #todoKeyword: _f$todoKeyword,
     #containsTimestampInHeadline: _f$containsTimestampInHeadline,
     #title: _f$title,
@@ -182,6 +198,7 @@ class OrgEntryCachedMapper extends SubClassMapperBase<OrgEntryCached> {
 
   static OrgEntryCached _instantiate(DecodingData data) {
     return OrgEntryCached(
+      locator: data.dec(_f$locator),
       todoKeyword: data.dec(_f$todoKeyword),
       containsTimestampInHeadline: data.dec(_f$containsTimestampInHeadline),
       title: data.dec(_f$title),
@@ -255,12 +272,15 @@ extension OrgEntryCachedValueCopy<$R, $Out>
 abstract class OrgEntryCachedCopyWith<$R, $In extends OrgEntryCached, $Out>
     implements OrgEntryCopyWith<$R, $In, $Out> {
   @override
+  OrgEntryLocatorCopyWith<$R, OrgEntryLocator, OrgEntryLocator> get locator;
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get tags;
   @override
   ListCopyWith<$R, OrgTimestamp, ObjectCopyWith<$R, OrgTimestamp, OrgTimestamp>>
   get timestamps;
   @override
   $R call({
+    OrgEntryLocator? locator,
     String? todoKeyword,
     bool? containsTimestampInHeadline,
     String? title,
@@ -283,6 +303,9 @@ class _OrgEntryCachedCopyWithImpl<$R, $Out>
   late final ClassMapperBase<OrgEntryCached> $mapper =
       OrgEntryCachedMapper.ensureInitialized();
   @override
+  OrgEntryLocatorCopyWith<$R, OrgEntryLocator, OrgEntryLocator> get locator =>
+      $value.locator.copyWith.$chain((v) => call(locator: v));
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get tags =>
       ListCopyWith(
         $value.tags,
@@ -298,6 +321,7 @@ class _OrgEntryCachedCopyWithImpl<$R, $Out>
   );
   @override
   $R call({
+    OrgEntryLocator? locator,
     Object? todoKeyword = $none,
     bool? containsTimestampInHeadline,
     String? title,
@@ -307,6 +331,7 @@ class _OrgEntryCachedCopyWithImpl<$R, $Out>
     Object? scheduled = $none,
   }) => $apply(
     FieldCopyWithData({
+      if (locator != null) #locator: locator,
       if (todoKeyword != $none) #todoKeyword: todoKeyword,
       if (containsTimestampInHeadline != null)
         #containsTimestampInHeadline: containsTimestampInHeadline,
@@ -319,6 +344,7 @@ class _OrgEntryCachedCopyWithImpl<$R, $Out>
   );
   @override
   OrgEntryCached $make(CopyWithData data) => OrgEntryCached(
+    locator: data.get(#locator, or: $value.locator),
     todoKeyword: data.get(#todoKeyword, or: $value.todoKeyword),
     containsTimestampInHeadline: data.get(
       #containsTimestampInHeadline,
@@ -345,6 +371,7 @@ class OrgEntryLoadedMapper extends SubClassMapperBase<OrgEntryLoaded> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = OrgEntryLoadedMapper._());
       OrgEntryMapper.ensureInitialized().addSubMapper(_instance!);
+      OrgEntryLocatorMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -352,6 +379,11 @@ class OrgEntryLoadedMapper extends SubClassMapperBase<OrgEntryLoaded> {
   @override
   final String id = 'OrgEntryLoaded';
 
+  static OrgEntryLocator _$locator(OrgEntryLoaded v) => v.locator;
+  static const Field<OrgEntryLoaded, OrgEntryLocator> _f$locator = Field(
+    'locator',
+    _$locator,
+  );
   static String? _$todoKeyword(OrgEntryLoaded v) => v.todoKeyword;
   static const Field<OrgEntryLoaded, String> _f$todoKeyword = Field(
     'todoKeyword',
@@ -396,6 +428,7 @@ class OrgEntryLoadedMapper extends SubClassMapperBase<OrgEntryLoaded> {
 
   @override
   final MappableFields<OrgEntryLoaded> fields = const {
+    #locator: _f$locator,
     #todoKeyword: _f$todoKeyword,
     #containsTimestampInHeadline: _f$containsTimestampInHeadline,
     #title: _f$title,
@@ -416,6 +449,7 @@ class OrgEntryLoadedMapper extends SubClassMapperBase<OrgEntryLoaded> {
 
   static OrgEntryLoaded _instantiate(DecodingData data) {
     return OrgEntryLoaded(
+      locator: data.dec(_f$locator),
       todoKeyword: data.dec(_f$todoKeyword),
       containsTimestampInHeadline: data.dec(_f$containsTimestampInHeadline),
       title: data.dec(_f$title),
@@ -491,12 +525,15 @@ extension OrgEntryLoadedValueCopy<$R, $Out>
 abstract class OrgEntryLoadedCopyWith<$R, $In extends OrgEntryLoaded, $Out>
     implements OrgEntryCopyWith<$R, $In, $Out> {
   @override
+  OrgEntryLocatorCopyWith<$R, OrgEntryLocator, OrgEntryLocator> get locator;
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get tags;
   @override
   ListCopyWith<$R, OrgTimestamp, ObjectCopyWith<$R, OrgTimestamp, OrgTimestamp>>
   get timestamps;
   @override
   $R call({
+    OrgEntryLocator? locator,
     String? todoKeyword,
     bool? containsTimestampInHeadline,
     String? title,
@@ -521,6 +558,9 @@ class _OrgEntryLoadedCopyWithImpl<$R, $Out>
   late final ClassMapperBase<OrgEntryLoaded> $mapper =
       OrgEntryLoadedMapper.ensureInitialized();
   @override
+  OrgEntryLocatorCopyWith<$R, OrgEntryLocator, OrgEntryLocator> get locator =>
+      $value.locator.copyWith.$chain((v) => call(locator: v));
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get tags =>
       ListCopyWith(
         $value.tags,
@@ -536,6 +576,7 @@ class _OrgEntryLoadedCopyWithImpl<$R, $Out>
   );
   @override
   $R call({
+    OrgEntryLocator? locator,
     Object? todoKeyword = $none,
     bool? containsTimestampInHeadline,
     String? title,
@@ -547,6 +588,7 @@ class _OrgEntryLoadedCopyWithImpl<$R, $Out>
     FileInfo? fileInfo,
   }) => $apply(
     FieldCopyWithData({
+      if (locator != null) #locator: locator,
       if (todoKeyword != $none) #todoKeyword: todoKeyword,
       if (containsTimestampInHeadline != null)
         #containsTimestampInHeadline: containsTimestampInHeadline,
@@ -561,6 +603,7 @@ class _OrgEntryLoadedCopyWithImpl<$R, $Out>
   );
   @override
   OrgEntryLoaded $make(CopyWithData data) => OrgEntryLoaded(
+    locator: data.get(#locator, or: $value.locator),
     todoKeyword: data.get(#todoKeyword, or: $value.todoKeyword),
     containsTimestampInHeadline: data.get(
       #containsTimestampInHeadline,
