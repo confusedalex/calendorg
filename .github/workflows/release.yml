@@ -12,39 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
-          distribution: "zulu"
-          java-version: "17"
+          persist-credentials: false
 
-      - name: Setup Flutter SDK
-        uses: flutter-actions/setup-flutter@v4
+      - uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3.6.3
         with:
-          channel: stable
-          version: 3.44.0
-          cache-sdk: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build universal release
-        run: flutter build apk --release
-
-      - name: Build release
-        run: flutter build apk --release --split-per-abi
+          cache: false
+          version: 2026.09.02
+      
+      - run: mise run release
 
       - name: Rename release artifacts
         run: |
-          mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk "build/app/outputs/flutter-apk/calendorg-${{ github.ref_name }}-arm64-v8a.apk"
-          mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk build/app/outputs/flutter-apk/calendorg-${{ github.ref_name }}-armeabi-v7a.apk
-          mv build/app/outputs/flutter-apk/app-x86_64-release.apk build/app/outputs/flutter-apk/calendorg-${{ github.ref_name }}-x86_64.apk
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/calendorg-${{ github.ref_name }}-universal.apk
+          mv build/app/outputs/flutter-apk/app-arm64-v8a-release.apk "build/app/outputs/flutter-apk/calendorg-${GITHUB_REF_NAME}-arm64-v8a.apk"
+          mv build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk build/app/outputs/flutter-apk/calendorg-${GITHUB_REF_NAME}-armeabi-v7a.apk
+          mv build/app/outputs/flutter-apk/app-x86_64-release.apk build/app/outputs/flutter-apk/calendorg-${GITHUB_REF_NAME}-x86_64.apk
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/calendorg-${GITHUB_REF_NAME}-universal.apk
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           files: |
             build/app/outputs/flutter-apk/calendorg-${{ github.ref_name }}-arm64-v8a.apk
