@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/files/services/org_file_service.dart';
 import '../../../../shared/config/preferences_service.dart';
 
 class DebugPage extends StatelessWidget {
@@ -57,18 +58,29 @@ class DebugPage extends StatelessWidget {
           BlocBuilder<OrgFilesCubit, OrgFilesState>(
             builder: (context, state) => ListTile(
               title: const Text('Show loaded Documents'),
-              onTap: () => showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: state.documentsMap.entries
-                          .map((e) => Text(e.value.toMarkup()))
-                          .toList(),
+              onTap: () async {
+                final fileService = context.read<OrgFileService>();
+                await showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    content: SingleChildScrollView(
+                      child: Column(
+                        children: state.filePaths
+                            .map(
+                              (fileInfo) => FutureBuilder<String>(
+                                future: fileService.readText(
+                                  fileInfo.identifier,
+                                ),
+                                builder: (context, snapshot) =>
+                                    Text(snapshot.data ?? 'Loading...'),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
           BlocBuilder<OrgFilesCubit, OrgFilesState>(
