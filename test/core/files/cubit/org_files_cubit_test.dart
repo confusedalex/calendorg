@@ -2,7 +2,6 @@ import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:org_parser/org_parser.dart';
 import 'package:test/test.dart';
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
@@ -10,8 +9,6 @@ class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
 class FakeDirectoryInfo extends Fake implements DirectoryInfo {}
 
 class FakeFileInfo extends Fake implements FileInfo {}
-
-class FakeOrgDocument extends Fake implements OrgDocument {}
 
 void main() {
   group('OrgFilesCubit', () {
@@ -48,39 +45,31 @@ void main() {
         final repository = MockOrgFilesRepository();
         final cubit = OrgFilesCubit(repository);
 
-        when(
-          () => repository.loadDocument(any()),
-        ).thenAnswer((_) async => FakeOrgDocument());
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
-          () => repository.parseAllEntries(any(), any()),
+          () => repository.parseEntriesForFiles(any(), any()),
         ).thenAnswer((_) async => []);
+        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
 
         await cubit.addFilePath(FakeFileInfo());
 
         verify(() => repository.saveFileList(any())).called(1);
       });
-      test(
-        'should emit new state with updated file paths and documents map',
-        () async {
-          final repository = MockOrgFilesRepository();
-          final cubit = OrgFilesCubit(repository);
+      test('should emit new state with updated file paths', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = OrgFilesCubit(repository);
 
-          final fakeFileInfo = FakeFileInfo();
-          when(
-            () => repository.loadDocument(fakeFileInfo),
-          ).thenAnswer((_) async => FakeOrgDocument());
-          when(() => repository.saveFileList(any())).thenAnswer((_) async {});
-          when(
-            () => repository.parseAllEntries(any(), any()),
-          ).thenAnswer((_) async => []);
+        final fakeFileInfo = FakeFileInfo();
+        when(() => repository.saveFileList(any())).thenAnswer((_) async {});
+        when(
+          () => repository.parseEntriesForFiles(any(), any()),
+        ).thenAnswer((_) async => []);
+        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
 
-          await cubit.addFilePath(fakeFileInfo);
+        await cubit.addFilePath(fakeFileInfo);
 
-          expect(cubit.state.filePaths.contains(fakeFileInfo), isTrue);
-          expect(cubit.state.documentsMap.containsKey(fakeFileInfo), isTrue);
-        },
-      );
+        expect(cubit.state.filePaths.contains(fakeFileInfo), isTrue);
+      });
     });
     group('removeFilePath()', () {
       test('should save file list in repository', () async {
@@ -88,27 +77,31 @@ void main() {
         final cubit = OrgFilesCubit(repository);
 
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
+        when(
+          () => repository.parseEntriesForFiles(any(), any()),
+        ).thenAnswer((_) async => []);
+        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
 
         final fakeFileInfo = FakeFileInfo();
         await cubit.removeFilePath(fakeFileInfo);
 
         verify(() => repository.saveFileList(any())).called(1);
       });
-      test(
-        'should emit new state with updated file paths and documents map',
-        () async {
-          final repository = MockOrgFilesRepository();
-          final cubit = OrgFilesCubit(repository);
+      test('should emit new state with updated file paths', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = OrgFilesCubit(repository);
 
-          final fakeFileInfo = FakeFileInfo();
-          when(() => repository.saveFileList(any())).thenAnswer((_) async {});
+        final fakeFileInfo = FakeFileInfo();
+        when(() => repository.saveFileList(any())).thenAnswer((_) async {});
+        when(
+          () => repository.parseEntriesForFiles(any(), any()),
+        ).thenAnswer((_) async => []);
+        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
 
-          await cubit.removeFilePath(fakeFileInfo);
+        await cubit.removeFilePath(fakeFileInfo);
 
-          expect(cubit.state.filePaths.contains(fakeFileInfo), isFalse);
-          expect(cubit.state.documentsMap.containsKey(fakeFileInfo), isFalse);
-        },
-      );
+        expect(cubit.state.filePaths.contains(fakeFileInfo), isFalse);
+      });
     });
   });
 }

@@ -118,7 +118,6 @@ class FakeOrgFilesCubit extends OrgFilesCubit {
         directory: null,
         status: OrgFilesStatus.success,
         filePaths: {},
-        documentsMap: {},
         todoStates: OrgTodoStatesWithIgnored(
           todo: ['TODO'],
           done: ['DONE'],

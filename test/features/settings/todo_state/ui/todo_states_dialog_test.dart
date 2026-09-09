@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:org_parser/src/org/model.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
@@ -128,10 +127,11 @@ void main() {
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
   @override
-  Future<List<OrgEntry>> parseAllEntries(
-    Map<FileInfo, OrgDocument> documentsMap,
+  Future<List<OrgEntryLoaded>> parseEntriesForFiles(
+    Iterable<FileInfo> fileInfos,
     List<String> ignoredTodoStates,
-  ) async {
-    return [];
-  }
+  ) async => [];
+
+  @override
+  Future<void> cacheOrgEntries(List<OrgEntryLoaded> entries) async {}
 }

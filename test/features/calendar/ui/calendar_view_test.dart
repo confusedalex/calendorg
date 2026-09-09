@@ -71,8 +71,7 @@ void main() {
                         StartingDayCubit(inMemoryPreferences()),
                   ),
                   BlocProvider(
-                    create: (context) =>
-                        TodoStatesCubit(inMemoryPreferences()),
+                    create: (context) => TodoStatesCubit(inMemoryPreferences()),
                   ),
                   BlocProvider(
                     create: (context) => TagColorsCubit.withInitialValue(
@@ -221,7 +220,6 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
     directory: null,
     status: OrgFilesStatus.success,
     filePaths: {fileInfo},
-    documentsMap: {fileInfo: document},
     todoStates: OrgTodoStatesWithIgnored(
       todo: ['TODO'],
       done: ['DONE'],

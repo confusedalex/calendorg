@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:org_parser/org_parser.dart';
 
 void main() {
   group('NewSectionDialog', () {
@@ -76,7 +75,6 @@ class TestOrgFilesCubit extends OrgFilesCubit {
         directory: null,
         status: OrgFilesStatus.success,
         filePaths: {inboxFile},
-        documentsMap: {inboxFile: OrgDocument.parse('')},
         todoStates: OrgTodoStatesWithIgnored(
           todo: ['TODO'],
           done: ['DONE'],

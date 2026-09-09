@@ -1,7 +1,6 @@
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/event_parser_service.dart';
@@ -37,58 +36,47 @@ class OrgFilesRepository {
   ) async {
     final (fileInfos, inboxFile, dirInfo) = await _persistence
         .loadFilePreferences();
-    final fileInfosToLoad = [...fileInfos, ?inboxFile];
-    final loadedDocuments = await Future.wait(
-      fileInfosToLoad.map((fileInfo) async {
-        try {
-          final parsed = await _fileService.documentByIdentifier(
-            fileInfo.identifier,
-          );
-          return parsed.document;
-        } on Exception catch (e) {
-          debugPrint('Error loading file: $e');
-          return null;
-        }
-      }),
-    );
-    final documentsMap = Map<FileInfo, OrgDocument>.fromIterables(
-      fileInfosToLoad,
-      loadedDocuments.whereType<OrgDocument>(),
-    );
 
     return InitialState(
       dirInfo: dirInfo,
       fileInfos: fileInfos,
       inboxFile: inboxFile,
-      documentsMap: documentsMap,
       todoStates: todoStates,
-      entries: [],
+      entries: await parseEntriesForFiles([
+        ...fileInfos,
+        ?inboxFile,
+      ], todoStates.ignored),
     );
   }
 
-  Future<List<OrgEntry>> parseAllEntries(
-    Map<FileInfo, OrgDocument> documentsMap,
+  Future<List<OrgEntryLoaded>> parseEntriesForFiles(
+    Iterable<FileInfo> fileInfos,
     List<String> ignoredTodoStates,
   ) async {
-    final perFileEvents = documentsMap.entries.map((entry) {
-      final parsedEvents = _eventParserService.parseEntriesFromDocument(
-        entry.key,
-        entry.value,
-        ignoredTodoStates.toSet(),
-      );
+    final ignored = ignoredTodoStates.toSet();
+    final perFile = await Future.wait(
+      fileInfos.map((fileInfo) async {
+        try {
+          final parsed = await _fileService.documentByIdentifier(
+            fileInfo.identifier,
+          );
+          return _eventParserService.parseEntriesFromDocument(
+            fileInfo,
+            parsed.document,
+            ignored,
+          );
+        } on Exception catch (e) {
+          debugPrint('Error loading file ${fileInfo.fileName}: $e');
+          return const <OrgEntryLoaded>[];
+        }
+      }),
+    );
 
-      return parsedEvents;
-    });
-    return perFileEvents.expand((e) => e).toList();
+    return perFile.expand((entries) => entries).toList();
   }
 
   Future<void> saveDirectory(DirectoryInfo dirInfo) {
     return _persistence.saveDirectory(dirInfo);
-  }
-
-  Future<OrgDocument> loadDocument(FileInfo fileInfo) async {
-    final parsed = await _fileService.documentByIdentifier(fileInfo.identifier);
-    return parsed.document;
   }
 
   Future<void> saveFileList(Set<FileInfo> fileInfos) {
@@ -144,15 +132,13 @@ class InitialState {
   final DirectoryInfo? dirInfo;
   final Set<FileInfo> fileInfos;
   final FileInfo? inboxFile;
-  final Map<FileInfo, OrgDocument> documentsMap;
   final OrgTodoStatesWithIgnored todoStates;
-  final Iterable<OrgEntryCached>? entries;
+  final List<OrgEntryLoaded> entries;
 
   InitialState({
     required this.dirInfo,
     required this.fileInfos,
     required this.inboxFile,
-    required this.documentsMap,
     required this.todoStates,
     required this.entries,
   });

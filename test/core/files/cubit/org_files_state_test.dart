@@ -21,12 +21,6 @@ void main() {
 
         expect(cubit.state.filePaths, isEmpty);
       });
-      test('initial state should have empty documentsMap', () {
-        final repository = MockOrgFilesRepository();
-        final cubit = OrgFilesCubit(repository);
-
-        expect(cubit.state.documentsMap, isEmpty);
-      });
       test('initial state should have empty allEvents', () {
         final repository = MockOrgFilesRepository();
         final cubit = OrgFilesCubit(repository);

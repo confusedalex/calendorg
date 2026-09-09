@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
-import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/org_entry.dart';
@@ -30,27 +29,16 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           directory: result.dirInfo,
           status: OrgFilesStatus.success,
           filePaths: result.fileInfos,
-          documentsMap: result.documentsMap,
           inboxFile: result.inboxFile,
           todoStates: result.todoStates,
-          entries: state.entries,
+          entries: result.entries,
         ),
       );
+      await _repository.cacheOrgEntries(result.entries);
     } on Exception catch (e) {
       debugPrint('Error initializing org files: $e');
       emit(OrgFilesState.initial());
     }
-    await parseFiles();
-  }
-
-  Future<void> parseFiles() async {
-    final entries = await _repository.parseAllEntries(
-      state.documentsMap,
-      state.todoStates.ignored,
-    );
-    emit(state.copyWith(entries: entries));
-
-    await _repository.cacheOrgEntries(state.entries as List<OrgEntryLoaded>);
   }
 
   Future<void> setOrgDirectory(DirectoryInfo dirInfo) async {
@@ -63,26 +51,11 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     if (fileInfo == null) return;
 
     try {
-      final document = await _repository.loadDocument(fileInfo);
       final filePaths = {...state.filePaths, fileInfo};
-
       await _repository.saveFileList(filePaths);
 
-      emit(
-        state.copyWith(
-          filePaths: filePaths,
-          documentsMap: {...state.documentsMap, fileInfo: document},
-        ),
-      );
-
-      emit(
-        state.copyWith(
-          entries: await _repository.parseAllEntries(
-            state.documentsMap,
-            state.todoStates.ignored,
-          ),
-        ),
-      );
+      emit(state.copyWith(filePaths: filePaths));
+      await _reloadEntries();
     } on Exception catch (e) {
       debugPrint('Error adding file: $e');
     }
@@ -91,11 +64,10 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   Future<void> removeFilePath(FileInfo fileInfo) async {
     try {
       final filePaths = {...state.filePaths}..remove(fileInfo);
-      final documentsMap = {...state.documentsMap}..remove(fileInfo);
-
       await _repository.saveFileList(filePaths);
 
-      emit(state.copyWith(filePaths: filePaths, documentsMap: documentsMap));
+      emit(state.copyWith(filePaths: filePaths));
+      await _reloadEntries();
     } on Exception catch (e) {
       debugPrint('Error removing file: $e');
     }
@@ -105,14 +77,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     try {
       await _repository.saveInboxFile(fileInfo);
 
-      final documentsMap = {...state.documentsMap}..remove(state.inboxFile);
-
-      final document = await _repository.loadDocument(fileInfo);
-      documentsMap[fileInfo] = document;
-
-      emit(
-        state.copyWith(inboxFile: () => fileInfo, documentsMap: documentsMap),
-      );
+      emit(state.copyWith(inboxFile: () => fileInfo));
+      await _reloadEntries();
     } on Exception catch (e) {
       debugPrint('Error changing inbox file: $e');
     }
@@ -122,33 +88,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     try {
       _repository.updateTodoStates(todoStates);
 
-      final newDocuments = await Future.wait(
-        state.filePaths.map(_repository.loadDocument),
-      );
-
-      final documentsMap = Map<FileInfo, OrgDocument>.fromIterables(
-        state.filePaths,
-        newDocuments,
-      );
-
-      final entries = await _repository.parseAllEntries(
-        documentsMap,
-        todoStates.ignored,
-      );
-
-      emit(
-        state.copyWith(
-          todoStates: todoStates,
-          documentsMap: documentsMap,
-          entries: entries,
-        ),
-      );
-
-      if (state.status == OrgFilesStatus.success) {
-        await _repository.cacheOrgEntries(
-          state.entries as List<OrgEntryLoaded>,
-        );
-      }
+      emit(state.copyWith(todoStates: todoStates));
+      await _reloadEntries();
     } on Exception catch (e) {
       debugPrint('Error changing todo states: $e');
     }
@@ -159,16 +100,35 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
     try {
       await _repository.applyEdit(entry.fileInfo, entry, edit);
-
-      final document = await _repository.loadDocument(entry.fileInfo);
-      emit(
-        state.copyWith(
-          documentsMap: {...state.documentsMap, entry.fileInfo: document},
-        ),
-      );
-      await parseFiles();
+      await _reloadFile(entry.fileInfo);
     } on Exception catch (e) {
       debugPrint('Error applying edit: $e');
     }
+  }
+
+  Future<void> _reloadEntries() =>
+      _emitEntries([...state.filePaths, ?state.inboxFile], const []);
+
+  Future<void> _reloadFile(FileInfo fileInfo) => _emitEntries(
+    [fileInfo],
+    state.entries
+        .whereType<OrgEntryLoaded>()
+        .where((entry) => entry.fileInfo != fileInfo),
+  );
+
+  Future<void> _emitEntries(
+    Iterable<FileInfo> fileInfos,
+    Iterable<OrgEntryLoaded> keep,
+  ) async {
+    final entries = [
+      ...keep,
+      ...await _repository.parseEntriesForFiles(
+        fileInfos,
+        state.todoStates.ignored,
+      ),
+    ];
+
+    emit(state.copyWith(entries: entries));
+    await _repository.cacheOrgEntries(entries);
   }
 }
