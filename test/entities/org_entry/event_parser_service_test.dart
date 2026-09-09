@@ -1,20 +1,13 @@
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 
-void main() {
-  final fileInfo = FileInfo(
-    identifier: 'x',
-    persistable: false,
-    uri: 'file:///x.org',
-  );
+import '../../helpers/entries.dart';
 
+void main() {
   Map<String, List<String>> tagsByTitle(String markup, {Set<String>? ignored}) {
-    final entries = EventParserService().parseEntriesFromDocument(
-      fileInfo,
+    final entries = parseEntries(
       OrgDocument.parse(markup),
-      ignored ?? {},
+      ignored: ignored ?? {},
     );
     return {for (final entry in entries) entry.title.trim(): entry.tags};
   }

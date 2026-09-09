@@ -4,7 +4,6 @@ import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
 import 'package:calendorg/features/event_view/ui/event_view.dart';
@@ -16,6 +15,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../helpers/preferences.dart';
+
+import '../../../helpers/entries.dart';
 
 void main() {
   const markup = '''
@@ -30,9 +31,7 @@ void main() {
 <2025-05-27>
 ''';
   final document = OrgDocument.parse(markup);
-  final entry = EventParserService()
-      .parseEntriesFromDocument(MockFileInfo(), document, {})
-      .first;
+  final entry = parseEntries(document).first;
   final occurrence = occurrencesFor(
     entry,
     DateTimeRange(start: DateTime(2025, 5), end: DateTime(2025, 5, 30)),

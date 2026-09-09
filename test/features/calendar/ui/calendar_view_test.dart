@@ -5,7 +5,6 @@ import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
 import 'package:calendorg/features/calendar/ui/calendar_view.dart';
@@ -21,6 +20,8 @@ import 'package:table_calendar/src/widgets/format_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../helpers/preferences.dart';
+
+import '../../../helpers/entries.dart';
 
 void main() {
   group('CalendarWidget', () {
@@ -226,11 +227,7 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
       done: ['DONE'],
       ignored: [],
     ),
-    entries: EventParserService().parseEntriesFromDocument(
-      fileInfo,
-      document,
-      {},
-    ),
+    entries: parseEntries(document),
   );
 
   @override

@@ -1,10 +1,11 @@
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:petitparser/petitparser.dart';
+
+import 'helpers/entries.dart';
 
 void main() {
   const markup = '''
@@ -37,11 +38,7 @@ CLOSED: [2026-04-24 Fri 11:25]
 :END:
 ''';
   final document = OrgDocument.parse(markup);
-  final entries = EventParserService().parseEntriesFromDocument(
-    MockFileInfo(),
-    document,
-    {},
-  );
+  final entries = parseEntries(document);
   final meetupEntry = entries.first;
 
   group('Util', () {
@@ -60,11 +57,7 @@ CLOSED: [2026-04-24 Fri 11:25]
 DEADLINE: <2025-05-04>
 ''';
       final document = OrgDocument.parse(markup);
-      final events = EventParserService().parseEntriesFromDocument(
-        MockFileInfo(),
-        document,
-        {},
-      );
+      final events = parseEntries(document);
 
       expect(events.first.deadline, isNotNull);
     });
@@ -266,11 +259,7 @@ DEADLINE: <2025-05-04>
           ],
         ).build();
         final document = parser.parse(markup).value as OrgDocument;
-        final events = EventParserService().parseEntriesFromDocument(
-          MockFileInfo(),
-          document,
-          {'OTHER'},
-        );
+        final events = parseEntries(document, ignored: {'OTHER'});
 
         expect(events.length, equals(1));
       });
@@ -294,11 +283,7 @@ DEADLINE: <2025-05-04>
           ],
         ).build();
         final document = parser.parse(markup).value as OrgDocument;
-        final events = EventParserService().parseEntriesFromDocument(
-          MockFileInfo(),
-          document,
-          {'OTHER'},
-        );
+        final events = parseEntries(document, ignored: {'OTHER'});
 
         expect(events.length, equals(3));
       });

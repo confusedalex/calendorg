@@ -1,8 +1,9 @@
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
+
+import '../../helpers/entries.dart';
 
 void main() {
   const markup = '''
@@ -14,9 +15,7 @@ void main() {
 <2025-05-01>--<2025-05-03>
 ''';
   final document = OrgDocument.parse(markup);
-  final entry = EventParserService()
-      .parseEntriesFromDocument(MockFileInfo(), document, {})
-      .first;
+  final entry = parseEntries(document).first;
 
   group('Events', () {
     test('All DateTimes found from event', () {
