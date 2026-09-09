@@ -1,19 +1,15 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
+import 'package:calendorg/entities/org_entry/entry_edit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/features/event_view/model/event_view_bloc.dart';
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:test/test.dart';
 
-class MockOrgFilesCubit extends Mock implements OrgFilesCubit {}
+import '../../../helpers/entries.dart';
 
-class FakeFileInfo extends Fake implements FileInfo {
-  @override
-  String get identifier => 'MockIdentifier';
-}
+class MockOrgFilesCubit extends Mock implements OrgFilesCubit {}
 
 void main() {
   final newTimestamp = OrgSimpleTimestamp(
@@ -28,18 +24,16 @@ void main() {
   late MockOrgFilesCubit orgFilesCubit;
 
   setUpAll(() {
-    registerFallbackValue(FakeFileInfo());
+    registerFallbackValue(
+      parseEntries(OrgDocument.parse('* Fallback <2025-01-01>')).first,
+    );
+    registerFallbackValue(const EntryEdit());
   });
 
   setUp(() {
     orgFilesCubit = MockOrgFilesCubit();
-    when(
-      () => orgFilesCubit.replaceNodes(any(), any()),
-    ).thenAnswer((_) async {});
-    final document = OrgDocument.parse('* Math exam <2025-05-15>');
-    entry = EventParserService()
-        .parseEntriesFromDocument(FakeFileInfo(), document, {})
-        .first;
+    when(() => orgFilesCubit.applyEdit(any(), any())).thenAnswer((_) async {});
+    entry = parseEntries(OrgDocument.parse('* Math exam <2025-05-15>')).first;
     timestamp = entry.timestamps.first;
   });
 
@@ -74,15 +68,11 @@ void main() {
       'emits correct timestamp when Timestamp is changed',
       build: () => EventViewBloc(
         orgFilesCubit,
-        EventParserService()
-            .parseEntriesFromDocument(
-              FakeFileInfo(),
-              OrgDocument.parse('''
+        parseEntries(
+          OrgDocument.parse('''
 * Math Exam
 <2025-10-10>'''),
-              {},
-            )
-            .first,
+        ).first,
         timestamp,
       ),
       act: (bloc) => bloc.add(EventViewChangeTimestamp(newTimestamp)),
@@ -104,7 +94,7 @@ void main() {
         bloc.add(EventViewSaveEvent());
       },
       verify: (bloc) {
-        verify(() => orgFilesCubit.replaceNodes(any(), any())).called(1);
+        verify(() => orgFilesCubit.applyEdit(any(), any())).called(1);
       },
     );
 

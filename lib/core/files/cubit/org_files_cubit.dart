@@ -3,6 +3,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 
+import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../services/org_files_repository.dart';
@@ -153,27 +154,21 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     }
   }
 
-  Future<void> replaceNodes(
-    FileInfo fileInfo,
-    List<(OrgNode, OrgNode)> replacements,
-  ) async {
+  Future<void> applyEdit(OrgEntry entry, EntryEdit edit) async {
+    if (entry is! OrgEntryLoaded) return;
+
     try {
-      final oldDocument = state.documentsMap[fileInfo];
-      if (oldDocument == null) return;
+      await _repository.applyEdit(entry.fileInfo, entry, edit);
 
-      final newDocument = await _repository.replaceNodesAndSave(
-        fileInfo,
-        oldDocument,
-        replacements,
-      );
-
+      final document = await _repository.loadDocument(entry.fileInfo);
       emit(
         state.copyWith(
-          documentsMap: {...state.documentsMap, fileInfo: newDocument},
+          documentsMap: {...state.documentsMap, entry.fileInfo: document},
         ),
       );
+      await parseFiles();
     } on Exception catch (e) {
-      debugPrint('Error replacing nodes: $e');
+      debugPrint('Error applying edit: $e');
     }
   }
 }

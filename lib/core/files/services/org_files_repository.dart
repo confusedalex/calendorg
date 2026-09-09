@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:org_parser/org_parser.dart';
 
+import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/event_parser_service.dart';
 import '../../../entities/org_entry/org_entry.dart';
+import '../../../entities/org_entry/org_entry_locator.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
 import 'org_file_persistence_service.dart';
 import 'org_file_service.dart';
@@ -105,17 +107,37 @@ class OrgFilesRepository {
     _parserService.invalidateCache(states);
   }
 
-  Future<OrgDocument> replaceNodesAndSave(
+  Future<void> applyEdit(
     FileInfo fileInfo,
-    OrgDocument oldDocument,
-    List<(OrgNode, OrgNode)> replacements,
-  ) {
-    return _fileService.replaceNodesAndSave(
+    OrgEntry entry,
+    EntryEdit edit,
+  ) async {
+    final parsed = await _fileService.documentByIdentifier(fileInfo.identifier);
+    final section = locateSection(parsed.document, entry.locator);
+    if (section == null) throw EntryNotFoundException(entry.title);
+
+    final replacements = _eventParserService.replacementsFor(
+      section,
+      entry,
+      edit,
+    );
+    if (replacements.isEmpty) return;
+
+    await _fileService.replaceNodesAndSave(
       fileInfo.identifier,
-      oldDocument,
+      parsed.document,
       replacements,
     );
   }
+}
+
+class EntryNotFoundException implements Exception {
+  final String title;
+
+  EntryNotFoundException(this.title);
+
+  @override
+  String toString() => 'The entry "$title" is no longer in the file.';
 }
 
 class InitialState {

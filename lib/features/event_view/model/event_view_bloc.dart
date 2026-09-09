@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
+import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/org_entry.dart';
 
 part 'event_view_event.dart';
@@ -30,32 +31,16 @@ class EventViewBloc extends Bloc<EventViewEvent, EventViewState> {
   }
 
   Future<void> save(OrgFilesCubit cubit) async {
-    if (state.oldEvent is OrgEntryCached) throw Error();
-    final oldEvent = state.oldEvent as OrgEntryLoaded;
-
-    final replacements = <(OrgNode, OrgNode)>[];
     final titleChanged = state.oldEvent.title != state.newEvent.title;
     final timestampChanged = state.oldTimestamp != state.newTimestamp;
 
-    if (state.oldEvent.containsTimestampInHeadline) {
-      if (titleChanged || timestampChanged) {
-        replacements.add((
-          oldEvent.section.headline.title! as OrgNode,
-          OrgContent([OrgPlainText(state.newEvent.title), state.newTimestamp]),
-        ));
-      }
-    } else {
-      if (timestampChanged) {
-        replacements.add((state.oldTimestamp, state.newTimestamp));
-      }
-      if (titleChanged) {
-        replacements.add((
-          oldEvent.section.headline.title! as OrgNode,
-          OrgContent([OrgPlainText(state.newEvent.title)]),
-        ));
-      }
-    }
+    final edit = EntryEdit(
+      newTitle: titleChanged ? state.newEvent.title : null,
+      oldTimestamp: state.oldTimestamp,
+      newTimestamp: timestampChanged ? state.newTimestamp : null,
+    );
+    if (edit.isEmpty) return;
 
-    await cubit.replaceNodes(oldEvent.fileInfo, replacements);
+    await cubit.applyEdit(state.oldEvent, edit);
   }
 }

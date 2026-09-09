@@ -1,6 +1,7 @@
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 
+import 'entry_edit.dart';
 import 'org_entry.dart';
 import 'org_entry_locator.dart';
 
@@ -64,6 +65,68 @@ class EventParserService {
       scheduled: planning.$1,
       deadline: planning.$2,
     );
+  }
+
+  List<OrgTimestamp> allTimestampsOf(OrgSection section) {
+    final planning = _extractPlanningEntries(section);
+    return [
+      ..._extractTimestamps(section),
+      if (planning.$1?.value case final OrgTimestamp scheduled) scheduled,
+      if (planning.$2?.value case final OrgTimestamp deadline) deadline,
+    ];
+  }
+
+  OrgTimestamp? locateTimestamp(
+    OrgSection section,
+    OrgEntry entry,
+    OrgTimestamp timestamp,
+  ) {
+    final markup = timestamp.toMarkup();
+    bool sameMarkup(OrgTimestamp candidate) => candidate.toMarkup() == markup;
+
+    final occurrence = entry.unifiedTimestamps
+        .takeWhile((candidate) => !identical(candidate, timestamp))
+        .where(sameMarkup)
+        .length;
+    final matches = allTimestampsOf(section).where(sameMarkup).toList();
+
+    return occurrence < matches.length ? matches[occurrence] : null;
+  }
+
+  List<(OrgNode, OrgNode)> replacementsFor(
+    OrgSection section,
+    OrgEntry entry,
+    EntryEdit edit,
+  ) {
+    final titleNode = section.headline.title;
+    if (titleNode == null) return const [];
+
+    if (entry.containsTimestampInHeadline) {
+      final timestamp = edit.newTimestamp ?? edit.oldTimestamp;
+      return [
+        (
+          titleNode as OrgNode,
+          OrgContent([OrgPlainText(edit.newTitle ?? entry.title), ?timestamp]),
+        ),
+      ];
+    }
+
+    final replacements = <(OrgNode, OrgNode)>[];
+
+    if (edit.newTimestamp case final newTimestamp?) {
+      final target = edit.oldTimestamp == null
+          ? null
+          : locateTimestamp(section, entry, edit.oldTimestamp!);
+      if (target != null) replacements.add((target, newTimestamp));
+    }
+    if (edit.newTitle case final newTitle?) {
+      replacements.add((
+        titleNode as OrgNode,
+        OrgContent([OrgPlainText(newTitle)]),
+      ));
+    }
+
+    return replacements;
   }
 
   List<OrgTimestamp> _extractTimestamps(OrgSection section) {
