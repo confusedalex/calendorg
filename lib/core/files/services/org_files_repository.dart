@@ -39,10 +39,10 @@ class OrgFilesRepository {
     final loadedDocuments = await Future.wait(
       fileInfosToLoad.map((fileInfo) async {
         try {
-          final document = await _fileService.documentByIdentifier(
+          final parsed = await _fileService.documentByIdentifier(
             fileInfo.identifier,
           );
-          return document;
+          return parsed.document;
         } on Exception catch (e) {
           debugPrint('Error loading file: $e');
           return null;
@@ -84,8 +84,9 @@ class OrgFilesRepository {
     return _persistence.saveDirectory(dirInfo);
   }
 
-  Future<OrgDocument> loadDocument(FileInfo fileInfo) {
-    return _fileService.documentByIdentifier(fileInfo.identifier);
+  Future<OrgDocument> loadDocument(FileInfo fileInfo) async {
+    final parsed = await _fileService.documentByIdentifier(fileInfo.identifier);
+    return parsed.document;
   }
 
   Future<void> saveFileList(Set<FileInfo> fileInfos) {

@@ -33,6 +33,7 @@ dependencies:
   package_info_plus: ^10.1.0
   bloc_concurrency: ^0.3.0
   dart_mappable: ^4.8.0
+  crypto: ^3.0.7
 
 dev_dependencies:
   flutter_test:

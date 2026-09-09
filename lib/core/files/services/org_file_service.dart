@@ -1,11 +1,20 @@
 import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 
+import '../../../shared/org_text_hash.dart';
 import '../../../util.dart';
 import 'org_parser_service.dart';
+
+class ParsedFile {
+  final OrgDocument document;
+  final String hash;
+
+  const ParsedFile({required this.document, required this.hash});
+}
 
 class OrgFileService {
   final OrgParserService _parserService;
@@ -13,13 +22,18 @@ class OrgFileService {
 
   OrgFileService(this._parserService);
 
-  Future<OrgDocument> documentByIdentifier(String identifier) async {
+  Future<String> readText(String identifier) => filePicker.readFile(
+    identifier: identifier,
+    reader: (_, file) => file.readAsString(),
+  );
+
+  Future<ParsedFile> documentByIdentifier(String identifier) async {
     try {
-      final content = await filePicker.readFile(
-        identifier: identifier,
-        reader: (fileInfo, file) => file.readAsString(),
+      final content = await readText(identifier);
+      return ParsedFile(
+        document: await _parserService.parseContentInBackground(content),
+        hash: orgTextHash(content),
       );
-      return _parserService.parseContentInBackground(content);
     } on Exception catch (e) {
       debugPrint('Error parsing document with identifier $identifier: $e');
       rethrow;
