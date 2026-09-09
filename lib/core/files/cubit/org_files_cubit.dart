@@ -96,29 +96,34 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   }
 
   Future<void> applyEdit(OrgEntry entry, EntryEdit edit) async {
-    if (entry is! OrgEntryLoaded) return;
+    final fileInfo = _fileInfoOf(entry.filePath);
+    if (fileInfo == null) return;
 
     try {
-      await _repository.applyEdit(entry.fileInfo, entry, edit);
-      await _reloadFile(entry.fileInfo);
+      await _repository.applyEdit(fileInfo, entry, edit);
+      await _reloadFile(fileInfo);
     } on Exception catch (e) {
       debugPrint('Error applying edit: $e');
     }
   }
 
+  FileInfo? _fileInfoOf(String filePath) {
+    for (final fileInfo in [...state.filePaths, ?state.inboxFile]) {
+      if (fileInfo.fileName == filePath) return fileInfo;
+    }
+    return null;
+  }
+
   Future<void> _reloadEntries() =>
       _emitEntries([...state.filePaths, ?state.inboxFile], const []);
 
-  Future<void> _reloadFile(FileInfo fileInfo) => _emitEntries(
-    [fileInfo],
-    state.entries
-        .whereType<OrgEntryLoaded>()
-        .where((entry) => entry.fileInfo != fileInfo),
-  );
+  Future<void> _reloadFile(FileInfo fileInfo) => _emitEntries([
+    fileInfo,
+  ], state.entries.where((entry) => entry.filePath != fileInfo.fileName));
 
   Future<void> _emitEntries(
     Iterable<FileInfo> fileInfos,
-    Iterable<OrgEntryLoaded> keep,
+    Iterable<OrgEntry> keep,
   ) async {
     final entries = [
       ...keep,

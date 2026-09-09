@@ -120,7 +120,7 @@ Future<void> main() async {
   });
 }
 
-class FakeEntry extends Fake implements OrgEntryLoaded {
+class FakeEntry extends Fake implements OrgEntry {
   @override
   List<String> tags;
 

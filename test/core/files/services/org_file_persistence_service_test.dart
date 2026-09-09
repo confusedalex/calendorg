@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
-import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -77,7 +76,7 @@ void main() {
 
         expect(
           await prefs.getStringList(PrefKeys.entriesCache),
-          entries.map((e) => OrgEntryCached.fromLoaded(e).toJson()).toList(),
+          entries.map((entry) => entry.toJson()).toList(),
         );
       });
     });

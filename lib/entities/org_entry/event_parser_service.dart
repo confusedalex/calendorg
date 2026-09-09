@@ -1,4 +1,3 @@
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 
 import 'entry_edit.dart';
@@ -10,12 +9,13 @@ class EventParserService {
     r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]',
   );
 
-  List<OrgEntryLoaded> parseEntriesFromDocument(
-    FileInfo fileInfo,
+  List<OrgEntry> parseEntriesFromDocument(
+    String filePath,
+    String fileHash,
     OrgDocument document,
     Set<String> ignoredTodoStates,
   ) {
-    final List<OrgEntryLoaded> entries = [];
+    final List<OrgEntry> entries = [];
 
     visitSections(document, (section, ancestors, locator) {
       final isIgnored =
@@ -28,16 +28,23 @@ class EventParserService {
         ...section.tags,
       ];
 
-      final event = _extractEventFromSection(section, fileInfo, tags, locator);
+      final event = _extractEventFromSection(
+        section,
+        filePath,
+        fileHash,
+        tags,
+        locator,
+      );
       if (event != null) entries.add(event);
     });
 
     return entries;
   }
 
-  OrgEntryLoaded? _extractEventFromSection(
+  OrgEntry? _extractEventFromSection(
     OrgSection section,
-    FileInfo fileInfo,
+    String filePath,
+    String fileHash,
     List<String> tags,
     OrgEntryLocator locator,
   ) {
@@ -53,17 +60,17 @@ class EventParserService {
       return null;
     }
 
-    return OrgEntryLoaded(
+    return OrgEntry(
       todoKeyword: keyword,
       locator: locator,
-      section: section,
       containsTimestampInHeadline: _containsTimestampInHeadline(section),
-      fileInfo: fileInfo,
       title: headline,
       tags: tags,
       timestamps: foundTimestamps,
       scheduled: planning.$1,
       deadline: planning.$2,
+      filePath: filePath,
+      fileHash: fileHash,
     );
   }
 

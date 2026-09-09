@@ -1,5 +1,4 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -11,11 +10,12 @@ import 'org_entry_locator.dart';
 part 'org_entry.mapper.dart';
 
 @MappableClass(
-  discriminatorKey: 'type',
   includeCustomMappers: [OrgTimestampMapper(), OrgPlanningEntryMapper()],
 )
-sealed class OrgEntry with OrgEntryMappable {
+class OrgEntry with OrgEntryMappable {
   final OrgEntryLocator locator;
+  final String filePath;
+  final String fileHash;
   final String? todoKeyword;
   final bool containsTimestampInHeadline;
   final String title;
@@ -56,51 +56,7 @@ sealed class OrgEntry with OrgEntryMappable {
     required this.timestamps,
     this.scheduled,
     this.deadline,
-  });
-}
-
-@MappableClass(discriminatorValue: 'cached')
-class OrgEntryCached extends OrgEntry with OrgEntryCachedMappable {
-  OrgEntryCached({
-    required super.locator,
-    required super.todoKeyword,
-    required super.containsTimestampInHeadline,
-    required super.title,
-    required super.tags,
-    required super.timestamps,
-    required super.deadline,
-    required super.scheduled,
-  });
-
-  factory OrgEntryCached.fromLoaded(OrgEntryLoaded entry) {
-    return OrgEntryCached(
-      locator: entry.locator,
-      todoKeyword: entry.todoKeyword,
-      containsTimestampInHeadline: entry.containsTimestampInHeadline,
-      title: entry.title,
-      tags: entry.tags,
-      timestamps: entry.timestamps,
-      deadline: entry.deadline,
-      scheduled: entry.scheduled,
-    );
-  }
-}
-
-@MappableClass(discriminatorValue: 'loaded')
-class OrgEntryLoaded extends OrgEntry with OrgEntryLoadedMappable {
-  final OrgSection section;
-  final FileInfo fileInfo;
-
-  OrgEntryLoaded({
-    required super.locator,
-    required super.todoKeyword,
-    required super.containsTimestampInHeadline,
-    required super.title,
-    required super.tags,
-    required super.timestamps,
-    required super.deadline,
-    required super.scheduled,
-    required this.section,
-    required this.fileInfo,
+    required this.filePath,
+    required this.fileHash,
   });
 }

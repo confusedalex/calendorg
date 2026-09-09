@@ -27,7 +27,7 @@ class OrgFilesRepository {
        _persistence = persistence,
        _parserService = parserService;
 
-  Future<List<OrgEntryCached>?> loadCachedEntries() async {
+  Future<List<OrgEntry>?> loadCachedEntries() async {
     return await _persistence.loadCachedOrgEntries();
   }
 
@@ -49,25 +49,29 @@ class OrgFilesRepository {
     );
   }
 
-  Future<List<OrgEntryLoaded>> parseEntriesForFiles(
+  Future<List<OrgEntry>> parseEntriesForFiles(
     Iterable<FileInfo> fileInfos,
     List<String> ignoredTodoStates,
   ) async {
     final ignored = ignoredTodoStates.toSet();
     final perFile = await Future.wait(
       fileInfos.map((fileInfo) async {
+        final fileName = fileInfo.fileName;
+        if (fileName == null) return const <OrgEntry>[];
+
         try {
           final parsed = await _fileService.documentByIdentifier(
             fileInfo.identifier,
           );
           return _eventParserService.parseEntriesFromDocument(
-            fileInfo,
+            fileName,
+            parsed.hash,
             parsed.document,
             ignored,
           );
         } on Exception catch (e) {
-          debugPrint('Error loading file ${fileInfo.fileName}: $e');
-          return const <OrgEntryLoaded>[];
+          debugPrint('Error loading file $fileName: $e');
+          return const <OrgEntry>[];
         }
       }),
     );
@@ -87,7 +91,7 @@ class OrgFilesRepository {
     return _persistence.saveInboxFile(fileInfo);
   }
 
-  Future<void> cacheOrgEntries(List<OrgEntryLoaded> entries) {
+  Future<void> cacheOrgEntries(List<OrgEntry> entries) {
     return _persistence.saveEntriesCache(entries);
   }
 
@@ -133,7 +137,7 @@ class InitialState {
   final Set<FileInfo> fileInfos;
   final FileInfo? inboxFile;
   final OrgTodoStatesWithIgnored todoStates;
-  final List<OrgEntryLoaded> entries;
+  final List<OrgEntry> entries;
 
   InitialState({
     required this.dirInfo,
