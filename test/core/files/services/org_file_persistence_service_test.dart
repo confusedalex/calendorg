@@ -72,12 +72,32 @@ void main() {
         final document = OrgDocument.parse(raw);
         final entries = parseEntries(document, ignored: {'OTHER'});
 
-        await service.saveEntriesCache(entries);
+        await service.saveEntriesCache(entries, 'TODO|DONE|');
 
         expect(
           await prefs.getStringList(PrefKeys.entriesCache),
           entries.map((entry) => entry.toJson()).toList(),
         );
+        expect(await prefs.getString(PrefKeys.entriesCacheKey), 'TODO|DONE|');
+      });
+    });
+    group('loadCachedOrgEntries()', () {
+      test('should return the entries when the cache key matches', () async {
+        final entries = parseEntries(OrgDocument.parse('* Exam\n<2026-05-01>'));
+        await service.saveEntriesCache(entries, 'TODO|DONE|');
+
+        final cached = await service.loadCachedOrgEntries('TODO|DONE|');
+
+        expect(
+          cached?.map((entry) => entry.toJson()).toList(),
+          entries.map((entry) => entry.toJson()).toList(),
+        );
+      });
+      test('should return null when the cache key differs', () async {
+        final entries = parseEntries(OrgDocument.parse('* Exam\n<2026-05-01>'));
+        await service.saveEntriesCache(entries, 'TODO|DONE|');
+
+        expect(await service.loadCachedOrgEntries('TODO|DONE|LATER'), isNull);
       });
     });
   });

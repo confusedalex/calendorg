@@ -1,5 +1,6 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
+import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -15,6 +16,9 @@ void main() {
     setUpAll(() {
       registerFallbackValue(FakeDirectoryInfo());
       registerFallbackValue(FakeFileInfo());
+      registerFallbackValue(
+        OrgTodoStatesWithIgnored(todo: [], done: [], ignored: []),
+      );
     });
     group('setOrgDirectory()', () {
       test('should save directory in repository', () async {
@@ -49,7 +53,9 @@ void main() {
         when(
           () => repository.parseEntriesForFiles(any(), any()),
         ).thenAnswer((_) async => []);
-        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
 
         await cubit.addFilePath(FakeFileInfo());
 
@@ -64,7 +70,9 @@ void main() {
         when(
           () => repository.parseEntriesForFiles(any(), any()),
         ).thenAnswer((_) async => []);
-        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
 
         await cubit.addFilePath(fakeFileInfo);
 
@@ -80,7 +88,9 @@ void main() {
         when(
           () => repository.parseEntriesForFiles(any(), any()),
         ).thenAnswer((_) async => []);
-        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
 
         final fakeFileInfo = FakeFileInfo();
         await cubit.removeFilePath(fakeFileInfo);
@@ -96,7 +106,9 @@ void main() {
         when(
           () => repository.parseEntriesForFiles(any(), any()),
         ).thenAnswer((_) async => []);
-        when(() => repository.cacheOrgEntries(any())).thenAnswer((_) async {});
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
 
         await cubit.removeFilePath(fakeFileInfo);
 

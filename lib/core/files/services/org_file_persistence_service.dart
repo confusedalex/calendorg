@@ -45,20 +45,25 @@ class OrgFilePersistenceService {
     }
   }
 
-  Future<void> saveEntriesCache(List<OrgEntry> entries) async {
+  Future<void> saveEntriesCache(List<OrgEntry> entries, String cacheKey) async {
     try {
       final json = await Isolate.run(
         () => entries.map((e) => e.toJson()).toList(),
       );
 
       await _prefs.setStringList(PrefKeys.entriesCache, json);
+      await _prefs.setString(PrefKeys.entriesCacheKey, cacheKey);
     } on Exception catch (e) {
       debugPrint('Error saving entries cache: $e');
       rethrow;
     }
   }
 
-  Future<List<OrgEntry>?>? loadCachedOrgEntries() async {
+  Future<List<OrgEntry>?>? loadCachedOrgEntries(String cacheKey) async {
+    if (await _prefs.getString(PrefKeys.entriesCacheKey) != cacheKey) {
+      return null;
+    }
+
     final entriesCacheString = await _prefs.getStringList(
       PrefKeys.entriesCache,
     );

@@ -12,6 +12,7 @@ abstract final class PrefKeys {
   static const agendaDirectory = PrefKey<String>('agendaDirectory');
   static const agendaFiles = PrefKey<List<String>>('agendaFiles');
   static const entriesCache = PrefKey<List<String>>('entriesCache');
+  static const entriesCacheKey = PrefKey<String>('entriesCacheKey');
   static const todoStates = PrefKey<String>('todoStates');
   static const doneStates = PrefKey<String>('doneStates');
   static const ignoredStates = PrefKey<String>('ignoredStates');

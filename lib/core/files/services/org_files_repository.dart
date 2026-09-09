@@ -7,6 +7,7 @@ import '../../../entities/org_entry/event_parser_service.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/org_entry/org_entry_locator.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
+import '../../../shared/org_text_hash.dart';
 import 'org_file_persistence_service.dart';
 import 'org_file_service.dart';
 import 'org_parser_service.dart';
@@ -27,12 +28,15 @@ class OrgFilesRepository {
        _persistence = persistence,
        _parserService = parserService;
 
-  Future<List<OrgEntry>?> loadCachedEntries() async {
-    return await _persistence.loadCachedOrgEntries();
+  Future<List<OrgEntry>?> loadCachedEntries(
+    OrgTodoStatesWithIgnored todoStates,
+  ) async {
+    return await _persistence.loadCachedOrgEntries(todoStates.cacheKey);
   }
 
   Future<InitialState> loadInitialState(
     OrgTodoStatesWithIgnored todoStates,
+    Iterable<OrgEntry> cachedEntries,
   ) async {
     final (fileInfos, inboxFile, dirInfo) = await _persistence
         .loadFilePreferences();
@@ -42,27 +46,39 @@ class OrgFilesRepository {
       fileInfos: fileInfos,
       inboxFile: inboxFile,
       todoStates: todoStates,
-      entries: await parseEntriesForFiles([
-        ...fileInfos,
-        ?inboxFile,
-      ], todoStates.ignored),
+      entries: await parseEntriesForFiles(
+        [...fileInfos, ?inboxFile],
+        todoStates.ignored,
+        cachedEntries,
+      ),
     );
   }
 
   Future<List<OrgEntry>> parseEntriesForFiles(
     Iterable<FileInfo> fileInfos,
-    List<String> ignoredTodoStates,
-  ) async {
+    List<String> ignoredTodoStates, [
+    Iterable<OrgEntry> cachedEntries = const [],
+  ]) async {
     final ignored = ignoredTodoStates.toSet();
+    final cached = <String, List<OrgEntry>>{};
+    for (final entry in cachedEntries) {
+      cached.putIfAbsent(entry.filePath, () => []).add(entry);
+    }
+
     final perFile = await Future.wait(
       fileInfos.map((fileInfo) async {
         final fileName = fileInfo.fileName;
         if (fileName == null) return const <OrgEntry>[];
 
         try {
-          final parsed = await _fileService.documentByIdentifier(
-            fileInfo.identifier,
-          );
+          final text = await _fileService.readText(fileInfo.identifier);
+          final reusable = cached[fileName];
+          if (reusable != null &&
+              reusable.first.fileHash == orgTextHash(text)) {
+            return reusable;
+          }
+
+          final parsed = await _fileService.parseText(text);
           return _eventParserService.parseEntriesFromDocument(
             fileName,
             parsed.hash,
@@ -91,8 +107,11 @@ class OrgFilesRepository {
     return _persistence.saveInboxFile(fileInfo);
   }
 
-  Future<void> cacheOrgEntries(List<OrgEntry> entries) {
-    return _persistence.saveEntriesCache(entries);
+  Future<void> cacheOrgEntries(
+    List<OrgEntry> entries,
+    OrgTodoStatesWithIgnored todoStates,
+  ) {
+    return _persistence.saveEntriesCache(entries, todoStates.cacheKey);
   }
 
   void updateTodoStates(OrgTodoStatesWithIgnored states) {

@@ -2,6 +2,7 @@ import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
+import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_state_add_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_states_dialog.dart';
 import 'package:file_picker_writable/src/file_picker_writable.dart';
@@ -129,9 +130,13 @@ class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
   @override
   Future<List<OrgEntry>> parseEntriesForFiles(
     Iterable<FileInfo> fileInfos,
-    List<String> ignoredTodoStates,
-  ) async => [];
+    List<String> ignoredTodoStates, [
+    Iterable<OrgEntry> cachedEntries = const [],
+  ]) async => [];
 
   @override
-  Future<void> cacheOrgEntries(List<OrgEntry> entries) async {}
+  Future<void> cacheOrgEntries(
+    List<OrgEntry> entries,
+    OrgTodoStatesWithIgnored todoStates,
+  ) async {}
 }

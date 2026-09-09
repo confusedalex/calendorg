@@ -7,6 +7,9 @@ class OrgTodoStatesWithIgnored {
   OrgTodoStates get todoStates =>
       OrgTodoStates(todo: [...todo, ...ignored], done: done);
 
+  String get cacheKey =>
+      [todo, done, ignored].map((states) => states.join(',')).join('|');
+
   OrgTodoStatesWithIgnored({
     required this.todo,
     required this.done,

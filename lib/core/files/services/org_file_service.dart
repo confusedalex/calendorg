@@ -27,13 +27,14 @@ class OrgFileService {
     reader: (_, file) => file.readAsString(),
   );
 
+  Future<ParsedFile> parseText(String content) async => ParsedFile(
+    document: await _parserService.parseContentInBackground(content),
+    hash: orgTextHash(content),
+  );
+
   Future<ParsedFile> documentByIdentifier(String identifier) async {
     try {
-      final content = await readText(identifier);
-      return ParsedFile(
-        document: await _parserService.parseContentInBackground(content),
-        hash: orgTextHash(content),
-      );
+      return await parseText(await readText(identifier));
     } on Exception catch (e) {
       debugPrint('Error parsing document with identifier $identifier: $e');
       rethrow;
