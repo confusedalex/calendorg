@@ -1,4 +1,7 @@
 # Changelog
+## Unreleased
+### Fixed
+- Find timestamps after a range timestamp in the same section
 ## 1.6.2 - 2026-09-11
 Same as 1.6.1. Still ci Issues
 ## 1.6.1 - 2026-09-10

@@ -156,7 +156,10 @@ class EventParserService {
           if (node.isActive) foundTimestamps.add(node);
 
         case OrgSimpleTimestamp():
-          if (ignoreNTimestamps > 0) break;
+          if (ignoreNTimestamps > 0) {
+            ignoreNTimestamps -= 1;
+            break;
+          }
           if (node.isActive) foundTimestamps.add(node);
 
         case OrgTimeRangeTimestamp():

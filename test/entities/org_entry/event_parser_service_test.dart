@@ -60,4 +60,18 @@ void main() {
       expect(tags['Child'], equals(['a', 'b']));
     });
   });
+  group('_extractTimestamps', () {
+    test('should find timestamp after range', () {
+      const markup = '''
+* Heading 1
+<2025-05-01>--<2025-05-03>
+
+<2025-06-01>
+''';
+
+      final entries = parseEntries(OrgDocument.parse(markup));
+
+      expect(entries.first.timestamps.length, 2);
+    });
+  });
 }
