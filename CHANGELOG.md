@@ -1,4 +1,6 @@
 # Changelog
+## 1.6.2 - 2026-09-11
+Same as 1.6.1. Still ci Issues
 ## 1.6.1 - 2026-09-10
 The same as 1.6.0. Some issues with the ci, therefore this "new" release.
 ## 1.6.0 - 2026-09-10
