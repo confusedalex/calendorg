@@ -41,6 +41,20 @@ jobs:
           cache: false
           version: 2026.09.2
 
+      - name: Install signing key
+        shell: bash
+        run: |
+          cd android
+          echo "$KEYSTORE" | base64 --decode > calendorg-keystore.jks
+          echo "storeFile=../calendorg-keystore.jks" >> key.properties
+          echo "keyAlias=upload" >> key.properties
+          echo "storePassword=$KEYSTORE_PASSWORD" >> key.properties
+          echo "keyPassword=$KEYSTORE_PASSWORD" >> key.properties
+          cd ..
+        env:
+          KEYSTORE: ${{ secrets.KEYSTORE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+
       - run: mise run release
 
       - name: Rename release artifacts

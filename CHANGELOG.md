@@ -2,6 +2,7 @@
 ## Unreleased
 ### Added
 - Old calendar entries show until the new ones are loaded
+- Calendorg build are now signed, so the app can updated not always reinstalled
 ### Changed
 - Reduced loading times
 ## 1.5.0 - 2026-08-25
