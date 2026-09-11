@@ -21,6 +21,7 @@ import 'l10n/calendorg_localizations.dart';
 import 'shared/config/preferences_service.dart';
 import 'theme.dart';
 
+final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -66,6 +67,7 @@ class Calendorg extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeMode>(
       builder: (context, state) {
         return MaterialApp(
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
           title: 'calendorg',
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,

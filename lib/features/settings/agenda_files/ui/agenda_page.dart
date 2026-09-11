@@ -77,7 +77,7 @@ class AgendaPage extends StatelessWidget {
                     );
                   }
                 } on Exception catch (e) {
-                  sendError(context, 'Error loading file: {$e}');
+                  sendError('Error loading file: {$e}');
                 }
               },
             ),

@@ -68,10 +68,7 @@ void main() {
     });
 
     test('parses the file when the cached hash is stale', () async {
-      final cached = parseEntries(
-        OrgDocument.parse(markup),
-        fileHash: 'stale',
-      );
+      final cached = parseEntries(OrgDocument.parse(markup), fileHash: 'stale');
 
       final entries = await repository.parseEntriesForFiles(
         [fileInfo],

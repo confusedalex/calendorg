@@ -28,10 +28,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     bool validateFile(FileInfo? fileInfo) {
       if (fileInfo == null || fileInfo.fileName == null) {
-        sendError(
-          context,
-          CalendorgLocalizations.of(context).file_could_not_open,
-        );
+        sendError(CalendorgLocalizations.of(context).file_could_not_open);
         return false;
       }
       return true;
@@ -39,10 +36,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     bool validateFileName(String? fileName) {
       if (fileName == null || filePaths.any((it) => it.fileName == fileName)) {
-        sendError(
-          context,
-          CalendorgLocalizations.of(context).file_already_exists,
-        );
+        sendError(CalendorgLocalizations.of(context).file_already_exists);
         return false;
       }
       return true;
@@ -55,7 +49,7 @@ class AgendaFilesDialog extends StatelessWidget {
         });
       } on Exception catch (e) {
         if (context.mounted) {
-          sendError(context, 'Error selecting file: $e');
+          sendError('Error selecting file: $e');
         }
         return null;
       }
@@ -69,7 +63,7 @@ class AgendaFilesDialog extends StatelessWidget {
         );
       } on Exception catch (e) {
         if (context.mounted) {
-          sendError(context, 'Error creating file: $e');
+          sendError('Error creating file: $e');
         }
         return null;
       }

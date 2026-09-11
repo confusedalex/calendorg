@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'main.dart';
+
 String? validate(String? value, String object, {Iterable<String>? notIn}) {
   if (value == null || value.trim().isEmpty) return "$object can't be empty!";
   if (notIn != null && notIn.contains(value)) return '$object already exists!';
@@ -9,8 +11,8 @@ String? validate(String? value, String object, {Iterable<String>? notIn}) {
   return null;
 }
 
-void sendError(BuildContext context, String error) {
-  ScaffoldMessenger.of(context).showSnackBar(
+void sendError(String error) {
+  rootScaffoldMessengerKey.currentState?.showSnackBar(
     SnackBar(
       content: Text(
         style: const TextStyle(

@@ -95,7 +95,7 @@ class EventCard extends StatelessWidget {
           onTap: () async {
             switch (filesStatus) {
               case OrgFilesStatus.loading:
-                sendError(context, "Can't edit heading before loading!");
+                sendError("Can't edit heading before loading!");
               case OrgFilesStatus.success:
                 await showDialog(
                   context: context,
@@ -112,7 +112,7 @@ class EventCard extends StatelessWidget {
                   ),
                 );
               case OrgFilesStatus.failure:
-                sendError(context, 'Some error has occured!');
+                sendError('Some error has occured!');
             }
           },
         ),
