@@ -25,11 +25,13 @@ String dateKey(DateTime date) {
 
 Map<String, List<Occurrence>> occurrencesByDateInRange(
   List<OrgEntry> entries,
-  DateTimeRange window,
+  List<DateTimeRange> windows,
 ) {
   final map = <String, List<Occurrence>>{};
-  for (final occurrence in occurrencesInRange(entries, window)) {
-    (map[dateKey(occurrence.date)] ??= []).add(occurrence);
+  for (final window in windows) {
+    for (final occurrence in occurrencesInRange(entries, window)) {
+      (map[dateKey(occurrence.date)] ??= []).add(occurrence);
+    }
   }
   return map;
 }

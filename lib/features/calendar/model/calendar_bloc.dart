@@ -43,11 +43,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }
 
   void _onOrgFilesChanged(_OrgFilesChanged event, Emitter<CalendarState> emit) {
-    final occurrences = occurrencesByDateInRange(
-      _orgFilesCubit.state.entries,
-      _visibleWindowFor(state.focusedDay),
-    );
-    emit(state.copyWith(occurrencesByDate: occurrences));
+    _reloadOccurrencesByDate(state.focusedDay, emit);
   }
 
   void _onFocusDateChanged(
@@ -55,11 +51,8 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
     Emitter<CalendarState> emit,
   ) {
     emit(state.copyWith(focusedDay: event.focusedDate));
-    final occurrences = occurrencesByDateInRange(
-      _orgFilesCubit.state.entries,
-      _visibleWindowFor(event.focusedDate),
-    );
-    emit(state.copyWith(occurrencesByDate: occurrences));
+
+    _reloadOccurrencesByDate(event.focusedDate, emit);
   }
 
   void _onSelectedDateChanged(
@@ -71,6 +64,21 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       focusedDay: event.selectedDate,
     ),
   );
+
+  void _reloadOccurrencesByDate(DateTime date, Emitter<CalendarState> emit) {
+    final range = _visibleWindowFor(date);
+    final selectedDateInRange =
+        state.selectedDate.compareTo(range.start) >= 0 &&
+        state.selectedDate.compareTo(range.end) <= 0;
+
+    final occurrences = occurrencesByDateInRange(_orgFilesCubit.state.entries, [
+      range,
+      if (!selectedDateInRange)
+        DateTimeRange(start: state.selectedDate, end: state.selectedDate),
+    ]);
+
+    emit(state.copyWith(occurrencesByDate: occurrences));
+  }
 
   void _onFormatChanged(
     CalendarChangeFormat event,
