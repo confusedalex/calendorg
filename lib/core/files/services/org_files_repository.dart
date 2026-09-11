@@ -127,7 +127,10 @@ class OrgFilesRepository {
   ) async {
     final parsed = await _fileService.documentByIdentifier(fileInfo.identifier);
     final section = locateSection(parsed.document, entry.locator);
-    if (section == null) throw EntryNotFoundException(entry.title);
+    if (section == null) {
+      sendError('Entry $entry no longer found in file!');
+      return null;
+    }
 
     final replacements = _eventParserService.replacementsFor(
       section,
@@ -155,15 +158,6 @@ class OrgFilesRepository {
       ignoredTodoStates.toSet(),
     );
   }
-}
-
-class EntryNotFoundException implements Exception {
-  final String title;
-
-  EntryNotFoundException(this.title);
-
-  @override
-  String toString() => 'The entry "$title" is no longer in the file.';
 }
 
 class InitialState {
