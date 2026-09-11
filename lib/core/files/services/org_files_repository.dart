@@ -8,6 +8,7 @@ import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/org_entry/org_entry_locator.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../shared/org_text_hash.dart';
+import '../../../util.dart';
 import 'org_file_persistence_service.dart';
 import 'org_file_service.dart';
 import 'org_parser_service.dart';
@@ -118,10 +119,11 @@ class OrgFilesRepository {
     _parserService.invalidateCache(states);
   }
 
-  Future<void> applyEdit(
+  Future<List<OrgEntry>?> applyEdit(
     FileInfo fileInfo,
     OrgEntry entry,
     EntryEdit edit,
+    List<String> ignoredTodoStates,
   ) async {
     final parsed = await _fileService.documentByIdentifier(fileInfo.identifier);
     final section = locateSection(parsed.document, entry.locator);
@@ -132,12 +134,25 @@ class OrgFilesRepository {
       entry,
       edit,
     );
-    if (replacements.isEmpty) return;
+    if (replacements.isEmpty) return null;
 
-    await _fileService.replaceNodesAndSave(
+    if (entry.fileHash != parsed.hash) {
+      debugPrint('File changed on disk!');
+      sendError('File changed on disk!');
+      return null;
+    }
+
+    final newDocument = await _fileService.replaceNodesAndSave(
       fileInfo.identifier,
       parsed.document,
       replacements,
+    );
+
+    return _eventParserService.parseEntriesFromDocument(
+      entry.filePath,
+      orgTextHash(newDocument.toMarkup()),
+      newDocument,
+      ignoredTodoStates.toSet(),
     );
   }
 }

@@ -3,6 +3,8 @@
 ### Fixed
 - Find timestamps after a range timestamp in the same section
 - Keep event of selected Day loaded when scrolling to other calendar pages
+- Error when trying to save a file which is newer on disk
+- Saving a file works again. Before it tried to reread the old file after saving
 ## 1.6.2 - 2026-09-11
 Same as 1.6.1. Still ci Issues
 ## 1.6.1 - 2026-09-10

@@ -105,12 +105,26 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     final fileInfo = _fileInfoOf(entry.filePath);
     if (fileInfo == null) return;
 
+    emit(state.copyWith(status: OrgFilesStatus.loading));
     try {
-      await _repository.applyEdit(fileInfo, entry, edit);
-      await _reloadFile(fileInfo);
+      final newEntries = await _repository.applyEdit(
+        fileInfo,
+        entry,
+        edit,
+        state.todoStates.ignored,
+      );
+      if (newEntries == null) return;
+
+      final entries = [
+        ...state.entries.where((e) => e.filePath != fileInfo.fileName),
+        ...newEntries,
+      ];
+      emit(state.copyWith(entries: entries));
+      await _repository.cacheOrgEntries(entries, state.todoStates);
     } on Exception catch (e) {
       debugPrint('Error applying edit: $e');
     }
+    emit(state.copyWith(status: OrgFilesStatus.success));
   }
 
   FileInfo? _fileInfoOf(String filePath) {
@@ -126,10 +140,6 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
   Future<void> _reloadEntries() =>
       _emitEntries([...state.filePaths, ?state.inboxFile], const []);
-
-  Future<void> _reloadFile(FileInfo fileInfo) => _emitEntries([
-    fileInfo,
-  ], state.entries.where((entry) => entry.filePath != fileInfo.fileName));
 
   Future<void> _emitEntries(
     Iterable<FileInfo> fileInfos,
