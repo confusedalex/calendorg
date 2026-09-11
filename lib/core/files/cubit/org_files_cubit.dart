@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:collection/collection.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 
@@ -101,13 +102,27 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     }
   }
 
+  Future<void> appendToInboxFile(String markup) async {
+    final dirInfo = state.directory;
+    final inboxFile = state.inboxFile;
+    if (dirInfo == null || inboxFile == null) return;
+
+    await _repository.appendToInboxFile(dirInfo, inboxFile, markup);
+
+    await _emitEntries([
+      inboxFile,
+    ], state.entries.whereNot((e) => e.filePath == inboxFile.fileName));
+  }
+
   Future<void> applyEdit(OrgEntry entry, EntryEdit edit) async {
+    final dirInfo = state.directory;
     final fileInfo = _fileInfoOf(entry.filePath);
-    if (fileInfo == null) return;
+    if (dirInfo == null || fileInfo == null) return;
 
     emit(state.copyWith(status: OrgFilesStatus.loading));
     try {
       final newEntries = await _repository.applyEdit(
+        dirInfo,
         fileInfo,
         entry,
         edit,
@@ -148,6 +163,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     final entries = [
       ...keep,
       ...await _repository.parseEntriesForFiles(
+        state.directory,
         fileInfos,
         state.todoStates.ignored,
       ),

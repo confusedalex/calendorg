@@ -48,6 +48,7 @@ class OrgFilesRepository {
       inboxFile: inboxFile,
       todoStates: todoStates,
       entries: await parseEntriesForFiles(
+        dirInfo,
         [...fileInfos, ?inboxFile],
         todoStates.ignored,
         cachedEntries,
@@ -56,6 +57,7 @@ class OrgFilesRepository {
   }
 
   Future<List<OrgEntry>> parseEntriesForFiles(
+    DirectoryInfo? dirInfo,
     Iterable<FileInfo> fileInfos,
     List<String> ignoredTodoStates, [
     Iterable<OrgEntry> cachedEntries = const [],
@@ -69,10 +71,14 @@ class OrgFilesRepository {
     final perFile = await Future.wait(
       fileInfos.map((fileInfo) async {
         final fileName = fileInfo.fileName;
-        if (fileName == null) return const <OrgEntry>[];
+        if (fileName == null || dirInfo == null) return const <OrgEntry>[];
 
         try {
-          final text = await _fileService.readText(fileInfo.identifier);
+          final resolved = await _fileService.resolveFileInfo(
+            dirInfo,
+            fileName,
+          );
+          final text = await _fileService.readText(resolved.identifier);
           final reusable = cached[fileName];
           if (reusable != null &&
               reusable.first.fileHash == orgTextHash(text)) {
@@ -119,13 +125,34 @@ class OrgFilesRepository {
     _parserService.invalidateCache(states);
   }
 
+  Future<void> appendToInboxFile(
+    DirectoryInfo dirInfo,
+    FileInfo inboxFile,
+    String markup,
+  ) async {
+    final fileName = inboxFile.fileName;
+    if (fileName == null) return;
+
+    try {
+      final resolved = await _fileService.resolveFileInfo(dirInfo, fileName);
+      await _fileService.appendToInboxFile(resolved, markup);
+    } on Exception catch (e) {
+      sendError('Error saving section: $e');
+    }
+  }
+
   Future<List<OrgEntry>?> applyEdit(
+    DirectoryInfo dirInfo,
     FileInfo fileInfo,
     OrgEntry entry,
     EntryEdit edit,
     List<String> ignoredTodoStates,
   ) async {
-    final parsed = await _fileService.documentByIdentifier(fileInfo.identifier);
+    final fileName = fileInfo.fileName;
+    if (fileName == null) return null;
+
+    final resolved = await _fileService.resolveFileInfo(dirInfo, fileName);
+    final parsed = await _fileService.documentByIdentifier(resolved.identifier);
     final section = locateSection(parsed.document, entry.locator);
     if (section == null) {
       sendError('Entry $entry no longer found in file!');
@@ -146,7 +173,7 @@ class OrgFilesRepository {
     }
 
     final newDocument = await _fileService.replaceNodesAndSave(
-      fileInfo.identifier,
+      resolved.identifier,
       parsed.document,
       replacements,
     );

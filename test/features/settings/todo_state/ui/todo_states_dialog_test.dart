@@ -129,6 +129,7 @@ void main() {
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {
   @override
   Future<List<OrgEntry>> parseEntriesForFiles(
+    DirectoryInfo? dirInfo,
     Iterable<FileInfo> fileInfos,
     List<String> ignoredTodoStates, [
     Iterable<OrgEntry> cachedEntries = const [],

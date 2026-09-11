@@ -26,6 +26,11 @@ void main() {
     uri: 'file:///test.org',
     fileName: 'test.org',
   );
+  final dirInfo = DirectoryInfo(
+    identifier: 'dir-identifier',
+    persistable: false,
+    uri: 'file:///',
+  );
 
   late MockOrgFileService fileService;
   late OrgFilesRepository repository;
@@ -39,6 +44,9 @@ void main() {
       eventParserService: EventParserService(),
     );
 
+    when(
+      () => fileService.resolveFileInfo(dirInfo, fileInfo.fileName!),
+    ).thenAnswer((_) async => fileInfo);
     when(
       () => fileService.readText(fileInfo.identifier),
     ).thenAnswer((_) async => markup);
@@ -58,6 +66,7 @@ void main() {
       );
 
       final entries = await repository.parseEntriesForFiles(
+        dirInfo,
         [fileInfo],
         [],
         cached,
@@ -71,6 +80,7 @@ void main() {
       final cached = parseEntries(OrgDocument.parse(markup), fileHash: 'stale');
 
       final entries = await repository.parseEntriesForFiles(
+        dirInfo,
         [fileInfo],
         [],
         cached,
@@ -82,10 +92,22 @@ void main() {
     });
 
     test('parses the file when nothing is cached', () async {
-      final entries = await repository.parseEntriesForFiles([fileInfo], []);
+      final entries = await repository.parseEntriesForFiles(
+        dirInfo,
+        [fileInfo],
+        [],
+      );
 
       expect(entries.single.title, 'Exam');
       verify(() => fileService.parseText(markup)).called(1);
+    });
+
+    test('returns nothing when the directory is unknown', () async {
+      final entries = await repository.parseEntriesForFiles(null, [
+        fileInfo,
+      ], []);
+
+      expect(entries, isEmpty);
     });
   });
 }

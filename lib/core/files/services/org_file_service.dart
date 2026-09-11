@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:org_parser/org_parser.dart';
 
@@ -31,6 +31,17 @@ class OrgFileService {
     document: await _parserService.parseContentInBackground(content),
     hash: orgTextHash(content),
   );
+
+  Future<FileInfo> resolveFileInfo(
+    DirectoryInfo dirInfo,
+    String fileName,
+  ) async {
+    final entity = await filePicker.resolveRelativePath(
+      directoryIdentifier: dirInfo.identifier,
+      relativePath: fileName,
+    );
+    return entity as FileInfo;
+  }
 
   Future<ParsedFile> documentByIdentifier(String identifier) async {
     try {
@@ -70,6 +81,25 @@ class OrgFileService {
 
     await saveDocument(fileIdentifier, newDoc);
     return newDoc;
+  }
+
+  Future<void> appendToInboxFile(FileInfo inboxFile, String markup) async {
+    try {
+      final oldFile = await filePicker.readFile(
+        identifier: inboxFile.identifier,
+        reader: (FileInfo fileInfo, File file) => file.readAsString(),
+      );
+
+      await filePicker.writeFile(
+        identifier: inboxFile.identifier,
+        writer: (file) => file.writeAsString(
+          '$oldFile \n* $markup',
+          mode: FileMode.writeOnly,
+        ),
+      );
+    } on Exception catch (e) {
+      sendError('Error saving section: $e');
+    }
   }
 
   Future<bool> validateFileDirectory(

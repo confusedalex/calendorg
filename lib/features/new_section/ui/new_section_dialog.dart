@@ -1,11 +1,7 @@
-import 'dart:io';
-
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
-import '../../../core/files/services/org_file_service.dart';
 import '../../../shared/ui/editor_dialog_shell.dart';
 import '../../../util.dart';
 import '../lib/openDatePicker.dart';
@@ -18,9 +14,6 @@ class NewSectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filePicker = context.select(
-      (OrgFileService service) => service.filePicker,
-    );
     final title = context.select((NewSectionCubit bloc) => bloc.state.title);
     final inboxFile = context.select(
       (OrgFilesCubit bloc) => bloc.state.inboxFile,
@@ -28,6 +21,10 @@ class NewSectionDialog extends StatelessWidget {
     final timestamp = context.select(
       (NewSectionCubit bloc) => bloc.state.timestamp,
     );
+    final appendTextToInboxFile = context
+        .read<OrgFilesCubit>()
+        .appendToInboxFile;
+
     final bloc = context.read<NewSectionCubit>();
 
     return DialogShell(
@@ -124,29 +121,12 @@ class NewSectionDialog extends StatelessWidget {
               ? () async {
                   if (!(bloc.formKey.currentState?.validate() ?? false)) return;
 
-                  try {
-                    final oldFile = await filePicker.readFile(
-                      identifier: inboxFile.identifier,
-                      reader: (FileInfo fileInfo, File file) =>
-                          file.readAsString(),
-                    );
+                  await appendTextToInboxFile(
+                    '* $title \n ${timestamp.toMarkup()}',
+                  );
 
-                    await filePicker.writeFile(
-                      identifier: inboxFile.identifier,
-                      writer: (file) => file.writeAsString(
-                        '$oldFile \n* $title\n${timestamp.toMarkup()}',
-                        mode: FileMode.writeOnly,
-                      ),
-                    );
-
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
-                  } on Exception catch (e) {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error saving section: $e')),
-                    );
-                  }
+                  if (!context.mounted) return;
+                  Navigator.pop(context);
                 }
               : null,
           icon: const Icon(Icons.save),

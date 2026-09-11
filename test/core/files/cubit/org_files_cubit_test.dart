@@ -51,7 +51,7 @@ void main() {
 
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
-          () => repository.parseEntriesForFiles(any(), any()),
+          () => repository.parseEntriesForFiles(any(), any(), any()),
         ).thenAnswer((_) async => []);
         when(
           () => repository.cacheOrgEntries(any(), any()),
@@ -68,7 +68,7 @@ void main() {
         final fakeFileInfo = FakeFileInfo();
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
-          () => repository.parseEntriesForFiles(any(), any()),
+          () => repository.parseEntriesForFiles(any(), any(), any()),
         ).thenAnswer((_) async => []);
         when(
           () => repository.cacheOrgEntries(any(), any()),
@@ -86,7 +86,7 @@ void main() {
 
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
-          () => repository.parseEntriesForFiles(any(), any()),
+          () => repository.parseEntriesForFiles(any(), any(), any()),
         ).thenAnswer((_) async => []);
         when(
           () => repository.cacheOrgEntries(any(), any()),
@@ -104,7 +104,7 @@ void main() {
         final fakeFileInfo = FakeFileInfo();
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
-          () => repository.parseEntriesForFiles(any(), any()),
+          () => repository.parseEntriesForFiles(any(), any(), any()),
         ).thenAnswer((_) async => []);
         when(
           () => repository.cacheOrgEntries(any(), any()),
