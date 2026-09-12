@@ -83,22 +83,21 @@ class OrgFileService {
     return newDoc;
   }
 
-  Future<void> appendToInboxFile(FileInfo inboxFile, String markup) async {
+  Future<ParsedFile?> appendToFile(FileInfo fileInfo, String markup) async {
     try {
-      final oldFile = await filePicker.readFile(
-        identifier: inboxFile.identifier,
-        reader: (FileInfo fileInfo, File file) => file.readAsString(),
-      );
+      final oldText = await readText(fileInfo.identifier);
+      final newText = '$oldText\n$markup';
 
       await filePicker.writeFile(
-        identifier: inboxFile.identifier,
-        writer: (file) => file.writeAsString(
-          '$oldFile \n* $markup',
-          mode: FileMode.writeOnly,
-        ),
+        identifier: fileInfo.identifier,
+        writer: (file) => file.writeAsString(newText, mode: FileMode.writeOnly),
       );
+
+      return parseText(newText);
     } on Exception catch (e) {
       sendError('Error saving section: $e');
+      debugPrint('$e');
+      return null;
     }
   }
 

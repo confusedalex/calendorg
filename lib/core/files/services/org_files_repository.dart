@@ -125,19 +125,28 @@ class OrgFilesRepository {
     _parserService.invalidateCache(states);
   }
 
-  Future<void> appendToInboxFile(
+  Future<List<OrgEntry>?> appendToInboxFile(
     DirectoryInfo dirInfo,
     FileInfo inboxFile,
     String markup,
+    List<String> ignoredTodoStates,
   ) async {
     final fileName = inboxFile.fileName;
-    if (fileName == null) return;
+    if (fileName == null) return null;
 
     try {
-      final resolved = await _fileService.resolveFileInfo(dirInfo, fileName);
-      await _fileService.appendToInboxFile(resolved, markup);
+      final parsed = await _fileService.appendToFile(inboxFile, markup);
+      if (parsed == null) return null;
+
+      return _eventParserService.parseEntriesFromDocument(
+        fileName,
+        parsed.hash,
+        parsed.document,
+        ignoredTodoStates.toSet(),
+      );
     } on Exception catch (e) {
       sendError('Error saving section: $e');
+      return null;
     }
   }
 
