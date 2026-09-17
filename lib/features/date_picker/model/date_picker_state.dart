@@ -4,9 +4,9 @@ final class DatePickerState {
   DatePickerState({
     required this.startDate,
     required this.startTimeActive,
-    startTimeDuration,
+    TimeOfDay? startTimeDuration,
     required this.endTimeActive,
-    endTimeDuration,
+    TimeOfDay? endTimeDuration,
     required this.endDateActive,
     this.endDate,
   }) : startTimeDuration =
@@ -71,7 +71,7 @@ final class DatePickerState {
 
   DatePickerState copyWith({
     DateTime? startDate,
-    DateTime? endDate,
+    ValueGetter<DateTime?>? endDate,
     bool? startTimeActive,
     TimeOfDay? startTimeDuration,
     bool? endTimeActive,
@@ -80,7 +80,7 @@ final class DatePickerState {
   }) {
     return DatePickerState(
       startDate: startDate ?? this.startDate,
-      endDate: endDate ?? this.endDate,
+      endDate: endDate != null ? endDate() : this.endDate,
       startTimeActive: startTimeActive ?? this.startTimeActive,
       startTimeDuration: startTimeDuration ?? this.startTimeDuration,
       endTimeActive: endTimeActive ?? this.endTimeActive,

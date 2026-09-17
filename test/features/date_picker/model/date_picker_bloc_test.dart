@@ -585,6 +585,59 @@ void main() {
       );
 
       blocTest(
+        'Deactivating startTime without an end date turns endTime off',
+        build: () => datePickerBloc,
+        act: (bloc) {
+          bloc
+            ..add(DatePickerStartTimeActiveChanged(true))
+            ..add(DatePickerEndTimeActiveChanged(true))
+            ..add(DatePickerStartTimeActiveChanged(false));
+        },
+        skip: 2,
+        expect: () => [
+          const TypeMatcher<DatePickerState>()
+              .having(
+                (state) => state.startTimeActive,
+                'startTimeActive',
+                isFalse,
+              )
+              .having((state) => state.endTimeActive, 'endTimeActive', isFalse),
+        ],
+      );
+
+      blocTest(
+        'Deactivating endDate without a start time turns endTime off',
+        build: () => datePickerBloc,
+        act: (bloc) {
+          bloc
+            ..add(DatePickerEndDateActiveChanged(true))
+            ..add(DatePickerEndTimeActiveChanged(true))
+            ..add(DatePickerEndDateActiveChanged(false));
+        },
+        skip: 2,
+        expect: () => [
+          const TypeMatcher<DatePickerState>()
+              .having((state) => state.endDateActive, 'endDateActive', isFalse)
+              .having((state) => state.endTimeActive, 'endTimeActive', isFalse),
+        ],
+      );
+
+      blocTest(
+        'Activating startTime keeps endTime off',
+        build: () => datePickerBloc,
+        act: (bloc) => bloc.add(DatePickerStartTimeActiveChanged(true)),
+        expect: () => [
+          const TypeMatcher<DatePickerState>()
+              .having(
+                (state) => state.startTimeActive,
+                'startTimeActive',
+                isTrue,
+              )
+              .having((state) => state.endTimeActive, 'endTimeActive', isFalse),
+        ],
+      );
+
+      blocTest(
         "Setting EndTimeActive while StartTimeActive is true won't set StartTimeActive to false",
         build: () => datePickerBloc,
         act: (bloc) {
