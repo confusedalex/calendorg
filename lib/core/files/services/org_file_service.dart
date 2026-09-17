@@ -126,16 +126,16 @@ class OrgFileService {
         return false;
       }
 
-      final relativeSize = await filePicker.readFile(
+      final relativeHash = await filePicker.readFile(
         identifier: relative.identifier,
-        reader: (_, file) => file.length(),
+        reader: (_, file) async => orgTextHash(await file.readAsString()),
       );
-      final pickedSize = await filePicker.readFile(
+      final pickedHash = await filePicker.readFile(
         identifier: fileInfo.identifier,
-        reader: (_, file) => file.length(),
+        reader: (_, file) async => orgTextHash(await file.readAsString()),
       );
 
-      final isSameFile = relativeSize == pickedSize;
+      final isSameFile = relativeHash == pickedHash;
 
       if (!isSameFile) {
         sendErr();
@@ -143,6 +143,7 @@ class OrgFileService {
 
       return isSameFile;
     } on Exception {
+      sendError('Error while reading file!');
       return false;
     }
   }
