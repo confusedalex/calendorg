@@ -16,10 +16,13 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filesStatus = context.read<OrgFilesCubit>().state.status;
+    final filesStatus = context.select(
+      (OrgFilesCubit cubit) => cubit.state.status,
+    );
     final keyword = occurrence.entry.todoKeyword;
-    final todoStates = context.read<TodoStatesCubit>().state;
-    final eventIsDone = todoStates.done.contains(keyword);
+    final eventIsDone = context.select(
+      (TodoStatesCubit cubit) => cubit.state.done.contains(keyword),
+    );
 
     return SizedBox(
       width: double.infinity,
