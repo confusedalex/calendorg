@@ -4,8 +4,8 @@ java = "temurin-17"
 zizmor = "latest"
 
 [tasks]
-format = "dart format -o none --set-exit-if-changed ./lib"
-"format:write" = "dart format"
+format = "dart format -o none --set-exit-if-changed ./lib ./test"
+"format:write" = "dart format ./"
 analyze = "flutter analyze --no-fatal-infos"
 test = "flutter test"
 "build:apk" = "flutter build apk --release"

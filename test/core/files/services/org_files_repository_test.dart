@@ -92,11 +92,9 @@ void main() {
     });
 
     test('parses the file when nothing is cached', () async {
-      final entries = await repository.parseEntriesForFiles(
-        dirInfo,
-        [fileInfo],
-        [],
-      );
+      final entries = await repository.parseEntriesForFiles(dirInfo, [
+        fileInfo,
+      ], []);
 
       expect(entries.single.title, 'Exam');
       verify(() => fileService.parseText(markup)).called(1);
