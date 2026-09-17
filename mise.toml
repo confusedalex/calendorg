@@ -10,7 +10,7 @@ analyze = "flutter analyze --no-fatal-infos"
 test = "flutter test"
 "build:apk" = "flutter build apk --release"
 "build:apk-split" = "flutter build apk --release --split-per-abi"
-"lint:workflows" = "zizmor ./github/workflows"
+"lint:workflows" = "zizmor ./.github/workflows"
 
 [tasks.ci]
 depends = ["analyze", "test", "format"]
