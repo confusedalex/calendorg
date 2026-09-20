@@ -38,7 +38,7 @@ class OrgFilePersistenceService {
 
   Future<void> saveInboxFile(FileInfo fileInfo) async {
     try {
-      await _prefs.setString(PrefKeys.inboxFile, fileInfo.fileName ?? 'null');
+      await _prefs.setString(PrefKeys.inboxFile, fileInfo.fileName!);
     } on Exception catch (e) {
       debugPrint('Error saving inbox file: $e');
       rethrow;
