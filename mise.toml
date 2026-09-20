@@ -16,8 +16,7 @@ test = "flutter test"
 depends = ["analyze", "test", "format"]
 
 [tasks.release]
-depends = ["build:apk"]
-depends_post = ["build:apk-split"]
+depends = ["build:apk-split"]
 
 [settings]
 lockfile = true
