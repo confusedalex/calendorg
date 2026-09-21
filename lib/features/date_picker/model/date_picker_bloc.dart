@@ -45,10 +45,10 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
 
   Future<void> datePickerDatePressed(
     BuildContext context,
-    String type, {
+    DatePickerType type, {
     DateTime? initialDate,
   }) async {
-    if (type == 'start') {
+    if (type == DatePickerType.start) {
       final DateTime? pickerDate = await showDatePicker(
         context: context,
         firstDate: DateTime(0),
@@ -61,7 +61,7 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
       }
       return;
     }
-    if (type == 'end') {
+    if (type == DatePickerType.end) {
       final DateTime? pickerDate = await showDatePicker(
         context: context,
         firstDate: state.startDate,

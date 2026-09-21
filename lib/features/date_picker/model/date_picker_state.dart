@@ -1,5 +1,7 @@
 part of 'date_picker_bloc.dart';
 
+enum DatePickerType { start, end }
+
 final class DatePickerState {
   DatePickerState({
     required this.startDate,

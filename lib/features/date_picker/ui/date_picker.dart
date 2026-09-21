@@ -42,7 +42,7 @@ class DatePicker extends StatelessWidget {
                   onPressed: () =>
                       context.read<DatePickerBloc>().datePickerDatePressed(
                         context,
-                        'start',
+                        DatePickerType.start,
                         initialDate: startDate,
                       ),
                   child: Text(
@@ -87,7 +87,7 @@ class DatePicker extends StatelessWidget {
                             .read<DatePickerBloc>()
                             .datePickerDatePressed(
                               context,
-                              'end',
+                              DatePickerType.end,
                               initialDate: endDate,
                             )
                       : null,
