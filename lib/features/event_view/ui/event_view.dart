@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../shared/ui/editor_dialog_shell.dart';
 import '../../../util.dart';
-import '../lib/openDatePicker.dart';
+import '../../date_picker/model/date_picker_bloc.dart';
+import '../../date_picker/ui/open_date_picker.dart';
 import '../model/event_view_bloc.dart';
 
 class EventView extends StatelessWidget {
@@ -56,7 +57,13 @@ class EventView extends StatelessWidget {
                 child: InkWell(
                   key: const Key('datePickerButton'),
                   borderRadius: BorderRadius.circular(16),
-                  onTap: () => openDatePicker(context, timestamp),
+                  onTap: () => openDatePicker(
+                    context,
+                    DatePickerState.initial(timestamp),
+                    (newTimestamp) => context.read<EventViewBloc>().add(
+                      EventViewChangeTimestamp(newTimestamp),
+                    ),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(

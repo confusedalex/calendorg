@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../shared/ui/editor_dialog_shell.dart';
 import '../../../util.dart';
-import '../lib/openDatePicker.dart';
+import '../../date_picker/model/date_picker_bloc.dart';
+import '../../date_picker/ui/open_date_picker.dart';
 import '../model/new_section_cubit.dart';
 
 class NewSectionDialog extends StatelessWidget {
@@ -67,7 +68,10 @@ class NewSectionDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         onTap: () => openDatePicker(
                           context,
-                          timestamp?.startDateTime ?? dateTime,
+                          DatePickerState.parseDateTimeWithoutTime(
+                            timestamp?.startDateTime ?? dateTime,
+                          ),
+                          bloc.changeTimestamp,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
