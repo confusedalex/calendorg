@@ -52,15 +52,6 @@ class TagColorsCubit extends Cubit<List<TagColor>> {
     await saveTagsToPrefs([...state.where((tag) => tag.tag != tagName)]);
   }
 
-  Color getTagColorByName(String tagName) {
-    return state
-        .firstWhere(
-          (tagColor) => tagColor.tag == tagName,
-          orElse: () => const TagColor('', Colors.blue),
-        )
-        .color;
-  }
-
   Color getTagColor(OrgEntry event) => state
       .firstWhere(
         (tagColor) => event.tags.contains(tagColor.tag),

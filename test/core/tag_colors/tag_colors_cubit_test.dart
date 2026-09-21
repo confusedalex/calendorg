@@ -108,15 +108,6 @@ Future<void> main() async {
       await cubit.reorder(0, 1);
       expect(cubit.state.first, homeTagColor);
     });
-
-    test('getTagColorByName will return correct color', () async {
-      final cubit = await getTagColorsCubit();
-
-      expect(
-        cubit.getTagColorByName(schoolTagColor.tag),
-        isSameColorAs(schoolTagColor.color),
-      );
-    });
   });
 }
 
