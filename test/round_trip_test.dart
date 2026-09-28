@@ -61,7 +61,7 @@ Notes with *bold*, =code= and a [[https://example.org][link]].
 * Meeting
 <2026-08-04 Tue 09:00-10:30>
 
-* Lunch <2026-10-01 Thu 12:00> with Sam                           :social:
+* Lunch <2026-10-01 Thu 12:00> with Sam >                          :social:
 ''';
 
 void main() {
@@ -295,7 +295,7 @@ void main() {
   group('timestamp in the headline', () {
     test('a date edit changes only that timestamp', () async {
       final result = await applyEdit(
-        'Lunch with Sam',
+        'Lunch with Sam >',
         (entry) => EntryEdit(
           oldTimestamp: entry.timestamps.single,
           newTimestamp: picked(
@@ -308,17 +308,17 @@ void main() {
       expect(
         result,
         markup.replaceFirst(
-          '<2026-10-01 Thu 12:00> with Sam',
-          '<2026-10-02 Fri 12:00> with Sam',
+          '<2026-10-01 Thu 12:00> with Sam >',
+          '<2026-10-02 Fri 12:00> with Sam >',
         ),
       );
     });
 
     test('a title edit keeps the timestamp and the tags', () async {
       final result = await applyEdit(
-        'Lunch with Sam',
+        'Lunch with Sam >',
         (entry) => EntryEdit(
-          newTitle: 'Lunch with Kim',
+          newTitle: 'Lunch with Kim >',
           oldTimestamp: entry.timestamps.single,
         ),
       );
@@ -326,8 +326,8 @@ void main() {
       expect(
         result,
         markup.replaceFirst(
-          'Lunch <2026-10-01 Thu 12:00> with Sam',
-          'Lunch with Kim <2026-10-01 Thu 12:00>',
+          'Lunch <2026-10-01 Thu 12:00> with Sam >',
+          'Lunch with Kim > <2026-10-01 Thu 12:00>',
         ),
       );
     });

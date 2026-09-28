@@ -7,7 +7,7 @@ import 'org_entry_locator.dart';
 class EventParserService {
   static final _whitespaceRegExp = RegExp(r'\s+');
   static final _timestampRegExp = RegExp(
-    r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]',
+    r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*?[>]',
   );
 
   List<OrgEntry> parseEntriesFromDocument(
