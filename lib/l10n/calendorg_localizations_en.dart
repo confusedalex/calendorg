@@ -120,6 +120,9 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get add_new_tag => 'Add new Tag';
 
   @override
+  String get tag_name => 'Tag name';
+
+  @override
   String edit_tag(String tag) {
     return 'Edit \"$tag\" Tag';
   }

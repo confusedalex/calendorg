@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/tag_colors/tag_color.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 import '../model/new_tag_color_cubit.dart';
 
@@ -16,14 +17,25 @@ class NewTagColorDialog extends StatelessWidget {
     final tagColorsCubit = context.read<TagColorsCubit>();
     final formKey = GlobalKey<FormState>();
 
-    return Form(
-      key: formKey,
-      child: AlertDialog(
-        title: Text(context.l10n.add_new_tag),
-        content: SingleChildScrollView(
+    return DialogShell(
+      title: context.l10n.add_new_tag,
+      titleIcon: Icons.sell_outlined,
+      content: Form(
+        key: formKey,
+        child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 16,
             children: [
               TextFormField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: context.l10n.tag_name,
+                  prefixText: ':',
+                  suffixText: ':',
+                  filled: true,
+                ),
                 onChanged: state.updateText,
                 validator: (value) => validate(
                   context.l10n,
@@ -34,6 +46,7 @@ class NewTagColorDialog extends StatelessWidget {
               ),
               ColorPicker(
                 color: state.state.color,
+                padding: EdgeInsets.zero,
                 onColorChanged: state.updateColor,
                 pickersEnabled: const <ColorPickerType, bool>{
                   ColorPickerType.primary: false,
@@ -44,21 +57,25 @@ class NewTagColorDialog extends StatelessWidget {
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            key: const Key('newtag_savebutton'),
-            onPressed: () async {
-              if (formKey.currentState!.validate()) {
-                await tagColorsCubit.addTagColor(
-                  TagColor(state.state.text, state.state.color),
-                );
-                Navigator.of(context).pop();
-              }
-            },
-            child: Text(context.l10n.save),
-          ),
-        ],
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(context.l10n.cancel),
+        ),
+        FilledButton(
+          key: const Key('newtag_savebutton'),
+          onPressed: () async {
+            if (!formKey.currentState!.validate()) return;
+            final navigator = Navigator.of(context);
+            await tagColorsCubit.addTagColor(
+              TagColor(state.state.text, state.state.color),
+            );
+            navigator.pop();
+          },
+          child: Text(context.l10n.save),
+        ),
+      ],
     );
   }
 }

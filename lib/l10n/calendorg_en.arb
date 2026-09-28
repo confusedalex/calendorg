@@ -73,6 +73,7 @@
   "tag_colors": "Tag Colors",
   "tag_color": "Tag Color",
   "add_new_tag": "Add new Tag",
+  "tag_name": "Tag name",
   "edit_tag": "Edit \"{tag}\" Tag",
   "@edit_tag": {
     "placeholders": {

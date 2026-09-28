@@ -289,6 +289,12 @@ abstract class CalendorgLocalizations {
   /// **'Add new Tag'**
   String get add_new_tag;
 
+  /// No description provided for @tag_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag name'**
+  String get tag_name;
+
   /// No description provided for @edit_tag.
   ///
   /// In en, this message translates to:

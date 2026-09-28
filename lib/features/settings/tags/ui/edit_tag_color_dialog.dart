@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/tag_colors/tag_color.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
 class EditTagColorDialog extends StatefulWidget {
@@ -15,45 +16,51 @@ class EditTagColorDialog extends StatefulWidget {
 }
 
 class _EditTagColorDialogState extends State<EditTagColorDialog> {
-  var selectedColor = const Color(0x00000000);
+  late var selectedColor = widget.tagColor.color;
 
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(context.l10n.edit_tag(widget.tagColor.tag)),
-    content: SingleChildScrollView(
-      child: ColorPicker(
-        color: widget.tagColor.color,
-        onColorChanged: (Color color) => setState(() {
-          selectedColor = color;
-        }),
-        pickersEnabled: const <ColorPickerType, bool>{
-          ColorPickerType.primary: false,
-          ColorPickerType.accent: false,
-          ColorPickerType.wheel: true,
-        },
+  Widget build(BuildContext context) {
+    final cubit = context.read<TagColorsCubit>();
+    return DialogShell(
+      title: context.l10n.edit_tag(widget.tagColor.tag),
+      titleIcon: Icons.palette_outlined,
+      content: SingleChildScrollView(
+        child: ColorPicker(
+          color: selectedColor,
+          padding: EdgeInsets.zero,
+          onColorChanged: (color) => setState(() => selectedColor = color),
+          pickersEnabled: const <ColorPickerType, bool>{
+            ColorPickerType.primary: false,
+            ColorPickerType.accent: false,
+            ColorPickerType.wheel: true,
+          },
+        ),
       ),
-    ),
-    actions: [
-      TextButton(
-        key: const Key('edittag_deletebutton'),
-        onPressed: () async {
-          await context.read<TagColorsCubit>().removeTagColor(
-            widget.tagColor.tag,
-          );
-          Navigator.of(context).pop();
-        },
-        child: Text(context.l10n.delete),
-      ),
-      TextButton(
-        key: const Key('edittag_savebutton'),
-        onPressed: () async {
-          await context.read<TagColorsCubit>().addTagColor(
-            TagColor(widget.tagColor.tag, selectedColor),
-          );
-          Navigator.of(context).pop();
-        },
-        child: Text(context.l10n.save),
-      ),
-    ],
-  );
+      actions: [
+        TextButton(
+          key: const Key('edittag_deletebutton'),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.error,
+          ),
+          onPressed: () async {
+            final navigator = Navigator.of(context);
+            await cubit.removeTagColor(widget.tagColor.tag);
+            navigator.pop();
+          },
+          child: Text(context.l10n.delete),
+        ),
+        FilledButton(
+          key: const Key('edittag_savebutton'),
+          onPressed: () async {
+            final navigator = Navigator.of(context);
+            await cubit.addTagColor(
+              TagColor(widget.tagColor.tag, selectedColor),
+            );
+            navigator.pop();
+          },
+          child: Text(context.l10n.save),
+        ),
+      ],
+    );
+  }
 }
