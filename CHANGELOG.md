@@ -21,6 +21,7 @@
 - Show titles without the spaces before the tags
 - Loading indicator no longer stays on when saving an edit fails
 - Replacing a timestamp in a heading could lead to replacing everything from the first '<' to the last '>'. This is now fixed.
+- Disable save button while saving to avoid double saving.
 ## 1.6.2 - 2026-09-11
 Same as 1.6.1. Still ci Issues
 ## 1.6.1 - 2026-09-10

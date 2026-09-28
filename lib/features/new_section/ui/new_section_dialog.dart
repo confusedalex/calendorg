@@ -26,6 +26,9 @@ class NewSectionDialog extends StatelessWidget {
     final appendTextToInboxFile = context
         .read<OrgFilesCubit>()
         .appendToInboxFile;
+    final isLoading = context.select(
+      (OrgFilesCubit cubit) => cubit.state.status == OrgFilesStatus.loading,
+    );
 
     final bloc = context.read<NewSectionCubit>();
     final colors = Theme.of(context).colorScheme;
@@ -93,7 +96,7 @@ class NewSectionDialog extends StatelessWidget {
         ),
         FilledButton(
           key: const Key('SaveButton'),
-          onPressed: inboxFile != null && timestamp != null
+          onPressed: inboxFile != null && timestamp != null && !isLoading
               ? () async {
                   if (!(bloc.formKey.currentState?.validate() ?? false)) return;
 
