@@ -81,14 +81,11 @@ class OrgFilePersistenceService {
       final inboxFileString = await _prefs.getString(PrefKeys.inboxFile);
       final directoryString = await _prefs.getString(PrefKeys.agendaDirectory);
 
-      final inboxName =
-          (inboxFileString == null ||
-              inboxFileString == 'null' ||
-              inboxFileString == '')
+      final inboxName = (inboxFileString == null || inboxFileString == '')
           ? null
           : inboxFileString;
 
-      final dirInfo = (directoryString == null || directoryString == 'null')
+      final dirInfo = (directoryString == null)
           ? null
           : DirectoryInfo.fromJsonString(directoryString);
 
