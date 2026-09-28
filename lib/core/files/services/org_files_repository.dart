@@ -224,6 +224,19 @@ class OrgFilesRepository {
 
     final resolved = await _resolveFileInfo(dirInfo, fileName);
     final parsed = await _parseText(await readText(resolved.identifier));
+    final ignored = ignoredTodoStates.toSet();
+
+    if (entry.fileHash != parsed.hash) {
+      _log.info('File changed on disk, reloading $fileName');
+      sendError(globalL10n.error_file_changed_on_disk);
+      return _eventParserService.parseEntriesFromDocument(
+        fileName,
+        parsed.hash,
+        parsed.document,
+        ignored,
+      );
+    }
+
     final section = locateSection(parsed.document, entry.locator);
     if (section == null) {
       sendError(globalL10n.error_entry_not_found(entry));
@@ -236,12 +249,6 @@ class OrgFilesRepository {
       edit,
     );
     if (replacements.isEmpty) return null;
-
-    if (entry.fileHash != parsed.hash) {
-      _log.info('File changed on disk');
-      sendError(globalL10n.error_file_changed_on_disk);
-      return null;
-    }
 
     final newDocument =
         replacements
@@ -257,7 +264,7 @@ class OrgFilesRepository {
       entry.filePath,
       orgTextHash(newDocument.toMarkup()),
       newDocument,
-      ignoredTodoStates.toSet(),
+      ignored,
     );
   }
 

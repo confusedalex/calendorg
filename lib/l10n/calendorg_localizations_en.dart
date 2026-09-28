@@ -102,7 +102,8 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   }
 
   @override
-  String get error_file_changed_on_disk => 'File changed on disk!';
+  String get error_file_changed_on_disk =>
+      'File changed on disk. The app reloaded it. Please try the edit again.';
 
   @override
   String get error_edit_before_loading => 'Can\'t edit heading before loading!';

@@ -256,7 +256,7 @@ abstract class CalendorgLocalizations {
   /// No description provided for @error_file_changed_on_disk.
   ///
   /// In en, this message translates to:
-  /// **'File changed on disk!'**
+  /// **'File changed on disk. The app reloaded it. Please try the edit again.'**
   String get error_file_changed_on_disk;
 
   /// No description provided for @error_edit_before_loading.

@@ -364,4 +364,39 @@ void main() {
       expect(result, '* Final exam\n<2026-05-01 Fri>');
     });
   });
+
+  group('file changed on disk', () {
+    const onDisk =
+        '* Exam\n<2026-05-01 Fri>\n* Added outside\n<2026-05-02 Sat>\n';
+
+    Future<List<OrgEntry>?> applyStaleEdit() {
+      source = onDisk;
+      final stale = parseEntries(
+        OrgDocument.parse(markup),
+        fileHash: orgTextHash(markup),
+      ).firstWhere((e) => e.title == 'Exam');
+
+      return repository.applyEdit(
+        dirInfo,
+        fileInfo,
+        stale,
+        const EntryEdit(newTitle: 'Final exam'),
+        [],
+      );
+    }
+
+    test('an edit with a stale hash writes nothing', () async {
+      await applyStaleEdit();
+
+      expect(written, isNull);
+    });
+
+    test('an edit with a stale hash returns the entries on disk', () async {
+      final entries = await applyStaleEdit();
+
+      expect(entries, isNotNull);
+      expect(entries!.map((e) => e.fileHash).toSet(), {orgTextHash(onDisk)});
+      expect(entries.map((e) => e.title), ['Exam', 'Added outside']);
+    });
+  });
 }
