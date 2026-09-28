@@ -19,15 +19,16 @@ class NewTagColorDialog extends StatelessWidget {
     return Form(
       key: formKey,
       child: AlertDialog(
-        title: const Text('Add new Tag'),
+        title: Text(context.l10n.add_new_tag),
         content: SingleChildScrollView(
           child: Column(
             children: [
               TextFormField(
                 onChanged: state.updateText,
                 validator: (value) => validate(
+                  context.l10n,
                   value,
-                  'Tag Color',
+                  context.l10n.tag_color,
                   notIn: tagColorsCubit.state.map((e) => e.tag),
                 ),
               ),
@@ -54,7 +55,7 @@ class NewTagColorDialog extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
-            child: const Text('save'),
+            child: Text(context.l10n.save),
           ),
         ],
       ),

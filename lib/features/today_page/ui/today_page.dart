@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../entities/occurrence/occurrence_getter.dart';
+import '../../../util.dart';
 import '../../calendar/ui/event_card.dart';
 
 class TodayPage extends StatelessWidget {
@@ -14,7 +15,8 @@ class TodayPage extends StatelessWidget {
       (OrgFilesCubit cubit) => cubit.state.entries,
     );
     final now = DateTime.now();
-    final endDate = now.add(const Duration(days: 3));
+    const days = 3;
+    final endDate = now.add(const Duration(days: days));
     final occurrences = occurrencesInRange(
       entries,
       DateTimeRange(start: now, end: endDate),
@@ -27,7 +29,7 @@ class TodayPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              'Next 3 days',
+              context.l10n.next_days(days),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),

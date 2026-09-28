@@ -2,6 +2,7 @@ import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/settings/tags/ui/tags_page.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,6 +27,8 @@ void main() {
     ) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+          supportedLocales: CalendorgLocalizations.supportedLocales,
           home: BlocProvider(
             create: (context) => cubit,
             child: const Scaffold(body: TagsPage()),

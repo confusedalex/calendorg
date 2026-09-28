@@ -23,7 +23,6 @@ void main() {
         MaterialApp(
           localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
           supportedLocales: CalendorgLocalizations.supportedLocales,
-
           home: Scaffold(
             body: RepositoryProvider(
               create: (context) => OrgFileService(OrgParserService()),

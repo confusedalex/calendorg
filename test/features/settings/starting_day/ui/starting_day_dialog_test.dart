@@ -1,5 +1,6 @@
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/features/settings/starting_day/ui/starting_day_dialog.dart';
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,6 +20,8 @@ void main() {
     Future<void> pumpWidgetToTester(dynamic tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+          supportedLocales: CalendorgLocalizations.supportedLocales,
           home: BlocProvider(
             create: (context) => cubit,
             child: const Scaffold(body: StartingDateDialog()),

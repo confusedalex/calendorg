@@ -1,8 +1,127 @@
 {
+  "@@locale": "en",
+
+  "nav_events": "Events",
+  "nav_calendar": "Calendar",
+  "nav_settings": "Settings",
+
+  "add": "Add",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "set": "Set",
+  "not_set": "Not set",
+
+  "validation_empty": "{name} can't be empty!",
+  "@validation_empty": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "validation_exists": "{name} already exists!",
+  "@validation_exists": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+
   "file_could_not_open": "File could not be opened!",
-  "file_already_exists": "File does already exist!",
+  "file_already_exists": "File already exists!",
   "select_file": "select file",
   "create_file": "create file",
   "agenda_files": "Agenda Files",
-  "file_name_couldnt_load": "File name could't not be loaded"
- }
+  "file_name_couldnt_load": "File name could not be loaded",
+  "pick_org_directory": "Pick org directory",
+  "inbox_file": "Inbox File",
+
+  "error_selecting_file": "Error selecting file: {error}",
+  "@error_selecting_file": {
+    "placeholders": {
+      "error": { "type": "Object" }
+    }
+  },
+  "error_creating_file": "Error creating file: {error}",
+  "@error_creating_file": {
+    "placeholders": {
+      "error": { "type": "Object" }
+    }
+  },
+  "error_loading_file": "Error loading file: {error}",
+  "@error_loading_file": {
+    "placeholders": {
+      "error": { "type": "Object" }
+    }
+  },
+  "error_saving_section": "Error saving section: {error}",
+  "@error_saving_section": {
+    "placeholders": {
+      "error": { "type": "Object" }
+    }
+  },
+  "error_reading_file": "Error while reading file!",
+  "error_file_not_in_org_folder": "File is not in org folder!\nPlease select a file that lies in your org folder or change your org folder.",
+  "error_entry_not_found": "Entry {entry} no longer found in file!",
+  "@error_entry_not_found": {
+    "placeholders": {
+      "entry": { "type": "Object" }
+    }
+  },
+  "error_file_changed_on_disk": "File changed on disk!",
+  "error_edit_before_loading": "Can't edit heading before loading!",
+  "error_unknown": "Some error has occurred!",
+
+  "tag_colors": "Tag Colors",
+  "tag_color": "Tag Color",
+  "add_new_tag": "Add new Tag",
+  "edit_tag": "Edit \"{tag}\" Tag",
+  "@edit_tag": {
+    "placeholders": {
+      "tag": { "type": "String" }
+    }
+  },
+
+  "starting_day": "Starting Day",
+  "starting_day_of_week": "Starting Day of Week",
+  "monday": "Monday",
+  "sunday": "Sunday",
+
+  "theme": "Theme",
+  "choose_theme": "Choose Theme",
+  "theme_dark": "dark",
+  "theme_light": "light",
+  "theme_automatic": "automatic",
+
+  "todo_states": "TODO States",
+  "todo_state": "TODO State",
+  "todo_state_name": "TODO State Name",
+  "todo_status_todo": "todo",
+  "todo_status_done": "done",
+  "todo_status_ignored": "ignored",
+
+  "debug": "Debug",
+
+  "edit_event": "Edit Event",
+  "add_event": "Add Event",
+  "event_title": "Event title",
+  "heading_title": "Heading title",
+  "title": "Title",
+  "when": "When",
+  "choose_date_and_time": "Choose date and time",
+  "change_date_and_time": "Change date and time",
+  "no_date_selected": "No date selected",
+  "need_inbox_file": "You need to set an inbox file",
+
+  "select_date": "Select Date",
+  "start_date": "Start Date",
+  "start_time": "Start Time",
+  "end_date": "End Date",
+  "end_time": "End Time",
+  "select_end_date": "select end date",
+
+  "next_days": "Next {count} days",
+  "@next_days": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  }
+}

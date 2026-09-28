@@ -29,10 +29,10 @@ class NewSectionDialog extends StatelessWidget {
     final bloc = context.read<NewSectionCubit>();
 
     return DialogShell(
-      title: 'Add Event',
+      title: context.l10n.add_event,
       titleIcon: Icons.title,
       content: inboxFile == null
-          ? const Text('You need to set an inbox file')
+          ? Text(context.l10n.need_inbox_file)
           : Form(
               key: bloc.formKey,
               child: SingleChildScrollView(
@@ -43,18 +43,22 @@ class NewSectionDialog extends StatelessWidget {
                     const SizedBox(height: 0),
                     TextFormField(
                       key: const Key('titleField'),
-                      decoration: const InputDecoration(
-                        labelText: 'Heading title',
-                        prefixIcon: Icon(Icons.title),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: context.l10n.heading_title,
+                        prefixIcon: const Icon(Icons.title),
+                        border: const OutlineInputBorder(),
                         filled: true,
                       ),
                       initialValue: title ?? '',
                       autovalidateMode: AutovalidateMode.always,
                       onChanged: bloc.changeTitle,
-                      validator: (value) => validate(value, 'Title'),
+                      validator: (value) =>
+                          validate(context.l10n, value, context.l10n.title),
                     ),
-                    Text('When', style: Theme.of(context).textTheme.labelLarge),
+                    Text(
+                      context.l10n.when,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
                     Material(
                       color: Theme.of(context)
                           .colorScheme
@@ -86,8 +90,8 @@ class NewSectionDialog extends StatelessWidget {
                                   children: [
                                     Text(
                                       timestamp == null
-                                          ? 'Choose date and time'
-                                          : 'Change date and time',
+                                          ? context.l10n.choose_date_and_time
+                                          : context.l10n.change_date_and_time,
                                       style: Theme.of(
                                         context,
                                       ).textTheme.titleMedium,
@@ -95,7 +99,7 @@ class NewSectionDialog extends StatelessWidget {
                                     const SizedBox(height: 4),
                                     Text(
                                       timestamp?.toMarkup() ??
-                                          'No date selected',
+                                          context.l10n.no_date_selected,
                                       style: Theme.of(
                                         context,
                                       ).textTheme.bodyMedium,
@@ -117,7 +121,7 @@ class NewSectionDialog extends StatelessWidget {
         TextButton(
           key: const Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton.icon(
           key: const Key('SaveButton'),
@@ -134,7 +138,7 @@ class NewSectionDialog extends StatelessWidget {
                 }
               : null,
           icon: const Icon(Icons.save),
-          label: const Text('Save'),
+          label: Text(context.l10n.save),
         ),
       ],
     );

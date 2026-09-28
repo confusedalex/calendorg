@@ -21,7 +21,7 @@ class EventView extends StatelessWidget {
     final bloc = context.read<EventViewBloc>();
 
     return DialogShell(
-      title: 'Edit Event',
+      title: context.l10n.edit_event,
       titleIcon: Icons.event_available,
       content: Form(
         key: bloc.formKey,
@@ -33,10 +33,10 @@ class EventView extends StatelessWidget {
               const SizedBox(height: 0),
               TextFormField(
                 key: const Key('TitleField'),
-                decoration: const InputDecoration(
-                  labelText: 'Event title',
-                  prefixIcon: Icon(Icons.title),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: context.l10n.event_title,
+                  prefixIcon: const Icon(Icons.title),
+                  border: const OutlineInputBorder(),
                   filled: true,
                 ),
                 initialValue: title,
@@ -44,9 +44,13 @@ class EventView extends StatelessWidget {
                 onChanged: (value) => context.read<EventViewBloc>().add(
                   EventViewTitleChangeEvent(value),
                 ),
-                validator: (value) => validate(value, 'Event title'),
+                validator: (value) =>
+                    validate(context.l10n, value, context.l10n.event_title),
               ),
-              Text('When', style: Theme.of(context).textTheme.labelLarge),
+              Text(
+                context.l10n.when,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
               Material(
                 color: Theme.of(
                   context,
@@ -76,7 +80,7 @@ class EventView extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Change date and time',
+                                context.l10n.change_date_and_time,
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                               const SizedBox(height: 4),
@@ -101,7 +105,7 @@ class EventView extends StatelessWidget {
         TextButton(
           key: const Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton.icon(
           key: const Key('SaveButton'),
@@ -111,7 +115,7 @@ class EventView extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.save),
-          label: const Text('Save'),
+          label: Text(context.l10n.save),
         ),
       ],
     );

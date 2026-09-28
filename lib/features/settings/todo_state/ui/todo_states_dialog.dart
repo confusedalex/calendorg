@@ -7,6 +7,7 @@ import '../../../../core/todo_states_cubit.dart';
 import '../../../../entities/todo_states/todo_states.dart';
 import '../../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
+import '../../../../util.dart';
 import '../model/todo_state_add_dialog_cubit.dart';
 import 'todo_state_add_dialog.dart';
 
@@ -20,7 +21,7 @@ class TodoStatesDialog extends StatelessWidget {
             context.read<OrgFilesCubit>().changeTodoStates(state),
         builder: (context, state) {
           return DialogShell(
-            title: 'TODO states',
+            title: context.l10n.todo_states,
             titleIcon: Icons.check,
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.75,
@@ -34,7 +35,12 @@ class TodoStatesDialog extends StatelessWidget {
                   ].mapIndexed(
                     (index, status) => Column(
                       children: [
-                        Text(status.name, textAlign: TextAlign.start),
+                        Text(switch (status) {
+                          TodoStatus.todo => context.l10n.todo_status_todo,
+                          TodoStatus.done => context.l10n.todo_status_done,
+                          TodoStatus.ignored =>
+                            context.l10n.todo_status_ignored,
+                        }, textAlign: TextAlign.start),
                         const Divider(),
                         Wrap(
                           children: [

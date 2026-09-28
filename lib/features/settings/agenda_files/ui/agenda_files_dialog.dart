@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/files/services/org_file_service.dart';
-import '../../../../l10n/calendorg_localizations.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
@@ -23,7 +22,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     bool validateFile(FileInfo? fileInfo) {
       if (fileInfo == null || fileInfo.fileName == null) {
-        sendError(CalendorgLocalizations.of(context).file_could_not_open);
+        sendError(context.l10n.file_could_not_open);
         return false;
       }
       return true;
@@ -31,7 +30,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     bool validateFileName(String? fileName) {
       if (fileName == null || filePaths.any((it) => it.fileName == fileName)) {
-        sendError(CalendorgLocalizations.of(context).file_already_exists);
+        sendError(context.l10n.file_already_exists);
         return false;
       }
       return true;
@@ -44,7 +43,7 @@ class AgendaFilesDialog extends StatelessWidget {
         });
       } on Exception catch (e) {
         if (context.mounted) {
-          sendError('Error selecting file: $e');
+          sendError(context.l10n.error_selecting_file(e));
         }
         return null;
       }
@@ -58,7 +57,7 @@ class AgendaFilesDialog extends StatelessWidget {
         );
       } on Exception catch (e) {
         if (context.mounted) {
-          sendError('Error creating file: $e');
+          sendError(context.l10n.error_creating_file(e));
         }
         return null;
       }
@@ -83,17 +82,17 @@ class AgendaFilesDialog extends StatelessWidget {
       TextButton(
         onPressed: () async =>
             onPressed(orgFilesCubit, await selectGetFileInfo()),
-        child: Text(CalendorgLocalizations.of(context).select_file),
+        child: Text(context.l10n.select_file),
       ),
       TextButton(
         onPressed: () async =>
             onPressed(orgFilesCubit, await createGetFileInfo()),
-        child: Text(CalendorgLocalizations.of(context).create_file),
+        child: Text(context.l10n.create_file),
       ),
     ];
 
     return DialogShell(
-      title: CalendorgLocalizations.of(context).agenda_files,
+      title: context.l10n.agenda_files,
       titleIcon: Icons.file_copy,
       showClose: true,
       content: BlocBuilder<OrgFilesCubit, OrgFilesState>(
@@ -106,8 +105,7 @@ class AgendaFilesDialog extends StatelessWidget {
               final fileInfo = state.filePaths.elementAt(index);
               return ListTile(
                 title: Text(
-                  fileInfo.fileName ??
-                      CalendorgLocalizations.of(context).file_name_couldnt_load,
+                  fileInfo.fileName ?? context.l10n.file_name_couldnt_load,
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete),

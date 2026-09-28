@@ -2,11 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'l10n/calendorg_localizations.dart';
 import 'main.dart';
 
-String? validate(String? value, String object, {Iterable<String>? notIn}) {
-  if (value == null || value.trim().isEmpty) return "$object can't be empty!";
-  if (notIn != null && notIn.contains(value)) return '$object already exists!';
+extension L10n on BuildContext {
+  CalendorgLocalizations get l10n => CalendorgLocalizations.of(this);
+}
+
+/// Localizations for code that has no [BuildContext], for example services.
+CalendorgLocalizations get globalL10n {
+  final context = rootScaffoldMessengerKey.currentContext;
+  return context != null
+      ? context.l10n
+      : lookupCalendorgLocalizations(const Locale('en'));
+}
+
+String? validate(
+  CalendorgLocalizations l10n,
+  String? value,
+  String object, {
+  Iterable<String>? notIn,
+}) {
+  if (value == null || value.trim().isEmpty) {
+    return l10n.validation_empty(object);
+  }
+  if (notIn != null && notIn.contains(value)) {
+    return l10n.validation_exists(object);
+  }
 
   return null;
 }

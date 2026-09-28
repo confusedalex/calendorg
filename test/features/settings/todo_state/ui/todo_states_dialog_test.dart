@@ -6,6 +6,7 @@ import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_state_add_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_states_dialog.dart';
 import 'package:file_picker_writable/src/file_picker_writable.dart';
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +25,8 @@ void main() {
   Future<void> pumpWidgetToTester(dynamic tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: MultiBlocProvider(
             providers: [

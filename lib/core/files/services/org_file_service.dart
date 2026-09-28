@@ -95,7 +95,7 @@ class OrgFileService {
 
       return parseText(newText);
     } on Exception catch (e) {
-      sendError('Error saving section: $e');
+      sendError(globalL10n.error_saving_section(e));
       debugPrint('$e');
       return null;
     }
@@ -108,9 +108,7 @@ class OrgFileService {
     if (fileInfo == null || dirInfo == null) return false;
     if (fileInfo.fileName == null) return false;
 
-    void sendErr() => sendError(
-      'File is not in org folder!\nPlease select a file that lies in your in org folder or change your org folder.',
-    );
+    void sendErr() => sendError(globalL10n.error_file_not_in_org_folder);
 
     try {
       late final EntityInfo relative;
@@ -142,7 +140,7 @@ class OrgFileService {
 
       return isSameFile;
     } on Exception {
-      sendError('Error while reading file!');
+      sendError(globalL10n.error_reading_file);
       return false;
     }
   }

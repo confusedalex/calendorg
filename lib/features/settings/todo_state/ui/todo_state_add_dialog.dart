@@ -20,12 +20,13 @@ class TodoStateAddDialog extends StatelessWidget {
         return Form(
           key: formKey,
           child: AlertDialog(
-            title: const Text('TODO State Name'),
+            title: Text(context.l10n.todo_state_name),
             content: TextFormField(
               onChanged: context.read<TodoStateAddDialogCubit>().updateText,
               validator: (value) => validate(
+                context.l10n,
                 value,
-                'TODO State',
+                context.l10n.todo_state,
                 notIn: [
                   ...states.todoStates.todo,
                   ...states.todoStates.done,
@@ -36,7 +37,7 @@ class TodoStateAddDialog extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('cancel'),
+                child: Text(context.l10n.cancel),
               ),
               TextButton(
                 onPressed: () async {
@@ -48,7 +49,7 @@ class TodoStateAddDialog extends StatelessWidget {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('save'),
+                child: Text(context.l10n.save),
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:calendorg/features/date_picker/model/date_picker_bloc.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +15,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
@@ -36,6 +39,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
@@ -62,6 +67,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
@@ -88,6 +95,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
@@ -115,6 +124,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
@@ -141,6 +152,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>

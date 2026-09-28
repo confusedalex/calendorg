@@ -1,5 +1,7 @@
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:org_parser/org_parser.dart';
@@ -207,23 +209,29 @@ DEADLINE: <2025-05-04>
       });
     });
     group('validator', () {
+      final l10n = lookupCalendorgLocalizations(const Locale('en'));
       test('validator should return string when null', () {
-        final result = validate(null, 'Placeholder');
+        final result = validate(l10n, null, 'Placeholder');
 
         expect(result, isA<String>());
       });
       test('validator should return string when string is empty', () {
-        final result = validate('', 'Placeholder');
+        final result = validate(l10n, '', 'Placeholder');
 
         expect(result, isA<String>());
       });
       test('validator should return string when string is just spaces', () {
-        final result = validate('                           ', 'Placeholder');
+        final result = validate(
+          l10n,
+          '                           ',
+          'Placeholder',
+        );
 
         expect(result, isA<String>());
       });
       test('validator should return string when string is in set', () {
         final result = validate(
+          l10n,
           'alreadyExists',
           'Placeholder',
           notIn: ['alreadyExists'],
@@ -235,6 +243,7 @@ DEADLINE: <2025-05-04>
         'validator should return null when string not in set and not empty',
         () {
           final result = validate(
+            l10n,
             'doesntAlreadyExists',
             'Placeholder',
             notIn: ['alreadyExists'],

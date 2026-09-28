@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/tag_colors/tag_color.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../../util.dart';
 
 class EditTagColorDialog extends StatefulWidget {
   final TagColor tagColor;
@@ -18,7 +19,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: Text('Edit "${widget.tagColor.tag}" Tag'),
+    title: Text(context.l10n.edit_tag(widget.tagColor.tag)),
     content: SingleChildScrollView(
       child: ColorPicker(
         color: widget.tagColor.color,
@@ -41,7 +42,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
           );
           Navigator.of(context).pop();
         },
-        child: const Text('delete'),
+        child: Text(context.l10n.delete),
       ),
       TextButton(
         key: const Key('edittag_savebutton'),
@@ -51,7 +52,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
           );
           Navigator.of(context).pop();
         },
-        child: const Text('save'),
+        child: Text(context.l10n.save),
       ),
     ],
   );

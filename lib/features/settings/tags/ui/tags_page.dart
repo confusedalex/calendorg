@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/tag_colors/tag_color.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../../util.dart';
 import '../model/new_tag_color_cubit.dart';
 import 'edit_tag_color_dialog.dart';
 import 'new_tag_color_dialog.dart';
@@ -70,7 +71,7 @@ class _TagsPageState extends State<TagsPage> {
           ),
         );
       },
-      label: const Text('Add'),
+      label: Text(context.l10n.add),
     ),
   );
 }

@@ -5,6 +5,7 @@ import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/starting_day_cubit.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../core/todo_states_cubit.dart';
+import '../../../../util.dart';
 import '../../agenda_files/ui/agenda_page.dart';
 import '../../debug/ui/debug_page.dart';
 import '../../starting_day/ui/starting_day_dialog.dart';
@@ -22,7 +23,7 @@ class SettingsPage extends StatelessWidget {
       children: [
         ListTile(
           leading: const Icon(Icons.palette),
-          title: const Text('Tag Colors'),
+          title: Text(context.l10n.tag_colors),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -36,7 +37,7 @@ class SettingsPage extends StatelessWidget {
         const Divider(height: 1),
         ListTile(
           leading: const Icon(Icons.calendar_today),
-          title: const Text('Starting Day of Week'),
+          title: Text(context.l10n.starting_day_of_week),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -48,7 +49,7 @@ class SettingsPage extends StatelessWidget {
         const Divider(height: 1),
         ListTile(
           leading: const Icon(Icons.check_circle),
-          title: const Text('TODO States'),
+          title: Text(context.l10n.todo_states),
           onTap: () => showDialog(
             context: context,
             builder: (_) => MultiBlocProvider(
@@ -63,7 +64,7 @@ class SettingsPage extends StatelessWidget {
         const Divider(height: 1),
         ListTile(
           leading: const Icon(Icons.brightness_4),
-          title: const Text('Theme'),
+          title: Text(context.l10n.theme),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -75,7 +76,7 @@ class SettingsPage extends StatelessWidget {
         const Divider(height: 1),
         ListTile(
           leading: const Icon(Icons.bug_report),
-          title: const Text('Debug'),
+          title: Text(context.l10n.debug),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -88,7 +89,7 @@ class SettingsPage extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.folder),
-          title: const Text('Agenda Files'),
+          title: Text(context.l10n.agenda_files),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(

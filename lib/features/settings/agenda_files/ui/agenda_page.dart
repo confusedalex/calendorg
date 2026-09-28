@@ -20,9 +20,9 @@ class AgendaPage extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.folder_open),
-              title: const Text('Pick org directory'),
+              title: Text(context.l10n.pick_org_directory),
               trailing: Text(
-                state.directory?.fileName ?? 'Not set',
+                state.directory?.fileName ?? context.l10n.not_set,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               onTap: () async {
@@ -39,7 +39,9 @@ class AgendaPage extends StatelessWidget {
                 } on Exception catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error selecting file: $e')),
+                      SnackBar(
+                        content: Text(context.l10n.error_selecting_file(e)),
+                      ),
                     );
                   }
                 }
@@ -49,9 +51,9 @@ class AgendaPage extends StatelessWidget {
             ListTile(
               enabled: state.directory != null,
               leading: const Icon(Icons.inbox),
-              title: const Text('Inbox File'),
+              title: Text(context.l10n.inbox_file),
               trailing: Text(
-                state.inboxFile?.fileName ?? 'Not set',
+                state.inboxFile?.fileName ?? context.l10n.not_set,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               onTap: () async {
@@ -74,13 +76,13 @@ class AgendaPage extends StatelessWidget {
                     );
                   }
                 } on Exception catch (e) {
-                  sendError('Error loading file: {$e}');
+                  sendError(globalL10n.error_loading_file(e));
                 }
               },
             ),
             ListTile(
               leading: const Icon(Icons.folder_copy),
-              title: const Text('Agenda Files'),
+              title: Text(context.l10n.agenda_files),
               enabled: state.directory != null,
               onTap: () => showDialog(
                 context: context,

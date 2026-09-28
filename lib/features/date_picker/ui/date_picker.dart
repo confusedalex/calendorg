@@ -28,13 +28,13 @@ class DatePicker extends StatelessWidget {
       ],
     );
     return DialogShell(
-      title: 'Select Date',
+      title: context.l10n.select_date,
       titleIcon: Icons.date_range,
       content: BlocBuilder<DatePickerBloc, DatePickerState>(
         builder: (context, state) => Table(
           columnWidths: const {1: FractionColumnWidth(0.25)},
           children: [
-            titleRow('Start Date'),
+            titleRow(context.l10n.start_date),
             TableRow(
               children: [
                 OutlinedButton(
@@ -56,7 +56,7 @@ class DatePicker extends StatelessWidget {
                 const SizedBox(),
               ],
             ),
-            titleRow('Start Time'),
+            titleRow(context.l10n.start_time),
             TableRow(
               children: [
                 OutlinedButton(
@@ -80,7 +80,7 @@ class DatePicker extends StatelessWidget {
                 ),
               ],
             ),
-            titleRow('End Date'),
+            titleRow(context.l10n.end_date),
             TableRow(
               children: [
                 OutlinedButton(
@@ -101,7 +101,7 @@ class DatePicker extends StatelessWidget {
                             false,
                             true,
                           ).toMarkup()
-                        : 'select end date',
+                        : context.l10n.select_end_date,
                   ),
                 ),
                 Switch(
@@ -113,7 +113,7 @@ class DatePicker extends StatelessWidget {
                 ),
               ],
             ),
-            titleRow('End Time'),
+            titleRow(context.l10n.end_time),
             TableRow(
               children: [
                 OutlinedButton(
@@ -146,7 +146,7 @@ class DatePicker extends StatelessWidget {
         TextButton(
           key: const Key('CancelButton'),
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton.icon(
           key: const Key('SetButton'),
@@ -155,7 +155,7 @@ class DatePicker extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.check),
-          label: const Text('Set'),
+          label: Text(context.l10n.set),
         ),
       ],
     );

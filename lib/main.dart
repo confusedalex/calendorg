@@ -20,6 +20,7 @@ import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
 import 'shared/config/preferences_service.dart';
 import 'theme.dart';
+import 'util.dart';
 
 final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
@@ -144,23 +145,23 @@ class _HomePageState extends State<HomePage> {
                   index = value;
                 }),
                 selectedIndex: index,
-                destinations: const [
+                destinations: [
                   if (kDebugMode)
-                    NavigationDestination(
+                    const NavigationDestination(
                       icon: Icon(Icons.compare_arrows),
                       label: 'Diff',
                     ),
                   NavigationDestination(
-                    icon: Icon(Icons.list),
-                    label: 'Events',
+                    icon: const Icon(Icons.list),
+                    label: context.l10n.nav_events,
                   ),
                   NavigationDestination(
-                    icon: Icon(Icons.calendar_today),
-                    label: 'Calendar',
+                    icon: const Icon(Icons.calendar_today),
+                    label: context.l10n.nav_calendar,
                   ),
                   NavigationDestination(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
+                    icon: const Icon(Icons.settings),
+                    label: context.l10n.nav_settings,
                   ),
                 ],
               ),

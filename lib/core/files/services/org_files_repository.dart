@@ -145,7 +145,7 @@ class OrgFilesRepository {
         ignoredTodoStates.toSet(),
       );
     } on Exception catch (e) {
-      sendError('Error saving section: $e');
+      sendError(globalL10n.error_saving_section(e));
       return null;
     }
   }
@@ -164,7 +164,7 @@ class OrgFilesRepository {
     final parsed = await _fileService.documentByIdentifier(resolved.identifier);
     final section = locateSection(parsed.document, entry.locator);
     if (section == null) {
-      sendError('Entry $entry no longer found in file!');
+      sendError(globalL10n.error_entry_not_found(entry));
       return null;
     }
 
@@ -177,7 +177,7 @@ class OrgFilesRepository {
 
     if (entry.fileHash != parsed.hash) {
       debugPrint('File changed on disk!');
-      sendError('File changed on disk!');
+      sendError(globalL10n.error_file_changed_on_disk);
       return null;
     }
 

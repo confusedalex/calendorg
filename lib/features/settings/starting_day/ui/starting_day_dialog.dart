@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../core/starting_day_cubit.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
+import '../../../../util.dart';
 
 class StartingDateDialog extends StatelessWidget {
   const StartingDateDialog({super.key});
@@ -13,7 +14,7 @@ class StartingDateDialog extends StatelessWidget {
       BlocBuilder<StartingDayCubit, StartingDayOfWeek>(
         builder: (context, state) {
           return DialogShell(
-            title: 'Starting Day',
+            title: context.l10n.starting_day,
             titleIcon: Icons.calendar_month,
             showClose: true,
             content: SizedBox(
@@ -26,14 +27,14 @@ class StartingDateDialog extends StatelessWidget {
                     onChanged: (day) => context
                         .read<StartingDayCubit>()
                         .changeStartingDayOfWeek(day!),
-                    child: const Column(
+                    child: Column(
                       children: [
                         RadioListTile(
-                          title: Text('Monday'),
+                          title: Text(context.l10n.monday),
                           value: StartingDayOfWeek.monday,
                         ),
                         RadioListTile(
-                          title: Text('Sunday'),
+                          title: Text(context.l10n.sunday),
                           value: StartingDayOfWeek.sunday,
                         ),
                       ],

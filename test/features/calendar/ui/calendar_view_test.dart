@@ -11,6 +11,7 @@ import 'package:calendorg/features/calendar/ui/calendar_view.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
 import 'package:calendorg/features/new_section/ui/new_section_dialog.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,6 +62,9 @@ void main() {
         RepositoryProvider(
           create: (context) => OrgFileService(OrgParserService()),
           child: MaterialApp(
+            localizationsDelegates:
+                CalendorgLocalizations.localizationsDelegates,
+            supportedLocales: CalendorgLocalizations.supportedLocales,
             home: Scaffold(
               body: MultiBlocProvider(
                 providers: [
