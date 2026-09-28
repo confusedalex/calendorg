@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../shared/config/preferences_service.dart';
+
+final _log = Logger('OrgFilePersistenceService');
 
 class OrgFilePersistenceService {
   OrgFilePersistenceService(this._prefs, this._filePicker);
@@ -17,8 +19,8 @@ class OrgFilePersistenceService {
         PrefKeys.agendaDirectory,
         jsonEncode(directoryInfo),
       );
-    } on Exception catch (e) {
-      debugPrint('Error saving file list: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error saving file list', e, stack);
       rethrow;
     }
   }
@@ -29,8 +31,8 @@ class OrgFilePersistenceService {
         PrefKeys.agendaFiles,
         fileInfos.map((e) => e.fileName).whereType<String>().toList(),
       );
-    } on Exception catch (e) {
-      debugPrint('Error saving file list: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error saving file list', e, stack);
       rethrow;
     }
   }
@@ -38,8 +40,8 @@ class OrgFilePersistenceService {
   Future<void> saveInboxFile(FileInfo fileInfo) async {
     try {
       await _prefs.setString(PrefKeys.inboxFile, fileInfo.fileName!);
-    } on Exception catch (e) {
-      debugPrint('Error saving inbox file: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error saving inbox file', e, stack);
       rethrow;
     }
   }
@@ -52,8 +54,8 @@ class OrgFilePersistenceService {
 
       await _prefs.setStringList(PrefKeys.entriesCache, json);
       await _prefs.setString(PrefKeys.entriesCacheKey, cacheKey);
-    } on Exception catch (e) {
-      debugPrint('Error saving entries cache: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error saving entries cache', e, stack);
       rethrow;
     }
   }
@@ -112,8 +114,8 @@ class OrgFilePersistenceService {
           : {};
 
       return (fileInfos, inboxFile, dirInfo);
-    } on Exception catch (e) {
-      debugPrint('Error loading preferences: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error loading preferences', e, stack);
       return (<FileInfo>{}, null, null);
     }
   }

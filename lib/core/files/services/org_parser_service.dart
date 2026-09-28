@@ -1,9 +1,12 @@
 import 'dart:isolate';
 
+import 'package:logging/logging.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../../entities/todo_states/todo_states_ignored.dart';
+
+final _log = Logger('OrgParserService');
 
 class _ParseRequest {
   final SendPort replyPort;
@@ -40,7 +43,7 @@ class OrgParserService {
       await Isolate.spawn(_parserWorkerMain, readyPort.sendPort);
       final sendPort = await readyPort.first as SendPort;
       _workerSendPort = sendPort;
-      print('OrgParserService worker isolate started');
+      _log.fine('Worker isolate started');
     } finally {
       readyPort.close();
     }
@@ -54,10 +57,11 @@ class OrgParserService {
     final responsePort = ReceivePort();
     final todoStates = _currentTodoStates.todoStates;
 
-    print(
+    _log.fine(
       'Sending parse request (${content.length} chars, states: '
       '${todoStates.todo} / ${todoStates.done})',
     );
+    final stopwatch = Stopwatch()..start();
 
     _workerSendPort.send(
       _ParseRequest(
@@ -73,8 +77,18 @@ class OrgParserService {
         const Duration(seconds: 30),
       );
 
-      if (response is OrgDocument) return response;
-      if (response is String) throw StateError('Worker error: $response');
+      if (response is OrgDocument) {
+        _log.fine('Parse succeeded in ${stopwatch.elapsedMilliseconds}ms');
+        return response;
+      }
+      if (response case (final String error, final String stack)) {
+        _log.warning(
+          'Parse failed after ${stopwatch.elapsedMilliseconds}ms',
+          error,
+          StackTrace.fromString(stack),
+        );
+        throw StateError('Worker error: $error');
+      }
       throw StateError('Unexpected response type');
     } finally {
       responsePort.close();
@@ -99,8 +113,6 @@ void _parserWorkerMain(SendPort mainSendPort) {
     }
 
     final request = message as _ParseRequest;
-    final stopwatch = Stopwatch()..start();
-
     try {
       final key =
           '${request.todoStates.join(',')}|${request.doneStates.join(',')}';
@@ -113,16 +125,9 @@ void _parserWorkerMain(SendPort mainSendPort) {
             ],
           ).build());
       final parseResult = parser.parse(request.content);
-      stopwatch.stop();
-
-      print('Parse succeeded in ${stopwatch.elapsedMilliseconds}ms ');
       request.replyPort.send(parseResult.value as OrgDocument);
     } on Exception catch (e, stack) {
-      stopwatch.stop();
-      print(
-        'Parse failed after ${stopwatch.elapsedMilliseconds}ms: $e\n$stack',
-      );
-      request.replyPort.send('Parser worker failed: $e');
+      request.replyPort.send(('$e', '$stack'));
     }
   });
 }

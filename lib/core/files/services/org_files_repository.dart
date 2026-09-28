@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
@@ -13,6 +13,8 @@ import '../../../shared/org_text_hash.dart';
 import '../../../util.dart';
 import 'org_file_persistence_service.dart';
 import 'org_parser_service.dart';
+
+final _log = Logger('OrgFilesRepository');
 
 typedef _ParsedFile = ({OrgDocument document, String hash});
 
@@ -92,8 +94,8 @@ class OrgFilesRepository {
             parsed.document,
             ignored,
           );
-        } on Exception catch (e) {
-          debugPrint('Error loading file $fileName: $e');
+        } on Exception catch (e, stack) {
+          _log.warning('Error loading file $fileName', e, stack);
           return const <OrgEntry>[];
         }
       }),
@@ -236,7 +238,7 @@ class OrgFilesRepository {
     if (replacements.isEmpty) return null;
 
     if (entry.fileHash != parsed.hash) {
-      debugPrint('File changed on disk!');
+      _log.info('File changed on disk');
       sendError(globalL10n.error_file_changed_on_disk);
       return null;
     }

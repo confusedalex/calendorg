@@ -7,6 +7,7 @@ import 'core/files/cubit/org_files_cubit.dart';
 import 'core/files/services/org_file_persistence_service.dart';
 import 'core/files/services/org_files_repository.dart';
 import 'core/files/services/org_parser_service.dart';
+import 'core/logging.dart';
 import 'core/starting_day_cubit.dart';
 import 'core/tag_colors/tag_colors_cubit.dart';
 import 'core/todo_states_cubit.dart';
@@ -25,6 +26,7 @@ import 'util.dart';
 final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setUpLogging();
 
   final preferences = PreferencesService();
   final todoStatesCubit = TodoStatesCubit(preferences);

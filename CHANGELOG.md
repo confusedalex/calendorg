@@ -2,6 +2,7 @@
 ## Unreleased
 ### Added
 - Add weekday text to timestamp
+- Logger for logging errors and warning
 ### Fixed
 - Find timestamps after a range timestamp in the same section
 - Keep event of selected Day loaded when scrolling to other calendar pages

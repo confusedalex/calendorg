@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/org_entry.dart';
@@ -8,6 +9,8 @@ import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../services/org_files_repository.dart';
 
 part 'org_files_state.dart';
+
+final _log = Logger('OrgFilesCubit');
 
 class OrgFilesCubit extends Cubit<OrgFilesState> {
   final OrgFilesRepository _repository;
@@ -41,8 +44,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       if (!_sameEntries(result.entries, cachedEntries)) {
         await _repository.cacheOrgEntries(result.entries, todoStates);
       }
-    } on Exception catch (e) {
-      debugPrint('Error initializing org files: $e');
+    } on Exception catch (e, stack) {
+      _log.severe('Error initializing org files', e, stack);
       emit(OrgFilesState.initial());
     }
   }
@@ -62,8 +65,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
       emit(state.copyWith(filePaths: filePaths));
       await _reloadEntries();
-    } on Exception catch (e) {
-      debugPrint('Error adding file: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error adding file', e, stack);
     }
   }
 
@@ -74,8 +77,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
       emit(state.copyWith(filePaths: filePaths));
       await _reloadEntries();
-    } on Exception catch (e) {
-      debugPrint('Error removing file: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error removing file', e, stack);
     }
   }
 
@@ -85,8 +88,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
       emit(state.copyWith(inboxFile: () => fileInfo));
       await _reloadEntries();
-    } on Exception catch (e) {
-      debugPrint('Error changing inbox file: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error changing inbox file', e, stack);
     }
   }
 
@@ -96,8 +99,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
       emit(state.copyWith(todoStates: todoStates));
       await _reloadEntries();
-    } on Exception catch (e) {
-      debugPrint('Error changing todo states: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error changing todo states', e, stack);
     }
   }
 
@@ -144,8 +147,8 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       ];
       emit(state.copyWith(entries: entries));
       await _repository.cacheOrgEntries(entries, state.todoStates);
-    } on Exception catch (e) {
-      debugPrint('Error applying edit: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error applying edit', e, stack);
     }
     emit(state.copyWith(status: OrgFilesStatus.success));
   }

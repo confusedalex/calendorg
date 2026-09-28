@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
+
 import '../entities/todo_states/todo_states.dart';
 import '../entities/todo_states/todo_states_ignored.dart';
 import '../shared/config/preferences_service.dart';
+
+final _log = Logger('TodoStatesCubit');
 
 final defaultTodoStates = OrgTodoStatesWithIgnored(
   todo: ['TODO'],
@@ -103,8 +106,8 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
       await _prefs.setString(PrefKeys.todoStates, jsonEncode(state.todo));
       await _prefs.setString(PrefKeys.doneStates, jsonEncode(state.done));
       await _prefs.setString(PrefKeys.ignoredStates, jsonEncode(state.ignored));
-    } on Exception catch (e) {
-      debugPrint('Error saving todo states: $e');
+    } on Exception catch (e, stack) {
+      _log.warning('Error saving todo states', e, stack);
     }
   }
 }
