@@ -102,7 +102,6 @@ class OrgFileService {
   }
 
   Future<bool> validateFileDirectory(
-    BuildContext context,
     FileInfo? fileInfo,
     DirectoryInfo? dirInfo,
   ) async {

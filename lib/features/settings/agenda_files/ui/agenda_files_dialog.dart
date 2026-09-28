@@ -18,12 +18,7 @@ class AgendaFilesDialog extends StatelessWidget {
     final filePaths = context.select(
       (OrgFilesCubit cubit) => cubit.state.filePaths,
     );
-    final validateFileDirectory = context.select(
-      (OrgFileService service) => service.validateFileDirectory,
-    );
-    final filePicker = context.select(
-      (OrgFileService service) => service.filePicker,
-    );
+    final orgFileService = context.read<OrgFileService>();
     final orgFilesCubit = context.read<OrgFilesCubit>();
 
     bool validateFile(FileInfo? fileInfo) {
@@ -44,7 +39,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     Future<FileInfo?> selectGetFileInfo() async {
       try {
-        return await filePicker.openFile((fileInfo, file) async {
+        return await orgFileService.filePicker.openFile((fileInfo, file) async {
           return fileInfo;
         });
       } on Exception catch (e) {
@@ -57,7 +52,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     Future<FileInfo?> createGetFileInfo() async {
       try {
-        return await filePicker.openFileForCreate(
+        return await orgFileService.filePicker.openFileForCreate(
           writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
           fileName: 'agenda.org',
         );
@@ -74,8 +69,7 @@ class AgendaFilesDialog extends StatelessWidget {
       FileInfo? fileInfo,
     ) async {
       if (!validateFile(fileInfo)) return;
-      if (!(await validateFileDirectory(
-        context,
+      if (!(await orgFileService.validateFileDirectory(
         fileInfo,
         orgFilesCubit.state.directory,
       ))) {

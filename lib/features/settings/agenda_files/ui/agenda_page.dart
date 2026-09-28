@@ -32,7 +32,9 @@ class AgendaPage extends StatelessWidget {
 
                   if (dirInfo == null) throw Error();
                   if (context.mounted) {
-                    context.read<OrgFilesCubit>().setOrgDirectory(dirInfo);
+                    await context.read<OrgFilesCubit>().setOrgDirectory(
+                      dirInfo,
+                    );
                   }
                 } on Exception catch (e) {
                   if (context.mounted) {
@@ -61,8 +63,7 @@ class AgendaPage extends StatelessWidget {
                     return fileInfo;
                   });
 
-                  final valid = await validateFileDirectory(
-                    context,
+                  final valid = await orgFileService.validateFileDirectory(
                     fileInfo,
                     state.directory,
                   );

@@ -11,9 +11,7 @@ class DiffViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filePicker = context.select(
-      (OrgFileService service) => service.filePicker,
-    );
+    final orgFileService = context.read<OrgFileService>();
     final oldText = context.select(
       (DiffViewCubit cubit) => cubit.state.oldText,
     );
@@ -26,7 +24,10 @@ class DiffViewPage extends StatelessWidget {
         child: OutlinedButton(
           onPressed: () async {
             try {
-              final content = await filePicker.openFile((fileInfo, file) {
+              final content = await orgFileService.filePicker.openFile((
+                fileInfo,
+                file,
+              ) {
                 return file.readAsString();
               });
               if (content != null && context.mounted) {
