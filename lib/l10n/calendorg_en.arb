@@ -75,6 +75,8 @@
     }
   },
   "error_edit_before_loading": "Can't edit heading before loading!",
+  "error_inbox_file_to_agenda_files": "Inbox file can't be added to agenda files.",
+  "error_already_in_agenda_files": "File already in agenda files.",
   "error_unknown": "Some error has occurred!",
 
   "tag_colors": "Tag Colors",

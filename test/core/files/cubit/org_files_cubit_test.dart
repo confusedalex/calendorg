@@ -6,11 +6,12 @@ import 'package:calendorg/entities/org_entry/entry_edit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:test/test.dart';
 
 import '../../../helpers/entries.dart';
+import '../services/org_file_persistence_service_test.dart';
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
 
@@ -19,6 +20,8 @@ class FakeDirectoryInfo extends Fake implements DirectoryInfo {}
 class FakeFileInfo extends Fake implements FileInfo {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('OrgFilesCubit', () {
     setUpAll(() {
       registerFallbackValue(FakeDirectoryInfo());
@@ -65,7 +68,7 @@ void main() {
           () => repository.cacheOrgEntries(any(), any()),
         ).thenAnswer((_) async {});
 
-        await cubit.addFilePath(FakeFileInfo());
+        await cubit.addFilePath(fakeFileInfo('work'));
 
         verify(() => repository.saveFileList(any())).called(1);
       });
@@ -73,7 +76,7 @@ void main() {
         final repository = MockOrgFilesRepository();
         final cubit = OrgFilesCubit(repository);
 
-        final fakeFileInfo = FakeFileInfo();
+        final file = fakeFileInfo('work');
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
         when(
           () => repository.parseEntriesForFiles(any(), any(), any()),
@@ -82,9 +85,27 @@ void main() {
           () => repository.cacheOrgEntries(any(), any()),
         ).thenAnswer((_) async {});
 
-        await cubit.addFilePath(fakeFileInfo);
+        await cubit.addFilePath(file);
 
-        expect(cubit.state.filePaths.contains(fakeFileInfo), isTrue);
+        expect(cubit.state.filePaths.contains(file), isTrue);
+      });
+      test('should not allow adding of inboxFile', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = OrgFilesCubit(repository);
+
+        final inboxFile = fakeFileInfo('inbox');
+        when(() => repository.saveInboxFile(any())).thenAnswer((_) async {});
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any()),
+        ).thenAnswer((_) async => []);
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
+
+        await cubit.changeInboxFile(inboxFile);
+        await cubit.addFilePath(inboxFile);
+
+        expect(cubit.state.filePaths, isEmpty);
       });
     });
     group('removeFilePath()', () {

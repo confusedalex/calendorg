@@ -120,6 +120,13 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get error_edit_before_loading => 'Can\'t edit heading before loading!';
 
   @override
+  String get error_inbox_file_to_agenda_files =>
+      'Inbox file can\'t be added to agenda files.';
+
+  @override
+  String get error_already_in_agenda_files => 'File already in agenda files.';
+
+  @override
   String get error_unknown => 'Some error has occurred!';
 
   @override

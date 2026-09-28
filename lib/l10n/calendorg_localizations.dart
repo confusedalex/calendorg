@@ -271,6 +271,18 @@ abstract class CalendorgLocalizations {
   /// **'Can\'t edit heading before loading!'**
   String get error_edit_before_loading;
 
+  /// No description provided for @error_inbox_file_to_agenda_files.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox file can\'t be added to agenda files.'**
+  String get error_inbox_file_to_agenda_files;
+
+  /// No description provided for @error_already_in_agenda_files.
+  ///
+  /// In en, this message translates to:
+  /// **'File already in agenda files.'**
+  String get error_already_in_agenda_files;
+
   /// No description provided for @error_unknown.
   ///
   /// In en, this message translates to:

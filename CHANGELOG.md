@@ -7,6 +7,7 @@
 - Logger for logging errors and warning
 - Add copy log button in the settings
 ### Fixed
+- Don't allow adding of inboxFile to agenda files or the other way around
 - Find timestamps after a range timestamp in the same section
 - Keep event of selected Day loaded when scrolling to other calendar pages
 - Error when trying to save a file which is newer on disk

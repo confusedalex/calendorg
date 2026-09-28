@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
+import '../../../util.dart';
 import '../services/org_files_repository.dart';
 
 part 'org_files_state.dart';
@@ -83,6 +84,10 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
   Future<void> addFilePath(FileInfo? fileInfo) async {
     if (fileInfo == null) return;
+    if (fileInfo.fileName == state.inboxFile?.fileName) {
+      sendError(globalL10n.error_inbox_file_to_agenda_files);
+      return;
+    }
 
     try {
       final filePaths = {...state.filePaths, fileInfo};
@@ -108,6 +113,11 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   }
 
   Future<void> changeInboxFile(FileInfo fileInfo) async {
+    if (state.filePaths.any((f) => f.fileName == fileInfo.fileName)) {
+      sendError(globalL10n.error_already_in_agenda_files);
+      return;
+    }
+
     try {
       await _repository.saveInboxFile(fileInfo);
 
