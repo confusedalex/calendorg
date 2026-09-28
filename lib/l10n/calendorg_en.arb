@@ -129,6 +129,10 @@
   "copy_log": "Copy log",
   "log_copied": "Log copied to the clipboard",
 
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "no_events": "No events",
+
   "next_days": "Next {count} days",
   "@next_days": {
     "placeholders": {

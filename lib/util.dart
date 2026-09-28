@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -14,6 +15,18 @@ CalendorgLocalizations get globalL10n {
   return context != null
       ? context.l10n
       : lookupCalendorgLocalizations(const Locale('en'));
+}
+
+String dayLabel(BuildContext context, DateTime day) {
+  final now = DateTime.now();
+  if (isSameDay(day, now)) return context.l10n.today;
+  if (isSameDay(day, now.add(const Duration(days: 1)))) {
+    return context.l10n.tomorrow;
+  }
+  final format = day.year == now.year
+      ? DateFormat.MMMMEEEEd()
+      : DateFormat.yMMMMEEEEd();
+  return format.format(day);
 }
 
 String? validate(

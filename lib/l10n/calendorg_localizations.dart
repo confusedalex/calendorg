@@ -541,6 +541,24 @@ abstract class CalendorgLocalizations {
   /// **'Log copied to the clipboard'**
   String get log_copied;
 
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @tomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// No description provided for @no_events.
+  ///
+  /// In en, this message translates to:
+  /// **'No events'**
+  String get no_events;
+
   /// No description provided for @next_days.
   ///
   /// In en, this message translates to:

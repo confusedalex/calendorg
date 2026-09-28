@@ -248,6 +248,15 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get log_copied => 'Log copied to the clipboard';
 
   @override
+  String get today => 'Today';
+
+  @override
+  String get tomorrow => 'Tomorrow';
+
+  @override
+  String get no_events => 'No events';
+
+  @override
   String next_days(int count) {
     return 'Next $count days';
   }

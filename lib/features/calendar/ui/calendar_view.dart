@@ -5,6 +5,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../core/starting_day_cubit.dart';
 import '../../../entities/occurrence/occurrence_getter.dart';
+import '../../../util.dart';
 import '../../new_section/model/new_section_cubit.dart';
 import '../../new_section/ui/new_section_dialog.dart';
 import '../model/calendar_bloc.dart';
@@ -29,6 +30,14 @@ class CalendarView extends StatelessWidget {
     final occurrencesByDate = context.select(
       (CalendarBloc bloc) => bloc.state.occurrencesByDate,
     );
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final textTheme = theme.textTheme;
+    final dayEvents = [...?occurrencesByDate[dateKey(selectedDate)]]
+      ..sort(
+        (a, b) =>
+            a.timestamp.startDateTime.compareTo(b.timestamp.startDateTime),
+      );
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<void>(
@@ -67,31 +76,91 @@ class CalendarView extends StatelessWidget {
               CalendarChangeFormat(calendarFormat: format),
             ),
             eventLoader: (day) => occurrencesByDate[dateKey(day)] ?? [],
+            headerStyle: HeaderStyle(
+              titleTextStyle: textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              headerPadding: const EdgeInsets.fromLTRB(16, 4, 0, 4),
+              leftChevronMargin: EdgeInsets.zero,
+              rightChevronMargin: const EdgeInsets.only(right: 4),
+              formatButtonTextStyle: textTheme.labelLarge!,
+              formatButtonDecoration: BoxDecoration(
+                border: Border.all(color: colors.outlineVariant),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              formatButtonPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              leftChevronIcon: Icon(
+                Icons.chevron_left,
+                color: colors.onSurfaceVariant,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right,
+                color: colors.onSurfaceVariant,
+              ),
+            ),
+            daysOfWeekStyle: DaysOfWeekStyle(
+              weekdayStyle: textTheme.labelMedium!.copyWith(
+                color: colors.onSurfaceVariant,
+              ),
+              weekendStyle: textTheme.labelMedium!.copyWith(
+                color: colors.onSurfaceVariant.withValues(alpha: 0.7),
+              ),
+            ),
+            calendarStyle: CalendarStyle(
+              cellMargin: const EdgeInsets.all(5),
+              defaultTextStyle: textTheme.bodyMedium!,
+              weekendTextStyle: textTheme.bodyMedium!.copyWith(
+                color: colors.onSurfaceVariant,
+              ),
+              outsideTextStyle: textTheme.bodyMedium!.copyWith(
+                color: colors.onSurface.withValues(alpha: 0.35),
+              ),
+              todayDecoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: colors.primary, width: 1.5),
+              ),
+              todayTextStyle: textTheme.bodyMedium!.copyWith(
+                color: colors.primary,
+                fontWeight: FontWeight.w700,
+              ),
+              selectedDecoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: colors.primary,
+              ),
+              selectedTextStyle: textTheme.bodyMedium!.copyWith(
+                color: colors.onPrimary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             calendarBuilders: CalendarBuilders(
               markerBuilder: (context, day, events) {
-                if (events.isEmpty ||
-                    isSameDay(day, focusedDay) ||
-                    isSameDay(day, DateTime.now())) {
-                  return Container();
-                }
+                if (events.isEmpty) return null;
                 return EventMarkers(
                   occurrences: occurrencesByDate[dateKey(day)] ?? [],
                 );
               },
             ),
           ),
+          const Padding(padding: EdgeInsets.fromLTRB(8, 8, 8, 8)),
+          const Divider(height: 1),
+          const Padding(padding: EdgeInsets.fromLTRB(8, 8, 8, 8)),
           Expanded(
-            child: ListView(
-              children:
-                  (occurrencesByDate[dateKey(selectedDate)] ?? [])
-                      .map(EventCard.new)
-                      .toList()
-                    ..sort(
-                      (a, b) => a.occurrence.timestamp.startDateTime.compareTo(
-                        b.occurrence.timestamp.startDateTime,
+            child: dayEvents.isEmpty
+                ? Center(
+                    child: Text(
+                      context.l10n.no_events,
+                      style: textTheme.bodyMedium!.copyWith(
+                        color: colors.onSurfaceVariant,
                       ),
                     ),
-            ),
+                  )
+                : ListView(
+                    padding: const EdgeInsets.only(bottom: 88),
+                    children: dayEvents.map(EventCard.new).toList(),
+                  ),
           ),
         ],
       ),

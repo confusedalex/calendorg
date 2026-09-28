@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/tag_colors/tag_color.dart';
 import '../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../entities/occurrence/occurrence.dart';
 
@@ -11,28 +10,24 @@ class EventMarkers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TagColorsCubit, List<TagColor>>(
-      builder: (context, state) {
-        return FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 1,
-            children: occurrences
-                .map((o) => o.entry)
-                .toSet()
-                .map(context.read<TagColorsCubit>().getTagColor)
-                .toSet()
-                .map(
-                  (color) => BlocBuilder<TagColorsCubit, List<TagColor>>(
-                    builder: (context, state) =>
-                        CircleAvatar(radius: 7, backgroundColor: color),
-                  ),
-                )
-                .toList(),
-          ),
-        );
-      },
+    final tagColors = context.watch<TagColorsCubit>();
+    final colors = occurrences
+        .map((o) => o.entry)
+        .toSet()
+        .map(tagColors.getTagColor)
+        .toSet();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 2,
+          children: colors
+              .map((color) => CircleAvatar(radius: 4, backgroundColor: color))
+              .toList(),
+        ),
+      ),
     );
   }
 }
