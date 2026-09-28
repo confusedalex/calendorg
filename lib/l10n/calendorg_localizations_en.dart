@@ -257,6 +257,11 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get no_events => 'No events';
 
   @override
+  String no_upcoming_events(int count) {
+    return 'Nothing planned for the next $count days';
+  }
+
+  @override
   String next_days(int count) {
     return 'Next $count days';
   }

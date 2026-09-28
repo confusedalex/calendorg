@@ -559,6 +559,12 @@ abstract class CalendorgLocalizations {
   /// **'No events'**
   String get no_events;
 
+  /// No description provided for @no_upcoming_events.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned for the next {count} days'**
+  String no_upcoming_events(int count);
+
   /// No description provided for @next_days.
   ///
   /// In en, this message translates to:
