@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                   NavigationDestination(
                     icon: const Icon(Icons.view_agenda_outlined),
                     selectedIcon: const Icon(Icons.view_agenda),
-                    label: context.l10n.nav_events,
+                    label: context.l10n.nav_agenda,
                   ),
                   NavigationDestination(
                     icon: const Icon(Icons.calendar_month_outlined),

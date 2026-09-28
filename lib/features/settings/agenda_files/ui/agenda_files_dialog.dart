@@ -72,41 +72,42 @@ class AgendaFilesDialog extends StatelessWidget {
     }
 
     final buttons = [
-      TextButton(
-        onPressed: () async =>
-            onPressed(orgFilesCubit, await selectGetFileInfo()),
-        child: Text(context.l10n.select_file),
-      ),
-      TextButton(
+      TextButton.icon(
         onPressed: () async =>
             onPressed(orgFilesCubit, await createGetFileInfo()),
-        child: Text(context.l10n.create_file),
+        icon: const Icon(Icons.note_add_outlined),
+        label: Text(context.l10n.create_file),
+      ),
+      FilledButton.tonalIcon(
+        onPressed: () async =>
+            onPressed(orgFilesCubit, await selectGetFileInfo()),
+        icon: const Icon(Icons.file_open_outlined),
+        label: Text(context.l10n.select_file),
       ),
     ];
 
     return DialogShell(
       title: context.l10n.agenda_files,
-      titleIcon: Icons.file_copy,
+      titleIcon: Icons.folder_copy_outlined,
       showClose: true,
       content: BlocBuilder<OrgFilesCubit, OrgFilesState>(
-        builder: (_, state) => SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: state.filePaths.length,
-            itemBuilder: (context, index) {
-              final fileInfo = state.filePaths.elementAt(index);
-              return ListTile(
-                title: Text(
-                  fileInfo.fileName ?? context.l10n.file_name_couldnt_load,
-                ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => orgFilesCubit.removeFilePath(fileInfo),
-                ),
-              );
-            },
-          ),
+        builder: (_, state) => ListView.builder(
+          shrinkWrap: true,
+          itemCount: state.filePaths.length,
+          itemBuilder: (context, index) {
+            final fileInfo = state.filePaths.elementAt(index);
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.description_outlined),
+              title: Text(
+                fileInfo.fileName ?? context.l10n.file_name_couldnt_load,
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () => orgFilesCubit.removeFilePath(fileInfo),
+              ),
+            );
+          },
         ),
       ),
       actions: buttons,

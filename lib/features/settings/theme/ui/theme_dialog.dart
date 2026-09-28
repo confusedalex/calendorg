@@ -15,35 +15,31 @@ class ThemeDialog extends StatelessWidget {
           context.read<ThemeBloc>().add(ThemeSwitchEvent(theme!));
       return DialogShell(
         title: context.l10n.choose_theme,
-        titleIcon: Icons.sunny,
+        titleIcon: Icons.brightness_6_outlined,
         showClose: true,
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.75,
-          child: ListView(
-            shrinkWrap: true,
+        content: RadioGroup(
+          groupValue: state,
+          onChanged: changeTheme,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              RadioGroup(
-                groupValue: state,
-                onChanged: changeTheme,
-                child: Column(
-                  children: [
-                    RadioListTile(
-                      title: Text(context.l10n.theme_dark),
-                      value: ThemeMode.dark,
-                      key: const Key('ThemeRadioDarkTheme'),
-                    ),
-                    RadioListTile(
-                      title: Text(context.l10n.theme_light),
-                      key: const Key('ThemeRadioLightTheme'),
-                      value: ThemeMode.light,
-                    ),
-                    RadioListTile(
-                      title: Text(context.l10n.theme_automatic),
-                      key: const Key('ThemeRadioGreenTheme'),
-                      value: ThemeMode.system,
-                    ),
-                  ],
-                ),
+              RadioListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(context.l10n.theme_dark),
+                value: ThemeMode.dark,
+                key: const Key('ThemeRadioDarkTheme'),
+              ),
+              RadioListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(context.l10n.theme_light),
+                key: const Key('ThemeRadioLightTheme'),
+                value: ThemeMode.light,
+              ),
+              RadioListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(context.l10n.theme_automatic),
+                key: const Key('ThemeRadioGreenTheme'),
+                value: ThemeMode.system,
               ),
             ],
           ),

@@ -97,11 +97,11 @@ abstract class CalendorgLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
-  /// No description provided for @nav_events.
+  /// No description provided for @nav_agenda.
   ///
   /// In en, this message translates to:
-  /// **'Events'**
-  String get nav_events;
+  /// **'Agenda'**
+  String get nav_agenda;
 
   /// No description provided for @nav_calendar.
   ///

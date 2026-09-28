@@ -9,7 +9,7 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   CalendorgLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get nav_events => 'Events';
+  String get nav_agenda => 'Agenda';
 
   @override
   String get nav_calendar => 'Calendar';

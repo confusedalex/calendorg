@@ -15,30 +15,25 @@ class StartingDateDialog extends StatelessWidget {
         builder: (context, state) {
           return DialogShell(
             title: context.l10n.starting_day,
-            titleIcon: Icons.calendar_month,
+            titleIcon: Icons.calendar_view_week_outlined,
             showClose: true,
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.75,
-              child: ListView(
-                shrinkWrap: true,
+            content: RadioGroup(
+              groupValue: state,
+              onChanged: (day) => context
+                  .read<StartingDayCubit>()
+                  .changeStartingDayOfWeek(day!),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  RadioGroup(
-                    groupValue: state,
-                    onChanged: (day) => context
-                        .read<StartingDayCubit>()
-                        .changeStartingDayOfWeek(day!),
-                    child: Column(
-                      children: [
-                        RadioListTile(
-                          title: Text(context.l10n.monday),
-                          value: StartingDayOfWeek.monday,
-                        ),
-                        RadioListTile(
-                          title: Text(context.l10n.sunday),
-                          value: StartingDayOfWeek.sunday,
-                        ),
-                      ],
-                    ),
+                  RadioListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.monday),
+                    value: StartingDayOfWeek.monday,
+                  ),
+                  RadioListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.sunday),
+                    value: StartingDayOfWeek.sunday,
                   ),
                 ],
               ),
