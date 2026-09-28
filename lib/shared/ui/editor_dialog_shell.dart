@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class DialogShell extends StatelessWidget {
@@ -20,42 +22,58 @@ class DialogShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final width = min<double>(
+      MediaQuery.sizeOf(context).width * widthFactor,
+      480,
+    );
+
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
-      contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      titlePadding: EdgeInsets.fromLTRB(24, 24, showClose ? 12 : 24, 16),
+      contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       title: Row(
+        spacing: 12,
         children: [
           Container(
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
+              color: colors.primaryContainer,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              titleIcon,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            ),
+            child: Icon(titleIcon, size: 22, color: colors.onPrimaryContainer),
           ),
-          const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text(title)],
+            child: Text(
+              title,
+              style: theme.textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           if (showClose) const CloseButton(),
         ],
       ),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * widthFactor,
-        child: content,
-      ),
-      actions: actions,
+      content: SizedBox(width: width, child: content),
+      actions: actions.isEmpty ? null : actions,
     );
   }
+}
+
+class DialogSectionLabel extends StatelessWidget {
+  final String text;
+  final Color? color;
+  const DialogSectionLabel(this.text, {super.key, this.color});
+
+  @override
+  Widget build(BuildContext context) => Text(
+    text,
+    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+      color: color ?? Theme.of(context).colorScheme.onSurfaceVariant,
+    ),
+  );
 }
