@@ -14,6 +14,7 @@ final _log = Logger('OrgFilesCubit');
 
 class OrgFilesCubit extends Cubit<OrgFilesState> {
   final OrgFilesRepository _repository;
+  Future<void>? _reloading;
 
   OrgFilesCubit(this._repository) : super(OrgFilesState.initial());
 
@@ -47,6 +48,30 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     } on Exception catch (e, stack) {
       _log.severe('Error initializing org files', e, stack);
       emit(OrgFilesState.initial());
+    }
+  }
+
+  Future<void> reload() =>
+      _reloading ??= _reload().whenComplete(() => _reloading = null);
+
+  Future<void> _reload() async {
+    if (state.status != OrgFilesStatus.success) return;
+
+    final before = state.entries;
+    try {
+      final entries = await _repository.parseEntriesForFiles(
+        state.directory,
+        [...state.filePaths, ?state.inboxFile],
+        state.todoStates.ignored,
+        before,
+      );
+      if (!identical(state.entries, before)) return;
+      if (_sameEntries(entries, before)) return;
+
+      emit(state.copyWith(entries: entries));
+      await _repository.cacheOrgEntries(entries, state.todoStates);
+    } on Exception catch (e, stack) {
+      _log.warning('Error reloading files', e, stack);
     }
   }
 

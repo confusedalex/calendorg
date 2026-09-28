@@ -1,6 +1,8 @@
 # Changelog
 ## Unreleased
 ### Added
+- Pull to refresh for reloading files
+- Reloading when when reopening the app while the app was not fully closed
 - Add weekday text to timestamp
 - Logger for logging errors and warning
 - Add copy log button in the settings

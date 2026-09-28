@@ -148,19 +148,33 @@ class CalendarView extends StatelessWidget {
           const Divider(height: 1),
           const Padding(padding: EdgeInsets.fromLTRB(8, 8, 8, 8)),
           Expanded(
-            child: dayEvents.isEmpty
-                ? Center(
-                    child: Text(
-                      context.l10n.no_events,
-                      style: textTheme.bodyMedium!.copyWith(
-                        color: colors.onSurfaceVariant,
+            child: RefreshIndicator(
+              onRefresh: context.read<OrgFilesCubit>().reload,
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  if (dayEvents.isEmpty)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          context.l10n.no_events,
+                          style: textTheme.bodyMedium!.copyWith(
+                            color: colors.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    SliverPadding(
+                      padding: const EdgeInsets.only(bottom: 88),
+                      sliver: SliverList.list(
+                        children: dayEvents.map(EventCard.new).toList(),
                       ),
                     ),
-                  )
-                : ListView(
-                    padding: const EdgeInsets.only(bottom: 88),
-                    children: dayEvents.map(EventCard.new).toList(),
-                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

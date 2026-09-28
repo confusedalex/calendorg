@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/entities/org_entry/entry_edit.dart';
+import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:mocktail/mocktail.dart';
@@ -173,6 +176,121 @@ void main() {
         await cubit.applyEdit(entry, const EntryEdit(newTitle: 'New'));
 
         expect(cubit.state.status, OrgFilesStatus.success);
+      });
+    });
+    group('reload()', () {
+      final oldEntry = parseEntries(
+        OrgDocument.parse('* Exam\n<2026-05-01>\n'),
+      ).single;
+      final newEntry = parseEntries(
+        OrgDocument.parse('* Exam\n<2026-05-02>\n'),
+        fileHash: 'new-hash',
+      ).single;
+      final todoStates = OrgTodoStatesWithIgnored(
+        todo: ['TODO'],
+        done: ['DONE'],
+        ignored: [],
+      );
+
+      Future<OrgFilesCubit> loadedCubit(
+        MockOrgFilesRepository repository,
+      ) async {
+        when(
+          () => repository.loadCachedEntries(any()),
+        ).thenAnswer((_) async => null);
+        when(() => repository.loadInitialState(any(), any())).thenAnswer(
+          (_) async => InitialState(
+            dirInfo: FakeDirectoryInfo(),
+            fileInfos: {},
+            inboxFile: null,
+            todoStates: todoStates,
+            entries: [oldEntry],
+          ),
+        );
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
+        final cubit = OrgFilesCubit(repository);
+        await cubit.init(todoStates);
+        return cubit;
+      }
+
+      test('should emit the entries of changed files', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = await loadedCubit(repository);
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any(), any()),
+        ).thenAnswer((_) async => [newEntry]);
+
+        await cubit.reload();
+
+        expect(cubit.state.entries, [newEntry]);
+        verify(
+          () =>
+              repository.parseEntriesForFiles(any(), any(), any(), [oldEntry]),
+        ).called(1);
+        verify(() => repository.cacheOrgEntries([newEntry], any())).called(1);
+      });
+
+      test('should not emit when no file changed', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = await loadedCubit(repository);
+        final before = cubit.state.entries;
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any(), any()),
+        ).thenAnswer((_) async => [oldEntry]);
+
+        await cubit.reload();
+
+        expect(cubit.state.entries, same(before));
+      });
+
+      test('should do nothing before the files are loaded', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = OrgFilesCubit(repository);
+
+        await cubit.reload();
+
+        verifyNever(
+          () => repository.parseEntriesForFiles(any(), any(), any(), any()),
+        );
+      });
+
+      test('should run only once when called twice', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = await loadedCubit(repository);
+        final result = Completer<List<OrgEntry>>();
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any(), any()),
+        ).thenAnswer((_) => result.future);
+
+        final first = cubit.reload();
+        final second = cubit.reload();
+        result.complete([newEntry]);
+        await Future.wait([first, second]);
+
+        verify(
+          () => repository.parseEntriesForFiles(any(), any(), any(), any()),
+        ).called(1);
+      });
+
+      test('should drop the result when entries changed meanwhile', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = await loadedCubit(repository);
+        final result = Completer<List<OrgEntry>>();
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any(), any()),
+        ).thenAnswer((_) => result.future);
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any()),
+        ).thenAnswer((_) async => []);
+
+        final reload = cubit.reload();
+        await cubit.changeTodoStates(todoStates);
+        result.complete([newEntry]);
+        await reload;
+
+        expect(cubit.state.entries, isEmpty);
       });
     });
   });
