@@ -1,6 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/org_file_service.dart';
-import 'package:calendorg/core/files/services/org_parser_service.dart';
+import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/features/settings/agenda_files/ui/agenda_files_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +23,8 @@ void main() {
           localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
           supportedLocales: CalendorgLocalizations.supportedLocales,
           home: Scaffold(
-            body: RepositoryProvider(
-              create: (context) => OrgFileService(OrgParserService()),
+            body: RepositoryProvider<OrgFilesRepository>(
+              create: (context) => MockOrgFilesRepository(),
               child: BlocProvider(
                 create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
                 child: const AgendaFilesDialog(),

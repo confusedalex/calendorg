@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -101,6 +103,29 @@ class OrgFilesRepository {
 
     return perFile.expand((entries) => entries).toList();
   }
+
+  Future<DirectoryInfo?> pickDirectory() =>
+      _fileService.filePicker.openDirectory();
+
+  Future<FileInfo?> pickFile() =>
+      _fileService.filePicker.openFile((fileInfo, _) async => fileInfo);
+
+  Future<String?> pickFileText() =>
+      _fileService.filePicker.openFile((_, file) => file.readAsString());
+
+  Future<FileInfo?> createEmptyFile(String fileName) =>
+      _fileService.filePicker.openFileForCreate(
+        writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
+        fileName: fileName,
+      );
+
+  Future<bool> validateFileDirectory(
+    FileInfo? fileInfo,
+    DirectoryInfo? dirInfo,
+  ) => _fileService.validateFileDirectory(fileInfo, dirInfo);
+
+  Future<String> readText(String identifier) =>
+      _fileService.readText(identifier);
 
   Future<void> saveDirectory(DirectoryInfo dirInfo) {
     return _persistence.saveDirectory(dirInfo);

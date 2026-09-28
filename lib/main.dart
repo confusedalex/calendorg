@@ -32,36 +32,32 @@ void main() async {
   final parserService = OrgParserService(todoStatesCubit.state);
   await parserService.start();
   final fileService = OrgFileService(parserService);
+  final repository = OrgFilesRepository(
+    fileService: fileService,
+    persistence: OrgFilePersistenceService(preferences, fileService),
+    parserService: parserService,
+    eventParserService: EventParserService(),
+  );
 
   runApp(
     MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: preferences),
-        RepositoryProvider.value(value: fileService),
+        RepositoryProvider.value(value: repository),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => ThemeBloc()),
           BlocProvider.value(value: todoStatesCubit),
         ],
-        child: Calendorg(
-          parserService: parserService,
-          fileService: fileService,
-        ),
+        child: const Calendorg(),
       ),
     ),
   );
 }
 
 class Calendorg extends StatelessWidget {
-  final OrgParserService parserService;
-  final OrgFileService fileService;
-
-  const Calendorg({
-    super.key,
-    required this.parserService,
-    required this.fileService,
-  });
+  const Calendorg({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -89,17 +85,8 @@ class Calendorg extends StatelessWidget {
               ),
               BlocProvider(
                 create: (context) {
-                  return OrgFilesCubit(
-                    OrgFilesRepository(
-                      fileService: fileService,
-                      persistence: OrgFilePersistenceService(
-                        context.read<PreferencesService>(),
-                        fileService,
-                      ),
-                      parserService: parserService,
-                      eventParserService: EventParserService(),
-                    ),
-                  )..init(context.read<TodoStatesCubit>().state);
+                  return OrgFilesCubit(context.read<OrgFilesRepository>())
+                    ..init(context.read<TodoStatesCubit>().state);
                 },
               ),
               if (kDebugMode)

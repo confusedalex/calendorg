@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/files/cubit/org_files_cubit.dart';
-import '../../../../core/files/services/org_file_service.dart';
+import '../../../../core/files/services/org_files_repository.dart';
 import '../../../../shared/config/preferences_service.dart';
 
 class DebugPage extends StatelessWidget {
@@ -59,7 +59,7 @@ class DebugPage extends StatelessWidget {
             builder: (context, state) => ListTile(
               title: const Text('Show loaded Documents'),
               onTap: () async {
-                final fileService = context.read<OrgFileService>();
+                final repository = context.read<OrgFilesRepository>();
                 await showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
@@ -68,7 +68,7 @@ class DebugPage extends StatelessWidget {
                         children: state.filePaths
                             .map(
                               (fileInfo) => FutureBuilder<String>(
-                                future: fileService.readText(
+                                future: repository.readText(
                                   fileInfo.identifier,
                                 ),
                                 builder: (context, snapshot) =>

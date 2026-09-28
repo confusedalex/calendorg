@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pretty_diff_text/pretty_diff_text.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
-import '../../../core/files/services/org_file_service.dart';
+import '../../../core/files/services/org_files_repository.dart';
 import '../model/diff_view_cubit.dart';
 
 class DiffViewPage extends StatelessWidget {
@@ -11,7 +11,7 @@ class DiffViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orgFileService = context.read<OrgFileService>();
+    final repository = context.read<OrgFilesRepository>();
     final oldText = context.select(
       (DiffViewCubit cubit) => cubit.state.oldText,
     );
@@ -24,12 +24,7 @@ class DiffViewPage extends StatelessWidget {
         child: OutlinedButton(
           onPressed: () async {
             try {
-              final content = await orgFileService.filePicker.openFile((
-                fileInfo,
-                file,
-              ) {
-                return file.readAsString();
-              });
+              final content = await repository.pickFileText();
               if (content != null && context.mounted) {
                 context.read<DiffViewCubit>().changeOldText(content);
               }
@@ -49,7 +44,7 @@ class DiffViewPage extends StatelessWidget {
     return FutureBuilder<String>(
       future: fileInfo == null
           ? null
-          : context.read<OrgFileService>().readText(fileInfo.identifier),
+          : repository.readText(fileInfo.identifier),
       builder: (context, snapshot) => SingleChildScrollView(
         child: PrettyDiffText(
           oldText: oldText,

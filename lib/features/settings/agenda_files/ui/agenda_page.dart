@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
-import '../../../../core/files/services/org_file_service.dart';
+import '../../../../core/files/services/org_files_repository.dart';
 import '../../../../util.dart';
 import 'agenda_files_dialog.dart';
 
@@ -11,7 +11,7 @@ class AgendaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orgFileService = context.read<OrgFileService>();
+    final repository = context.read<OrgFilesRepository>();
 
     return Scaffold(
       appBar: AppBar(),
@@ -27,8 +27,7 @@ class AgendaPage extends StatelessWidget {
               ),
               onTap: () async {
                 try {
-                  final dirInfo = await orgFileService.filePicker
-                      .openDirectory();
+                  final dirInfo = await repository.pickDirectory();
 
                   if (dirInfo == null) throw Error();
                   if (context.mounted) {
@@ -58,14 +57,9 @@ class AgendaPage extends StatelessWidget {
               ),
               onTap: () async {
                 try {
-                  final fileInfo = await orgFileService.filePicker.openFile((
-                    fileInfo,
-                    file,
-                  ) async {
-                    return fileInfo;
-                  });
+                  final fileInfo = await repository.pickFile();
 
-                  final valid = await orgFileService.validateFileDirectory(
+                  final valid = await repository.validateFileDirectory(
                     fileInfo,
                     state.directory,
                   );

@@ -1,7 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
-import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -24,8 +22,8 @@ void main() {
   group('Settings Page Test', () {
     Future<void> pumpWidget(WidgetTester tester) async {
       await tester.pumpWidget(
-        RepositoryProvider(
-          create: (context) => OrgFileService(OrgParserService()),
+        RepositoryProvider<OrgFilesRepository>(
+          create: (context) => MockOrgFilesRepository(),
           child: MultiBlocProvider(
             providers: [
               BlocProvider(

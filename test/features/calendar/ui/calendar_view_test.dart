@@ -1,6 +1,4 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/files/services/org_file_service.dart';
-import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
@@ -59,33 +57,28 @@ void main() {
 
     Future<void> pumpWidgetToTester(dynamic tester) async {
       await tester.pumpWidget(
-        RepositoryProvider(
-          create: (context) => OrgFileService(OrgParserService()),
-          child: MaterialApp(
-            localizationsDelegates:
-                CalendorgLocalizations.localizationsDelegates,
-            supportedLocales: CalendorgLocalizations.supportedLocales,
-            home: Scaffold(
-              body: MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(value: orgFilesCubit),
-                  BlocProvider.value(value: calendarBloc),
-                  BlocProvider(
-                    create: (context) =>
-                        StartingDayCubit(inMemoryPreferences()),
+        MaterialApp(
+          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+          supportedLocales: CalendorgLocalizations.supportedLocales,
+          home: Scaffold(
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: orgFilesCubit),
+                BlocProvider.value(value: calendarBloc),
+                BlocProvider(
+                  create: (context) => StartingDayCubit(inMemoryPreferences()),
+                ),
+                BlocProvider(
+                  create: (context) => TodoStatesCubit(inMemoryPreferences()),
+                ),
+                BlocProvider(
+                  create: (context) => TagColorsCubit.withInitialValue(
+                    inMemoryPreferences(),
+                    [schoolTagColor, homeTagColor, workTagColor],
                   ),
-                  BlocProvider(
-                    create: (context) => TodoStatesCubit(inMemoryPreferences()),
-                  ),
-                  BlocProvider(
-                    create: (context) => TagColorsCubit.withInitialValue(
-                      inMemoryPreferences(),
-                      [schoolTagColor, homeTagColor, workTagColor],
-                    ),
-                  ),
-                ],
-                child: const CalendarView(),
-              ),
+                ),
+              ],
+              child: const CalendarView(),
             ),
           ),
         ),

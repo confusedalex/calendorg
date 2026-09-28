@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
-import '../../../../core/files/services/org_file_service.dart';
+import '../../../../core/files/services/org_files_repository.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
@@ -17,7 +15,7 @@ class AgendaFilesDialog extends StatelessWidget {
     final filePaths = context.select(
       (OrgFilesCubit cubit) => cubit.state.filePaths,
     );
-    final orgFileService = context.read<OrgFileService>();
+    final repository = context.read<OrgFilesRepository>();
     final orgFilesCubit = context.read<OrgFilesCubit>();
 
     bool validateFile(FileInfo? fileInfo) {
@@ -38,9 +36,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     Future<FileInfo?> selectGetFileInfo() async {
       try {
-        return await orgFileService.filePicker.openFile((fileInfo, file) async {
-          return fileInfo;
-        });
+        return await repository.pickFile();
       } on Exception catch (e) {
         if (context.mounted) {
           sendError(context.l10n.error_selecting_file(e));
@@ -51,10 +47,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     Future<FileInfo?> createGetFileInfo() async {
       try {
-        return await orgFileService.filePicker.openFileForCreate(
-          writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
-          fileName: 'agenda.org',
-        );
+        return await repository.createEmptyFile('agenda.org');
       } on Exception catch (e) {
         if (context.mounted) {
           sendError(context.l10n.error_creating_file(e));
@@ -68,7 +61,7 @@ class AgendaFilesDialog extends StatelessWidget {
       FileInfo? fileInfo,
     ) async {
       if (!validateFile(fileInfo)) return;
-      if (!(await orgFileService.validateFileDirectory(
+      if (!(await repository.validateFileDirectory(
         fileInfo,
         orgFilesCubit.state.directory,
       ))) {
