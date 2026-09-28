@@ -85,6 +85,14 @@
   "monday": "Monday",
   "sunday": "Sunday",
 
+  "weekday_short_monday": "Mon",
+  "weekday_short_tuesday": "Tue",
+  "weekday_short_wednesday": "Wed",
+  "weekday_short_thursday": "Thu",
+  "weekday_short_friday": "Fri",
+  "weekday_short_saturday": "Sat",
+  "weekday_short_sunday": "Sun",
+
   "theme": "Theme",
   "choose_theme": "Choose Theme",
   "theme_dark": "dark",

@@ -137,6 +137,27 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get sunday => 'Sunday';
 
   @override
+  String get weekday_short_monday => 'Mon';
+
+  @override
+  String get weekday_short_tuesday => 'Tue';
+
+  @override
+  String get weekday_short_wednesday => 'Wed';
+
+  @override
+  String get weekday_short_thursday => 'Thu';
+
+  @override
+  String get weekday_short_friday => 'Fri';
+
+  @override
+  String get weekday_short_saturday => 'Sat';
+
+  @override
+  String get weekday_short_sunday => 'Sun';
+
+  @override
   String get theme => 'Theme';
 
   @override

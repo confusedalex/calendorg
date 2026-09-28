@@ -10,6 +10,7 @@ import 'package:petitparser/petitparser.dart';
 import 'helpers/entries.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   const markup = '''
 * Heading 1
 ** orgmode meetup
@@ -72,9 +73,9 @@ DEADLINE: <2025-05-04>
 
           var timestamp = dateTimeToSimpleTimestamp(dateTime, false, true);
 
-          expect(timestamp.toMarkup(), '<2025-05-15>');
+          expect(timestamp.toMarkup(), '<2025-05-15 Thu>');
           timestamp = dateTimeToSimpleTimestamp(dateTime, false, false);
-          expect(timestamp.toMarkup(), '[2025-05-15]');
+          expect(timestamp.toMarkup(), '[2025-05-15 Thu]');
         },
       );
       test(
@@ -84,7 +85,7 @@ DEADLINE: <2025-05-04>
 
           final timestamp = dateTimeToSimpleTimestamp(dateTime, false, true);
 
-          expect(timestamp.toMarkup(), '<2025-12-31>');
+          expect(timestamp.toMarkup(), '<2025-12-31 Wed>');
         },
       );
       test('DateTime Time should return correct OrgSimpleTimestamp', () {
@@ -92,7 +93,7 @@ DEADLINE: <2025-05-04>
 
         final timestamp = dateTimeToSimpleTimestamp(dateTime, true, true);
 
-        expect(timestamp.toMarkup(), '<2025-12-31 15:00>');
+        expect(timestamp.toMarkup(), '<2025-12-31 Wed 15:00>');
       });
     });
     group('DateTime to OrgTimeRangeTimestamp', () {
@@ -110,7 +111,7 @@ DEADLINE: <2025-05-04>
             true,
           );
 
-          expect(timestamp.toMarkup(), '<2025-05-15 11:00-17:00>');
+          expect(timestamp.toMarkup(), '<2025-05-15 Thu 11:00-17:00>');
         },
       );
       test(
@@ -127,7 +128,7 @@ DEADLINE: <2025-05-04>
             true,
           );
 
-          expect(timestamp.toMarkup(), '<2025-12-31 00:00-23:59>');
+          expect(timestamp.toMarkup(), '<2025-12-31 Wed 00:00-23:59>');
         },
       );
     });
@@ -148,7 +149,7 @@ DEADLINE: <2025-05-04>
 
           expect(
             timestamp.toMarkup(),
-            '<2025-05-15 11:00>--<2025-05-16 17:00>',
+            '<2025-05-15 Thu 11:00>--<2025-05-16 Fri 17:00>',
           );
           timestamp = dateTimeToTimeRangeTimestamp(
             start,
@@ -159,7 +160,7 @@ DEADLINE: <2025-05-04>
           );
           expect(
             timestamp.toMarkup(),
-            '[2025-05-15 11:00]--[2025-05-16 17:00]',
+            '[2025-05-15 Thu 11:00]--[2025-05-16 Fri 17:00]',
           );
           timestamp = dateTimeToTimeRangeTimestamp(
             start,
@@ -168,7 +169,10 @@ DEADLINE: <2025-05-04>
             false,
             true,
           );
-          expect(timestamp.toMarkup(), '[2025-05-15]--[2025-05-16 17:00]');
+          expect(
+            timestamp.toMarkup(),
+            '[2025-05-15 Thu]--[2025-05-16 Fri 17:00]',
+          );
           timestamp = dateTimeToTimeRangeTimestamp(
             start,
             end,
@@ -176,7 +180,7 @@ DEADLINE: <2025-05-04>
             false,
             false,
           );
-          expect(timestamp.toMarkup(), '[2025-05-15]--[2025-05-16]');
+          expect(timestamp.toMarkup(), '[2025-05-15 Thu]--[2025-05-16 Fri]');
         },
       );
       test(
@@ -193,7 +197,7 @@ DEADLINE: <2025-05-04>
             true,
           );
 
-          expect(timestamp.toMarkup(), '<2025-12-31 00:00-23:59>');
+          expect(timestamp.toMarkup(), '<2025-12-31 Wed 00:00-23:59>');
         },
       );
     });

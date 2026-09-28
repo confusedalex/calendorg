@@ -9,7 +9,6 @@ extension L10n on BuildContext {
   CalendorgLocalizations get l10n => CalendorgLocalizations.of(this);
 }
 
-/// Localizations for code that has no [BuildContext], for example services.
 CalendorgLocalizations get globalL10n {
   final context = rootScaffoldMessengerKey.currentContext;
   return context != null
@@ -50,8 +49,25 @@ void sendError(String error) {
 
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
   final isoDate = dateTime.toIso8601String().split('T')[0].split('-');
-  return (year: isoDate[0], month: isoDate[1], day: isoDate[2], dayName: null);
+  return (
+    year: isoDate[0],
+    month: isoDate[1],
+    day: isoDate[2],
+    dayName: weekDayToString(globalL10n, dateTime.weekday),
+  );
 }
+
+String weekDayToString(CalendorgLocalizations l10n, int weekday) =>
+    switch (weekday) {
+      DateTime.monday => l10n.weekday_short_monday,
+      DateTime.tuesday => l10n.weekday_short_tuesday,
+      DateTime.wednesday => l10n.weekday_short_wednesday,
+      DateTime.thursday => l10n.weekday_short_thursday,
+      DateTime.friday => l10n.weekday_short_friday,
+      DateTime.saturday => l10n.weekday_short_saturday,
+      DateTime.sunday => l10n.weekday_short_sunday,
+      _ => throw ArgumentError.value(weekday, 'weekday'),
+    };
 
 OrgTime dateTimeToOrgTime(DateTime dateTime) {
   final isoTime = dateTime.toIso8601String().split('T')[1].split(':');
