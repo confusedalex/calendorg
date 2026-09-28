@@ -138,16 +138,10 @@ class EventParserService {
 
   List<OrgTimestamp> _extractTimestamps(OrgSection section) {
     final List<OrgTimestamp> foundTimestamps = [];
-    var returnIfSectionFound = false;
     var ignoreNTimestamps = 0;
 
-    section.visitWithBlacklist({OrgProperty, OrgDrawer, OrgPlanningEntry}, (
-      OrgNode node,
-    ) {
+    bool visitor(OrgNode node) {
       switch (node) {
-        case OrgSection():
-          return !returnIfSectionFound && (returnIfSectionFound = true);
-
         case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will
           // be just part of this range
@@ -166,7 +160,15 @@ class EventParserService {
           if (node.isActive) foundTimestamps.add(node);
       }
       return true;
-    });
+    }
+
+    for (final child in _ownChildren(section)) {
+      child.visitWithBlacklist({
+        OrgProperty,
+        OrgDrawer,
+        OrgPlanningEntry,
+      }, visitor);
+    }
     return foundTimestamps;
   }
 
@@ -190,25 +192,25 @@ class EventParserService {
     OrgPlanningEntry? scheduled;
     OrgPlanningEntry? deadline;
 
-    var returnIfSectionFound = false;
-
-    section.visit((OrgNode node) {
-      switch (node) {
-        case OrgSection():
-          return !returnIfSectionFound && (returnIfSectionFound = true);
-        case OrgPlanningEntry():
+    for (final child in _ownChildren(section)) {
+      child.visit((OrgNode node) {
+        if (node case OrgPlanningEntry()) {
           switch (node.keyword.content) {
             case 'SCHEDULED:':
               scheduled = node;
             case 'DEADLINE:':
               deadline = node;
           }
-      }
-      return true;
-    });
+        }
+        return true;
+      });
+    }
 
     return (scheduled, deadline);
   }
+
+  Iterable<OrgNode> _ownChildren(OrgSection section) =>
+      section.children.takeWhile((child) => child is! OrgSection);
 }
 
 extension VisitBlacklist on OrgNode {
