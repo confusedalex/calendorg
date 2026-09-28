@@ -106,6 +106,17 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
       'File changed on disk. The app reloaded it. Please try the edit again.';
 
   @override
+  String error_files_not_found(int count, String names) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count files not found: $names',
+      one: '1 file not found: $names',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get error_edit_before_loading => 'Can\'t edit heading before loading!';
 
   @override

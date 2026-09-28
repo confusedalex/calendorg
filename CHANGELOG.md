@@ -11,6 +11,7 @@
 - Keep event of selected Day loaded when scrolling to other calendar pages
 - Error when trying to save a file which is newer on disk
 - Edits to a file that changed outside the app work again without a restart of the app
+- A missing agenda file no longer hides all other files. The app shows the names of the missing files
 - Saving a file works again. Before it tried to reread the old file after saving
 - Keep repeaters and delays, like `+1w` or `-3d`, when you change the date of an event
 - Keep the tags when you change the title of an event

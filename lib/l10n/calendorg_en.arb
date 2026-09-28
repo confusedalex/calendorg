@@ -67,6 +67,13 @@
     }
   },
   "error_file_changed_on_disk": "File changed on disk. The app reloaded it. Please try the edit again.",
+  "error_files_not_found": "{count, plural, =1{1 file not found: {names}} other{{count} files not found: {names}}}",
+  "@error_files_not_found": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "names": { "type": "String" }
+    }
+  },
   "error_edit_before_loading": "Can't edit heading before loading!",
   "error_unknown": "Some error has occurred!",
 

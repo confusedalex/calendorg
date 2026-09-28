@@ -4,11 +4,14 @@ import 'package:calendorg/core/files/services/org_file_persistence_service.dart'
 import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../helpers/preferences.dart';
 
 import '../../../helpers/entries.dart';
+
+class MockFilePickerWritable extends Mock implements FilePickerWritable {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -93,6 +96,56 @@ void main() {
         await service.saveEntriesCache(entries, 'TODO|DONE|');
 
         expect(await service.loadCachedOrgEntries('TODO|DONE|LATER'), isNull);
+      });
+    });
+    group('loadFilePreferences()', () {
+      late MockFilePickerWritable filePicker;
+      final dirInfo = fakeDirectoryInfo('orgFiles');
+
+      void resolvesTo(String name, Future<EntityInfo> Function() result) =>
+          when(
+            () => filePicker.resolveRelativePath(
+              directoryIdentifier: dirInfo.identifier,
+              relativePath: name,
+            ),
+          ).thenAnswer((_) => result());
+
+      setUp(() async {
+        filePicker = MockFilePickerWritable();
+        service = OrgFilePersistenceService(prefs, filePicker);
+        await service.saveDirectory(dirInfo);
+        await service.saveFileList({
+          fakeFileInfo('work'),
+          fakeFileInfo('old'),
+          fakeFileInfo('folder'),
+        });
+        await service.saveInboxFile(fakeFileInfo('inbox'));
+      });
+
+      test('should skip missing files and keep the rest', () async {
+        resolvesTo('work.org', () async => fakeFileInfo('work'));
+        resolvesTo('old.org', () => Future.error(Exception('not found')));
+        resolvesTo('folder.org', () async => fakeDirectoryInfo('folder'));
+        resolvesTo('inbox.org', () async => fakeFileInfo('inbox'));
+
+        final (files, inbox, dir) = await service.loadFilePreferences();
+
+        expect(files.map((f) => f.fileName), ['work.org']);
+        expect(inbox?.fileName, 'inbox.org');
+        expect(dir?.identifier, dirInfo.identifier);
+      });
+
+      test('should keep the files when the inbox file is missing', () async {
+        resolvesTo('work.org', () async => fakeFileInfo('work'));
+        resolvesTo('old.org', () async => fakeFileInfo('old'));
+        resolvesTo('folder.org', () async => fakeFileInfo('folder'));
+        resolvesTo('inbox.org', () => Future.error(Exception('not found')));
+
+        final (files, inbox, dir) = await service.loadFilePreferences();
+
+        expect(files, hasLength(3));
+        expect(inbox, isNull);
+        expect(dir, isNotNull);
       });
     });
   });

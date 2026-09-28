@@ -5,6 +5,7 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:logging/logging.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../shared/config/preferences_service.dart';
+import '../../../util.dart';
 
 final _log = Logger('OrgFilePersistenceService');
 
@@ -94,29 +95,42 @@ class OrgFilePersistenceService {
         return (<FileInfo>{}, null, null);
       }
 
-      final FileInfo? inboxFile = inboxName != null
-          ? (await _filePicker.resolveRelativePath(
-                  directoryIdentifier: dirInfo.identifier,
-                  relativePath: inboxName,
-                ))
-                as FileInfo
-          : null;
+      final missing = <String>[];
+      Future<FileInfo?> resolve(String name) async {
+        final file = await _resolveFile(dirInfo, name);
+        if (file == null) missing.add(name);
+        return file;
+      }
 
-      final Set<FileInfo> fileInfos = filesString != null
-          ? (await Future.wait(
-              filesString.whereType<String>().map(
-                (s) => _filePicker.resolveRelativePath(
-                  directoryIdentifier: dirInfo.identifier,
-                  relativePath: s,
-                ),
-              ),
-            )).cast<FileInfo>().toSet()
-          : {};
+      final inboxFile = inboxName != null ? await resolve(inboxName) : null;
+      final fileInfos = (await Future.wait(
+        (filesString ?? const <String>[]).map(resolve),
+      )).nonNulls.toSet();
+
+      if (missing.isNotEmpty) {
+        sendError(
+          globalL10n.error_files_not_found(missing.length, missing.join(', ')),
+        );
+      }
 
       return (fileInfos, inboxFile, dirInfo);
     } on Exception catch (e, stack) {
       _log.warning('Error loading preferences', e, stack);
       return (<FileInfo>{}, null, null);
     }
+  }
+
+  Future<FileInfo?> _resolveFile(DirectoryInfo dirInfo, String name) async {
+    try {
+      final entity = await _filePicker.resolveRelativePath(
+        directoryIdentifier: dirInfo.identifier,
+        relativePath: name,
+      );
+      if (entity is FileInfo) return entity;
+      _log.warning('$name is not a file');
+    } on Exception catch (e, stack) {
+      _log.warning('Error resolving file $name', e, stack);
+    }
+    return null;
   }
 }

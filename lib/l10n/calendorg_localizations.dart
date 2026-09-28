@@ -259,6 +259,12 @@ abstract class CalendorgLocalizations {
   /// **'File changed on disk. The app reloaded it. Please try the edit again.'**
   String get error_file_changed_on_disk;
 
+  /// No description provided for @error_files_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 file not found: {names}} other{{count} files not found: {names}}}'**
+  String error_files_not_found(int count, String names);
+
   /// No description provided for @error_edit_before_loading.
   ///
   /// In en, this message translates to:
