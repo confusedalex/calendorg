@@ -138,10 +138,17 @@ class EventParserService {
 
   List<OrgTimestamp> _extractTimestamps(OrgSection section) {
     final List<OrgTimestamp> foundTimestamps = [];
+    final skipped = Set<OrgNode>.identity();
     var ignoreNTimestamps = 0;
 
     bool visitor(OrgNode node) {
+      if (skipped.contains(node)) return true;
       switch (node) {
+        // Add all timestamps inside these nodes into the skipped set
+        // These timestamps will be handled seperatly.
+        case OrgProperty() || OrgDrawer() || OrgPlanningEntry():
+          node.visit<OrgTimestamp>(skipped.add);
+
         case OrgDateRangeTimestamp():
           // ignore the next 2 timestamps, because they will
           // be just part of this range
@@ -163,11 +170,7 @@ class EventParserService {
     }
 
     for (final child in _ownChildren(section)) {
-      child.visitWithBlacklist({
-        OrgProperty,
-        OrgDrawer,
-        OrgPlanningEntry,
-      }, visitor);
+      child.visit(visitor);
     }
     return foundTimestamps;
   }
@@ -211,26 +214,4 @@ class EventParserService {
 
   Iterable<OrgNode> _ownChildren(OrgSection section) =>
       section.children.takeWhile((child) => child is! OrgSection);
-}
-
-extension VisitBlacklist on OrgNode {
-  bool visitWithBlacklist<T extends OrgNode>(
-    Set<Type> blacklist,
-    bool Function(T) visitor,
-  ) {
-    final self = this;
-    if (self is T) {
-      if (!visitor.call(self)) {
-        return false;
-      }
-    }
-    final children = this.children;
-    if (children != null) {
-      for (final child in children) {
-        if (blacklist.contains(child.runtimeType)) continue;
-        if (!child.visitWithBlacklist<T>(blacklist, visitor)) return false;
-      }
-    }
-    return true;
-  }
 }
