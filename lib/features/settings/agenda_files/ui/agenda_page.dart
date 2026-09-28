@@ -11,12 +11,7 @@ class AgendaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filePicker = context.select(
-      (OrgFileService service) => service.filePicker,
-    );
-    final validateFileDirectory = context.select(
-      (OrgFileService service) => service.validateFileDirectory,
-    );
+    final orgFileService = context.read<OrgFileService>();
 
     return Scaffold(
       appBar: AppBar(),
@@ -32,7 +27,8 @@ class AgendaPage extends StatelessWidget {
               ),
               onTap: () async {
                 try {
-                  final dirInfo = await filePicker.openDirectory();
+                  final dirInfo = await orgFileService.filePicker
+                      .openDirectory();
 
                   if (dirInfo == null) throw Error();
                   if (context.mounted) {
@@ -58,7 +54,7 @@ class AgendaPage extends StatelessWidget {
               ),
               onTap: () async {
                 try {
-                  final fileInfo = await filePicker.openFile((
+                  final fileInfo = await orgFileService.filePicker.openFile((
                     fileInfo,
                     file,
                   ) async {
