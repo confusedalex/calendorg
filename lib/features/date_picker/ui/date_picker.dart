@@ -64,7 +64,10 @@ class DatePicker extends StatelessWidget {
                   onPressed: state.startTimeActive
                       ? () => context
                             .read<DatePickerBloc>()
-                            .datePickerTimePressed(context, 'start')
+                            .datePickerTimePressed(
+                              context,
+                              DatePickerType.start,
+                            )
                       : null,
                   child: Text(state.startTimeDuration.format(context)),
                 ),
@@ -120,7 +123,7 @@ class DatePicker extends StatelessWidget {
                           (state.endDateActive || state.startTimeActive)
                       ? () => context
                             .read<DatePickerBloc>()
-                            .datePickerTimePressed(context, 'end')
+                            .datePickerTimePressed(context, DatePickerType.end)
                       : null,
                   child: Text(state.endTimeDuration.format(context)),
                 ),

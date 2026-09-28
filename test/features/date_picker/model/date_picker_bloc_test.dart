@@ -460,7 +460,10 @@ void main() {
         'Setting StartTime works',
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(
-          DatePickerTimeChanged(const TimeOfDay(hour: 14, minute: 50), 'start'),
+          DatePickerTimeChanged(
+            const TimeOfDay(hour: 14, minute: 50),
+            DatePickerType.start,
+          ),
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()
@@ -487,7 +490,10 @@ void main() {
         'Setting StartTime works',
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(
-          DatePickerTimeChanged(const TimeOfDay(hour: 14, minute: 50), 'start'),
+          DatePickerTimeChanged(
+            const TimeOfDay(hour: 14, minute: 50),
+            DatePickerType.start,
+          ),
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()
@@ -520,7 +526,10 @@ void main() {
         'Setting EndTime works',
         build: () => datePickerBloc,
         act: (bloc) => bloc.add(
-          DatePickerTimeChanged(const TimeOfDay(hour: 12, minute: 50), 'end'),
+          DatePickerTimeChanged(
+            const TimeOfDay(hour: 12, minute: 50),
+            DatePickerType.end,
+          ),
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()

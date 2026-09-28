@@ -36,7 +36,7 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
         case DatePickerEndDateChanged():
           emit(state.copyWith(endDate: () => event.endDate));
         case DatePickerTimeChanged():
-          event.type == 'end'
+          event.type == DatePickerType.end
               ? emit(state.copyWith(endTimeDuration: event.timeDuration))
               : emit(state.copyWith(startTimeDuration: event.timeDuration));
       }
@@ -75,7 +75,10 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
     }
   }
 
-  Future<void> datePickerTimePressed(BuildContext context, String type) async {
+  Future<void> datePickerTimePressed(
+    BuildContext context,
+    DatePickerType type,
+  ) async {
     final TimeOfDay? time = await showTimePicker(
       context: context,
       initialTime: const TimeOfDay(hour: 12, minute: 00),
