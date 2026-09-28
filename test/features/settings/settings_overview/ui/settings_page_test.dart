@@ -1,5 +1,6 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
+import 'package:calendorg/core/logging.dart';
 import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
@@ -12,8 +13,10 @@ import 'package:calendorg/features/settings/theme/ui/theme_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_states_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logging/logging.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../../../helpers/preferences.dart';
@@ -110,6 +113,28 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(StartingDateDialog), findsOneWidget);
+    });
+    testWidgets('Copy Log copies the log to the clipboard', (tester) async {
+      setUpLogging();
+      Logger('SettingsPageTest').warning('Error saving file list');
+      String? copied;
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'Clipboard.setData') {
+            copied = (call.arguments as Map)['text'] as String;
+          }
+          return null;
+        },
+      );
+
+      await pumpWidget(tester);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Copy log'));
+      await tester.pumpAndSettle();
+
+      expect(copied, contains('SettingsPageTest: Error saving file list'));
+      expect(find.text('Log copied to the clipboard'), findsOneWidget);
     });
   });
 }

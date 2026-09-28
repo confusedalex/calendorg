@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/logging.dart';
 import '../../../../core/starting_day_cubit.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../core/todo_states_cubit.dart';
@@ -99,6 +101,17 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        const Divider(height: 1),
+        ListTile(
+          leading: const Icon(Icons.content_copy),
+          title: Text(context.l10n.copy_log),
+          onTap: () async {
+            final messenger = ScaffoldMessenger.of(context);
+            final message = context.l10n.log_copied;
+            await Clipboard.setData(ClipboardData(text: logText));
+            messenger.showSnackBar(SnackBar(content: Text(message)));
+          },
         ),
       ],
     );

@@ -529,6 +529,18 @@ abstract class CalendorgLocalizations {
   /// **'select end date'**
   String get select_end_date;
 
+  /// No description provided for @copy_log.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy log'**
+  String get copy_log;
+
+  /// No description provided for @log_copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Log copied to the clipboard'**
+  String get log_copied;
+
   /// No description provided for @next_days.
   ///
   /// In en, this message translates to:

@@ -242,6 +242,12 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get select_end_date => 'select end date';
 
   @override
+  String get copy_log => 'Copy log';
+
+  @override
+  String get log_copied => 'Log copied to the clipboard';
+
+  @override
   String next_days(int count) {
     return 'Next $count days';
   }
