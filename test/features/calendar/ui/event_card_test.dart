@@ -82,16 +82,11 @@ void main() {
       testWidgets('EventCard displays correct TagColor', (tester) async {
         await initWidget(tester);
 
-        final containerFinder = find.byWidgetPredicate(
-          (widget) => widget is Container && widget.decoration is BoxDecoration,
+        final card = tester.widget<Card>(
+          find.byKey(const Key('EventCardAccent')),
         );
 
-        final container = tester.widget<Container>(containerFinder);
-        final decoration = container.decoration! as BoxDecoration;
-        final border = decoration.border as Border?;
-
-        expect(border, isNotNull);
-        expect(border!.left.color, isSameColorAs(meetupTagColor.color));
+        expect(card.color, isSameColorAs(meetupTagColor.color));
       });
       testWidgets('EventCard display correct time', (tester) async {
         await initWidget(tester);

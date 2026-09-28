@@ -23,102 +23,173 @@ class EventCard extends StatelessWidget {
     final eventIsDone = context.select(
       (TodoStatesCubit cubit) => cubit.state.done.contains(keyword),
     );
+    final tagColor = context.select(
+      (TagColorsCubit cubit) => cubit.getTagColor(occurrence.entry),
+    );
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final textTheme = theme.textTheme;
+    final scheduled = occurrence.entry.scheduled?.value as OrgTimestamp?;
+    final deadline = occurrence.entry.deadline?.value as OrgTimestamp?;
 
-    return SizedBox(
-      width: double.infinity,
-      child: Card(
-        child: InkWell(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  width: 12,
-                  color: context.select(
-                    (TagColorsCubit cubit) =>
-                        cubit.getTagColor(occurrence.entry),
+    return Card(
+      key: const Key('EventCardAccent'),
+      elevation: 0,
+      color: tagColor,
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 6),
+        child: Material(
+          color: colors.surfaceContainerLow,
+          child: InkWell(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 4,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            style: textTheme.titleMedium?.copyWith(
+                              color: eventIsDone
+                                  ? colors.onSurfaceVariant
+                                  : null,
+                            ),
+                            children: [
+                              if (keyword != null)
+                                TextSpan(
+                                  text: '$keyword ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: eventIsDone
+                                        ? Colors.green.shade600
+                                        : colors.error,
+                                  ),
+                                ),
+                              TextSpan(
+                                text: occurrence.entry.title,
+                                style: eventIsDone
+                                    ? const TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                      )
+                                    : null,
+                              ),
+                            ],
+                          ),
+                        ),
+                        _InfoLine(
+                          icon: Icons.schedule,
+                          text: occurrence.timestamp.toMarkup(),
+                          color: colors.onSurfaceVariant,
+                        ),
+                        if (scheduled != null)
+                          _InfoLine(
+                            icon: Icons.event_available,
+                            text: 'SCHEDULED: ${scheduled.toMarkup()}',
+                            color: colors.tertiary,
+                          ),
+                        if (deadline != null)
+                          _InfoLine(
+                            icon: Icons.flag_outlined,
+                            text: 'DEADLINE: ${deadline.toMarkup()}',
+                            color: colors.error,
+                          ),
+                        if (occurrence.entry.tags.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
+                              children: occurrence.entry.tags
+                                  .map(_TagPill.new)
+                                  .toList(),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-            padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    style: Theme.of(context).textTheme.titleMedium,
-                    children: [
-                      TextSpan(
-                        text: keyword ?? '',
-                        style: keyword == null
-                            ? const TextStyle()
-                            : TextStyle(
-                                color: eventIsDone ? Colors.green : Colors.red,
-                              ),
-                      ),
-                      TextSpan(text: occurrence.entry.title),
-                    ],
-                  ),
-                ),
-                Text(
-                  occurrence.timestamp.toMarkup(),
-                  textAlign: TextAlign.left,
-                  textScaler: const TextScaler.linear(0.9),
-                ),
-                if (occurrence.entry.scheduled != null)
-                  Text(
-                    'SCHEDULED: ${(occurrence.entry.scheduled!.value as OrgTimestamp).toMarkup()}',
-                    textAlign: TextAlign.left,
-                    textScaler: const TextScaler.linear(0.85),
-                    style: const TextStyle(color: Colors.amber),
-                  ),
-                if (occurrence.entry.deadline != null)
-                  Text(
-                    'DEADLINE: ${(occurrence.entry.deadline!.value as OrgTimestamp).toMarkup()}',
-                    textAlign: TextAlign.left,
-                    textScaler: const TextScaler.linear(0.85),
-                    style: const TextStyle(color: Colors.redAccent),
-                  ),
-                if (occurrence.entry.tags.isNotEmpty)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Text(
-                        ":${occurrence.entry.tags.join(":")}:",
-                        textAlign: TextAlign.right,
-                        textScaler: const TextScaler.linear(0.9),
-                        style: TextStyle(color: Theme.of(context).hintColor),
+            onTap: () async {
+              switch (filesStatus) {
+                case OrgFilesStatus.loading:
+                  sendError(context.l10n.error_edit_before_loading);
+                case OrgFilesStatus.success:
+                  await showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<OrgFilesCubit>(),
+                      child: BlocProvider(
+                        create: (context) => EventViewBloc(
+                          context.read<OrgFilesCubit>(),
+                          occurrence.entry,
+                          occurrence.timestamp,
+                        ),
+                        child: const EventView(),
                       ),
                     ),
-                  ),
-              ],
-            ),
+                  );
+                case OrgFilesStatus.failure:
+                  sendError(context.l10n.error_unknown);
+              }
+            },
           ),
-          onTap: () async {
-            switch (filesStatus) {
-              case OrgFilesStatus.loading:
-                sendError(context.l10n.error_edit_before_loading);
-              case OrgFilesStatus.success:
-                await showDialog(
-                  context: context,
-                  builder: (_) => BlocProvider.value(
-                    value: context.read<OrgFilesCubit>(),
-                    child: BlocProvider(
-                      create: (context) => EventViewBloc(
-                        context.read<OrgFilesCubit>(),
-                        occurrence.entry,
-                        occurrence.timestamp,
-                      ),
-                      child: const EventView(),
-                    ),
-                  ),
-                );
-              case OrgFilesStatus.failure:
-                sendError(context.l10n.error_unknown);
-            }
-          },
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoLine extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color color;
+
+  const _InfoLine({
+    required this.icon,
+    required this.text,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) => Row(
+    spacing: 6,
+    children: [
+      Icon(icon, size: 14, color: color),
+      Flexible(
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
+        ),
+      ),
+    ],
+  );
+}
+
+class _TagPill extends StatelessWidget {
+  final String tag;
+  const _TagPill(this.tag);
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: colors.surfaceContainerHighest,
+        shape: const StadiumBorder(),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Text(
+          tag,
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: colors.onSurfaceVariant),
         ),
       ),
     );
