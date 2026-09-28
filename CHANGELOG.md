@@ -9,6 +9,12 @@
 - Keep event of selected Day loaded when scrolling to other calendar pages
 - Error when trying to save a file which is newer on disk
 - Saving a file works again. Before it tried to reread the old file after saving
+- Keep repeaters and delays, like `+1w` or `-3d`, when you change the date of an event
+- Keep the tags when you change the title of an event
+- Keep the text after a timestamp in the headline when you change the date
+- Keep the space between the title and a timestamp in the headline
+- Show titles without the spaces before the tags
+- Loading indicator no longer stays on when saving an edit fails
 ## 1.6.2 - 2026-09-11
 Same as 1.6.1. Still ci Issues
 ## 1.6.1 - 2026-09-10

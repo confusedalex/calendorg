@@ -149,8 +149,9 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       await _repository.cacheOrgEntries(entries, state.todoStates);
     } on Exception catch (e, stack) {
       _log.warning('Error applying edit', e, stack);
+    } finally {
+      emit(state.copyWith(status: OrgFilesStatus.success));
     }
-    emit(state.copyWith(status: OrgFilesStatus.success));
   }
 
   FileInfo? _fileInfoOf(String filePath) {
