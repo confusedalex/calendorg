@@ -33,8 +33,9 @@ class EventCard extends StatelessWidget {
               border: Border(
                 left: BorderSide(
                   width: 12,
-                  color: context.read<TagColorsCubit>().getTagColor(
-                    occurrence.entry,
+                  color: context.select(
+                    (TagColorsCubit cubit) =>
+                        cubit.getTagColor(occurrence.entry),
                   ),
                 ),
               ),
