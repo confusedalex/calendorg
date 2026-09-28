@@ -262,6 +262,18 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   }
 
   @override
+  String get settings_section_files => 'Files';
+
+  @override
+  String get settings_section_calendar => 'Calendar';
+
+  @override
+  String get settings_section_appearance => 'Appearance';
+
+  @override
+  String get settings_section_diagnostics => 'Diagnostics';
+
+  @override
   String next_days(int count) {
     return 'Next $count days';
   }

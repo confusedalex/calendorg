@@ -21,11 +21,34 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = context.watch<ThemeBloc>().state;
+    final directory = context.select(
+      (OrgFilesCubit cubit) => cubit.state.directory?.fileName,
+    );
     return ListView(
+      padding: const EdgeInsets.only(bottom: 16),
       children: [
+        _SectionHeader(context.l10n.settings_section_files),
         ListTile(
-          leading: const Icon(Icons.palette),
+          leading: const Icon(Icons.folder_outlined),
+          title: Text(context.l10n.agenda_files),
+          subtitle: Text(directory ?? context.l10n.not_set),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<OrgFilesCubit>(context),
+                child: const AgendaPage(),
+              ),
+            ),
+          ),
+        ),
+        _SectionHeader(context.l10n.settings_section_calendar),
+        ListTile(
+          leading: const Icon(Icons.palette_outlined),
           title: Text(context.l10n.tag_colors),
+          trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -36,9 +59,8 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        const Divider(height: 1),
         ListTile(
-          leading: const Icon(Icons.calendar_today),
+          leading: const Icon(Icons.calendar_view_week_outlined),
           title: Text(context.l10n.starting_day_of_week),
           onTap: () => showDialog(
             context: context,
@@ -48,9 +70,8 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        const Divider(height: 1),
         ListTile(
-          leading: const Icon(Icons.check_circle),
+          leading: const Icon(Icons.check_circle_outline),
           title: Text(context.l10n.todo_states),
           onTap: () => showDialog(
             context: context,
@@ -63,10 +84,15 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        const Divider(height: 1),
+        _SectionHeader(context.l10n.settings_section_appearance),
         ListTile(
-          leading: const Icon(Icons.brightness_4),
+          leading: const Icon(Icons.brightness_6_outlined),
           title: Text(context.l10n.theme),
+          subtitle: Text(switch (themeMode) {
+            ThemeMode.dark => context.l10n.theme_dark,
+            ThemeMode.light => context.l10n.theme_light,
+            ThemeMode.system => context.l10n.theme_automatic,
+          }),
           onTap: () => showDialog(
             context: context,
             builder: (_) => BlocProvider.value(
@@ -75,10 +101,21 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        const Divider(height: 1),
+        _SectionHeader(context.l10n.settings_section_diagnostics),
         ListTile(
-          leading: const Icon(Icons.bug_report),
+          leading: const Icon(Icons.content_copy_outlined),
+          title: Text(context.l10n.copy_log),
+          onTap: () async {
+            final messenger = ScaffoldMessenger.of(context);
+            final message = context.l10n.log_copied;
+            await Clipboard.setData(ClipboardData(text: logText));
+            messenger.showSnackBar(SnackBar(content: Text(message)));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.bug_report_outlined),
           title: Text(context.l10n.debug),
+          trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -89,31 +126,23 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.folder),
-          title: Text(context.l10n.agenda_files),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<OrgFilesCubit>(context),
-                child: const AgendaPage(),
-              ),
-            ),
-          ),
-        ),
-        const Divider(height: 1),
-        ListTile(
-          leading: const Icon(Icons.content_copy),
-          title: Text(context.l10n.copy_log),
-          onTap: () async {
-            final messenger = ScaffoldMessenger.of(context);
-            final message = context.l10n.log_copied;
-            await Clipboard.setData(ClipboardData(text: logText));
-            messenger.showSnackBar(SnackBar(content: Text(message)));
-          },
-        ),
       ],
     );
   }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  const _SectionHeader(this.title);
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
+    child: Text(
+      title,
+      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    ),
+  );
 }

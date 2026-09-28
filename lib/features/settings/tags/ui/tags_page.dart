@@ -19,7 +19,7 @@ class TagsPage extends StatefulWidget {
 class _TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(),
+    appBar: AppBar(title: Text(context.l10n.tag_colors)),
     body: BlocBuilder<TagColorsCubit, List<TagColor>>(
       builder: (_, state) => ReorderableListView(
         buildDefaultDragHandles: false,
@@ -33,8 +33,8 @@ class _TagsPageState extends State<TagsPage> {
                   child: const Icon(Icons.drag_handle),
                 ),
                 leading: Container(
-                  width: 30,
-                  height: 30,
+                  width: 24,
+                  height: 24,
                   decoration: BoxDecoration(
                     color: tagColor.color,
                     shape: BoxShape.circle,
@@ -71,6 +71,7 @@ class _TagsPageState extends State<TagsPage> {
           ),
         );
       },
+      icon: const Icon(Icons.add),
       label: Text(context.l10n.add),
     ),
   );

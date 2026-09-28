@@ -565,6 +565,30 @@ abstract class CalendorgLocalizations {
   /// **'Nothing planned for the next {count} days'**
   String no_upcoming_events(int count);
 
+  /// No description provided for @settings_section_files.
+  ///
+  /// In en, this message translates to:
+  /// **'Files'**
+  String get settings_section_files;
+
+  /// No description provided for @settings_section_calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get settings_section_calendar;
+
+  /// No description provided for @settings_section_appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settings_section_appearance;
+
+  /// No description provided for @settings_section_diagnostics.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics'**
+  String get settings_section_diagnostics;
+
   /// No description provided for @next_days.
   ///
   /// In en, this message translates to:

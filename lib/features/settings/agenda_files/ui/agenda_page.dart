@@ -14,7 +14,7 @@ class AgendaPage extends StatelessWidget {
     final repository = context.read<OrgFilesRepository>();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text(context.l10n.agenda_files)),
       body: BlocBuilder<OrgFilesCubit, OrgFilesState>(
         builder: (context, state) => Column(
           children: [
@@ -46,7 +46,6 @@ class AgendaPage extends StatelessWidget {
                 }
               },
             ),
-            const Divider(),
             ListTile(
               enabled: state.directory != null,
               leading: const Icon(Icons.inbox),

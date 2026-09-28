@@ -138,6 +138,10 @@
       "count": { "type": "int" }
     }
   },
+  "settings_section_files": "Files",
+  "settings_section_calendar": "Calendar",
+  "settings_section_appearance": "Appearance",
+  "settings_section_diagnostics": "Diagnostics",
 
   "next_days": "Next {count} days",
   "@next_days": {
