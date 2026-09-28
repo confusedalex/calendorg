@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (filesState.status == OrgFilesStatus.loading)
-                const LinearProgressIndicator(),
+                const LinearProgressIndicator(minHeight: 2),
               NavigationBar(
                 onDestinationSelected: (value) => setState(() {
                   index = value;
@@ -141,15 +141,18 @@ class _HomePageState extends State<HomePage> {
                       label: 'Diff',
                     ),
                   NavigationDestination(
-                    icon: const Icon(Icons.list),
+                    icon: const Icon(Icons.view_agenda_outlined),
+                    selectedIcon: const Icon(Icons.view_agenda),
                     label: context.l10n.nav_events,
                   ),
                   NavigationDestination(
-                    icon: const Icon(Icons.calendar_today),
+                    icon: const Icon(Icons.calendar_month_outlined),
+                    selectedIcon: const Icon(Icons.calendar_month),
                     label: context.l10n.nav_calendar,
                   ),
                   NavigationDestination(
-                    icon: const Icon(Icons.settings),
+                    icon: const Icon(Icons.settings_outlined),
+                    selectedIcon: const Icon(Icons.settings),
                     label: context.l10n.nav_settings,
                   ),
                 ],
