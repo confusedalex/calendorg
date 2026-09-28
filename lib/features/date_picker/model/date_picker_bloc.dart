@@ -66,6 +66,10 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
         context: context,
         firstDate: state.startDate,
         lastDate: DateTime(3000),
+        initialDate:
+            initialDate == null || initialDate.isBefore(state.startDate)
+            ? state.startDate
+            : initialDate,
       );
 
       if (pickerDate != null) {
@@ -81,7 +85,9 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
   ) async {
     final TimeOfDay? time = await showTimePicker(
       context: context,
-      initialTime: const TimeOfDay(hour: 12, minute: 00),
+      initialTime: type == DatePickerType.start
+          ? state.startTimeDuration
+          : state.endTimeDuration,
     );
 
     if (time == null) return;
