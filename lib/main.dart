@@ -1,10 +1,10 @@
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/files/cubit/org_files_cubit.dart';
 import 'core/files/services/org_file_persistence_service.dart';
-import 'core/files/services/org_file_service.dart';
 import 'core/files/services/org_files_repository.dart';
 import 'core/files/services/org_parser_service.dart';
 import 'core/starting_day_cubit.dart';
@@ -31,10 +31,10 @@ void main() async {
   await todoStatesCubit.loadFromPrefs();
   final parserService = OrgParserService(todoStatesCubit.state);
   await parserService.start();
-  final fileService = OrgFileService(parserService);
+  final filePicker = FilePickerWritable();
   final repository = OrgFilesRepository(
-    fileService: fileService,
-    persistence: OrgFilePersistenceService(preferences, fileService),
+    filePicker: filePicker,
+    persistence: OrgFilePersistenceService(preferences, filePicker),
     parserService: parserService,
     eventParserService: EventParserService(),
   );

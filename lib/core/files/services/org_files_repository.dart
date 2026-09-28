@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:file_picker_writable/file_picker_writable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/event_parser_service.dart';
@@ -12,22 +12,23 @@ import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../shared/org_text_hash.dart';
 import '../../../util.dart';
 import 'org_file_persistence_service.dart';
-import 'org_file_service.dart';
 import 'org_parser_service.dart';
 
+typedef _ParsedFile = ({OrgDocument document, String hash});
+
 class OrgFilesRepository {
-  final OrgFileService _fileService;
+  final FilePickerWritable _filePicker;
   final OrgFilePersistenceService _persistence;
   final OrgParserService _parserService;
   final EventParserService _eventParserService;
 
   OrgFilesRepository({
-    required OrgFileService fileService,
+    required FilePickerWritable filePicker,
     required OrgFilePersistenceService persistence,
     required OrgParserService parserService,
     required EventParserService eventParserService,
   }) : _eventParserService = eventParserService,
-       _fileService = fileService,
+       _filePicker = filePicker,
        _persistence = persistence,
        _parserService = parserService;
 
@@ -76,18 +77,15 @@ class OrgFilesRepository {
         if (fileName == null || dirInfo == null) return const <OrgEntry>[];
 
         try {
-          final resolved = await _fileService.resolveFileInfo(
-            dirInfo,
-            fileName,
-          );
-          final text = await _fileService.readText(resolved.identifier);
+          final resolved = await _resolveFileInfo(dirInfo, fileName);
+          final text = await readText(resolved.identifier);
           final reusable = cached[fileName];
           if (reusable != null &&
               reusable.first.fileHash == orgTextHash(text)) {
             return reusable;
           }
 
-          final parsed = await _fileService.parseText(text);
+          final parsed = await _parseText(text);
           return _eventParserService.parseEntriesFromDocument(
             fileName,
             parsed.hash,
@@ -104,28 +102,63 @@ class OrgFilesRepository {
     return perFile.expand((entries) => entries).toList();
   }
 
-  Future<DirectoryInfo?> pickDirectory() =>
-      _fileService.filePicker.openDirectory();
+  Future<DirectoryInfo?> pickDirectory() => _filePicker.openDirectory();
 
   Future<FileInfo?> pickFile() =>
-      _fileService.filePicker.openFile((fileInfo, _) async => fileInfo);
+      _filePicker.openFile((fileInfo, _) async => fileInfo);
 
   Future<String?> pickFileText() =>
-      _fileService.filePicker.openFile((_, file) => file.readAsString());
+      _filePicker.openFile((_, file) => file.readAsString());
 
   Future<FileInfo?> createEmptyFile(String fileName) =>
-      _fileService.filePicker.openFileForCreate(
+      _filePicker.openFileForCreate(
         writer: (file) => file.writeAsString('', mode: FileMode.writeOnly),
         fileName: fileName,
       );
 
+  Future<String> readText(String identifier) => _filePicker.readFile(
+    identifier: identifier,
+    reader: (_, file) => file.readAsString(),
+  );
+
   Future<bool> validateFileDirectory(
     FileInfo? fileInfo,
     DirectoryInfo? dirInfo,
-  ) => _fileService.validateFileDirectory(fileInfo, dirInfo);
+  ) async {
+    if (fileInfo == null || dirInfo == null) return false;
+    final fileName = fileInfo.fileName;
+    if (fileName == null) return false;
 
-  Future<String> readText(String identifier) =>
-      _fileService.readText(identifier);
+    void sendErr() => sendError(globalL10n.error_file_not_in_org_folder);
+
+    try {
+      late final EntityInfo relative;
+
+      try {
+        relative = await _filePicker.resolveRelativePath(
+          directoryIdentifier: dirInfo.identifier,
+          relativePath: fileName,
+        );
+      } on Exception {
+        sendErr();
+        return false;
+      }
+
+      final relativeHash = orgTextHash(await readText(relative.identifier));
+      final pickedHash = orgTextHash(await readText(fileInfo.identifier));
+
+      final isSameFile = relativeHash == pickedHash;
+
+      if (!isSameFile) {
+        sendErr();
+      }
+
+      return isSameFile;
+    } on Exception {
+      sendError(globalL10n.error_reading_file);
+      return false;
+    }
+  }
 
   Future<void> saveDirectory(DirectoryInfo dirInfo) {
     return _persistence.saveDirectory(dirInfo);
@@ -160,8 +193,10 @@ class OrgFilesRepository {
     if (fileName == null) return null;
 
     try {
-      final parsed = await _fileService.appendToFile(inboxFile, markup);
-      if (parsed == null) return null;
+      final oldText = await readText(inboxFile.identifier);
+      final newText = '$oldText\n$markup';
+      await _writeText(inboxFile.identifier, newText);
+      final parsed = await _parseText(newText);
 
       return _eventParserService.parseEntriesFromDocument(
         fileName,
@@ -185,8 +220,8 @@ class OrgFilesRepository {
     final fileName = fileInfo.fileName;
     if (fileName == null) return null;
 
-    final resolved = await _fileService.resolveFileInfo(dirInfo, fileName);
-    final parsed = await _fileService.documentByIdentifier(resolved.identifier);
+    final resolved = await _resolveFileInfo(dirInfo, fileName);
+    final parsed = await _parseText(await readText(resolved.identifier));
     final section = locateSection(parsed.document, entry.locator);
     if (section == null) {
       sendError(globalL10n.error_entry_not_found(entry));
@@ -206,11 +241,15 @@ class OrgFilesRepository {
       return null;
     }
 
-    final newDocument = await _fileService.replaceNodesAndSave(
-      resolved.identifier,
-      parsed.document,
-      replacements,
-    );
+    final newDocument =
+        replacements
+                .fold<OrgZipper>(
+                  parsed.document.edit(),
+                  (builder, nodes) => builder.find(nodes.$1)!.replace(nodes.$2),
+                )
+                .commit()
+            as OrgDocument;
+    await _writeText(resolved.identifier, newDocument.toMarkup());
 
     return _eventParserService.parseEntriesFromDocument(
       entry.filePath,
@@ -219,6 +258,28 @@ class OrgFilesRepository {
       ignoredTodoStates.toSet(),
     );
   }
+
+  Future<FileInfo> _resolveFileInfo(
+    DirectoryInfo dirInfo,
+    String fileName,
+  ) async {
+    final entity = await _filePicker.resolveRelativePath(
+      directoryIdentifier: dirInfo.identifier,
+      relativePath: fileName,
+    );
+    return entity as FileInfo;
+  }
+
+  Future<_ParsedFile> _parseText(String content) async => (
+    document: await _parserService.parseContentInBackground(content),
+    hash: orgTextHash(content),
+  );
+
+  Future<void> _writeText(String identifier, String text) =>
+      _filePicker.writeFile(
+        identifier: identifier,
+        writer: (file) => file.writeAsString(text, mode: FileMode.writeOnly),
+      );
 }
 
 class InitialState {

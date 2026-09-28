@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
-import 'package:calendorg/core/files/services/org_file_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/entities/org_entry/event_parser_service.dart';
@@ -11,7 +12,7 @@ import 'package:org_parser/org_parser.dart';
 
 import '../../../helpers/entries.dart';
 
-class MockOrgFileService extends Mock implements OrgFileService {}
+class MockFilePickerWritable extends Mock implements FilePickerWritable {}
 
 class MockOrgFilePersistenceService extends Mock
     implements OrgFilePersistenceService {}
@@ -32,30 +33,39 @@ void main() {
     uri: 'file:///',
   );
 
-  late MockOrgFileService fileService;
+  late MockFilePickerWritable filePicker;
+  late MockOrgParserService parserService;
   late OrgFilesRepository repository;
 
+  setUpAll(() {
+    registerFallbackValue((FileInfo _, File _) => Future.value(''));
+  });
+
   setUp(() {
-    fileService = MockOrgFileService();
+    filePicker = MockFilePickerWritable();
+    parserService = MockOrgParserService();
     repository = OrgFilesRepository(
-      fileService: fileService,
+      filePicker: filePicker,
       persistence: MockOrgFilePersistenceService(),
-      parserService: MockOrgParserService(),
+      parserService: parserService,
       eventParserService: EventParserService(),
     );
 
     when(
-      () => fileService.resolveFileInfo(dirInfo, fileInfo.fileName!),
+      () => filePicker.resolveRelativePath(
+        directoryIdentifier: dirInfo.identifier,
+        relativePath: fileInfo.fileName!,
+      ),
     ).thenAnswer((_) async => fileInfo);
     when(
-      () => fileService.readText(fileInfo.identifier),
-    ).thenAnswer((_) async => markup);
-    when(() => fileService.parseText(markup)).thenAnswer(
-      (_) async => ParsedFile(
-        document: OrgDocument.parse(markup),
-        hash: orgTextHash(markup),
+      () => filePicker.readFile<String>(
+        identifier: fileInfo.identifier,
+        reader: any(named: 'reader'),
       ),
-    );
+    ).thenAnswer((_) async => markup);
+    when(
+      () => parserService.parseContentInBackground(markup),
+    ).thenAnswer((_) async => OrgDocument.parse(markup));
   });
 
   group('parseEntriesForFiles', () {
@@ -73,7 +83,7 @@ void main() {
       );
 
       expect(identical(entries.first, cached.first), isTrue);
-      verifyNever(() => fileService.parseText(any()));
+      verifyNever(() => parserService.parseContentInBackground(any()));
     });
 
     test('parses the file when the cached hash is stale', () async {
@@ -88,7 +98,7 @@ void main() {
 
       expect(identical(entries.first, cached.first), isFalse);
       expect(entries.first.fileHash, orgTextHash(markup));
-      verify(() => fileService.parseText(markup)).called(1);
+      verify(() => parserService.parseContentInBackground(markup)).called(1);
     });
 
     test('parses the file when nothing is cached', () async {
@@ -97,7 +107,7 @@ void main() {
       ], []);
 
       expect(entries.single.title, 'Exam');
-      verify(() => fileService.parseText(markup)).called(1);
+      verify(() => parserService.parseContentInBackground(markup)).called(1);
     });
 
     test('returns nothing when the directory is unknown', () async {
