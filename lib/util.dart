@@ -83,12 +83,13 @@ OrgTime dateTimeToOrgTime(DateTime dateTime) {
 OrgSimpleTimestamp dateTimeToSimpleTimestamp(
   DateTime dateTime,
   bool includeTime,
-  bool isActive,
-) {
+  bool isActive, {
+  Iterable<OrgTimestampModifier> modifiers = const [],
+}) {
   final OrgDate date = dateTimeToOrgDate(dateTime);
   final OrgTime? time = includeTime ? dateTimeToOrgTime(dateTime) : null;
   final (prefix, suffix) = prefixAndSuffixFromBool(isActive);
-  return OrgSimpleTimestamp(prefix, date, time, [], suffix);
+  return OrgSimpleTimestamp(prefix, date, time, modifiers, suffix);
 }
 
 OrgTimestamp dateTimeToTimeRangeTimestamp(
@@ -96,8 +97,9 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
   DateTime endDateTime,
   bool isActive,
   bool includeStartTime,
-  bool includeEndTime,
-) {
+  bool includeEndTime, {
+  Iterable<OrgTimestampModifier> modifiers = const [],
+}) {
   if (includeStartTime &&
       includeEndTime &&
       isSameDay(startDateTime, endDateTime)) {
@@ -105,12 +107,20 @@ OrgTimestamp dateTimeToTimeRangeTimestamp(
     final OrgTime timeStart = dateTimeToOrgTime(startDateTime);
     final OrgTime timeEnd = dateTimeToOrgTime(endDateTime);
     final (prefix, suffix) = prefixAndSuffixFromBool(isActive);
-    return OrgTimeRangeTimestamp(prefix, date, timeStart, timeEnd, [], suffix);
+    return OrgTimeRangeTimestamp(
+      prefix,
+      date,
+      timeStart,
+      timeEnd,
+      modifiers,
+      suffix,
+    );
   } else {
     final OrgSimpleTimestamp start = dateTimeToSimpleTimestamp(
       startDateTime,
       includeStartTime,
       isActive,
+      modifiers: modifiers,
     );
     final OrgSimpleTimestamp end = dateTimeToSimpleTimestamp(
       endDateTime,

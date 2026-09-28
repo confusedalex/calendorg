@@ -133,7 +133,7 @@ void main() {
         ),
       );
 
-      expect(markup, equals('* History exam<2025-05-16>\n'));
+      expect(markup, equals('* History exam <2025-05-16>\n'));
     });
 
     test('keeps the old timestamp when only the headline title changes', () {
@@ -145,7 +145,7 @@ void main() {
         ),
       );
 
-      expect(markup, equals('* History exam<2025-05-15>\n'));
+      expect(markup, equals('* History exam <2025-05-15>\n'));
     });
 
     test('changes nothing when the old timestamp is gone', () {

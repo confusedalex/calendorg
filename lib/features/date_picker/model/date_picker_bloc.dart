@@ -115,6 +115,7 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
         true,
         state.startTimeActive,
         state.endTimeActive,
+        modifiers: state.modifiers,
       );
     } else if (state.startTimeActive && state.endTimeActive) {
       return dateTimeToTimeRangeTimestamp(
@@ -126,9 +127,15 @@ class DatePickerBloc extends Bloc<DatePickerEvent, DatePickerState> {
         true,
         true,
         true,
+        modifiers: state.modifiers,
       );
     } else {
-      return dateTimeToSimpleTimestamp(startDate, state.startTimeActive, true);
+      return dateTimeToSimpleTimestamp(
+        startDate,
+        state.startTimeActive,
+        true,
+        modifiers: state.modifiers,
+      );
     }
   }
 }

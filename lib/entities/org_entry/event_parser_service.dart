@@ -5,6 +5,7 @@ import 'org_entry.dart';
 import 'org_entry_locator.dart';
 
 class EventParserService {
+  static final _whitespaceRegExp = RegExp(r'\s+');
   static final _timestampRegExp = RegExp(
     r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*[>]',
   );
@@ -108,30 +109,41 @@ class EventParserService {
     final titleNode = section.headline.title;
     if (titleNode == null) return const [];
 
-    if (entry.containsTimestampInHeadline) {
-      final timestamp = edit.newTimestamp ?? edit.oldTimestamp;
-      return [
-        (
-          titleNode as OrgNode,
-          OrgContent([OrgPlainText(edit.newTitle ?? entry.title), ?timestamp]),
-        ),
-      ];
-    }
+    // Keep the whitespace between the title and the tags. Without it, org
+    // reads the tags as part of the title.
+    final padding = RegExp(r'\s*$').stringMatch(titleNode.toMarkup())!;
+    final paddingNode = padding.isEmpty ? null : OrgPlainText(padding);
+    final headlineTimestamps = titleNode.children.whereType<OrgTimestamp>();
 
     final replacements = <(OrgNode, OrgNode)>[];
+    final target = switch (edit) {
+      EntryEdit(:final oldTimestamp?, newTimestamp: _?) => locateTimestamp(
+        section,
+        entry,
+        oldTimestamp,
+      ),
+      _ => null,
+    };
 
-    if (edit.newTimestamp case final newTimestamp?) {
-      final target = edit.oldTimestamp == null
-          ? null
-          : locateTimestamp(section, entry, edit.oldTimestamp!);
-      if (target != null) replacements.add((target, newTimestamp));
-    }
     if (edit.newTitle case final newTitle?) {
+      // The title text holds no timestamps, so the headline timestamps go
+      // after the new title.
       replacements.add((
         titleNode as OrgNode,
-        OrgContent([OrgPlainText(newTitle)]),
+        OrgContent([
+          OrgPlainText(newTitle),
+          for (final timestamp in headlineTimestamps) ...[
+            OrgPlainText(' '),
+            if (identical(timestamp, target)) edit.newTimestamp! else timestamp,
+          ],
+          ?paddingNode,
+        ]),
       ));
+      if (headlineTimestamps.any((t) => identical(t, target))) {
+        return replacements;
+      }
     }
+    if (target != null) replacements.add((target, edit.newTimestamp!));
 
     return replacements;
   }
@@ -178,16 +190,11 @@ class EventParserService {
   bool _containsTimestampInHeadline(OrgSection section) =>
       section.headline.rawTitle?.contains(_timestampRegExp) ?? false;
 
-  String _sanitizeHeadline(OrgSection section) {
-    var headline =
-        section.headline.rawTitle?.replaceAll(_timestampRegExp, '') ?? '';
-
-    if (section.tags.isNotEmpty) {
-      headline = headline.substring(0, headline.length - 1);
-    }
-
-    return headline;
-  }
+  String _sanitizeHeadline(OrgSection section) =>
+      (section.headline.rawTitle ?? '')
+          .replaceAll(_timestampRegExp, '')
+          .replaceAll(_whitespaceRegExp, ' ')
+          .trim();
 
   (OrgPlanningEntry?, OrgPlanningEntry?) _extractPlanningEntries(
     OrgSection section,

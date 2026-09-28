@@ -11,6 +11,7 @@ final class DatePickerState {
     TimeOfDay? endTimeDuration,
     required this.endDateActive,
     this.endDate,
+    this.modifiers = const [],
   }) : startTimeDuration =
            startTimeDuration ?? const TimeOfDay(hour: 12, minute: 00),
        endTimeDuration =
@@ -23,6 +24,8 @@ final class DatePickerState {
   final bool endTimeActive;
   final TimeOfDay endTimeDuration;
   final bool endDateActive;
+
+  final List<OrgTimestampModifier> modifiers;
 
   factory DatePickerState.initial(OrgTimestamp timestamp) {
     switch (timestamp) {
@@ -38,6 +41,7 @@ final class DatePickerState {
                   hour: int.parse(timestamp.time!.hour),
                   minute: int.parse(timestamp.time!.minute),
                 ),
+          modifiers: timestamp.modifiers,
         );
       case OrgDateRangeTimestamp():
         return DatePickerState(
@@ -50,6 +54,7 @@ final class DatePickerState {
               (timestamp.start as OrgSimpleTimestamp).time?.timeOfDay,
           endTimeDuration:
               (timestamp.end as OrgSimpleTimestamp).time?.timeOfDay,
+          modifiers: (timestamp.start as OrgSimpleTimestamp).modifiers,
         );
       case OrgTimeRangeTimestamp():
         return DatePickerState(
@@ -59,6 +64,7 @@ final class DatePickerState {
           endDateActive: false,
           startTimeDuration: timestamp.timeStart.timeOfDay,
           endTimeDuration: timestamp.timeEnd.timeOfDay,
+          modifiers: timestamp.modifiers,
         );
     }
   }
@@ -88,6 +94,7 @@ final class DatePickerState {
       endTimeActive: endTimeActive ?? this.endTimeActive,
       endTimeDuration: endTimeDuration ?? this.endTimeDuration,
       endDateActive: endDateActive ?? this.endDateActive,
+      modifiers: modifiers,
     );
   }
 }
