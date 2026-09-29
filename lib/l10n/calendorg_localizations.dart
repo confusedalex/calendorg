@@ -493,23 +493,11 @@ abstract class CalendorgLocalizations {
   /// **'When'**
   String get when;
 
-  /// No description provided for @choose_date_and_time.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose date and time'**
-  String get choose_date_and_time;
-
   /// No description provided for @change_date_and_time.
   ///
   /// In en, this message translates to:
   /// **'Change date and time'**
   String get change_date_and_time;
-
-  /// No description provided for @no_date_selected.
-  ///
-  /// In en, this message translates to:
-  /// **'No date selected'**
-  String get no_date_selected;
 
   /// No description provided for @need_inbox_file.
   ///

@@ -234,13 +234,7 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get when => 'When';
 
   @override
-  String get choose_date_and_time => 'Choose date and time';
-
-  @override
   String get change_date_and_time => 'Change date and time';
-
-  @override
-  String get no_date_selected => 'No date selected';
 
   @override
   String get need_inbox_file => 'You need to set an inbox file';

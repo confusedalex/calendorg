@@ -23,7 +23,7 @@ jobs:
         with:
           cache: false
           version: 2026.9.2
-      - run: mise run ci
+      - run: mise run ci --continue-on-error
 
   release:
     needs: ci

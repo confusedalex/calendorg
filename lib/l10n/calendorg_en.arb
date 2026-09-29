@@ -124,9 +124,7 @@
   "heading_title": "Heading title",
   "title": "Title",
   "when": "When",
-  "choose_date_and_time": "Choose date and time",
   "change_date_and_time": "Change date and time",
-  "no_date_selected": "No date selected",
   "need_inbox_file": "You need to set an inbox file",
 
   "select_date": "Select Date",

@@ -68,16 +68,12 @@ class NewSectionDialog extends StatelessWidget {
                     DialogSectionLabel(context.l10n.when),
                     DateTile(
                       key: const Key('datePickerButton'),
-                      title: timestamp == null
-                          ? context.l10n.choose_date_and_time
-                          : dayLabel(context, timestamp.startDateTime),
-                      subtitle:
-                          timestamp?.toMarkup() ??
-                          context.l10n.no_date_selected,
+                      title: dayLabel(context, timestamp.startDateTime),
+                      subtitle: timestamp.toMarkup(),
                       onTap: () => openDatePicker(
                         context,
                         DatePickerState.parseDateTimeWithoutTime(
-                          timestamp!.startDateTime,
+                          timestamp.startDateTime,
                         ),
                         bloc.changeTimestamp,
                       ),
@@ -94,7 +90,7 @@ class NewSectionDialog extends StatelessWidget {
         ),
         FilledButton(
           key: const Key('SaveButton'),
-          onPressed: inboxFile != null && timestamp != null && !isLoading
+          onPressed: inboxFile != null && !isLoading
               ? () async {
                   if (!(bloc.formKey.currentState?.validate() ?? false)) return;
 
