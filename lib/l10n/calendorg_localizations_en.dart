@@ -264,6 +264,10 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get select_end_date => 'select end date';
 
   @override
+  String get error_end_time_before_start =>
+      'The end time is before the start time.';
+
+  @override
   String get copy_log => 'Copy log';
 
   @override

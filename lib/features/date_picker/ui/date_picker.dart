@@ -96,6 +96,7 @@ class DatePicker extends StatelessWidget {
                   button: _PickerButton(
                     key: const Key('datepicker_endtimebutton'),
                     icon: Icons.schedule,
+                    error: state.endTimeBeforeStart,
                     text: state.endTimeDuration.format(context),
                     onPressed: state.endTimeActive && endTimeAllowed
                         ? () => bloc.datePickerTimePressed(
@@ -113,6 +114,14 @@ class DatePicker extends StatelessWidget {
                         : null,
                   ),
                 ),
+                if (state.endTimeBeforeStart)
+                  Text(
+                    context.l10n.error_end_time_before_start,
+                    key: const Key('datepicker_endtimeerror'),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
               ],
             ),
           );
@@ -124,13 +133,18 @@ class DatePicker extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: Text(context.l10n.cancel),
         ),
-        FilledButton(
-          key: const Key('SetButton'),
-          onPressed: () {
-            handleSave(timestamp);
-            Navigator.pop(context);
-          },
-          child: Text(context.l10n.set),
+        BlocSelector<DatePickerBloc, DatePickerState, bool>(
+          selector: (state) => state.endTimeBeforeStart,
+          builder: (context, endTimeBeforeStart) => FilledButton(
+            key: const Key('SetButton'),
+            onPressed: endTimeBeforeStart
+                ? null
+                : () {
+                    handleSave(timestamp);
+                    Navigator.pop(context);
+                  },
+            child: Text(context.l10n.set),
+          ),
         ),
       ],
     );
@@ -195,23 +209,30 @@ class _PickerButton extends StatelessWidget {
   final IconData icon;
   final String text;
   final VoidCallback? onPressed;
+  final bool error;
 
   const _PickerButton({
     super.key,
     required this.icon,
     required this.text,
     required this.onPressed,
+    this.error = false,
   });
 
   @override
-  Widget build(BuildContext context) => OutlinedButton.icon(
-    onPressed: onPressed,
-    icon: Icon(icon, size: 18),
-    label: Text(text),
-    style: OutlinedButton.styleFrom(
-      alignment: Alignment.centerLeft,
-      minimumSize: const Size.fromHeight(44),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final errorColor = Theme.of(context).colorScheme.error;
+    return OutlinedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 18),
+      label: Text(text),
+      style: OutlinedButton.styleFrom(
+        alignment: Alignment.centerLeft,
+        minimumSize: const Size.fromHeight(44),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        foregroundColor: error ? errorColor : null,
+        side: error ? BorderSide(color: errorColor) : null,
+      ),
+    );
+  }
 }

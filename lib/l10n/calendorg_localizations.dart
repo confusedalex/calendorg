@@ -553,6 +553,12 @@ abstract class CalendorgLocalizations {
   /// **'select end date'**
   String get select_end_date;
 
+  /// No description provided for @error_end_time_before_start.
+  ///
+  /// In en, this message translates to:
+  /// **'The end time is before the start time.'**
+  String get error_end_time_before_start;
+
   /// No description provided for @copy_log.
   ///
   /// In en, this message translates to:

@@ -171,4 +171,33 @@ void main() {
 
     expect(find.byType(TimePickerDialog), findsOneWidget);
   });
+
+  testWidgets('an end time before the start time shows an error', (
+    tester,
+  ) async {
+    final timestamp = OrgDocument.parse(
+      '<2025-12-04 Thu 14:00-12:00>',
+    ).find<OrgTimestamp>((node) => true)!.node;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+        supportedLocales: CalendorgLocalizations.supportedLocales,
+        home: Scaffold(
+          body: BlocProvider(
+            create: (context) =>
+                DatePickerBloc(DatePickerState.initial(timestamp)),
+            child: DatePicker(handleSave),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('datepicker_endtimeerror')), findsOneWidget);
+    final setButton = tester.widget<FilledButton>(
+      find.byKey(const Key('SetButton')),
+    );
+    expect(setButton.onPressed, isNull);
+  });
 }

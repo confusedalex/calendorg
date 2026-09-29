@@ -684,5 +684,50 @@ void main() {
         ],
       );
     });
+
+    group('Range check tests', () {
+      DatePickerState parse(String text) => DatePickerState.initial(
+        OrgDocument.parse(text).find<OrgTimestamp>((node) => true)!.node,
+      );
+
+      test('A valid time range is not flagged', () {
+        final state = parse('<2026-10-01 Thu 12:00-14:00>');
+        expect(state.endTimeBeforeStart, isFalse);
+      });
+
+      test('An end time before the start time is flagged', () {
+        final state = parse('<2026-10-01 Thu 14:00-12:00>');
+        expect(state.endTimeBeforeStart, isTrue);
+      });
+
+      test('An earlier end time on a later day is not flagged', () {
+        final state = parse('<2026-10-01 Thu 14:00>--<2026-10-02 Fri 12:00>');
+        expect(state.endTimeBeforeStart, isFalse);
+      });
+
+      blocTest(
+        'Picking an end time before the start time keeps the value',
+        build: () => DatePickerBloc(parse('<2026-10-01 Thu 10:00-12:00>')),
+        act: (bloc) => bloc.add(
+          DatePickerTimeChanged(
+            const TimeOfDay(hour: 9, minute: 0),
+            DatePickerType.end,
+          ),
+        ),
+        expect: () => [
+          const TypeMatcher<DatePickerState>()
+              .having(
+                (state) => state.endTimeDuration,
+                'endTimeDuration',
+                const TimeOfDay(hour: 9, minute: 0),
+              )
+              .having(
+                (state) => state.endTimeBeforeStart,
+                'endTimeBeforeStart',
+                isTrue,
+              ),
+        ],
+      );
+    });
   });
 }

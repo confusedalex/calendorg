@@ -27,6 +27,15 @@ final class DatePickerState {
 
   final List<OrgTimestampModifier> modifiers;
 
+  bool get endTimeBeforeStart {
+    final end = endDateActive ? endDate : null;
+    final sameDay = end == null || DateUtils.isSameDay(startDate, end);
+    return sameDay &&
+        startTimeActive &&
+        endTimeActive &&
+        endTimeDuration.isBefore(startTimeDuration);
+  }
+
   factory DatePickerState.initial(OrgTimestamp timestamp) {
     switch (timestamp) {
       case OrgSimpleTimestamp():
