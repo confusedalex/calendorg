@@ -2,7 +2,6 @@ import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
-import 'package:calendorg/features/new_section/model/new_section_cubit.dart';
 import 'package:calendorg/features/new_section/ui/new_section_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:calendorg/util.dart';
@@ -29,16 +28,10 @@ void main() {
           supportedLocales: CalendorgLocalizations.supportedLocales,
           home: Scaffold(
             body: MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: orgFilesCubit),
-                BlocProvider(
-                  create: (_) => NewSectionCubit(
-                    null,
-                    dateTimeToSimpleTimestamp(date, false, true),
-                  ),
-                ),
-              ],
-              child: const NewSectionDialog(),
+              providers: [BlocProvider.value(value: orgFilesCubit)],
+              child: NewSectionDialog(
+                timestamp: dateTimeToSimpleTimestamp(date, false, true),
+              ),
             ),
           ),
         ),

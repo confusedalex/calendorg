@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:org_parser/org_parser.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../shared/ui/date_tile.dart';
@@ -7,19 +8,24 @@ import '../../../shared/ui/editor_dialog_shell.dart';
 import '../../../util.dart';
 import '../../date_picker/model/date_picker_bloc.dart';
 import '../../date_picker/ui/open_date_picker.dart';
-import '../model/new_section_cubit.dart';
 
-class NewSectionDialog extends StatelessWidget {
-  const NewSectionDialog({super.key});
+class NewSectionDialog extends StatefulWidget {
+  final OrgTimestamp timestamp;
+  const NewSectionDialog({super.key, required this.timestamp});
+
+  @override
+  State<StatefulWidget> createState() => _NewSectionDialogState();
+}
+
+class _NewSectionDialogState extends State<NewSectionDialog> {
+  final _formKey = GlobalKey<FormState>();
+  late final _title = TextEditingController();
+  late var _timestamp = widget.timestamp;
 
   @override
   Widget build(BuildContext context) {
-    final title = context.select((NewSectionCubit bloc) => bloc.state.title);
     final inboxFile = context.select(
       (OrgFilesCubit bloc) => bloc.state.inboxFile,
-    );
-    final timestamp = context.select(
-      (NewSectionCubit bloc) => bloc.state.timestamp,
     );
     final appendTextToInboxFile = context
         .read<OrgFilesCubit>()
@@ -27,8 +33,6 @@ class NewSectionDialog extends StatelessWidget {
     final isLoading = context.select(
       (OrgFilesCubit cubit) => cubit.state.status == OrgFilesStatus.loading,
     );
-
-    final bloc = context.read<NewSectionCubit>();
     final colors = Theme.of(context).colorScheme;
 
     return DialogShell(
@@ -43,7 +47,7 @@ class NewSectionDialog extends StatelessWidget {
               ],
             )
           : Form(
-              key: bloc.formKey,
+              key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -56,11 +60,10 @@ class NewSectionDialog extends StatelessWidget {
                         labelText: context.l10n.heading_title,
                         filled: true,
                       ),
-                      initialValue: title ?? '',
+                      controller: _title,
                       autofocus: true,
                       textCapitalization: TextCapitalization.sentences,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      onChanged: bloc.changeTitle,
                       validator: (value) =>
                           validate(context.l10n, value, context.l10n.title),
                     ),
@@ -68,14 +71,14 @@ class NewSectionDialog extends StatelessWidget {
                     DialogSectionLabel(context.l10n.when),
                     DateTile(
                       key: const Key('datePickerButton'),
-                      title: dayLabel(context, timestamp.startDateTime),
-                      subtitle: timestamp.toMarkup(),
+                      title: dayLabel(context, _timestamp.startDateTime),
+                      subtitle: _timestamp.toMarkup(),
                       onTap: () => openDatePicker(
                         context,
                         DatePickerState.parseDateTimeWithoutTime(
-                          timestamp.startDateTime,
+                          _timestamp.startDateTime,
                         ),
-                        bloc.changeTimestamp,
+                        (newTimestamp) => _timestamp = newTimestamp,
                       ),
                     ),
                   ],
@@ -92,10 +95,10 @@ class NewSectionDialog extends StatelessWidget {
           key: const Key('SaveButton'),
           onPressed: inboxFile != null && !isLoading
               ? () async {
-                  if (!(bloc.formKey.currentState?.validate() ?? false)) return;
+                  if (!(_formKey.currentState?.validate() ?? false)) return;
 
                   await appendTextToInboxFile(
-                    '* $title \n ${timestamp.toMarkup()}',
+                    '* ${_title.text.trim()} \n ${_timestamp.toMarkup()}',
                   );
 
                   if (!context.mounted) return;
