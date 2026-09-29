@@ -36,12 +36,7 @@ class SettingsPage extends StatelessWidget {
           trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<OrgFilesCubit>(context),
-                child: const AgendaPage(),
-              ),
-            ),
+            MaterialPageRoute(builder: (_) => const AgendaPage()),
           ),
         ),
         _SectionHeader(context.l10n.settings_section_calendar),
@@ -51,12 +46,7 @@ class SettingsPage extends StatelessWidget {
           trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<TagColorsCubit>(context),
-                child: const TagsPage(),
-              ),
-            ),
+            MaterialPageRoute(builder: (_) => const TagsPage()),
           ),
         ),
         ListTile(
@@ -64,10 +54,7 @@ class SettingsPage extends StatelessWidget {
           title: Text(context.l10n.starting_day_of_week),
           onTap: () => showDialog(
             context: context,
-            builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<StartingDayCubit>(context),
-              child: const StartingDateDialog(),
-            ),
+            builder: (_) => const StartingDateDialog(),
           ),
         ),
         ListTile(
@@ -75,13 +62,7 @@ class SettingsPage extends StatelessWidget {
           title: Text(context.l10n.todo_states),
           onTap: () => showDialog(
             context: context,
-            builder: (_) => MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: context.read<TodoStatesCubit>()),
-                BlocProvider.value(value: context.read<OrgFilesCubit>()),
-              ],
-              child: const TodoStatesDialog(),
-            ),
+            builder: (_) => const TodoStatesDialog(),
           ),
         ),
         _SectionHeader(context.l10n.settings_section_appearance),
@@ -93,13 +74,8 @@ class SettingsPage extends StatelessWidget {
             ThemeMode.light => context.l10n.theme_light,
             ThemeMode.system => context.l10n.theme_automatic,
           }),
-          onTap: () => showDialog(
-            context: context,
-            builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<ThemeBloc>(context),
-              child: const ThemeDialog(),
-            ),
-          ),
+          onTap: () =>
+              showDialog(context: context, builder: (_) => const ThemeDialog()),
         ),
         _SectionHeader(context.l10n.settings_section_diagnostics),
         ListTile(
@@ -118,12 +94,7 @@ class SettingsPage extends StatelessWidget {
           trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<OrgFilesCubit>(context),
-                child: const DebugPage(),
-              ),
-            ),
+            MaterialPageRoute(builder: (_) => const DebugPage()),
           ),
         ),
       ],

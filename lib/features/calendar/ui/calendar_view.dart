@@ -42,16 +42,11 @@ class CalendarView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog<void>(
           context: context,
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: context.read<OrgFilesCubit>()),
-              BlocProvider(
-                create: (context) => NewSectionCubit(
-                  null,
-                  dateTimeToSimpleTimestamp(selectedDate, false, true),
-                ),
-              ),
-            ],
+          builder: (_) => BlocProvider(
+            create: (context) => NewSectionCubit(
+              null,
+              dateTimeToSimpleTimestamp(selectedDate, false, true),
+            ),
             child: NewSectionDialog(),
           ),
         ),

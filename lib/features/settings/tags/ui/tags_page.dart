@@ -43,10 +43,7 @@ class _TagsPageState extends State<TagsPage> {
                 onTap: () async {
                   await showDialog(
                     context: context,
-                    builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<TagColorsCubit>(context),
-                      child: EditTagColorDialog(tagColor),
-                    ),
+                    builder: (_) => EditTagColorDialog(tagColor),
                   );
                 },
               ),
@@ -60,13 +57,8 @@ class _TagsPageState extends State<TagsPage> {
       onPressed: () async {
         await showDialog(
           context: context,
-          builder: (_) => MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: BlocProvider.of<TagColorsCubit>(context),
-              ),
-              BlocProvider(create: (context) => NewTagColorCubit()),
-            ],
+          builder: (_) => BlocProvider(
+            create: (context) => NewTagColorCubit(),
             child: const NewTagColorDialog(),
           ),
         );

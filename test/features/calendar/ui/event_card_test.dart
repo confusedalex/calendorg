@@ -52,19 +52,17 @@ void main() {
     final orgFilesCubit = customOrgFilesCubit ?? FakeOrgFilesCubit();
 
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
-        supportedLocales: CalendorgLocalizations.supportedLocales,
-        home: Scaffold(
-          body: MultiBlocProvider(
-            providers: [
-              BlocProvider.value(value: tagColorsCubit),
-              BlocProvider.value(value: todoStatesCubit),
-              BlocProvider.value(value: orgFilesCubit),
-              ...?extraProviders,
-            ],
-            child: EventCard(occurrence),
-          ),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: tagColorsCubit),
+          BlocProvider.value(value: todoStatesCubit),
+          BlocProvider.value(value: orgFilesCubit),
+          ...?extraProviders,
+        ],
+        child: MaterialApp(
+          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+          supportedLocales: CalendorgLocalizations.supportedLocales,
+          home: Scaffold(body: EventCard(occurrence)),
         ),
       ),
     );

@@ -51,6 +51,23 @@ void main() async {
         providers: [
           BlocProvider(create: (context) => ThemeBloc()),
           BlocProvider.value(value: todoStatesCubit),
+          BlocProvider(
+            create: (context) =>
+                StartingDayCubit(context.read<PreferencesService>())
+                  ..setInititalStartingDay(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                TagColorsCubit(context.read<PreferencesService>())
+                  ..setInitialTagColor(),
+          ),
+          BlocProvider(
+            create: (context) {
+              return OrgFilesCubit(context.read<OrgFilesRepository>())
+                ..init(context.read<TodoStatesCubit>().state);
+            },
+          ),
+          if (kDebugMode) BlocProvider(create: (context) => DiffViewCubit()),
         ],
         child: const Calendorg(),
       ),
@@ -73,29 +90,7 @@ class Calendorg extends StatelessWidget {
           themeMode: state,
           localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
           supportedLocales: CalendorgLocalizations.supportedLocales,
-          home: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) =>
-                    StartingDayCubit(context.read<PreferencesService>())
-                      ..setInititalStartingDay(),
-              ),
-              BlocProvider(
-                create: (context) =>
-                    TagColorsCubit(context.read<PreferencesService>())
-                      ..setInitialTagColor(),
-              ),
-              BlocProvider(
-                create: (context) {
-                  return OrgFilesCubit(context.read<OrgFilesRepository>())
-                    ..init(context.read<TodoStatesCubit>().state);
-                },
-              ),
-              if (kDebugMode)
-                BlocProvider(create: (context) => DiffViewCubit()),
-            ],
-            child: const HomePage(),
-          ),
+          home: const HomePage(),
         );
       },
     );

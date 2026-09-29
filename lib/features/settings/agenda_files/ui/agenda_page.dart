@@ -79,10 +79,7 @@ class AgendaPage extends StatelessWidget {
               enabled: state.directory != null,
               onTap: () => showDialog(
                 context: context,
-                builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<OrgFilesCubit>(context),
-                  child: const AgendaFilesDialog(),
-                ),
+                builder: (_) => const AgendaFilesDialog(),
               ),
             ),
           ],

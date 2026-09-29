@@ -26,12 +26,13 @@ void main() {
       TagColorsCubit cubit,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
-          supportedLocales: CalendorgLocalizations.supportedLocales,
-          home: BlocProvider(
-            create: (context) => cubit,
-            child: const Scaffold(body: TagsPage()),
+        BlocProvider(
+          create: (context) => cubit,
+          child: const MaterialApp(
+            localizationsDelegates:
+                CalendorgLocalizations.localizationsDelegates,
+            supportedLocales: CalendorgLocalizations.supportedLocales,
+            home: Scaffold(body: TagsPage()),
           ),
         ),
       );

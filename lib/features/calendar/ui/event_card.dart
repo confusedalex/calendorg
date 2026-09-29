@@ -122,16 +122,13 @@ class EventCard extends StatelessWidget {
                 case OrgFilesStatus.success:
                   await showDialog(
                     context: context,
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<OrgFilesCubit>(),
-                      child: BlocProvider(
-                        create: (context) => EventViewBloc(
-                          context.read<OrgFilesCubit>(),
-                          occurrence.entry,
-                          occurrence.timestamp,
-                        ),
-                        child: const EventView(),
+                    builder: (_) => BlocProvider(
+                      create: (context) => EventViewBloc(
+                        context.read<OrgFilesCubit>(),
+                        occurrence.entry,
+                        occurrence.timestamp,
                       ),
+                      child: const EventView(),
                     ),
                   );
                 case OrgFilesStatus.failure:

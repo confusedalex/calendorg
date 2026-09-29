@@ -57,29 +57,28 @@ void main() {
 
     Future<void> pumpWidgetToTester(dynamic tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
-          supportedLocales: CalendorgLocalizations.supportedLocales,
-          home: Scaffold(
-            body: MultiBlocProvider(
-              providers: [
-                BlocProvider.value(value: orgFilesCubit),
-                BlocProvider.value(value: calendarBloc),
-                BlocProvider(
-                  create: (context) => StartingDayCubit(inMemoryPreferences()),
-                ),
-                BlocProvider(
-                  create: (context) => TodoStatesCubit(inMemoryPreferences()),
-                ),
-                BlocProvider(
-                  create: (context) => TagColorsCubit.withInitialValue(
-                    inMemoryPreferences(),
-                    [schoolTagColor, homeTagColor, workTagColor],
-                  ),
-                ),
-              ],
-              child: const CalendarView(),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: orgFilesCubit),
+            BlocProvider.value(value: calendarBloc),
+            BlocProvider(
+              create: (context) => StartingDayCubit(inMemoryPreferences()),
             ),
+            BlocProvider(
+              create: (context) => TodoStatesCubit(inMemoryPreferences()),
+            ),
+            BlocProvider(
+              create: (context) => TagColorsCubit.withInitialValue(
+                inMemoryPreferences(),
+                [schoolTagColor, homeTagColor, workTagColor],
+              ),
+            ),
+          ],
+          child: const MaterialApp(
+            localizationsDelegates:
+                CalendorgLocalizations.localizationsDelegates,
+            supportedLocales: CalendorgLocalizations.supportedLocales,
+            home: Scaffold(body: CalendarView()),
           ),
         ),
       );
