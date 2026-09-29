@@ -4,6 +4,7 @@ java = "temurin-17"
 zizmor = "latest"
 
 [tasks]
+"pub:get" = "dart pub get"
 format = "dart format -o none --set-exit-if-changed ./lib ./test"
 "format:write" = "dart format ./"
 analyze = "flutter analyze --no-fatal-infos"
@@ -13,7 +14,8 @@ test = "flutter test"
 "lint:workflows" = "zizmor ./.github/workflows"
 
 [tasks.ci]
-depends = ["analyze", "test", "format"]
+depends = ["pub:get"]
+depends_post = ["analyze", "test", "format"]
 
 [tasks.release]
 depends = ["build:apk-split"]
