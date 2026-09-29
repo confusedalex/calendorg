@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## 1.7.0 - 2026-09-29
 ### Added
 - Pull to refresh for reloading files
 - Reloading when when reopening the app while the app was not fully closed
