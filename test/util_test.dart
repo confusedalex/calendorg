@@ -201,17 +201,6 @@ DEADLINE: <2025-05-04>
         },
       );
     });
-    group('dateTimesFromOrgDateRange', () {
-      test('Parse dateRange', () {
-        final dateTimes = dateRange(
-          meetupEntry.timestamps.last.startDateTime,
-          meetupEntry.timestamps.last.endDateTime,
-        );
-        expect(dateTimes, containsOnce(DateTime(2025, 05)));
-        expect(dateTimes, containsOnce(DateTime(2025, 05, 02)));
-        expect(dateTimes, containsOnce(DateTime(2025, 05, 03)));
-      });
-    });
     group('validator', () {
       final l10n = lookupCalendorgLocalizations(const Locale('en'));
       test('validator should return string when null', () {

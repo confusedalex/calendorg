@@ -30,23 +30,6 @@ class OrgEntry with OrgEntryMappable {
     if (deadline?.value != null) deadline!.value as OrgTimestamp,
   ];
 
-  List<OrgTimestamp> timestampsByDateTime(
-    DateTime date, {
-    bool? includeInactive = false,
-  }) => unifiedTimestamps
-      .where(
-        (timestamp) => switch (timestamp) {
-          OrgSimpleTimestamp() =>
-            isSameDay(date, timestamp.dateTime) &&
-                timestamp.isActive != includeInactive,
-          OrgDateRangeTimestamp() =>
-            date.isAfter(beforeMidnight(timestamp.startDateTime)) &&
-                date.isBefore(afterMidnight(timestamp.endDateTime)),
-          OrgTimeRangeTimestamp() => isSameDay(date, timestamp.startDateTime),
-        },
-      )
-      .toList();
-
   OrgEntry({
     required this.locator,
     required this.todoKeyword,
