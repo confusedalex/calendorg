@@ -7,12 +7,12 @@ part 'new_section_state.dart';
 class NewSectionCubit extends Cubit<NewSectionState> {
   final formKey = GlobalKey<FormState>();
 
-  NewSectionCubit(String? title, OrgTimestamp? timestamp)
+  NewSectionCubit(String? title, OrgTimestamp timestamp)
     : super(NewSectionState(title: title, timestamp: timestamp));
 
   void changeTitle(String newTitle) =>
       emit(state.copyWith(title: () => newTitle));
 
   void changeTimestamp(OrgTimestamp timestamp) =>
-      emit(state.copyWith(timestamp: () => timestamp));
+      emit(state.copyWith(timestamp: timestamp));
 }

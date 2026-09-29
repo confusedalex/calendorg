@@ -4,8 +4,9 @@ import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
 import 'package:calendorg/features/new_section/model/new_section_cubit.dart';
 import 'package:calendorg/features/new_section/ui/new_section_dialog.dart';
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
+import 'package:calendorg/util.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,6 +21,8 @@ void main() {
     });
 
     Future<void> pumpWidget(WidgetTester tester) async {
+      final date = DateTime(2025, 5, 17);
+
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
@@ -28,9 +31,14 @@ void main() {
             body: MultiBlocProvider(
               providers: [
                 BlocProvider.value(value: orgFilesCubit),
-                BlocProvider(create: (_) => NewSectionCubit(null, null)),
+                BlocProvider(
+                  create: (_) => NewSectionCubit(
+                    null,
+                    dateTimeToSimpleTimestamp(date, false, true),
+                  ),
+                ),
               ],
-              child: NewSectionDialog(dateTime: DateTime(2025, 5, 17)),
+              child: const NewSectionDialog(),
             ),
           ),
         ),
@@ -47,12 +55,11 @@ void main() {
       expect(find.byKey(const Key('datePickerButton')), findsOneWidget);
       expect(find.byKey(const Key('CancelButton')), findsOneWidget);
       expect(find.byKey(const Key('SaveButton')), findsOneWidget);
-      expect(find.text('No date selected'), findsOneWidget);
 
       final saveButton = tester.widget<FilledButton>(
         find.byKey(const Key('SaveButton')),
       );
-      expect(saveButton.onPressed, isNull);
+      expect(saveButton.onPressed, isNotNull);
 
       await tester.tap(find.byKey(const Key('datePickerButton')));
       await tester.pumpAndSettle();

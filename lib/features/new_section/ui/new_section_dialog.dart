@@ -10,9 +10,7 @@ import '../../date_picker/ui/open_date_picker.dart';
 import '../model/new_section_cubit.dart';
 
 class NewSectionDialog extends StatelessWidget {
-  final DateTime dateTime;
-
-  const NewSectionDialog({super.key, required this.dateTime});
+  const NewSectionDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +77,7 @@ class NewSectionDialog extends StatelessWidget {
                       onTap: () => openDatePicker(
                         context,
                         DatePickerState.parseDateTimeWithoutTime(
-                          timestamp?.startDateTime ?? dateTime,
+                          timestamp!.startDateTime,
                         ),
                         bloc.changeTimestamp,
                       ),

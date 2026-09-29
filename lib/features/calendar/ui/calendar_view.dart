@@ -45,9 +45,14 @@ class CalendarView extends StatelessWidget {
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: context.read<OrgFilesCubit>()),
-              BlocProvider(create: (context) => NewSectionCubit(null, null)),
+              BlocProvider(
+                create: (context) => NewSectionCubit(
+                  null,
+                  dateTimeToSimpleTimestamp(selectedDate, false, true),
+                ),
+              ),
             ],
-            child: NewSectionDialog(dateTime: selectedDate),
+            child: NewSectionDialog(),
           ),
         ),
         child: const Icon(Icons.add),
