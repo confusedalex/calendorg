@@ -4,9 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/logging.dart';
-import '../../../../core/starting_day_cubit.dart';
-import '../../../../core/tag_colors/tag_colors_cubit.dart';
-import '../../../../core/todo_states_cubit.dart';
 import '../../../../util.dart';
 import '../../agenda_files/ui/agenda_page.dart';
 import '../../debug/ui/debug_page.dart';

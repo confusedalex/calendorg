@@ -32,8 +32,6 @@ class NewTagColorDialog extends StatelessWidget {
                 autofocus: true,
                 decoration: InputDecoration(
                   labelText: context.l10n.tag_name,
-                  prefixText: ':',
-                  suffixText: ':',
                   filled: true,
                 ),
                 onChanged: state.updateText,
