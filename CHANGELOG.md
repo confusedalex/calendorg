@@ -6,6 +6,7 @@
 - Add weekday text to timestamp
 - Logger for logging errors and warning
 - Add copy log button in the settings
+- Timestamp repeaters are now handlet
 ### Fixed
 - Don't allow adding of inboxFile to agenda files or the other way around
 - Find timestamps after a range timestamp in the same section

@@ -1,8 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:org_parser/org_parser.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-import '../../util.dart';
 import '../planning_entry.dart';
 import '../timestamp.dart';
 import 'org_entry_locator.dart';

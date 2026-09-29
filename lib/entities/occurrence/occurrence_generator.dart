@@ -23,6 +23,16 @@ DayKey? _dayKeyOfTimestamp(OrgTimestamp timestamp) => switch (timestamp) {
   OrgDateRangeTimestamp() => null,
 };
 
+OrgTimestampModifier? _repeaterOf(OrgTimestamp timestamp) {
+  final modifiers = switch (timestamp) {
+    OrgSimpleTimestamp() => timestamp.modifiers,
+    OrgTimeRangeTimestamp() => timestamp.modifiers,
+    // Org mode doesn't use modifiers on range timestamps
+    OrgDateRangeTimestamp() => const <OrgTimestampModifier>[],
+  };
+  return modifiers.where((modifier) => modifier.isRepeater).firstOrNull;
+}
+
 List<Occurrence> occurrencesFor(OrgEntry entry, DateTimeRange window) =>
     occurrencesForInDays(entry, dayKeyOf(window.start), dayKeyOf(window.end));
 
@@ -70,8 +80,23 @@ List<DayKey> _daysInWindow(
 ) {
   if (timestamp is! OrgDateRangeTimestamp) {
     final key = _dayKeyOfTimestamp(timestamp)!;
-    if (key < windowStart || key > windowEnd) return const [];
-    return [key];
+    final repeater = _repeaterOf(timestamp);
+    final step = int.tryParse(repeater?.value ?? '') ?? 0;
+    if (repeater == null || step <= 0) {
+      if (key < windowStart || key > windowEnd) return const [];
+      return [key];
+    }
+
+    final base = _dateOfDayKey(key);
+    final days = <DayKey>[];
+    for (var n = 0; ; n++) {
+      final day = dayKeyOf(base.addModifier(n * step, repeater.unit));
+      if (day > windowEnd) break;
+      if (day >= windowStart && (days.isEmpty || days.last != day)) {
+        days.add(day);
+      }
+    }
+    return days;
   }
 
   final startDateKey = _dayKeyOfTimestamp(timestamp.start);

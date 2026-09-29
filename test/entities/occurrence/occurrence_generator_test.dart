@@ -93,5 +93,33 @@ SCHEDULED: <2025-05-02> DEADLINE: <2025-05-04>
         ],
       );
     });
+
+    test('repeats timestamps with a repeater', () {
+      List<DateTime> repeats(String timestamp, DateTime start, DateTime end) =>
+          _dates(_entry('* Event $timestamp'), start, end);
+
+      final may = (DateTime(2025, 5), DateTime(2025, 5, 31));
+      expect(repeats('<2025-05-05 Mon +1w>', may.$1, may.$2), [
+        DateTime(2025, 5, 5),
+        DateTime(2025, 5, 12),
+        DateTime(2025, 5, 19),
+        DateTime(2025, 5, 26),
+      ]);
+      expect(repeats('<2025-04-29 Tue 10:00-11:00 .+2d>', may.$1, may.$2), [
+        for (var day = 1; day <= 31; day += 2) DateTime(2025, 5, day),
+      ]);
+      expect(repeats('<1990-05-20 Sun ++1y>', may.$1, may.$2), [
+        DateTime(2025, 5, 20),
+      ]);
+      // Counted from the base date, so it does not drift after February.
+      expect(
+        repeats('<2025-01-31 Fri +1m>', DateTime(2025, 3), DateTime(2025, 4)),
+        [DateTime(2025, 3, 3), DateTime(2025, 3, 31)],
+      );
+      expect(repeats('<2025-06-01 Sun +1d>', may.$1, may.$2), isEmpty);
+      expect(repeats('<2025-05-05 Mon -2d>', may.$1, may.$2), [
+        DateTime(2025, 5, 5),
+      ]);
+    });
   });
 }
