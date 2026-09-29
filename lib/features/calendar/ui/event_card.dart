@@ -7,7 +7,6 @@ import '../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../core/todo_states_cubit.dart';
 import '../../../entities/occurrence/occurrence.dart';
 import '../../../util.dart';
-import '../../event_view/model/event_view_bloc.dart';
 import '../../event_view/ui/event_view.dart';
 
 class EventCard extends StatelessWidget {
@@ -122,13 +121,9 @@ class EventCard extends StatelessWidget {
                 case OrgFilesStatus.success:
                   await showDialog(
                     context: context,
-                    builder: (_) => BlocProvider(
-                      create: (context) => EventViewBloc(
-                        context.read<OrgFilesCubit>(),
-                        occurrence.entry,
-                        occurrence.timestamp,
-                      ),
-                      child: const EventView(),
+                    builder: (_) => EventView(
+                      entry: occurrence.entry,
+                      timestamp: occurrence.timestamp,
                     ),
                   );
                 case OrgFilesStatus.failure:
