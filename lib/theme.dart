@@ -141,7 +141,9 @@ abstract final class AppTheme {
   );
 
   // The FlexColorScheme defined dark mode ThemeData.
-  static ThemeData dark = FlexThemeData.dark(
+  static ThemeData dark = _darkSwitchThumb(_flexDark);
+
+  static final ThemeData _flexDark = FlexThemeData.dark(
     // Using FlexColorScheme built-in FlexScheme enum based colors.
     scheme: FlexScheme.shadNeutral,
     // Input color modifiers.
@@ -260,5 +262,18 @@ abstract final class AppTheme {
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     materialTapTargetSize: MaterialTapTargetSize.padded,
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+  );
+
+  static ThemeData _darkSwitchThumb(ThemeData theme) => theme.copyWith(
+    switchTheme: theme.switchTheme.copyWith(
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        final color = states.contains(WidgetState.selected)
+            ? theme.colorScheme.onPrimary
+            : Colors.white;
+        return states.contains(WidgetState.disabled)
+            ? color.withValues(alpha: 0.5)
+            : color;
+      }),
+    ),
   );
 }
