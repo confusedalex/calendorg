@@ -286,7 +286,7 @@ abstract class CalendorgLocalizations {
   /// No description provided for @error_unknown.
   ///
   /// In en, this message translates to:
-  /// **'The files could not be loaded.'**
+  /// **'The files could not be loaded. Pull down to try again.'**
   String get error_unknown;
 
   /// No description provided for @tag_colors.

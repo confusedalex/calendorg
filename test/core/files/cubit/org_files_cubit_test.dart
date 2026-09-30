@@ -325,6 +325,35 @@ void main() {
         expect(cubit.state.entries, [oldEntry]);
       });
 
+      test('should load again on reload after a failure', () async {
+        final repository = MockOrgFilesRepository();
+        when(
+          () => repository.loadCachedEntries(any()),
+        ).thenAnswer((_) async => null);
+        when(
+          () => repository.loadInitialState(any(), any()),
+        ).thenThrow(Exception('no access'));
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
+        final cubit = OrgFilesCubit(repository);
+        await cubit.init(todoStates);
+        when(() => repository.loadInitialState(any(), any())).thenAnswer(
+          (_) async => InitialState(
+            dirInfo: FakeDirectoryInfo(),
+            fileInfos: {},
+            inboxFile: null,
+            todoStates: todoStates,
+            entries: [newEntry],
+          ),
+        );
+
+        await cubit.reload();
+
+        expect(cubit.state.status, OrgFilesStatus.success);
+        expect(cubit.state.entries, [newEntry]);
+      });
+
       test('should report saved files that are missing', () async {
         final repository = MockOrgFilesRepository();
         when(

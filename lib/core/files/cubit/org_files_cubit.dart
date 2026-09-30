@@ -51,7 +51,9 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       }
     } on Exception catch (e, stack) {
       _log.severe('Error initializing org files', e, stack);
-      emit(state.copyWith(status: OrgFilesStatus.failure));
+      emit(
+        state.copyWith(status: OrgFilesStatus.failure, todoStates: todoStates),
+      );
     }
   }
 
@@ -59,6 +61,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       _reloading ??= _reload().whenComplete(() => _reloading = null);
 
   Future<void> _reload() async {
+    if (state.status == OrgFilesStatus.failure) return init(state.todoStates);
     if (state.status != OrgFilesStatus.success) return;
 
     final before = state.entries;

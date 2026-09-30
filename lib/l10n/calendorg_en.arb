@@ -57,7 +57,7 @@
   "error_edit_before_loading": "Wait until the files are loaded, then try again.",
   "error_inbox_file_to_agenda_files": "The inbox file can't also be an agenda file.",
   "error_already_in_agenda_files": "This file is already an agenda file.",
-  "error_unknown": "The files could not be loaded.",
+  "error_unknown": "The files could not be loaded. Pull down to try again.",
 
   "tag_colors": "Tag colors",
   "add_new_tag": "Add tag",

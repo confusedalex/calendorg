@@ -121,7 +121,8 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
       'This file is already an agenda file.';
 
   @override
-  String get error_unknown => 'The files could not be loaded.';
+  String get error_unknown =>
+      'The files could not be loaded. Pull down to try again.';
 
   @override
   String get tag_colors => 'Tag colors';
