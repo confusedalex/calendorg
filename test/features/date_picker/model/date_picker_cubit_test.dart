@@ -1,24 +1,24 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:calendorg/features/date_picker/model/date_picker_bloc.dart';
+import 'package:calendorg/features/date_picker/model/date_picker_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 
 void main() {
-  group('Date Picker Bloc Test', () {
+  group('Date Picker Cubit Test', () {
     final OrgSimpleTimestamp timestamp = OrgDocument.parse(
       '<2025-12-04>',
     ).find<OrgSimpleTimestamp>((node) => true)!.node;
-    late DatePickerBloc bloc;
+    late DatePickerCubit cubit;
 
     setUp(() {
-      bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+      cubit = DatePickerCubit(DatePickerState.initial(timestamp));
     });
 
     group('initialization tests', () {
       test('OrgSimpleTimestamp without time parses correctly', () {
         expect(
-          bloc.state,
+          cubit.state,
           const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
@@ -34,13 +34,13 @@ void main() {
                 isFalse,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         );
@@ -51,10 +51,10 @@ void main() {
           '<2025-12-04 13:21>',
         ).find<OrgSimpleTimestamp>((node) => true)!.node;
 
-        final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+        final cubit = DatePickerCubit(DatePickerState.initial(timestamp));
 
         expect(
-          bloc.state,
+          cubit.state,
           const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
@@ -70,13 +70,13 @@ void main() {
                 isTrue,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 13, minute: 21)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         );
@@ -87,10 +87,10 @@ void main() {
           '<2025-12-04 13:21-14:56>',
         ).find<OrgTimeRangeTimestamp>((node) => true)!.node;
 
-        final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+        final cubit = DatePickerCubit(DatePickerState.initial(timestamp));
 
         expect(
-          bloc.state,
+          cubit.state,
           const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
@@ -106,13 +106,13 @@ void main() {
                 isTrue,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 13, minute: 21)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 14, minute: 56)),
               ),
         );
@@ -123,10 +123,10 @@ void main() {
           '<2025-12-04>--<2026-01-07>',
         ).find<OrgDateRangeTimestamp>((node) => true)!.node;
 
-        final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+        final cubit = DatePickerCubit(DatePickerState.initial(timestamp));
 
         expect(
-          bloc.state,
+          cubit.state,
           const TypeMatcher<DatePickerState>()
               .having(
                 (state) => state.startDate,
@@ -146,13 +146,13 @@ void main() {
                 isFalse,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         );
@@ -164,10 +164,10 @@ void main() {
             '<2025-12-04 14:36>--<2026-01-07>',
           ).find<OrgDateRangeTimestamp>((node) => true)!.node;
 
-          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+          final cubit = DatePickerCubit(DatePickerState.initial(timestamp));
 
           expect(
-            bloc.state,
+            cubit.state,
             const TypeMatcher<DatePickerState>()
                 .having(
                   (state) => state.startDate,
@@ -191,13 +191,13 @@ void main() {
                   isTrue,
                 )
                 .having(
-                  (state) => state.startTimeDuration,
-                  'startTimeDuration',
+                  (state) => state.startTime,
+                  'startTime',
                   equals(const TimeOfDay(hour: 14, minute: 36)),
                 )
                 .having(
-                  (state) => state.endTimeDuration,
-                  'endTimeDuration',
+                  (state) => state.endTime,
+                  'endTime',
                   equals(const TimeOfDay(hour: 12, minute: 00)),
                 ),
           );
@@ -210,10 +210,10 @@ void main() {
             '<2025-12-04>--<2026-01-07 09:31>',
           ).find<OrgDateRangeTimestamp>((node) => true)!.node;
 
-          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+          final cubit = DatePickerCubit(DatePickerState.initial(timestamp));
 
           expect(
-            bloc.state,
+            cubit.state,
             const TypeMatcher<DatePickerState>()
                 .having(
                   (state) => state.startDate,
@@ -233,13 +233,13 @@ void main() {
                   isFalse,
                 )
                 .having(
-                  (state) => state.startTimeDuration,
-                  'startTimeDuration',
+                  (state) => state.startTime,
+                  'startTime',
                   equals(const TimeOfDay(hour: 12, minute: 00)),
                 )
                 .having(
-                  (state) => state.endTimeDuration,
-                  'endTimeDuration',
+                  (state) => state.endTime,
+                  'endTime',
                   equals(const TimeOfDay(hour: 9, minute: 31)),
                 ),
           );
@@ -252,10 +252,10 @@ void main() {
             '<2025-12-04 19:56>--<2026-01-07 09:31>',
           ).find<OrgDateRangeTimestamp>((node) => true)!.node;
 
-          final bloc = DatePickerBloc(DatePickerState.initial(timestamp));
+          final cubit = DatePickerCubit(DatePickerState.initial(timestamp));
 
           expect(
-            bloc.state,
+            cubit.state,
             const TypeMatcher<DatePickerState>()
                 .having(
                   (state) => state.startDate,
@@ -275,13 +275,13 @@ void main() {
                   isTrue,
                 )
                 .having(
-                  (state) => state.startTimeDuration,
-                  'startTimeDuration',
+                  (state) => state.startTime,
+                  'startTime',
                   equals(const TimeOfDay(hour: 19, minute: 56)),
                 )
                 .having(
-                  (state) => state.endTimeDuration,
-                  'endTimeDuration',
+                  (state) => state.endTime,
+                  'endTime',
                   equals(const TimeOfDay(hour: 9, minute: 31)),
                 ),
           );
@@ -290,10 +290,10 @@ void main() {
     });
 
     group('Event tests', () {
-      late DatePickerBloc datePickerBloc;
+      late DatePickerCubit datePickerCubit;
 
       setUp(() {
-        datePickerBloc = DatePickerBloc(
+        datePickerCubit = DatePickerCubit(
           DatePickerState.initial(
             OrgSimpleTimestamp(
               '<',
@@ -308,9 +308,8 @@ void main() {
 
       blocTest(
         'Changing DateTime works',
-        build: () => datePickerBloc,
-        act: (bloc) =>
-            bloc.add(DatePickerStartDateChanged(DateTime(2010, 01, 05))),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeStartDate(DateTime(2010, 01, 05)),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -330,8 +329,8 @@ void main() {
 
       blocTest(
         'Activate endDate will flip bool',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerEndDateActiveChanged(true)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeEndDateActive(true),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -352,8 +351,8 @@ void main() {
 
       blocTest(
         'Deactivate endDate will flip bool',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerEndDateActiveChanged(false)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeEndDateActive(false),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -374,8 +373,8 @@ void main() {
 
       blocTest(
         'Activate startTime will flip bool',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerStartTimeActiveChanged(true)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeStartTimeActive(true),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -395,8 +394,8 @@ void main() {
 
       blocTest(
         'Deactivate startTime will flip bool',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerStartTimeActiveChanged(false)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeStartTimeActive(false),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -416,8 +415,8 @@ void main() {
 
       blocTest(
         'Activate endTime will flip bool',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerEndTimeActiveChanged(true)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeEndTimeActive(true),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -437,8 +436,8 @@ void main() {
 
       blocTest(
         'Deactivate endTime will flip bool',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerEndTimeActiveChanged(false)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeEndTimeActive(false),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -458,12 +457,10 @@ void main() {
 
       blocTest(
         'Setting StartTime works',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(
-          DatePickerTimeChanged(
-            const TimeOfDay(hour: 14, minute: 50),
-            DatePickerType.start,
-          ),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeTime(
+          const TimeOfDay(hour: 14, minute: 50),
+          DatePickerType.start,
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()
@@ -480,20 +477,18 @@ void main() {
                 isFalse,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 14, minute: 50)),
               ),
         ],
       );
       blocTest(
         'Setting StartTime works',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(
-          DatePickerTimeChanged(
-            const TimeOfDay(hour: 14, minute: 50),
-            DatePickerType.start,
-          ),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeTime(
+          const TimeOfDay(hour: 14, minute: 50),
+          DatePickerType.start,
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()
@@ -510,13 +505,13 @@ void main() {
                 isFalse,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 14, minute: 50)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         ],
@@ -524,12 +519,10 @@ void main() {
 
       blocTest(
         'Setting EndTime works',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(
-          DatePickerTimeChanged(
-            const TimeOfDay(hour: 12, minute: 50),
-            DatePickerType.end,
-          ),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeTime(
+          const TimeOfDay(hour: 12, minute: 50),
+          DatePickerType.end,
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()
@@ -546,13 +539,13 @@ void main() {
                 isFalse,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 12, minute: 50)),
               ),
         ],
@@ -560,8 +553,8 @@ void main() {
 
       blocTest(
         'Setting EndDate works',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerEndDateChanged(DateTime(2026, 02))),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeEndDate(DateTime(2026, 02)),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -581,13 +574,13 @@ void main() {
                 isFalse,
               )
               .having(
-                (state) => state.startTimeDuration,
-                'startTimeDuration',
+                (state) => state.startTime,
+                'startTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               )
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 equals(const TimeOfDay(hour: 12, minute: 00)),
               ),
         ],
@@ -595,12 +588,12 @@ void main() {
 
       blocTest(
         'Deactivating startTime without an end date turns endTime off',
-        build: () => datePickerBloc,
-        act: (bloc) {
-          bloc
-            ..add(DatePickerStartTimeActiveChanged(true))
-            ..add(DatePickerEndTimeActiveChanged(true))
-            ..add(DatePickerStartTimeActiveChanged(false));
+        build: () => datePickerCubit,
+        act: (cubit) {
+          cubit
+            ..changeStartTimeActive(true)
+            ..changeEndTimeActive(true)
+            ..changeStartTimeActive(false);
         },
         skip: 2,
         expect: () => [
@@ -616,12 +609,12 @@ void main() {
 
       blocTest(
         'Deactivating endDate without a start time turns endTime off',
-        build: () => datePickerBloc,
-        act: (bloc) {
-          bloc
-            ..add(DatePickerEndDateActiveChanged(true))
-            ..add(DatePickerEndTimeActiveChanged(true))
-            ..add(DatePickerEndDateActiveChanged(false));
+        build: () => datePickerCubit,
+        act: (cubit) {
+          cubit
+            ..changeEndDateActive(true)
+            ..changeEndTimeActive(true)
+            ..changeEndDateActive(false);
         },
         skip: 2,
         expect: () => [
@@ -633,8 +626,8 @@ void main() {
 
       blocTest(
         'Activating startTime keeps endTime off',
-        build: () => datePickerBloc,
-        act: (bloc) => bloc.add(DatePickerStartTimeActiveChanged(true)),
+        build: () => datePickerCubit,
+        act: (cubit) => cubit.changeStartTimeActive(true),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
@@ -648,11 +641,11 @@ void main() {
 
       blocTest(
         "Setting EndTimeActive while StartTimeActive is true won't set StartTimeActive to false",
-        build: () => datePickerBloc,
-        act: (bloc) {
-          bloc
-            ..add(DatePickerStartTimeActiveChanged(true))
-            ..add(DatePickerEndTimeActiveChanged(true));
+        build: () => datePickerCubit,
+        act: (cubit) {
+          cubit
+            ..changeStartTimeActive(true)
+            ..changeEndTimeActive(true);
         },
         expect: () => [
           const TypeMatcher<DatePickerState>()
@@ -707,18 +700,16 @@ void main() {
 
       blocTest(
         'Picking an end time before the start time keeps the value',
-        build: () => DatePickerBloc(parse('<2026-10-01 Thu 10:00-12:00>')),
-        act: (bloc) => bloc.add(
-          DatePickerTimeChanged(
-            const TimeOfDay(hour: 9, minute: 0),
-            DatePickerType.end,
-          ),
+        build: () => DatePickerCubit(parse('<2026-10-01 Thu 10:00-12:00>')),
+        act: (cubit) => cubit.changeTime(
+          const TimeOfDay(hour: 9, minute: 0),
+          DatePickerType.end,
         ),
         expect: () => [
           const TypeMatcher<DatePickerState>()
               .having(
-                (state) => state.endTimeDuration,
-                'endTimeDuration',
+                (state) => state.endTime,
+                'endTime',
                 const TimeOfDay(hour: 9, minute: 0),
               )
               .having(

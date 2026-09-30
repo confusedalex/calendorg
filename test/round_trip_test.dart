@@ -6,7 +6,7 @@ import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/entities/org_entry/entry_edit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
-import 'package:calendorg/features/date_picker/model/date_picker_bloc.dart';
+import 'package:calendorg/features/date_picker/model/date_picker_cubit.dart';
 import 'package:calendorg/shared/org_text_hash.dart';
 import 'package:calendorg/util.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
@@ -202,7 +202,7 @@ void main() {
   OrgTimestamp picked(
     OrgTimestamp old,
     DatePickerState Function(DatePickerState state) change,
-  ) => DatePickerBloc(change(DatePickerState.initial(old))).generateTimestamp();
+  ) => change(DatePickerState.initial(old)).timestamp;
 
   group('modifiers', () {
     test('a date edit keeps the repeater', () async {
@@ -276,8 +276,7 @@ void main() {
         oldTimestamp: entry.timestamps.single,
         newTimestamp: picked(
           entry.timestamps.single,
-          (s) =>
-              s.copyWith(endTimeDuration: const TimeOfDay(hour: 11, minute: 0)),
+          (s) => s.copyWith(endTime: const TimeOfDay(hour: 11, minute: 0)),
         ),
       ),
     );

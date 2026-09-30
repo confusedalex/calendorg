@@ -8,7 +8,7 @@ import '../../../entities/org_entry/org_entry.dart';
 import '../../../shared/ui/date_tile.dart';
 import '../../../shared/ui/editor_dialog_shell.dart';
 import '../../../util.dart';
-import '../../date_picker/model/date_picker_bloc.dart';
+import '../../date_picker/model/date_picker_cubit.dart';
 import '../../date_picker/ui/open_date_picker.dart';
 
 class EventView extends StatefulWidget {

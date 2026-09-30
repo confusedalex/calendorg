@@ -1,4 +1,4 @@
-import 'package:calendorg/features/date_picker/model/date_picker_bloc.dart';
+import 'package:calendorg/features/date_picker/model/date_picker_cubit.dart';
 import 'package:calendorg/features/date_picker/ui/date_picker.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),
@@ -44,7 +44,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),
@@ -72,7 +72,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),
@@ -100,7 +100,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),
@@ -129,7 +129,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),
@@ -157,7 +157,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),
@@ -186,7 +186,7 @@ void main() {
         home: Scaffold(
           body: BlocProvider(
             create: (context) =>
-                DatePickerBloc(DatePickerState.initial(timestamp)),
+                DatePickerCubit(DatePickerState.initial(timestamp)),
             child: DatePicker(handleSave),
           ),
         ),

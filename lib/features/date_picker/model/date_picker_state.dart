@@ -1,4 +1,4 @@
-part of 'date_picker_bloc.dart';
+part of 'date_picker_cubit.dart';
 
 enum DatePickerType { start, end }
 
@@ -6,23 +6,21 @@ final class DatePickerState {
   DatePickerState({
     required this.startDate,
     required this.startTimeActive,
-    TimeOfDay? startTimeDuration,
+    TimeOfDay? startTime,
     required this.endTimeActive,
-    TimeOfDay? endTimeDuration,
+    TimeOfDay? endTime,
     required this.endDateActive,
     this.endDate,
     this.modifiers = const [],
-  }) : startTimeDuration =
-           startTimeDuration ?? const TimeOfDay(hour: 12, minute: 00),
-       endTimeDuration =
-           endTimeDuration ?? const TimeOfDay(hour: 12, minute: 00);
+  }) : startTime = startTime ?? const TimeOfDay(hour: 12, minute: 00),
+       endTime = endTime ?? const TimeOfDay(hour: 12, minute: 00);
 
   final DateTime startDate;
   final DateTime? endDate;
   final bool startTimeActive;
-  final TimeOfDay startTimeDuration;
+  final TimeOfDay startTime;
   final bool endTimeActive;
-  final TimeOfDay endTimeDuration;
+  final TimeOfDay endTime;
   final bool endDateActive;
 
   final List<OrgTimestampModifier> modifiers;
@@ -33,7 +31,55 @@ final class DatePickerState {
     return sameDay &&
         startTimeActive &&
         endTimeActive &&
-        endTimeDuration.isBefore(startTimeDuration);
+        endTime.isBefore(startTime);
+  }
+
+  OrgTimestamp get timestamp {
+    final start = startTimeActive
+        ? DateTime(
+            startDate.year,
+            startDate.month,
+            startDate.day,
+            startTime.hour,
+            startTime.minute,
+          )
+        : startDate;
+    final end = endDate;
+
+    if (endDateActive && end != null) {
+      return dateTimeToTimeRangeTimestamp(
+        start,
+        endTimeActive
+            ? DateTime(
+                end.year,
+                end.month,
+                end.day,
+                endTime.hour,
+                endTime.minute,
+              )
+            : end,
+        true,
+        startTimeActive,
+        endTimeActive,
+        modifiers: modifiers,
+      );
+    } else if (startTimeActive && endTimeActive) {
+      return dateTimeToTimeRangeTimestamp(
+        start,
+        start.copyWith(hour: endTime.hour, minute: endTime.minute),
+        true,
+        true,
+        true,
+        modifiers: modifiers,
+      );
+    } else {
+      return dateTimeToSimpleTimestamp(
+        start,
+        startTimeActive,
+        true,
+        modifiers: modifiers,
+      );
+    }
   }
 
   factory DatePickerState.initial(OrgTimestamp timestamp) {
@@ -44,7 +90,7 @@ final class DatePickerState {
           startTimeActive: timestamp.time != null,
           endTimeActive: false,
           endDateActive: false,
-          startTimeDuration: timestamp.time == null
+          startTime: timestamp.time == null
               ? null
               : TimeOfDay(
                   hour: int.parse(timestamp.time!.hour),
@@ -59,10 +105,8 @@ final class DatePickerState {
           endTimeActive: (timestamp.end as OrgSimpleTimestamp).time != null,
           endDateActive: true,
           endDate: timestamp.endDateTime,
-          startTimeDuration:
-              (timestamp.start as OrgSimpleTimestamp).time?.timeOfDay,
-          endTimeDuration:
-              (timestamp.end as OrgSimpleTimestamp).time?.timeOfDay,
+          startTime: (timestamp.start as OrgSimpleTimestamp).time?.timeOfDay,
+          endTime: (timestamp.end as OrgSimpleTimestamp).time?.timeOfDay,
           modifiers: (timestamp.start as OrgSimpleTimestamp).modifiers,
         );
       case OrgTimeRangeTimestamp():
@@ -71,8 +115,8 @@ final class DatePickerState {
           startTimeActive: true,
           endTimeActive: true,
           endDateActive: false,
-          startTimeDuration: timestamp.timeStart.timeOfDay,
-          endTimeDuration: timestamp.timeEnd.timeOfDay,
+          startTime: timestamp.timeStart.timeOfDay,
+          endTime: timestamp.timeEnd.timeOfDay,
           modifiers: timestamp.modifiers,
         );
     }
@@ -90,18 +134,18 @@ final class DatePickerState {
     DateTime? startDate,
     ValueGetter<DateTime?>? endDate,
     bool? startTimeActive,
-    TimeOfDay? startTimeDuration,
+    TimeOfDay? startTime,
     bool? endTimeActive,
-    TimeOfDay? endTimeDuration,
+    TimeOfDay? endTime,
     bool? endDateActive,
   }) {
     return DatePickerState(
       startDate: startDate ?? this.startDate,
       endDate: endDate != null ? endDate() : this.endDate,
       startTimeActive: startTimeActive ?? this.startTimeActive,
-      startTimeDuration: startTimeDuration ?? this.startTimeDuration,
+      startTime: startTime ?? this.startTime,
       endTimeActive: endTimeActive ?? this.endTimeActive,
-      endTimeDuration: endTimeDuration ?? this.endTimeDuration,
+      endTime: endTime ?? this.endTime,
       endDateActive: endDateActive ?? this.endDateActive,
       modifiers: modifiers,
     );

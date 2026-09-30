@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
 
-import '../model/date_picker_bloc.dart';
+import '../model/date_picker_cubit.dart';
 import 'date_picker.dart';
 
 Future<void> openDatePicker(
@@ -13,7 +13,7 @@ Future<void> openDatePicker(
   context: context,
   builder: (_) {
     return BlocProvider(
-      create: (_) => DatePickerBloc(initialState),
+      create: (_) => DatePickerCubit(initialState),
       child: DatePicker(onChanged),
     );
   },
