@@ -26,11 +26,7 @@ final class OrgFilesState {
     directory: null,
     status: OrgFilesStatus.loading,
     filePaths: {},
-    todoStates: OrgTodoStatesWithIgnored(
-      todo: ['TODO'],
-      done: ['DONE'],
-      ignored: [],
-    ),
+    todoStates: OrgTodoStatesWithIgnored.defaults,
     entries: [],
   );
 

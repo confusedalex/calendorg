@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../helpers/preferences.dart';
 
-final schoolTagColor = TagColor('school', Colors.orange);
+const schoolTagColor = TagColor('school', Colors.orange);
 
 void main() {
   group('TagsPage', () {
@@ -61,7 +61,7 @@ void main() {
 
       expect(
         cubit.state,
-        containsOnce(TagColor('test tag', const Color(0xff043052))),
+        containsOnce(const TagColor('test tag', Color(0xff043052))),
       );
       expect(cubit.state, containsOnce(schoolTagColor));
     });
@@ -98,12 +98,12 @@ void main() {
       expect(cubit.state, isNot(contains(schoolTagColor)));
       expect(
         cubit.state,
-        contains(TagColor('school', const Color(0xff523304))),
+        contains(const TagColor('school', Color(0xff523304))),
       );
     });
 
     testWidgets('Moving tags word', (tester) async {
-      final meetupTag = TagColor('meetups', Colors.purple);
+      const meetupTag = TagColor('meetups', Colors.purple);
       cubit.addTagColor(meetupTag);
 
       expect(cubit.state, containsAllInOrder([schoolTagColor, meetupTag]));

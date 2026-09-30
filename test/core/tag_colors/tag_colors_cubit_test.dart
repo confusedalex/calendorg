@@ -9,8 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/preferences.dart';
 
-final schoolTagColor = TagColor('school', Colors.orange);
-final homeTagColor = TagColor('@home', Colors.green);
+const schoolTagColor = TagColor('school', Colors.orange);
+const homeTagColor = TagColor('@home', Colors.green);
 
 Future<void> main() async {
   late PreferencesService prefs;
@@ -35,9 +35,9 @@ Future<void> main() async {
 
     test('Add tag to model will add to list and save to prefs', () async {
       final cubit = await getTagColorsCubit();
-      final newTag = TagColor('new green tag', Colors.green);
+      const newTag = TagColor('new green tag', Colors.green);
 
-      await cubit.addTagColor(TagColor('new green tag', Colors.green));
+      await cubit.addTagColor(const TagColor('new green tag', Colors.green));
       final stored = await prefs.getString(PrefKeys.tagColors) ?? '[]';
       final tagsColorsFromPrefs = (jsonDecode(stored) as List)
           .map((tagColor) => TagColor.fromJson(tagColor))
@@ -49,7 +49,7 @@ Future<void> main() async {
 
     test('Adding tag with same name wont add a new tag', () async {
       final cubit = await getTagColorsCubit();
-      final newSchoolTag = TagColor('school', Colors.green);
+      const newSchoolTag = TagColor('school', Colors.green);
 
       await cubit.addTagColor(newSchoolTag);
 

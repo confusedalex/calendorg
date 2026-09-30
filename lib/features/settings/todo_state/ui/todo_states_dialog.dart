@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/todo_states_cubit.dart';
 import '../../../../entities/todo_states/todo_states.dart';
 import '../../../../entities/todo_states/todo_states_ignored.dart';
@@ -15,9 +14,7 @@ class TodoStatesDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocConsumer<TodoStatesCubit, OrgTodoStatesWithIgnored>(
-        listener: (_, state) =>
-            context.read<OrgFilesCubit>().changeTodoStates(state),
+      BlocBuilder<TodoStatesCubit, OrgTodoStatesWithIgnored>(
         builder: (context, state) {
           final colors = Theme.of(context).colorScheme;
           return DialogShell(

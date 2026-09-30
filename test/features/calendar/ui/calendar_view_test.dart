@@ -43,9 +43,9 @@ void main() {
 ''';
 
     final document = OrgDocument.parse(markup);
-    final schoolTagColor = TagColor('school', Colors.orange);
-    final homeTagColor = TagColor('@home', Colors.lightGreen);
-    final workTagColor = TagColor('@work', Colors.yellow);
+    const schoolTagColor = TagColor('school', Colors.orange);
+    const homeTagColor = TagColor('@home', Colors.lightGreen);
+    const workTagColor = TagColor('@work', Colors.yellow);
     late OrgFilesCubit orgFilesCubit;
     late CalendarBloc calendarBloc;
 
@@ -216,7 +216,7 @@ class MockOrgFilesBloc extends Mock implements OrgFilesCubit {
     directory: null,
     status: OrgFilesStatus.success,
     filePaths: {fileInfo},
-    todoStates: OrgTodoStatesWithIgnored(
+    todoStates: const OrgTodoStatesWithIgnored(
       todo: ['TODO'],
       done: ['DONE'],
       ignored: [],

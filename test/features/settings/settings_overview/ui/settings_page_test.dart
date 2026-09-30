@@ -43,11 +43,11 @@ void main() {
                 create: (context) => StartingDayCubit(inMemoryPreferences()),
               ),
             ],
-            child: MaterialApp(
+            child: const MaterialApp(
               localizationsDelegates:
                   CalendorgLocalizations.localizationsDelegates,
               supportedLocales: CalendorgLocalizations.supportedLocales,
-              home: const Scaffold(body: SettingsPage()),
+              home: Scaffold(body: SettingsPage()),
             ),
           ),
         ),

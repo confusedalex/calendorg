@@ -28,7 +28,7 @@ void main() {
       registerFallbackValue(FakeDirectoryInfo());
       registerFallbackValue(FakeFileInfo());
       registerFallbackValue(
-        OrgTodoStatesWithIgnored(todo: [], done: [], ignored: []),
+        const OrgTodoStatesWithIgnored(todo: [], done: [], ignored: []),
       );
       registerFallbackValue(const EntryEdit());
     });
@@ -245,7 +245,7 @@ void main() {
         OrgDocument.parse('* Exam\n<2026-05-02>\n'),
         fileHash: 'new-hash',
       ).single;
-      final todoStates = OrgTodoStatesWithIgnored(
+      const todoStates = OrgTodoStatesWithIgnored(
         todo: ['TODO'],
         done: ['DONE'],
         ignored: [],

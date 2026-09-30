@@ -9,14 +9,8 @@ import '../shared/config/preferences_service.dart';
 
 final _log = Logger('TodoStatesCubit');
 
-final defaultTodoStates = OrgTodoStatesWithIgnored(
-  todo: ['TODO'],
-  done: ['DONE'],
-  ignored: [],
-);
-
 class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
-  TodoStatesCubit(this._prefs) : super(defaultTodoStates);
+  TodoStatesCubit(this._prefs) : super(OrgTodoStatesWithIgnored.defaults);
 
   final PreferencesService _prefs;
 
@@ -33,11 +27,11 @@ class TodoStatesCubit extends Cubit<OrgTodoStatesWithIgnored> {
       );
 
       final states = todo.isEmpty && done.isEmpty
-          ? defaultTodoStates
+          ? OrgTodoStatesWithIgnored.defaults
           : OrgTodoStatesWithIgnored(todo: todo, done: done, ignored: ignored);
       emit(states);
     } on Exception {
-      emit(defaultTodoStates);
+      emit(OrgTodoStatesWithIgnored.defaults);
     }
   }
 

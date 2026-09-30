@@ -37,7 +37,7 @@ void main() {
     entry,
     DateTimeRange(start: DateTime(2025, 5), end: DateTime(2025, 5, 30)),
   ).first;
-  final meetupTagColor = TagColor('meetups', Colors.pink);
+  const meetupTagColor = TagColor('meetups', Colors.pink);
 
   Future<void> initWidget(
     dynamic tester, {
@@ -114,7 +114,7 @@ class FakeOrgFilesCubit extends OrgFilesCubit {
         directory: null,
         status: OrgFilesStatus.success,
         filePaths: {},
-        todoStates: OrgTodoStatesWithIgnored(
+        todoStates: const OrgTodoStatesWithIgnored(
           todo: ['TODO'],
           done: ['DONE'],
           ignored: [],

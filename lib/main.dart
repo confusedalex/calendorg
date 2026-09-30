@@ -11,6 +11,7 @@ import 'core/logging.dart';
 import 'core/starting_day_cubit.dart';
 import 'core/tag_colors/tag_colors_cubit.dart';
 import 'core/todo_states_cubit.dart';
+import 'core/todo_states_listener.dart';
 import 'entities/org_entry/event_parser_service.dart';
 import 'features/calendar/ui/calendar_page.dart';
 import 'features/diff_view/model/diff_view_cubit.dart';
@@ -80,18 +81,21 @@ class Calendorg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeMode>(
-      builder: (context, state) {
-        return MaterialApp(
-          title: 'calendorg',
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: state,
-          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
-          supportedLocales: CalendorgLocalizations.supportedLocales,
-          home: const HomePage(),
-        );
-      },
+    return TodoStatesListener(
+      child: BlocBuilder<ThemeBloc, ThemeMode>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'calendorg',
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: state,
+            localizationsDelegates:
+                CalendorgLocalizations.localizationsDelegates,
+            supportedLocales: CalendorgLocalizations.supportedLocales,
+            home: const HomePage(),
+          );
+        },
+      ),
     );
   }
 }

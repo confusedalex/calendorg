@@ -73,7 +73,7 @@ class TestOrgFilesCubit extends OrgFilesCubit {
         directory: null,
         status: OrgFilesStatus.success,
         filePaths: {inboxFile},
-        todoStates: OrgTodoStatesWithIgnored(
+        todoStates: const OrgTodoStatesWithIgnored(
           todo: ['TODO'],
           done: ['DONE'],
           ignored: [],

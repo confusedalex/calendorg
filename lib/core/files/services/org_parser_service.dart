@@ -25,13 +25,11 @@ class _ParseRequest {
 class OrgParserService {
   var _started = false;
   late SendPort _workerSendPort;
-  late OrgTodoStatesWithIgnored _currentTodoStates;
+  OrgTodoStatesWithIgnored _currentTodoStates;
 
-  OrgParserService([OrgTodoStatesWithIgnored? todoStates]) {
-    _currentTodoStates =
-        todoStates ??
-        OrgTodoStatesWithIgnored(todo: ['TODO'], done: ['DONE'], ignored: []);
-  }
+  OrgParserService([
+    this._currentTodoStates = OrgTodoStatesWithIgnored.defaults,
+  ]);
 
   Future<void> start() async {
     if (_started) throw StateError('Already started');
