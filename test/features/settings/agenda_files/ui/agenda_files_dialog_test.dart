@@ -38,13 +38,13 @@ void main() {
     testWidgets('should find "select file" button', (tester) async {
       await pumpWidgetToTester(tester);
 
-      expect(find.text('select file'), findsOneWidget);
+      expect(find.text('Select file'), findsOneWidget);
     });
 
     testWidgets('should find "create file" button', (tester) async {
       await pumpWidgetToTester(tester);
 
-      expect(find.text('create file'), findsOneWidget);
+      expect(find.text('Create file'), findsOneWidget);
     });
   });
 }

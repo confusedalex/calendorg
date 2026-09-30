@@ -12,35 +12,35 @@
   "set": "Set",
   "not_set": "Not set",
 
-  "validation_empty": "{name} can't be empty!",
+  "validation_empty": "{name} can't be empty.",
   "@validation_empty": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
-  "validation_exists": "{name} already exists!",
+  "validation_exists": "{name} already exists.",
   "@validation_exists": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
 
-  "file_could_not_open": "File could not be opened!",
-  "file_already_exists": "File already exists!",
-  "select_file": "select file",
-  "create_file": "create file",
-  "agenda_files": "Agenda Files",
+  "file_could_not_open": "The file could not be opened.",
+  "file_already_exists": "This file is already in the list.",
+  "select_file": "Select file",
+  "create_file": "Create file",
+  "agenda_files": "Agenda files",
   "file_name_couldnt_load": "File name could not be loaded",
   "pick_org_directory": "Pick org directory",
-  "inbox_file": "Inbox File",
+  "inbox_file": "Inbox file",
 
   "error_selecting_file": "The file could not be selected.",
   "error_creating_file": "The file could not be created.",
   "error_loading_file": "The file could not be loaded.",
   "error_saving_section": "The change could not be saved.",
-  "error_reading_file": "Error while reading file!",
-  "error_file_not_in_org_folder": "File is not in org folder!\nPlease select a file that lies in your org folder or change your org folder.",
-  "error_entry_not_found": "Entry {title} no longer found in file!",
+  "error_reading_file": "The file could not be read.",
+  "error_file_not_in_org_folder": "This file is not in your org folder. Choose a file from the org folder, or change the org folder.",
+  "error_entry_not_found": "\"{title}\" is no longer in the file.",
   "@error_entry_not_found": {
     "placeholders": {
       "title": { "type": "String" }
@@ -54,58 +54,56 @@
       "names": { "type": "String" }
     }
   },
-  "error_edit_before_loading": "Can't edit heading before loading!",
-  "error_inbox_file_to_agenda_files": "Inbox file can't be added to agenda files.",
-  "error_already_in_agenda_files": "File already in agenda files.",
-  "error_unknown": "Some error has occurred!",
+  "error_edit_before_loading": "Wait until the files are loaded, then try again.",
+  "error_inbox_file_to_agenda_files": "The inbox file can't also be an agenda file.",
+  "error_already_in_agenda_files": "This file is already an agenda file.",
+  "error_unknown": "The files could not be loaded.",
 
-  "tag_colors": "Tag Colors",
-  "tag_color": "Tag Color",
-  "add_new_tag": "Add new Tag",
+  "tag_colors": "Tag colors",
+  "add_new_tag": "Add tag",
   "tag_name": "Tag name",
-  "edit_tag": "Edit \"{tag}\" Tag",
+  "edit_tag": "Edit tag \"{tag}\"",
   "@edit_tag": {
     "placeholders": {
       "tag": { "type": "String" }
     }
   },
 
-  "starting_day": "Starting Day",
-  "starting_day_of_week": "Starting Day of Week",
+  "starting_day": "Starting day",
+  "starting_day_of_week": "Starting day of the week",
   "monday": "Monday",
   "sunday": "Sunday",
 
 
   "theme": "Theme",
-  "choose_theme": "Choose Theme",
-  "theme_dark": "dark",
-  "theme_light": "light",
-  "theme_automatic": "automatic",
+  "choose_theme": "Choose theme",
+  "theme_dark": "Dark",
+  "theme_light": "Light",
+  "theme_automatic": "Automatic",
 
-  "todo_states": "TODO States",
-  "todo_state": "TODO State",
-  "todo_state_name": "TODO State Name",
-  "todo_status_todo": "todo",
-  "todo_status_done": "done",
-  "todo_status_ignored": "ignored",
+  "todo_states": "TODO states",
+  "todo_state": "TODO state",
+  "todo_state_name": "TODO state name",
+  "todo_status_todo": "Todo",
+  "todo_status_done": "Done",
+  "todo_status_ignored": "Ignored",
 
   "debug": "Debug",
 
-  "edit_event": "Edit Event",
-  "add_event": "Add Event",
+  "edit_event": "Edit event",
+  "add_event": "Add event",
   "event_title": "Event title",
   "heading_title": "Heading title",
   "title": "Title",
   "when": "When",
-  "change_date_and_time": "Change date and time",
-  "need_inbox_file": "You need to set an inbox file",
+  "need_inbox_file": "Set an inbox file in Settings first.",
 
-  "select_date": "Select Date",
-  "start_date": "Start Date",
-  "start_time": "Start Time",
-  "end_date": "End Date",
-  "end_time": "End Time",
-  "select_end_date": "select end date",
+  "select_date": "Select date",
+  "start_date": "Start date",
+  "start_time": "Start time",
+  "end_date": "End date",
+  "end_time": "End time",
+  "select_end_date": "Select end date",
   "error_end_time_before_start": "The end time is before the start time.",
 
   "copy_log": "Copy log",

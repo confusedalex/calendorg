@@ -154,43 +154,43 @@ abstract class CalendorgLocalizations {
   /// No description provided for @validation_empty.
   ///
   /// In en, this message translates to:
-  /// **'{name} can\'t be empty!'**
+  /// **'{name} can\'t be empty.'**
   String validation_empty(String name);
 
   /// No description provided for @validation_exists.
   ///
   /// In en, this message translates to:
-  /// **'{name} already exists!'**
+  /// **'{name} already exists.'**
   String validation_exists(String name);
 
   /// No description provided for @file_could_not_open.
   ///
   /// In en, this message translates to:
-  /// **'File could not be opened!'**
+  /// **'The file could not be opened.'**
   String get file_could_not_open;
 
   /// No description provided for @file_already_exists.
   ///
   /// In en, this message translates to:
-  /// **'File already exists!'**
+  /// **'This file is already in the list.'**
   String get file_already_exists;
 
   /// No description provided for @select_file.
   ///
   /// In en, this message translates to:
-  /// **'select file'**
+  /// **'Select file'**
   String get select_file;
 
   /// No description provided for @create_file.
   ///
   /// In en, this message translates to:
-  /// **'create file'**
+  /// **'Create file'**
   String get create_file;
 
   /// No description provided for @agenda_files.
   ///
   /// In en, this message translates to:
-  /// **'Agenda Files'**
+  /// **'Agenda files'**
   String get agenda_files;
 
   /// No description provided for @file_name_couldnt_load.
@@ -208,7 +208,7 @@ abstract class CalendorgLocalizations {
   /// No description provided for @inbox_file.
   ///
   /// In en, this message translates to:
-  /// **'Inbox File'**
+  /// **'Inbox file'**
   String get inbox_file;
 
   /// No description provided for @error_selecting_file.
@@ -238,19 +238,19 @@ abstract class CalendorgLocalizations {
   /// No description provided for @error_reading_file.
   ///
   /// In en, this message translates to:
-  /// **'Error while reading file!'**
+  /// **'The file could not be read.'**
   String get error_reading_file;
 
   /// No description provided for @error_file_not_in_org_folder.
   ///
   /// In en, this message translates to:
-  /// **'File is not in org folder!\nPlease select a file that lies in your org folder or change your org folder.'**
+  /// **'This file is not in your org folder. Choose a file from the org folder, or change the org folder.'**
   String get error_file_not_in_org_folder;
 
   /// No description provided for @error_entry_not_found.
   ///
   /// In en, this message translates to:
-  /// **'Entry {title} no longer found in file!'**
+  /// **'\"{title}\" is no longer in the file.'**
   String error_entry_not_found(String title);
 
   /// No description provided for @error_file_changed_on_disk.
@@ -268,43 +268,37 @@ abstract class CalendorgLocalizations {
   /// No description provided for @error_edit_before_loading.
   ///
   /// In en, this message translates to:
-  /// **'Can\'t edit heading before loading!'**
+  /// **'Wait until the files are loaded, then try again.'**
   String get error_edit_before_loading;
 
   /// No description provided for @error_inbox_file_to_agenda_files.
   ///
   /// In en, this message translates to:
-  /// **'Inbox file can\'t be added to agenda files.'**
+  /// **'The inbox file can\'t also be an agenda file.'**
   String get error_inbox_file_to_agenda_files;
 
   /// No description provided for @error_already_in_agenda_files.
   ///
   /// In en, this message translates to:
-  /// **'File already in agenda files.'**
+  /// **'This file is already an agenda file.'**
   String get error_already_in_agenda_files;
 
   /// No description provided for @error_unknown.
   ///
   /// In en, this message translates to:
-  /// **'Some error has occurred!'**
+  /// **'The files could not be loaded.'**
   String get error_unknown;
 
   /// No description provided for @tag_colors.
   ///
   /// In en, this message translates to:
-  /// **'Tag Colors'**
+  /// **'Tag colors'**
   String get tag_colors;
-
-  /// No description provided for @tag_color.
-  ///
-  /// In en, this message translates to:
-  /// **'Tag Color'**
-  String get tag_color;
 
   /// No description provided for @add_new_tag.
   ///
   /// In en, this message translates to:
-  /// **'Add new Tag'**
+  /// **'Add tag'**
   String get add_new_tag;
 
   /// No description provided for @tag_name.
@@ -316,19 +310,19 @@ abstract class CalendorgLocalizations {
   /// No description provided for @edit_tag.
   ///
   /// In en, this message translates to:
-  /// **'Edit \"{tag}\" Tag'**
+  /// **'Edit tag \"{tag}\"'**
   String edit_tag(String tag);
 
   /// No description provided for @starting_day.
   ///
   /// In en, this message translates to:
-  /// **'Starting Day'**
+  /// **'Starting day'**
   String get starting_day;
 
   /// No description provided for @starting_day_of_week.
   ///
   /// In en, this message translates to:
-  /// **'Starting Day of Week'**
+  /// **'Starting day of the week'**
   String get starting_day_of_week;
 
   /// No description provided for @monday.
@@ -352,61 +346,61 @@ abstract class CalendorgLocalizations {
   /// No description provided for @choose_theme.
   ///
   /// In en, this message translates to:
-  /// **'Choose Theme'**
+  /// **'Choose theme'**
   String get choose_theme;
 
   /// No description provided for @theme_dark.
   ///
   /// In en, this message translates to:
-  /// **'dark'**
+  /// **'Dark'**
   String get theme_dark;
 
   /// No description provided for @theme_light.
   ///
   /// In en, this message translates to:
-  /// **'light'**
+  /// **'Light'**
   String get theme_light;
 
   /// No description provided for @theme_automatic.
   ///
   /// In en, this message translates to:
-  /// **'automatic'**
+  /// **'Automatic'**
   String get theme_automatic;
 
   /// No description provided for @todo_states.
   ///
   /// In en, this message translates to:
-  /// **'TODO States'**
+  /// **'TODO states'**
   String get todo_states;
 
   /// No description provided for @todo_state.
   ///
   /// In en, this message translates to:
-  /// **'TODO State'**
+  /// **'TODO state'**
   String get todo_state;
 
   /// No description provided for @todo_state_name.
   ///
   /// In en, this message translates to:
-  /// **'TODO State Name'**
+  /// **'TODO state name'**
   String get todo_state_name;
 
   /// No description provided for @todo_status_todo.
   ///
   /// In en, this message translates to:
-  /// **'todo'**
+  /// **'Todo'**
   String get todo_status_todo;
 
   /// No description provided for @todo_status_done.
   ///
   /// In en, this message translates to:
-  /// **'done'**
+  /// **'Done'**
   String get todo_status_done;
 
   /// No description provided for @todo_status_ignored.
   ///
   /// In en, this message translates to:
-  /// **'ignored'**
+  /// **'Ignored'**
   String get todo_status_ignored;
 
   /// No description provided for @debug.
@@ -418,13 +412,13 @@ abstract class CalendorgLocalizations {
   /// No description provided for @edit_event.
   ///
   /// In en, this message translates to:
-  /// **'Edit Event'**
+  /// **'Edit event'**
   String get edit_event;
 
   /// No description provided for @add_event.
   ///
   /// In en, this message translates to:
-  /// **'Add Event'**
+  /// **'Add event'**
   String get add_event;
 
   /// No description provided for @event_title.
@@ -451,52 +445,46 @@ abstract class CalendorgLocalizations {
   /// **'When'**
   String get when;
 
-  /// No description provided for @change_date_and_time.
-  ///
-  /// In en, this message translates to:
-  /// **'Change date and time'**
-  String get change_date_and_time;
-
   /// No description provided for @need_inbox_file.
   ///
   /// In en, this message translates to:
-  /// **'You need to set an inbox file'**
+  /// **'Set an inbox file in Settings first.'**
   String get need_inbox_file;
 
   /// No description provided for @select_date.
   ///
   /// In en, this message translates to:
-  /// **'Select Date'**
+  /// **'Select date'**
   String get select_date;
 
   /// No description provided for @start_date.
   ///
   /// In en, this message translates to:
-  /// **'Start Date'**
+  /// **'Start date'**
   String get start_date;
 
   /// No description provided for @start_time.
   ///
   /// In en, this message translates to:
-  /// **'Start Time'**
+  /// **'Start time'**
   String get start_time;
 
   /// No description provided for @end_date.
   ///
   /// In en, this message translates to:
-  /// **'End Date'**
+  /// **'End date'**
   String get end_date;
 
   /// No description provided for @end_time.
   ///
   /// In en, this message translates to:
-  /// **'End Time'**
+  /// **'End time'**
   String get end_time;
 
   /// No description provided for @select_end_date.
   ///
   /// In en, this message translates to:
-  /// **'select end date'**
+  /// **'Select end date'**
   String get select_end_date;
 
   /// No description provided for @error_end_time_before_start.

@@ -43,7 +43,7 @@ void main() {
     testWidgets('uses the event-style dialog chrome', (tester) async {
       await pumpWidget(tester);
 
-      expect(find.text('Add Event'), findsOneWidget);
+      expect(find.text('Add event'), findsOneWidget);
       expect(find.byKey(const Key('titleField')), findsOneWidget);
       expect(find.byKey(const Key('datePickerButton')), findsOneWidget);
       expect(find.byKey(const Key('CancelButton')), findsOneWidget);

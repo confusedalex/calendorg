@@ -17,7 +17,7 @@ void main() {
   test('names the entry by its title', () {
     expect(
       const EntryNotFound('Exam').message(l10n),
-      'Entry Exam no longer found in file!',
+      '"Exam" is no longer in the file.',
     );
   });
 }

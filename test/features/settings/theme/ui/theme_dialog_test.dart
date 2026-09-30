@@ -36,20 +36,20 @@ void main() {
       testWidgets('Find light theme', (tester) async {
         await pumpWidgetToTester(tester);
         expect(
-          find.widgetWithText(RadioListTile<ThemeMode>, 'light'),
+          find.widgetWithText(RadioListTile<ThemeMode>, 'Light'),
           findsOne,
         );
       });
 
       testWidgets('Find dark theme', (tester) async {
         await pumpWidgetToTester(tester);
-        expect(find.widgetWithText(RadioListTile<ThemeMode>, 'dark'), findsOne);
+        expect(find.widgetWithText(RadioListTile<ThemeMode>, 'Dark'), findsOne);
       });
 
       testWidgets('Find automatic theme', (tester) async {
         await pumpWidgetToTester(tester);
         expect(
-          find.widgetWithText(RadioListTile<ThemeMode>, 'automatic'),
+          find.widgetWithText(RadioListTile<ThemeMode>, 'Automatic'),
           findsOne,
         );
       });

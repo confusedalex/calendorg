@@ -46,20 +46,20 @@ void main() {
       );
     }
 
-    group('Tag Colors', () {
+    group('Tag colors', () {
       testWidgets('Find Tag Colors Button', (tester) async {
         await pumpWidget(tester);
 
         await tester.pumpAndSettle();
 
-        expect(find.text('Tag Colors'), findsOneWidget);
+        expect(find.text('Tag colors'), findsOneWidget);
       });
 
       testWidgets('Tapping Button open Dialog', (tester) async {
         await pumpWidget(tester);
 
         await tester.pumpAndSettle();
-        await tester.tap(find.text('Tag Colors'));
+        await tester.tap(find.text('Tag colors'));
 
         await tester.pumpAndSettle();
 
@@ -80,7 +80,7 @@ void main() {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Agenda Files'));
+      await tester.tap(find.text('Agenda files'));
 
       await tester.pumpAndSettle();
 
@@ -90,7 +90,7 @@ void main() {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text('TODO States'));
+      await tester.tap(find.text('TODO states'));
 
       await tester.pumpAndSettle();
 
@@ -100,7 +100,7 @@ void main() {
       await pumpWidget(tester);
 
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Starting Day of Week'));
+      await tester.tap(find.text('Starting day of the week'));
 
       await tester.pumpAndSettle();
 
