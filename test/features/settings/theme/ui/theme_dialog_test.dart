@@ -1,37 +1,31 @@
-import 'package:bloc_test/bloc_test.dart';
-import 'package:calendorg/features/settings/theme/model/theme_bloc.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/features/settings/theme/ui/theme_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+
+import '../../../../helpers/preferences.dart';
 
 void main() {
   group('Theme Dialog', () {
-    late ThemeBloc bloc;
-
-    setUpAll(() {
-      registerFallbackValue(ThemeSwitchEvent(ThemeMode.light));
-    });
+    late SettingsCubit cubit;
 
     setUp(() {
-      bloc = MockThemeBloc();
-
-      whenListen(
-        bloc,
-        Stream<ThemeMode>.value(ThemeMode.dark),
-        initialState: ThemeMode.dark,
+      cubit = SettingsCubit(
+        inMemoryPreferences(),
+        const AppSettings(themeMode: ThemeMode.dark),
       );
     });
 
-    Future<void> pumpWidgetToTester(dynamic tester) async {
+    Future<void> pumpWidgetToTester(WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
           supportedLocales: CalendorgLocalizations.supportedLocales,
           home: BlocProvider.value(
-            value: bloc,
+            value: cubit,
             child: const Scaffold(body: ThemeDialog()),
           ),
         ),
@@ -61,19 +55,13 @@ void main() {
       });
     });
 
-    group('theme switching calls correct event', () {
-      testWidgets('Switching to light theme works', (tester) async {
-        await pumpWidgetToTester(tester);
+    testWidgets('Switching to light theme works', (tester) async {
+      await pumpWidgetToTester(tester);
 
-        await tester.tap(find.byKey(const Key('ThemeRadioLightTheme')));
+      await tester.tap(find.byKey(const Key('ThemeRadioLightTheme')));
+      await tester.pumpAndSettle();
 
-        await tester.pumpAndSettle();
-
-        verify(() => bloc.add(any())).called(1);
-      });
+      expect(cubit.state.themeMode, ThemeMode.light);
     });
   });
 }
-
-class MockThemeBloc extends MockBloc<ThemeEvent, ThemeMode>
-    implements ThemeBloc {}

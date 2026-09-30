@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/todo_states_cubit.dart';
+import '../../../../core/settings/app_settings.dart';
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../entities/todo_states/todo_states.dart';
 import '../../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
@@ -13,7 +14,8 @@ class TodoStatesDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<TodoStatesCubit, OrgTodoStatesWithIgnored>(
+      BlocSelector<SettingsCubit, AppSettings, OrgTodoStatesWithIgnored>(
+        selector: (settings) => settings.todoStates,
         builder: (context, state) {
           final colors = Theme.of(context).colorScheme;
           return DialogShell(
@@ -101,7 +103,7 @@ class _StatusSection extends StatelessWidget {
                 side: BorderSide(color: color.withValues(alpha: 0.4)),
                 deleteIcon: const Icon(Icons.close),
                 onDeleted: () =>
-                    context.read<TodoStatesCubit>().removeTodo(status, todo),
+                    context.read<SettingsCubit>().removeTodoState(status, todo),
               ),
             ),
             ActionChip(

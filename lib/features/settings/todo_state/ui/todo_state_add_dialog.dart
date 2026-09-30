@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/todo_states_cubit.dart';
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../entities/todo_states/todo_states.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
@@ -26,13 +26,13 @@ class _TodoStateAddDialogState extends State<TodoStateAddDialog> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    await context.read<TodoStatesCubit>().addTodo(widget.status, _name.text);
+    await context.read<SettingsCubit>().addTodoState(widget.status, _name.text);
     if (mounted) Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final states = context.read<TodoStatesCubit>().state;
+    final states = context.read<SettingsCubit>().state.todoStates;
 
     return DialogShell(
       title: context.l10n.todo_state,

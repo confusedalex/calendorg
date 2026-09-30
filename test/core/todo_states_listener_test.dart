@@ -1,5 +1,6 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/core/todo_states_listener.dart';
 import 'package:calendorg/entities/todo_states/todo_states.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
@@ -16,7 +17,10 @@ void main() {
   setUpAll(() => registerFallbackValue(OrgTodoStatesWithIgnored.defaults));
 
   testWidgets('sends changed states to OrgFilesCubit', (tester) async {
-    final todoStatesCubit = TodoStatesCubit(inMemoryPreferences());
+    final settingsCubit = SettingsCubit(
+      inMemoryPreferences(),
+      const AppSettings(),
+    );
     final orgFilesCubit = MockOrgFilesCubit();
     when(() => orgFilesCubit.stream).thenAnswer((_) => const Stream.empty());
     when(() => orgFilesCubit.changeTodoStates(any())).thenAnswer((_) async {});
@@ -24,7 +28,7 @@ void main() {
     await tester.pumpWidget(
       MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: todoStatesCubit),
+          BlocProvider.value(value: settingsCubit),
           BlocProvider<OrgFilesCubit>.value(value: orgFilesCubit),
         ],
         child: TodoStatesListener(child: const SizedBox()),
@@ -32,7 +36,7 @@ void main() {
     );
 
     await tester.runAsync(
-      () => todoStatesCubit.addTodo(TodoStatus.ignored, 'LATER'),
+      () => settingsCubit.addTodoState(TodoStatus.ignored, 'LATER'),
     );
     await tester.pump();
 

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
-import '../../../core/starting_day_cubit.dart';
+import '../../../core/settings/settings_cubit.dart';
 import '../../../entities/occurrence/occurrence_getter.dart';
 import '../../../util.dart';
 import '../../new_section/ui/new_section_dialog.dart';
@@ -25,7 +25,9 @@ class CalendarView extends StatelessWidget {
     final calendarFormat = context.select(
       (CalendarCubit cubit) => cubit.state.calendarFormat,
     );
-    final startingDay = context.select((StartingDayCubit bloc) => bloc.state);
+    final startingDay = context.select(
+      (SettingsCubit cubit) => cubit.state.startingDay,
+    );
     final occurrencesByDate = context.select(
       (CalendarCubit cubit) => cubit.state.occurrencesByDate,
     );

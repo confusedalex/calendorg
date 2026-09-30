@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../core/starting_day_cubit.dart';
+import '../../../../core/settings/app_settings.dart';
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
@@ -11,7 +12,8 @@ class StartingDateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      BlocBuilder<StartingDayCubit, StartingDayOfWeek>(
+      BlocSelector<SettingsCubit, AppSettings, StartingDayOfWeek>(
+        selector: (settings) => settings.startingDay,
         builder: (context, state) {
           return DialogShell(
             title: context.l10n.starting_day,
@@ -19,9 +21,8 @@ class StartingDateDialog extends StatelessWidget {
             showClose: true,
             content: RadioGroup(
               groupValue: state,
-              onChanged: (day) => context
-                  .read<StartingDayCubit>()
-                  .changeStartingDayOfWeek(day!),
+              onChanged: (day) =>
+                  context.read<SettingsCubit>().setStartingDay(day!),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

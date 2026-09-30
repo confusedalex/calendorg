@@ -1,8 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/core/starting_day_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/calendar/model/calendar_cubit.dart';
 import 'package:calendorg/features/calendar/ui/calendar_view.dart';
@@ -62,15 +61,11 @@ void main() {
             BlocProvider.value(value: orgFilesCubit),
             BlocProvider.value(value: calendarCubit),
             BlocProvider(
-              create: (context) => StartingDayCubit(inMemoryPreferences()),
-            ),
-            BlocProvider(
-              create: (context) => TodoStatesCubit(inMemoryPreferences()),
-            ),
-            BlocProvider(
-              create: (context) => TagColorsCubit.withInitialValue(
+              create: (context) => SettingsCubit(
                 inMemoryPreferences(),
-                [schoolTagColor, homeTagColor, workTagColor],
+                const AppSettings(
+                  tagColors: [schoolTagColor, homeTagColor, workTagColor],
+                ),
               ),
             ),
           ],

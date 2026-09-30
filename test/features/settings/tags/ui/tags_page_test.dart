@@ -1,5 +1,6 @@
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/features/settings/tags/ui/tags_page.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
@@ -13,18 +14,16 @@ const schoolTagColor = TagColor('school', Colors.orange);
 
 void main() {
   group('TagsPage', () {
-    late TagColorsCubit cubit;
+    late SettingsCubit cubit;
 
     setUp(() {
-      cubit = TagColorsCubit.withInitialValue(inMemoryPreferences(), [
-        schoolTagColor,
-      ]);
+      cubit = SettingsCubit(
+        inMemoryPreferences(),
+        const AppSettings(tagColors: [schoolTagColor]),
+      );
     });
 
-    Future<void> pumpWidgetToTester(
-      dynamic tester,
-      TagColorsCubit cubit,
-    ) async {
+    Future<void> pumpWidgetToTester(dynamic tester, SettingsCubit cubit) async {
       await tester.pumpWidget(
         BlocProvider(
           create: (context) => cubit,
@@ -60,10 +59,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        cubit.state,
+        cubit.state.tagColors,
         containsOnce(const TagColor('test tag', Color(0xff043052))),
       );
-      expect(cubit.state, containsOnce(schoolTagColor));
+      expect(cubit.state.tagColors, containsOnce(schoolTagColor));
     });
 
     testWidgets('deleting tag works', (tester) async {
@@ -74,7 +73,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('edittag_deletebutton')));
 
-      expect(cubit.state, isEmpty);
+      expect(cubit.state.tagColors, isEmpty);
     });
 
     testWidgets('changing tag color works', (tester) async {
@@ -95,9 +94,9 @@ void main() {
       await tester.tap(find.byKey(const Key('edittag_savebutton')));
       await tester.pumpAndSettle();
 
-      expect(cubit.state, isNot(contains(schoolTagColor)));
+      expect(cubit.state.tagColors, isNot(contains(schoolTagColor)));
       expect(
-        cubit.state,
+        cubit.state.tagColors,
         contains(const TagColor('school', Color(0xff523304))),
       );
     });
@@ -106,7 +105,10 @@ void main() {
       const meetupTag = TagColor('meetups', Colors.purple);
       cubit.addTagColor(meetupTag);
 
-      expect(cubit.state, containsAllInOrder([schoolTagColor, meetupTag]));
+      expect(
+        cubit.state.tagColors,
+        containsAllInOrder([schoolTagColor, meetupTag]),
+      );
 
       await pumpWidgetToTester(tester, cubit);
       await tester.pumpAndSettle();
@@ -120,7 +122,10 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(cubit.state, containsAllInOrder([meetupTag, schoolTagColor]));
+      expect(
+        cubit.state.tagColors,
+        containsAllInOrder([meetupTag, schoolTagColor]),
+      );
     });
   });
 }

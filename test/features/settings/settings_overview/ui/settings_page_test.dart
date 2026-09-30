@@ -1,14 +1,12 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/logging.dart';
-import 'package:calendorg/core/starting_day_cubit.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/features/settings/agenda_files/ui/agenda_page.dart';
 import 'package:calendorg/features/settings/settings_overview/ui/settings_page.dart';
 import 'package:calendorg/features/settings/starting_day/ui/starting_day_dialog.dart';
 import 'package:calendorg/features/settings/tags/ui/tags_page.dart';
-import 'package:calendorg/features/settings/theme/model/theme_bloc.dart';
 import 'package:calendorg/features/settings/theme/ui/theme_dialog.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_states_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
@@ -32,15 +30,9 @@ void main() {
               BlocProvider(
                 create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
               ),
-              BlocProvider(create: (context) => ThemeBloc()),
               BlocProvider(
-                create: (context) => TagColorsCubit(inMemoryPreferences()),
-              ),
-              BlocProvider(
-                create: (context) => TodoStatesCubit(inMemoryPreferences()),
-              ),
-              BlocProvider(
-                create: (context) => StartingDayCubit(inMemoryPreferences()),
+                create: (context) =>
+                    SettingsCubit(inMemoryPreferences(), const AppSettings()),
               ),
             ],
             child: const MaterialApp(

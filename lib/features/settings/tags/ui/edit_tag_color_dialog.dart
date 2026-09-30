@@ -2,8 +2,8 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../core/tag_colors/tag_color.dart';
-import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
@@ -20,7 +20,7 @@ class _EditTagColorDialogState extends State<EditTagColorDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<TagColorsCubit>();
+    final cubit = context.read<SettingsCubit>();
     return DialogShell(
       title: context.l10n.edit_tag(widget.tagColor.tag),
       titleIcon: Icons.palette_outlined,

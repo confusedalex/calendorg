@@ -6,6 +6,7 @@ class PrefKey<T> {
 }
 
 abstract final class PrefKeys {
+  static const themeMode = PrefKey<String>('themeMode');
   static const startingDay = PrefKey<int>('startingDay');
   static const tagColors = PrefKey<String>('tagColors');
   static const inboxFile = PrefKey<String>('inboxFile');

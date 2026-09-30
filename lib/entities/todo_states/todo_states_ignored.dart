@@ -2,6 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:org_parser/org_parser.dart';
 
+import 'todo_states.dart';
+
 @immutable
 class OrgTodoStatesWithIgnored {
   final List<String> todo;
@@ -24,6 +26,31 @@ class OrgTodoStatesWithIgnored {
     done: ['DONE'],
     ignored: [],
   );
+
+  List<String> statesOf(TodoStatus status) => switch (status) {
+    TodoStatus.todo => todo,
+    TodoStatus.done => done,
+    TodoStatus.ignored => ignored,
+  };
+
+  OrgTodoStatesWithIgnored withStates(TodoStatus status, List<String> states) =>
+      switch (status) {
+        TodoStatus.todo => OrgTodoStatesWithIgnored(
+          todo: states,
+          done: done,
+          ignored: ignored,
+        ),
+        TodoStatus.done => OrgTodoStatesWithIgnored(
+          todo: todo,
+          done: states,
+          ignored: ignored,
+        ),
+        TodoStatus.ignored => OrgTodoStatesWithIgnored(
+          todo: todo,
+          done: done,
+          ignored: states,
+        ),
+      };
 
   static const _lists = ListEquality<String>();
 

@@ -8,15 +8,13 @@ import 'core/files/services/org_file_persistence_service.dart';
 import 'core/files/services/org_files_repository.dart';
 import 'core/files/services/org_parser_service.dart';
 import 'core/logging.dart';
-import 'core/starting_day_cubit.dart';
-import 'core/tag_colors/tag_colors_cubit.dart';
-import 'core/todo_states_cubit.dart';
+import 'core/settings/app_settings.dart';
+import 'core/settings/settings_cubit.dart';
 import 'core/todo_states_listener.dart';
 import 'features/calendar/ui/calendar_page.dart';
 import 'features/diff_view/model/diff_view_cubit.dart';
 import 'features/diff_view/ui/diff_view_page.dart';
 import 'features/settings/settings_overview/ui/settings_page.dart';
-import 'features/settings/theme/model/theme_bloc.dart';
 import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
 import 'shared/config/preferences_service.dart';
@@ -29,9 +27,10 @@ void main() async {
   setUpLogging();
 
   final preferences = PreferencesService();
-  final todoStatesCubit = TodoStatesCubit(preferences);
-  await todoStatesCubit.loadFromPrefs();
-  final parserService = await OrgParserService.spawn(todoStatesCubit.state);
+  final settingsCubit = await SettingsCubit.load(preferences);
+  final parserService = await OrgParserService.spawn(
+    settingsCubit.state.todoStates,
+  );
   final filePicker = FilePickerWritable();
   final repository = OrgFilesRepository(
     filePicker: filePicker,
@@ -47,22 +46,11 @@ void main() async {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => ThemeBloc()),
-          BlocProvider.value(value: todoStatesCubit),
-          BlocProvider(
-            create: (context) =>
-                StartingDayCubit(context.read<PreferencesService>())
-                  ..setInititalStartingDay(),
-          ),
-          BlocProvider(
-            create: (context) =>
-                TagColorsCubit(context.read<PreferencesService>())
-                  ..setInitialTagColor(),
-          ),
+          BlocProvider.value(value: settingsCubit),
           BlocProvider(
             create: (context) {
               return OrgFilesCubit(context.read<OrgFilesRepository>())
-                ..init(context.read<TodoStatesCubit>().state);
+                ..init(context.read<SettingsCubit>().state.todoStates);
             },
           ),
           if (kDebugMode) BlocProvider(create: (context) => DiffViewCubit()),
@@ -79,13 +67,14 @@ class Calendorg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TodoStatesListener(
-      child: BlocBuilder<ThemeBloc, ThemeMode>(
-        builder: (context, state) {
+      child: BlocSelector<SettingsCubit, AppSettings, ThemeMode>(
+        selector: (settings) => settings.themeMode,
+        builder: (context, themeMode) {
           return MaterialApp(
             title: 'calendorg',
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
-            themeMode: state,
+            themeMode: themeMode,
             localizationsDelegates:
                 CalendorgLocalizations.localizationsDelegates,
             supportedLocales: CalendorgLocalizations.supportedLocales,

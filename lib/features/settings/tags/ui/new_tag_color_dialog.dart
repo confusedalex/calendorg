@@ -2,8 +2,8 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../core/tag_colors/tag_color.dart';
-import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
 
@@ -27,7 +27,7 @@ class _NewTagColorDialogState extends State<NewTagColorDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final tagColorsCubit = context.read<TagColorsCubit>();
+    final settingsCubit = context.read<SettingsCubit>();
 
     return DialogShell(
       title: context.l10n.add_new_tag,
@@ -51,7 +51,7 @@ class _NewTagColorDialogState extends State<NewTagColorDialog> {
                   context.l10n,
                   value,
                   context.l10n.tag_name,
-                  notIn: tagColorsCubit.state.map((e) => e.tag),
+                  notIn: settingsCubit.state.tagColors.map((e) => e.tag),
                 ),
               ),
               ColorPicker(
@@ -78,7 +78,7 @@ class _NewTagColorDialogState extends State<NewTagColorDialog> {
           onPressed: () async {
             if (!_formKey.currentState!.validate()) return;
             final navigator = Navigator.of(context);
-            await tagColorsCubit.addTagColor(TagColor(_name.text, _color));
+            await settingsCubit.addTagColor(TagColor(_name.text, _color));
             navigator.pop();
           },
           child: Text(context.l10n.save),

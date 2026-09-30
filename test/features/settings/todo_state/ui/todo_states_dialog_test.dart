@@ -1,6 +1,7 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/settings/todo_state/ui/todo_state_add_dialog.dart';
@@ -27,7 +28,8 @@ void main() {
       MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => TodoStatesCubit(inMemoryPreferences()),
+            create: (context) =>
+                SettingsCubit(inMemoryPreferences(), const AppSettings()),
           ),
           BlocProvider(
             create: (context) => OrgFilesCubit(MockOrgFilesRepository()),

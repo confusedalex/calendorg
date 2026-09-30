@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../core/files/cubit/org_files_cubit.dart';
-import '../../../core/tag_colors/tag_colors_cubit.dart';
-import '../../../core/todo_states_cubit.dart';
+import '../../../core/settings/settings_cubit.dart';
 import '../../../entities/occurrence/occurrence.dart';
 import '../../../shared/ui/errors.dart';
 import '../../../util.dart';
@@ -21,10 +20,10 @@ class EventCard extends StatelessWidget {
     );
     final keyword = occurrence.entry.todoKeyword;
     final eventIsDone = context.select(
-      (TodoStatesCubit cubit) => cubit.state.done.contains(keyword),
+      (SettingsCubit cubit) => cubit.state.todoStates.done.contains(keyword),
     );
     final tagColor = context.select(
-      (TagColorsCubit cubit) => cubit.getTagColor(occurrence.entry),
+      (SettingsCubit cubit) => cubit.state.tagColorOf(occurrence.entry),
     );
     final theme = Theme.of(context);
     final colors = theme.colorScheme;

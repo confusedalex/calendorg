@@ -1,8 +1,8 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/tag_colors/tag_color.dart';
-import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
-import 'package:calendorg/core/todo_states_cubit.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/entities/occurrence/occurrence_generator.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
@@ -44,18 +44,16 @@ void main() {
     List<BlocProvider<dynamic>>? extraProviders,
     OrgFilesCubit? customOrgFilesCubit,
   }) async {
-    final tagColorsCubit = TagColorsCubit.withInitialValue(
+    final settingsCubit = SettingsCubit(
       inMemoryPreferences(),
-      [meetupTagColor],
+      const AppSettings(tagColors: [meetupTagColor]),
     );
-    final todoStatesCubit = TodoStatesCubit(inMemoryPreferences());
     final orgFilesCubit = customOrgFilesCubit ?? FakeOrgFilesCubit();
 
     await tester.pumpWidget(
       MultiBlocProvider(
         providers: [
-          BlocProvider.value(value: tagColorsCubit),
-          BlocProvider.value(value: todoStatesCubit),
+          BlocProvider.value(value: settingsCubit),
           BlocProvider.value(value: orgFilesCubit),
           ...?extraProviders,
         ],

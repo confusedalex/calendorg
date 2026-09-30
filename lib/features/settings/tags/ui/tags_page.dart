@@ -2,8 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/settings/app_settings.dart';
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../core/tag_colors/tag_color.dart';
-import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../util.dart';
 import 'edit_tag_color_dialog.dart';
 import 'new_tag_color_dialog.dart';
@@ -19,7 +20,8 @@ class _TagsPageState extends State<TagsPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text(context.l10n.tag_colors)),
-    body: BlocBuilder<TagColorsCubit, List<TagColor>>(
+    body: BlocSelector<SettingsCubit, AppSettings, List<TagColor>>(
+      selector: (settings) => settings.tagColors,
       builder: (_, state) => ReorderableListView(
         buildDefaultDragHandles: false,
         children: state
@@ -49,7 +51,7 @@ class _TagsPageState extends State<TagsPage> {
             )
             .toList(),
         onReorderItem: (oldIndex, newIndex) =>
-            context.read<TagColorsCubit>().reorder(oldIndex, newIndex),
+            context.read<SettingsCubit>().reorderTagColors(oldIndex, newIndex),
       ),
     ),
     floatingActionButton: FloatingActionButton.extended(

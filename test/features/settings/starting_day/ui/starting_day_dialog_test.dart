@@ -1,4 +1,5 @@
-import 'package:calendorg/core/starting_day_cubit.dart';
+import 'package:calendorg/core/settings/app_settings.dart';
+import 'package:calendorg/core/settings/settings_cubit.dart';
 import 'package:calendorg/features/settings/starting_day/ui/starting_day_dialog.dart';
 import 'package:calendorg/l10n/calendorg_localizations.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,13 @@ import '../../../../helpers/preferences.dart';
 
 void main() {
   group('starting_day_dialog_test', () {
-    late StartingDayCubit cubit;
+    late SettingsCubit cubit;
 
     setUp(() {
-      cubit = StartingDayCubit(inMemoryPreferences())
-        ..changeStartingDayOfWeek(StartingDayOfWeek.friday);
+      cubit = SettingsCubit(
+        inMemoryPreferences(),
+        const AppSettings(startingDay: StartingDayOfWeek.friday),
+      );
     });
 
     Future<void> pumpWidgetToTester(dynamic tester) async {
@@ -44,7 +47,7 @@ void main() {
 
         await tester.tap(find.text('Monday'));
 
-        expect(cubit.state, equals(StartingDayOfWeek.monday));
+        expect(cubit.state.startingDay, equals(StartingDayOfWeek.monday));
       });
     });
 
@@ -61,7 +64,7 @@ void main() {
 
           await tester.tap(find.text('Sunday'));
 
-          expect(cubit.state, equals(StartingDayOfWeek.sunday));
+          expect(cubit.state.startingDay, equals(StartingDayOfWeek.sunday));
         },
       );
     });

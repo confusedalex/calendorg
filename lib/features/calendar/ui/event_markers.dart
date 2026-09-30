@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/tag_colors/tag_colors_cubit.dart';
+import '../../../core/settings/settings_cubit.dart';
 import '../../../entities/occurrence/occurrence.dart';
 
 class EventMarkers extends StatelessWidget {
@@ -10,11 +10,11 @@ class EventMarkers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tagColors = context.watch<TagColorsCubit>();
+    final settings = context.watch<SettingsCubit>().state;
     final colors = occurrences
         .map((o) => o.entry)
         .toSet()
-        .map(tagColors.getTagColor)
+        .map(settings.tagColorOf)
         .toSet();
     return Padding(
       padding: const EdgeInsets.only(bottom: 5),

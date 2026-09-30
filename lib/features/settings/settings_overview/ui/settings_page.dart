@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/logging.dart';
+import '../../../../core/settings/settings_cubit.dart';
 import '../../../../util.dart';
 import '../../agenda_files/ui/agenda_page.dart';
 import '../../debug/ui/debug_page.dart';
 import '../../starting_day/ui/starting_day_dialog.dart';
 import '../../tags/ui/tags_page.dart';
-import '../../theme/model/theme_bloc.dart';
 import '../../theme/ui/theme_dialog.dart';
 import '../../todo_state/ui/todo_states_dialog.dart';
 
@@ -18,7 +18,9 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = context.watch<ThemeBloc>().state;
+    final themeMode = context.select(
+      (SettingsCubit cubit) => cubit.state.themeMode,
+    );
     final directory = context.select(
       (OrgFilesCubit cubit) => cubit.state.directory?.fileName,
     );
