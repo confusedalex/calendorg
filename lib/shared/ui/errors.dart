@@ -32,7 +32,7 @@ extension OrgFilesProblemMessage on OrgFilesProblem {
     ),
     FileNotInOrgFolder() => l10n.error_file_not_in_org_folder,
     FileReadFailed() => l10n.error_reading_file,
-    SaveFailed(:final error) => l10n.error_saving_section(error),
+    SaveFailed() => l10n.error_saving_section,
     InboxFileInAgendaFiles() => l10n.error_inbox_file_to_agenda_files,
     AlreadyInAgendaFiles() => l10n.error_already_in_agenda_files,
   };

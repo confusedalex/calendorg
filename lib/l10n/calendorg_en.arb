@@ -34,30 +34,10 @@
   "pick_org_directory": "Pick org directory",
   "inbox_file": "Inbox File",
 
-  "error_selecting_file": "Error selecting file: {error}",
-  "@error_selecting_file": {
-    "placeholders": {
-      "error": { "type": "Object" }
-    }
-  },
-  "error_creating_file": "Error creating file: {error}",
-  "@error_creating_file": {
-    "placeholders": {
-      "error": { "type": "Object" }
-    }
-  },
-  "error_loading_file": "Error loading file: {error}",
-  "@error_loading_file": {
-    "placeholders": {
-      "error": { "type": "Object" }
-    }
-  },
-  "error_saving_section": "Error saving section: {error}",
-  "@error_saving_section": {
-    "placeholders": {
-      "error": { "type": "Object" }
-    }
-  },
+  "error_selecting_file": "The file could not be selected.",
+  "error_creating_file": "The file could not be created.",
+  "error_loading_file": "The file could not be loaded.",
+  "error_saving_section": "The change could not be saved.",
   "error_reading_file": "Error while reading file!",
   "error_file_not_in_org_folder": "File is not in org folder!\nPlease select a file that lies in your org folder or change your org folder.",
   "error_entry_not_found": "Entry {title} no longer found in file!",

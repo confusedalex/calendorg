@@ -70,24 +70,16 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get inbox_file => 'Inbox File';
 
   @override
-  String error_selecting_file(Object error) {
-    return 'Error selecting file: $error';
-  }
+  String get error_selecting_file => 'The file could not be selected.';
 
   @override
-  String error_creating_file(Object error) {
-    return 'Error creating file: $error';
-  }
+  String get error_creating_file => 'The file could not be created.';
 
   @override
-  String error_loading_file(Object error) {
-    return 'Error loading file: $error';
-  }
+  String get error_loading_file => 'The file could not be loaded.';
 
   @override
-  String error_saving_section(Object error) {
-    return 'Error saving section: $error';
-  }
+  String get error_saving_section => 'The change could not be saved.';
 
   @override
   String get error_reading_file => 'Error while reading file!';

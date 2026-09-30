@@ -176,7 +176,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       await _repository.cacheOrgEntries(entries, state.todoStates);
     } on Exception catch (e, stack) {
       _log.warning('Error appending to inbox file', e, stack);
-      emit(state.copyWith(problem: SaveFailed(e)));
+      emit(state.copyWith(problem: const SaveFailed()));
     }
   }
 
@@ -213,7 +213,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       emit(state.copyWith(problem: problem));
     } on Exception catch (e, stack) {
       _log.warning('Error applying edit', e, stack);
-      emit(state.copyWith(problem: SaveFailed(e)));
+      emit(state.copyWith(problem: const SaveFailed()));
     } finally {
       emit(state.copyWith(status: OrgFilesStatus.success));
     }

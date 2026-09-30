@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/files/org_files_problem.dart';
@@ -7,6 +8,8 @@ import '../../../../core/files/services/org_files_repository.dart';
 import '../../../../shared/ui/errors.dart';
 import '../../../../util.dart';
 import 'agenda_files_dialog.dart';
+
+final _log = Logger('AgendaPage');
 
 class AgendaPage extends StatelessWidget {
   const AgendaPage({super.key});
@@ -33,13 +36,10 @@ class AgendaPage extends StatelessWidget {
 
                   if (dirInfo == null || !context.mounted) return;
                   await context.read<OrgFilesCubit>().setOrgDirectory(dirInfo);
-                } on Exception catch (e) {
+                } on Exception catch (e, stack) {
+                  _log.warning('Error picking directory', e, stack);
                   if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(context.l10n.error_selecting_file(e)),
-                      ),
-                    );
+                    showError(context, context.l10n.error_selecting_file);
                   }
                 }
               },
@@ -63,9 +63,10 @@ class AgendaPage extends StatelessWidget {
                   await cubit.changeInboxFile(fileInfo);
                 } on OrgFilesProblem catch (problem) {
                   if (context.mounted) showProblem(context, problem);
-                } on Exception catch (e) {
+                } on Exception catch (e, stack) {
+                  _log.warning('Error picking inbox file', e, stack);
                   if (context.mounted) {
-                    showError(context, context.l10n.error_loading_file(e));
+                    showError(context, context.l10n.error_loading_file);
                   }
                 }
               },

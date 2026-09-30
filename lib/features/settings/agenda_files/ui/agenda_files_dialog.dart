@@ -1,6 +1,7 @@
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
 import '../../../../core/files/org_files_problem.dart';
@@ -8,6 +9,8 @@ import '../../../../core/files/services/org_files_repository.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../shared/ui/errors.dart';
 import '../../../../util.dart';
+
+final _log = Logger('AgendaFilesDialog');
 
 class AgendaFilesDialog extends StatelessWidget {
   const AgendaFilesDialog({super.key});
@@ -39,9 +42,10 @@ class AgendaFilesDialog extends StatelessWidget {
     Future<FileInfo?> selectGetFileInfo() async {
       try {
         return await repository.pickFile();
-      } on Exception catch (e) {
+      } on Exception catch (e, stack) {
+        _log.warning('Error picking file', e, stack);
         if (context.mounted) {
-          showError(context, context.l10n.error_selecting_file(e));
+          showError(context, context.l10n.error_selecting_file);
         }
         return null;
       }
@@ -50,9 +54,10 @@ class AgendaFilesDialog extends StatelessWidget {
     Future<FileInfo?> createGetFileInfo() async {
       try {
         return await repository.createEmptyFile('agenda.org');
-      } on Exception catch (e) {
+      } on Exception catch (e, stack) {
+        _log.warning('Error creating file', e, stack);
         if (context.mounted) {
-          showError(context, context.l10n.error_creating_file(e));
+          showError(context, context.l10n.error_creating_file);
         }
         return null;
       }

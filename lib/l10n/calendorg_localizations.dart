@@ -214,26 +214,26 @@ abstract class CalendorgLocalizations {
   /// No description provided for @error_selecting_file.
   ///
   /// In en, this message translates to:
-  /// **'Error selecting file: {error}'**
-  String error_selecting_file(Object error);
+  /// **'The file could not be selected.'**
+  String get error_selecting_file;
 
   /// No description provided for @error_creating_file.
   ///
   /// In en, this message translates to:
-  /// **'Error creating file: {error}'**
-  String error_creating_file(Object error);
+  /// **'The file could not be created.'**
+  String get error_creating_file;
 
   /// No description provided for @error_loading_file.
   ///
   /// In en, this message translates to:
-  /// **'Error loading file: {error}'**
-  String error_loading_file(Object error);
+  /// **'The file could not be loaded.'**
+  String get error_loading_file;
 
   /// No description provided for @error_saving_section.
   ///
   /// In en, this message translates to:
-  /// **'Error saving section: {error}'**
-  String error_saving_section(Object error);
+  /// **'The change could not be saved.'**
+  String get error_saving_section;
 
   /// No description provided for @error_reading_file.
   ///

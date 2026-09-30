@@ -29,8 +29,7 @@ final class FileReadFailed extends OrgFilesProblem {
 }
 
 final class SaveFailed extends OrgFilesProblem {
-  const SaveFailed(this.error);
-  final Object error;
+  const SaveFailed();
 }
 
 final class InboxFileInAgendaFiles extends OrgFilesProblem {
