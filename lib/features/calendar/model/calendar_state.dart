@@ -1,4 +1,4 @@
-part of 'calendar_bloc.dart';
+part of 'calendar_cubit.dart';
 
 final class CalendarState {
   final DateTime focusedDay;

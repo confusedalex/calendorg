@@ -7,7 +7,7 @@ import '../../../core/starting_day_cubit.dart';
 import '../../../entities/occurrence/occurrence_getter.dart';
 import '../../../util.dart';
 import '../../new_section/ui/new_section_dialog.dart';
-import '../model/calendar_bloc.dart';
+import '../model/calendar_cubit.dart';
 import 'event_card.dart';
 import 'event_markers.dart';
 
@@ -17,17 +17,17 @@ class CalendarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final focusedDay = context.select(
-      (CalendarBloc bloc) => bloc.state.focusedDay,
+      (CalendarCubit cubit) => cubit.state.focusedDay,
     );
     final selectedDate = context.select(
-      (CalendarBloc bloc) => bloc.state.selectedDate,
+      (CalendarCubit cubit) => cubit.state.selectedDate,
     );
     final calendarFormat = context.select(
-      (CalendarBloc bloc) => bloc.state.calendarFormat,
+      (CalendarCubit cubit) => cubit.state.calendarFormat,
     );
     final startingDay = context.select((StartingDayCubit bloc) => bloc.state);
     final occurrencesByDate = context.select(
-      (CalendarBloc bloc) => bloc.state.occurrencesByDate,
+      (CalendarCubit cubit) => cubit.state.occurrencesByDate,
     );
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
@@ -53,23 +53,15 @@ class CalendarView extends StatelessWidget {
             firstDay: DateTime.utc(2010, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: focusedDay,
-            onPageChanged: (d) {
-              context.read<CalendarBloc>().add(
-                CalendarChangeFocusDateEvent(focusedDate: d),
-              );
-            },
+            onPageChanged: context.read<CalendarCubit>().focusDate,
             startingDayOfWeek: startingDay,
             selectedDayPredicate: (day) {
               return isSameDay(selectedDate, day);
             },
             onDaySelected: (selectedDate, _) =>
-                context.read<CalendarBloc>().add(
-                  CalendarChangeSelectedDateEvent(selectedDate: selectedDate),
-                ),
+                context.read<CalendarCubit>().selectDate(selectedDate),
             calendarFormat: calendarFormat,
-            onFormatChanged: (format) => context.read<CalendarBloc>().add(
-              CalendarChangeFormat(calendarFormat: format),
-            ),
+            onFormatChanged: context.read<CalendarCubit>().changeFormat,
             eventLoader: (day) => occurrencesByDate[dateKey(day)] ?? [],
             headerStyle: HeaderStyle(
               titleTextStyle: textTheme.titleLarge!.copyWith(

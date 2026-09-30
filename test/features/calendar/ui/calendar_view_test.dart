@@ -4,7 +4,7 @@ import 'package:calendorg/core/tag_colors/tag_color.dart';
 import 'package:calendorg/core/tag_colors/tag_colors_cubit.dart';
 import 'package:calendorg/core/todo_states_cubit.dart';
 import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
-import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
+import 'package:calendorg/features/calendar/model/calendar_cubit.dart';
 import 'package:calendorg/features/calendar/ui/calendar_view.dart';
 import 'package:calendorg/features/calendar/ui/event_card.dart';
 import 'package:calendorg/features/new_section/ui/new_section_dialog.dart';
@@ -47,12 +47,12 @@ void main() {
     const homeTagColor = TagColor('@home', Colors.lightGreen);
     const workTagColor = TagColor('@work', Colors.yellow);
     late OrgFilesCubit orgFilesCubit;
-    late CalendarBloc calendarBloc;
+    late CalendarCubit calendarCubit;
 
     orgFilesCubit = MockOrgFilesBloc(document);
 
     setUp(() {
-      calendarBloc = CalendarBloc(DateTime(2025, 05, 17), orgFilesCubit);
+      calendarCubit = CalendarCubit(DateTime(2025, 05, 17), orgFilesCubit);
     });
 
     Future<void> pumpWidgetToTester(dynamic tester) async {
@@ -60,7 +60,7 @@ void main() {
         MultiBlocProvider(
           providers: [
             BlocProvider.value(value: orgFilesCubit),
-            BlocProvider.value(value: calendarBloc),
+            BlocProvider.value(value: calendarCubit),
             BlocProvider(
               create: (context) => StartingDayCubit(inMemoryPreferences()),
             ),
@@ -146,12 +146,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 17)),
+        isSameDay(calendarCubit.state.focusedDay, DateTime(2025, 05, 17)),
         isTrue,
       );
       await tester.tap(find.byKey(const Key('CellContent-2025-5-16')));
       expect(
-        isSameDay(calendarBloc.state.focusedDay, DateTime(2025, 05, 16)),
+        isSameDay(calendarCubit.state.focusedDay, DateTime(2025, 05, 16)),
         isTrue,
       );
     });
@@ -162,14 +162,14 @@ void main() {
       await tester.tap(find.byType(FormatButton));
 
       expect(
-        calendarBloc.state.calendarFormat,
+        calendarCubit.state.calendarFormat,
         equals(CalendarFormat.twoWeeks),
       );
     });
     testWidgets(
       'CalendarView shows eventCards for every event, when events are there',
       (tester) async {
-        calendarBloc = CalendarBloc(DateTime(2025, 05, 05), orgFilesCubit);
+        calendarCubit = CalendarCubit(DateTime(2025, 05, 05), orgFilesCubit);
 
         await pumpWidgetToTester(tester);
         await tester.runAsync(

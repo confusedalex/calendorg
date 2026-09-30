@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
-import 'package:calendorg/features/calendar/model/calendar_bloc.dart';
+import 'package:calendorg/features/calendar/model/calendar_cubit.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:test/test.dart';
@@ -13,22 +13,21 @@ class MockOrgFilesCubit extends Mock implements OrgFilesCubit {
 }
 
 void main() {
-  group('CalendarBloc tests', () {
-    late CalendarBloc bloc;
+  group('CalendarCubit tests', () {
+    late CalendarCubit cubit;
 
     setUp(() {
-      bloc = CalendarBloc(DateTime(2025, 05, 15), MockOrgFilesCubit());
+      cubit = CalendarCubit(DateTime(2025, 05, 15), MockOrgFilesCubit());
     });
 
     test('Initial format is month', () {
-      expect(bloc.state.calendarFormat, equals(CalendarFormat.month));
+      expect(cubit.state.calendarFormat, equals(CalendarFormat.month));
     });
 
     blocTest(
       'Changing CalendarFormat works',
-      build: () => bloc,
-      act: (bloc) =>
-          bloc.add(CalendarChangeFormat(calendarFormat: CalendarFormat.week)),
+      build: () => cubit,
+      act: (cubit) => cubit.changeFormat(CalendarFormat.week),
       expect: () => [
         const TypeMatcher<CalendarState>().having(
           (state) => state.calendarFormat,
@@ -40,10 +39,8 @@ void main() {
 
     blocTest(
       'Changing selected Day works',
-      build: () => bloc,
-      act: (bloc) => bloc.add(
-        CalendarChangeSelectedDateEvent(selectedDate: DateTime(2025, 05, 16)),
-      ),
+      build: () => cubit,
+      act: (cubit) => cubit.selectDate(DateTime(2025, 05, 16)),
       expect: () => [
         const TypeMatcher<CalendarState>().having(
           (state) => state.selectedDate,
@@ -51,6 +48,14 @@ void main() {
           equals(DateTime(2025, 05, 16)),
         ),
       ],
+    );
+
+    blocTest(
+      'Changing focused Day works',
+      build: () => cubit,
+      act: (cubit) => cubit.focusDate(DateTime(2025, 07)),
+      verify: (cubit) =>
+          expect(cubit.state.focusedDay, equals(DateTime(2025, 07))),
     );
   });
 }
