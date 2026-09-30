@@ -133,7 +133,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
   Future<void> changeTodoStates(OrgTodoStatesWithIgnored todoStates) async {
     try {
-      _repository.updateTodoStates(todoStates);
+      _repository.todoStates = todoStates;
 
       emit(state.copyWith(todoStates: todoStates));
       await _reloadEntries();

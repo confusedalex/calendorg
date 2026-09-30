@@ -31,8 +31,7 @@ void main() async {
   final preferences = PreferencesService();
   final todoStatesCubit = TodoStatesCubit(preferences);
   await todoStatesCubit.loadFromPrefs();
-  final parserService = OrgParserService(todoStatesCubit.state);
-  await parserService.start();
+  final parserService = await OrgParserService.spawn(todoStatesCubit.state);
   final filePicker = FilePickerWritable();
   final repository = OrgFilesRepository(
     filePicker: filePicker,

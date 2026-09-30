@@ -23,41 +23,32 @@ class _ParseRequest {
 }
 
 class OrgParserService {
-  var _started = false;
-  late SendPort _workerSendPort;
-  OrgTodoStatesWithIgnored _currentTodoStates;
+  OrgParserService._(this._workerSendPort, this.todoStates);
 
-  OrgParserService([
-    this._currentTodoStates = OrgTodoStatesWithIgnored.defaults,
-  ]);
+  final SendPort _workerSendPort;
+  OrgTodoStatesWithIgnored todoStates;
 
-  Future<void> start() async {
-    if (_started) throw StateError('Already started');
-    _started = true;
-
+  static Future<OrgParserService> spawn([
+    OrgTodoStatesWithIgnored todoStates = OrgTodoStatesWithIgnored.defaults,
+  ]) async {
     final readyPort = ReceivePort();
-
     try {
       await Isolate.spawn(_parserWorkerMain, readyPort.sendPort);
-      final sendPort = await readyPort.first as SendPort;
-      _workerSendPort = sendPort;
+      final workerSendPort = await readyPort.first as SendPort;
       _log.fine('Worker isolate started');
+      return OrgParserService._(workerSendPort, todoStates);
     } finally {
       readyPort.close();
     }
   }
 
   Future<OrgDocument> parseContentInBackground(String content) async {
-    if (!_started) {
-      throw StateError('Call start() before parsing');
-    }
-
     final responsePort = ReceivePort();
-    final todoStates = _currentTodoStates.todoStates;
+    final states = todoStates.todoStates;
 
     _log.fine(
       'Sending parse request (${content.length} chars, states: '
-      '${todoStates.todo} / ${todoStates.done})',
+      '${states.todo} / ${states.done})',
     );
     final stopwatch = Stopwatch()..start();
 
@@ -65,8 +56,8 @@ class OrgParserService {
       _ParseRequest(
         replyPort: responsePort.sendPort,
         content: content,
-        todoStates: todoStates.todo,
-        doneStates: todoStates.done,
+        todoStates: states.todo,
+        doneStates: states.done,
       ),
     );
 
@@ -91,11 +82,6 @@ class OrgParserService {
     } finally {
       responsePort.close();
     }
-  }
-
-  // ignore: use_setters_to_change_properties
-  void invalidateCache(OrgTodoStatesWithIgnored newStates) {
-    _currentTodoStates = newStates;
   }
 }
 

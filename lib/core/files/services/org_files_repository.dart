@@ -169,9 +169,10 @@ class OrgFilesRepository {
     return _persistence.saveEntriesCache(entries, todoStates.cacheKey);
   }
 
-  void updateTodoStates(OrgTodoStatesWithIgnored states) {
-    _parserService.invalidateCache(states);
-  }
+  OrgTodoStatesWithIgnored get todoStates => _parserService.todoStates;
+
+  set todoStates(OrgTodoStatesWithIgnored states) =>
+      _parserService.todoStates = states;
 
   Future<List<OrgEntry>?> appendToInboxFile(
     DirectoryInfo dirInfo,
