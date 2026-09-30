@@ -17,7 +17,7 @@ class EventMarkers extends StatelessWidget {
         .map(settings.tagColorOf)
         .toSet();
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 9),
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Row(

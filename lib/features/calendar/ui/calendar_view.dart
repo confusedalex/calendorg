@@ -34,6 +34,9 @@ class CalendarView extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final textTheme = theme.textTheme;
+    const cellShape = BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    );
     final dayEvents = [...?occurrencesByDate[dateKey(selectedDate)]]
       ..sort(
         (a, b) =>
@@ -65,6 +68,7 @@ class CalendarView extends StatelessWidget {
             calendarFormat: calendarFormat,
             onFormatChanged: context.read<CalendarCubit>().changeFormat,
             eventLoader: (day) => occurrencesByDate[dateKey(day)] ?? [],
+            rowHeight: 56,
             headerStyle: HeaderStyle(
               titleTextStyle: textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.w600,
@@ -99,7 +103,13 @@ class CalendarView extends StatelessWidget {
               ),
             ),
             calendarStyle: CalendarStyle(
-              cellMargin: const EdgeInsets.all(5),
+              cellMargin: const EdgeInsets.symmetric(
+                horizontal: 4,
+                vertical: 3,
+              ),
+              defaultDecoration: cellShape,
+              weekendDecoration: cellShape,
+              outsideDecoration: cellShape,
               defaultTextStyle: textTheme.bodyMedium!,
               weekendTextStyle: textTheme.bodyMedium!.copyWith(
                 color: colors.onSurfaceVariant,
@@ -107,20 +117,18 @@ class CalendarView extends StatelessWidget {
               outsideTextStyle: textTheme.bodyMedium!.copyWith(
                 color: colors.onSurface.withValues(alpha: 0.35),
               ),
-              todayDecoration: BoxDecoration(
-                shape: BoxShape.circle,
+              todayDecoration: cellShape.copyWith(
                 border: Border.all(color: colors.primary, width: 1.5),
               ),
               todayTextStyle: textTheme.bodyMedium!.copyWith(
                 color: colors.primary,
                 fontWeight: FontWeight.w700,
               ),
-              selectedDecoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colors.primary,
+              selectedDecoration: cellShape.copyWith(
+                color: colors.secondaryContainer,
               ),
               selectedTextStyle: textTheme.bodyMedium!.copyWith(
-                color: colors.onPrimary,
+                color: colors.onSecondaryContainer,
                 fontWeight: FontWeight.w700,
               ),
             ),
