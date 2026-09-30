@@ -31,12 +31,8 @@ class AgendaPage extends StatelessWidget {
                 try {
                   final dirInfo = await repository.pickDirectory();
 
-                  if (dirInfo == null) throw Error();
-                  if (context.mounted) {
-                    await context.read<OrgFilesCubit>().setOrgDirectory(
-                      dirInfo,
-                    );
-                  }
+                  if (dirInfo == null || !context.mounted) return;
+                  await context.read<OrgFilesCubit>().setOrgDirectory(dirInfo);
                 } on Exception catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
