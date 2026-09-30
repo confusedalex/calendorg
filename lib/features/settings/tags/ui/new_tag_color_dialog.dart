@@ -6,22 +6,34 @@ import '../../../../core/tag_colors/tag_color.dart';
 import '../../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
-import '../model/new_tag_color_cubit.dart';
 
-class NewTagColorDialog extends StatelessWidget {
+class NewTagColorDialog extends StatefulWidget {
   const NewTagColorDialog({super.key});
 
   @override
+  State<NewTagColorDialog> createState() => _NewTagColorDialogState();
+}
+
+class _NewTagColorDialogState extends State<NewTagColorDialog> {
+  final _formKey = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  Color _color = Colors.blue;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final state = context.read<NewTagColorCubit>();
     final tagColorsCubit = context.read<TagColorsCubit>();
-    final formKey = GlobalKey<FormState>();
 
     return DialogShell(
       title: context.l10n.add_new_tag,
       titleIcon: Icons.sell_outlined,
       content: Form(
-        key: formKey,
+        key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,23 +41,23 @@ class NewTagColorDialog extends StatelessWidget {
             spacing: 16,
             children: [
               TextFormField(
+                controller: _name,
                 autofocus: true,
                 decoration: InputDecoration(
                   labelText: context.l10n.tag_name,
                   filled: true,
                 ),
-                onChanged: state.updateText,
                 validator: (value) => validate(
                   context.l10n,
                   value,
-                  context.l10n.tag_color,
+                  context.l10n.tag_name,
                   notIn: tagColorsCubit.state.map((e) => e.tag),
                 ),
               ),
               ColorPicker(
-                color: state.state.color,
+                color: _color,
                 padding: EdgeInsets.zero,
-                onColorChanged: state.updateColor,
+                onColorChanged: (color) => setState(() => _color = color),
                 pickersEnabled: const <ColorPickerType, bool>{
                   ColorPickerType.primary: false,
                   ColorPickerType.accent: false,
@@ -64,11 +76,9 @@ class NewTagColorDialog extends StatelessWidget {
         FilledButton(
           key: const Key('newtag_savebutton'),
           onPressed: () async {
-            if (!formKey.currentState!.validate()) return;
+            if (!_formKey.currentState!.validate()) return;
             final navigator = Navigator.of(context);
-            await tagColorsCubit.addTagColor(
-              TagColor(state.state.text, state.state.color),
-            );
+            await tagColorsCubit.addTagColor(TagColor(_name.text, _color));
             navigator.pop();
           },
           child: Text(context.l10n.save),
