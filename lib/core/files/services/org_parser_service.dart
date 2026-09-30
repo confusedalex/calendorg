@@ -110,7 +110,7 @@ void _parserWorkerMain(SendPort mainSendPort) {
           ).build());
       final parseResult = parser.parse(request.content);
       request.replyPort.send(parseResult.value as OrgDocument);
-    } on Exception catch (e, stack) {
+    } on Object catch (e, stack) {
       request.replyPort.send(('$e', '$stack'));
     }
   });

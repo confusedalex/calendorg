@@ -51,7 +51,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       }
     } on Exception catch (e, stack) {
       _log.severe('Error initializing org files', e, stack);
-      emit(OrgFilesState.initial());
+      emit(state.copyWith(status: OrgFilesStatus.failure));
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,15 +88,16 @@ class SettingsPage extends StatelessWidget {
             messenger.showSnackBar(SnackBar(content: Text(message)));
           },
         ),
-        ListTile(
-          leading: const Icon(Icons.bug_report_outlined),
-          title: Text(context.l10n.debug),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const DebugPage()),
+        if (kDebugMode)
+          ListTile(
+            leading: const Icon(Icons.bug_report_outlined),
+            title: Text(context.l10n.debug),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const DebugPage()),
+            ),
           ),
-        ),
       ],
     );
   }

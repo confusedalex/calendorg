@@ -274,6 +274,22 @@ void main() {
         return cubit;
       }
 
+      test('should keep cached entries when loading fails', () async {
+        final repository = MockOrgFilesRepository();
+        when(
+          () => repository.loadCachedEntries(any()),
+        ).thenAnswer((_) async => [oldEntry]);
+        when(
+          () => repository.loadInitialState(any(), any()),
+        ).thenThrow(Exception('no access'));
+        final cubit = OrgFilesCubit(repository);
+
+        await cubit.init(todoStates);
+
+        expect(cubit.state.status, OrgFilesStatus.failure);
+        expect(cubit.state.entries, [oldEntry]);
+      });
+
       test('should report saved files that are missing', () async {
         final repository = MockOrgFilesRepository();
         when(

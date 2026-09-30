@@ -254,7 +254,8 @@ class OrgFilesRepository {
       directoryIdentifier: dirInfo.identifier,
       relativePath: fileName,
     );
-    return entity as FileInfo;
+    if (entity is! FileInfo) throw FileSystemException('Not a file', fileName);
+    return entity;
   }
 
   Future<_ParsedFile> _parseText(String content) async => (
