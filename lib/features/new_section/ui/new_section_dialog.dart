@@ -96,7 +96,7 @@ class _NewSectionDialogState extends State<NewSectionDialog> {
                   if (!(_formKey.currentState?.validate() ?? false)) return;
 
                   await appendTextToInboxFile(
-                    '* ${_title.text.trim()} \n ${_timestamp.toMarkup()}',
+                    '* ${_title.text.trim()}\n${_timestamp.toMarkup()}',
                   );
 
                   if (!context.mounted) return;

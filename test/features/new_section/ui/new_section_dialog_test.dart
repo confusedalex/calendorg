@@ -13,7 +13,7 @@ import 'package:mockito/mockito.dart';
 
 void main() {
   group('NewSectionDialog', () {
-    late OrgFilesCubit orgFilesCubit;
+    late TestOrgFilesCubit orgFilesCubit;
 
     setUp(() {
       orgFilesCubit = TestOrgFilesCubit.withInboxFile(MockFileInfo());
@@ -28,7 +28,9 @@ void main() {
           supportedLocales: CalendorgLocalizations.supportedLocales,
           home: Scaffold(
             body: MultiBlocProvider(
-              providers: [BlocProvider.value(value: orgFilesCubit)],
+              providers: [
+                BlocProvider<OrgFilesCubit>.value(value: orgFilesCubit),
+              ],
               child: NewSectionDialog(
                 timestamp: dateTimeToSimpleTimestamp(date, false, true),
               ),
@@ -59,6 +61,16 @@ void main() {
 
       expect(find.byType(DatePicker), findsOneWidget);
     });
+
+    testWidgets('appends the heading without extra spaces', (tester) async {
+      await pumpWidget(tester);
+
+      await tester.enterText(find.byKey(const Key('titleField')), ' Exam ');
+      await tester.tap(find.byKey(const Key('SaveButton')));
+      await tester.pumpAndSettle();
+
+      expect(orgFilesCubit.appended, '* Exam\n<2025-05-17 Sat>');
+    });
   });
 }
 
@@ -66,6 +78,11 @@ class TestOrgFilesCubit extends OrgFilesCubit {
   TestOrgFilesCubit._(OrgFilesState state) : super(MockOrgFilesRepository()) {
     emit(state);
   }
+
+  String? appended;
+
+  @override
+  Future<void> appendToInboxFile(String markup) async => appended = markup;
 
   factory TestOrgFilesCubit.withInboxFile(FileInfo inboxFile) {
     return TestOrgFilesCubit._(
