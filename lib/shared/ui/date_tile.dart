@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 
 class DateTile extends StatelessWidget {
   final String title;
-  final String subtitle;
   final VoidCallback onTap;
 
-  const DateTile({
-    super.key,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
+  const DateTile({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +17,7 @@ class DateTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
+          padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
           child: Row(
             spacing: 12,
             children: [
@@ -44,15 +38,7 @@ class DateTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 2,
-                  children: [
-                    Text(title, style: theme.textTheme.titleSmall),
-                    Text(
-                      subtitle,
-                      style: theme.textTheme.bodySmall!.copyWith(
-                        color: colors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                  children: [Text(title, style: theme.textTheme.titleSmall)],
                 ),
               ),
               Icon(Icons.chevron_right, color: colors.onSurfaceVariant),

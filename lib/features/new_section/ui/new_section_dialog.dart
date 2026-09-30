@@ -71,12 +71,12 @@ class _NewSectionDialogState extends State<NewSectionDialog> {
                     DialogSectionLabel(context.l10n.when),
                     DateTile(
                       key: const Key('datePickerButton'),
-                      title: dayLabel(context, _timestamp.startDateTime),
-                      subtitle: _timestamp.toMarkup(),
+                      title: _timestamp.toMarkup(),
                       onTap: () => openDatePicker(
                         context,
                         DatePickerState.initial(_timestamp),
-                        (newTimestamp) => _timestamp = newTimestamp,
+                        (newTimestamp) =>
+                            setState(() => _timestamp = newTimestamp),
                       ),
                     ),
                   ],

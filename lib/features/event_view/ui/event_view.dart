@@ -78,8 +78,7 @@ class _EventViewState extends State<EventView> {
               DialogSectionLabel(context.l10n.when),
               DateTile(
                 key: const Key('datePickerButton'),
-                title: dayLabel(context, _timestamp.startDateTime),
-                subtitle: _timestamp.toMarkup(),
+                title: _timestamp.toMarkup(),
                 onTap: () => openDatePicker(
                   context,
                   DatePickerState.initial(_timestamp),

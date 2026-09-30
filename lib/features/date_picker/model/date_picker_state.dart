@@ -122,14 +122,6 @@ final class DatePickerState {
     }
   }
 
-  factory DatePickerState.parseDateTimeWithoutTime(DateTime dateTime) =>
-      DatePickerState(
-        startDate: dateTime,
-        startTimeActive: false,
-        endTimeActive: false,
-        endDateActive: false,
-      );
-
   DatePickerState copyWith({
     DateTime? startDate,
     ValueGetter<DateTime?>? endDate,
