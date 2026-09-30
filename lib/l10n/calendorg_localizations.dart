@@ -570,6 +570,90 @@ abstract class CalendorgLocalizations {
   /// In en, this message translates to:
   /// **'Choose files'**
   String get choose_files;
+
+  /// No description provided for @intro_welcome_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to calendorg'**
+  String get intro_welcome_title;
+
+  /// No description provided for @intro_welcome_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendorg is a companion app for Emacs org-mode.\n\nIt shows your org files as a calendar. You can change headings and timestamps, and quickly add new events to an inbox file.\n\nIt is not a full org-mode viewer or task manager.'**
+  String get intro_welcome_body;
+
+  /// No description provided for @intro_directory_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick your org directory'**
+  String get intro_directory_title;
+
+  /// No description provided for @intro_directory_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the folder where your org files are.\n\nIf you do not have one yet, create one and come back later.'**
+  String get intro_directory_body;
+
+  /// No description provided for @intro_files_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your agenda files'**
+  String get intro_files_title;
+
+  /// No description provided for @intro_files_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the files that you want to see in the calendar.'**
+  String get intro_files_body;
+
+  /// No description provided for @intro_inbox_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Inbox file'**
+  String get intro_inbox_title;
+
+  /// No description provided for @intro_inbox_body.
+  ///
+  /// In en, this message translates to:
+  /// **'New events that you create in the app go into your inbox file.\n\nYou can skip this step and choose a file later.'**
+  String get intro_inbox_body;
+
+  /// No description provided for @intro_tags_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Give your tags colors'**
+  String get intro_tags_title;
+
+  /// No description provided for @intro_tags_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Give each tag a color to tell your events apart.\n\nIf an event has more than one tag, the first tag in the list sets its color. You can change the order in the settings.'**
+  String get intro_tags_body;
+
+  /// No description provided for @intro_add_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Add tag'**
+  String get intro_add_tag;
+
+  /// No description provided for @intro_next.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get intro_next;
+
+  /// No description provided for @intro_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get intro_skip;
+
+  /// No description provided for @intro_finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Setup'**
+  String get intro_finish;
 }
 
 class _CalendorgLocalizationsDelegate

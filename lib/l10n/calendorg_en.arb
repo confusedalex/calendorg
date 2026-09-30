@@ -130,5 +130,19 @@
     }
   },
   "setup_hint": "Choose your org folder and files to see your events.",
-  "choose_files": "Choose files"
+  "choose_files": "Choose files",
+  "intro_welcome_title": "Welcome to calendorg",
+  "intro_welcome_body": "Calendorg is a companion app for Emacs org-mode.\n\nIt shows your org files as a calendar. You can change headings and timestamps, and quickly add new events to an inbox file.\n\nIt is not a full org-mode viewer or task manager.",
+  "intro_directory_title": "Pick your org directory",
+  "intro_directory_body": "Pick the folder where your org files are.\n\nIf you do not have one yet, create one and come back later.",
+  "intro_files_title": "Select your agenda files",
+  "intro_files_body": "Choose the files that you want to see in the calendar.",
+  "intro_inbox_title": "Inbox file",
+  "intro_inbox_body": "New events that you create in the app go into your inbox file.\n\nYou can skip this step and choose a file later.",
+  "intro_tags_title": "Give your tags colors",
+  "intro_tags_body": "Give each tag a color to tell your events apart.\n\nIf an event has more than one tag, the first tag in the list sets its color. You can change the order in the settings.",
+  "intro_add_tag": "Add tag",
+  "intro_next": "Continue",
+  "intro_skip": "Skip",
+  "intro_finish": "Finish Setup"
 }

@@ -17,6 +17,7 @@ abstract final class PrefKeys {
   static const todoStates = PrefKey<String>('todoStates');
   static const doneStates = PrefKey<String>('doneStates');
   static const ignoredStates = PrefKey<String>('ignoredStates');
+  static const showSetup = PrefKey<bool>('showSetup');
 }
 
 class PreferencesService {
@@ -25,6 +26,10 @@ class PreferencesService {
   Future<int?> getInt(PrefKey<int> key) => _prefs.getInt(key.name);
   Future<void> setInt(PrefKey<int> key, int value) =>
       _prefs.setInt(key.name, value);
+
+  Future<bool?> getBool(PrefKey<bool> key) => _prefs.getBool(key.name);
+  Future<void> setBool(PrefKey<bool> key, {required bool value}) =>
+      _prefs.setBool(key.name, value);
 
   Future<String?> getString(PrefKey<String> key) => _prefs.getString(key.name);
   Future<void> setString(PrefKey<String> key, String value) =>

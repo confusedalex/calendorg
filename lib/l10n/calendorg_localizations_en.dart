@@ -272,4 +272,51 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
 
   @override
   String get choose_files => 'Choose files';
+
+  @override
+  String get intro_welcome_title => 'Welcome to calendorg';
+
+  @override
+  String get intro_welcome_body =>
+      'Calendorg is a companion app for Emacs org-mode.\n\nIt shows your org files as a calendar. You can change headings and timestamps, and quickly add new events to an inbox file.\n\nIt is not a full org-mode viewer or task manager.';
+
+  @override
+  String get intro_directory_title => 'Pick your org directory';
+
+  @override
+  String get intro_directory_body =>
+      'Pick the folder where your org files are.\n\nIf you do not have one yet, create one and come back later.';
+
+  @override
+  String get intro_files_title => 'Select your agenda files';
+
+  @override
+  String get intro_files_body =>
+      'Choose the files that you want to see in the calendar.';
+
+  @override
+  String get intro_inbox_title => 'Inbox file';
+
+  @override
+  String get intro_inbox_body =>
+      'New events that you create in the app go into your inbox file.\n\nYou can skip this step and choose a file later.';
+
+  @override
+  String get intro_tags_title => 'Give your tags colors';
+
+  @override
+  String get intro_tags_body =>
+      'Give each tag a color to tell your events apart.\n\nIf an event has more than one tag, the first tag in the list sets its color. You can change the order in the settings.';
+
+  @override
+  String get intro_add_tag => 'Add tag';
+
+  @override
+  String get intro_next => 'Continue';
+
+  @override
+  String get intro_skip => 'Skip';
+
+  @override
+  String get intro_finish => 'Finish Setup';
 }

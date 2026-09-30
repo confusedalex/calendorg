@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ import 'features/diff_view/ui/diff_view_page.dart';
 import 'features/settings/settings_overview/ui/settings_page.dart';
 import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
+import 'pages/introduction_screen/ui/calendorg_introduction.dart';
 import 'shared/config/preferences_service.dart';
 import 'shared/ui/errors.dart';
 import 'theme.dart';
@@ -28,6 +31,7 @@ void main() async {
 
   final preferences = PreferencesService();
   final settingsCubit = await SettingsCubit.load(preferences);
+  final showSetup = await preferences.getBool(PrefKeys.showSetup) ?? true;
   final parserService = await OrgParserService.spawn(
     settingsCubit.state.todoStates,
   );
@@ -55,14 +59,16 @@ void main() async {
           ),
           if (kDebugMode) BlocProvider(create: (context) => DiffViewCubit()),
         ],
-        child: const Calendorg(),
+        child: Calendorg(showSetup: showSetup),
       ),
     ),
   );
 }
 
 class Calendorg extends StatelessWidget {
-  const Calendorg({super.key});
+  const Calendorg({required this.showSetup, super.key});
+
+  final bool showSetup;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,7 @@ class Calendorg extends StatelessWidget {
             localizationsDelegates:
                 CalendorgLocalizations.localizationsDelegates,
             supportedLocales: CalendorgLocalizations.supportedLocales,
-            home: const HomePage(),
+            home: HomePage(showSetup: showSetup),
           );
         },
       ),
@@ -87,9 +93,14 @@ class Calendorg extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, this.showDebugTab = kDebugMode});
+  const HomePage({
+    super.key,
+    this.showDebugTab = kDebugMode,
+    this.showSetup = false,
+  });
 
   final bool showDebugTab;
+  final bool showSetup;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -97,6 +108,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var index = 0;
+  late var _showSetup = widget.showSetup;
   late final AppLifecycleListener _lifecycleListener;
 
   @override
@@ -104,6 +116,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _lifecycleListener = AppLifecycleListener(
       onResume: () => context.read<OrgFilesCubit>().reload(),
+    );
+  }
+
+  Future<void> _finishSetup() async {
+    setState(() => _showSetup = false);
+    await context.read<PreferencesService>().setBool(
+      PrefKeys.showSetup,
+      value: false,
     );
   }
 
@@ -115,6 +135,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_showSetup) {
+      return IntroductionPage(onDone: () => unawaited(_finishSetup()));
+    }
+
     final List pages = [
       if (widget.showDebugTab) const DiffViewPage(),
       const TodayPage(),

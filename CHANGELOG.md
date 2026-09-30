@@ -1,5 +1,7 @@
 # Changelog
 ## Unreleased
+### Added
+- Add introduction screen to guide initial setup
 ### Fixed
 - Set min/max date for the calendar to 1900-01-01 and 2100-01-01
 - Canceling the directory picker won't throw an error
