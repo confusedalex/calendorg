@@ -52,8 +52,8 @@ class CalendarView extends StatelessWidget {
       body: Column(
         children: [
           TableCalendar(
-            firstDay: DateTime.utc(2010, 10, 16),
-            lastDay: DateTime.utc(2030, 3, 14),
+            firstDay: DateTime.utc(1900),
+            lastDay: DateTime.utc(2100),
             focusedDay: focusedDay,
             onPageChanged: context.read<CalendarCubit>().focusDate,
             startingDayOfWeek: startingDay,
