@@ -75,9 +75,7 @@ class _NewSectionDialogState extends State<NewSectionDialog> {
                       subtitle: _timestamp.toMarkup(),
                       onTap: () => openDatePicker(
                         context,
-                        DatePickerState.parseDateTimeWithoutTime(
-                          _timestamp.startDateTime,
-                        ),
+                        DatePickerState.initial(_timestamp),
                         (newTimestamp) => _timestamp = newTimestamp,
                       ),
                     ),

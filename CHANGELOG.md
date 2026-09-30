@@ -3,6 +3,7 @@
 ### Fixed
 - Set min/max date for the calendar to 1900-01-01 and 2100-01-01
 - Canceling the directory picker won't throw an error
+- Remember start/endtime when re-enterin date picker
 ## 1.7.0 - 2026-09-29
 ### Added
 - Pull to refresh for reloading files
