@@ -16,7 +16,12 @@ import '../services/org_file_persistence_service_test.dart';
 
 class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
 
-class FakeDirectoryInfo extends Fake implements DirectoryInfo {}
+class FakeDirectoryInfo extends Fake implements DirectoryInfo {
+  FakeDirectoryInfo([this.fileName = 'org']);
+
+  @override
+  final String fileName;
+}
 
 class FakeFileInfo extends Fake implements FileInfo {}
 
@@ -33,27 +38,56 @@ void main() {
       registerFallbackValue(const EntryEdit());
     });
     group('setOrgDirectory()', () {
-      test('should save directory in repository', () async {
-        final repository = MockOrgFilesRepository();
-        final cubit = OrgFilesCubit(repository);
+      late MockOrgFilesRepository repository;
+      late OrgFilesCubit cubit;
 
+      setUp(() {
+        repository = MockOrgFilesRepository();
         when(() => repository.saveDirectory(any())).thenAnswer((_) async {});
+        when(() => repository.saveFileList(any())).thenAnswer((_) async {});
+        when(() => repository.saveInboxFile(any())).thenAnswer((_) async {});
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
+        when(
+          () => repository.parseEntriesForFiles(any(), any(), any()),
+        ).thenAnswer((_) async => []);
+        cubit = OrgFilesCubit(repository);
+      });
 
+      test('should save directory in repository', () async {
         await cubit.setOrgDirectory(FakeDirectoryInfo());
 
         verify(() => repository.saveDirectory(any())).called(1);
       });
+
       test('should emit new state with updated directory', () async {
-        final repository = MockOrgFilesRepository();
-        final cubit = OrgFilesCubit(repository);
-
-        when(() => repository.saveDirectory(any())).thenAnswer((_) async {});
-
         final newDirectory = FakeDirectoryInfo();
         await cubit.setOrgDirectory(newDirectory);
 
         expect(cubit.state.directory, newDirectory);
-        expect(cubit.state.directory, isNotNull);
+      });
+
+      test('should clear the files of the old directory', () async {
+        await cubit.setOrgDirectory(FakeDirectoryInfo('old'));
+        await cubit.addFilePath(fakeFileInfo('work'));
+        await cubit.changeInboxFile(fakeFileInfo('inbox'));
+
+        await cubit.setOrgDirectory(FakeDirectoryInfo('new'));
+
+        expect(cubit.state.filePaths, isEmpty);
+        expect(cubit.state.inboxFile, isNull);
+        expect(cubit.state.entries, isEmpty);
+        verify(() => repository.saveInboxFile(null)).called(2);
+      });
+
+      test('should keep the files when the same directory is picked', () async {
+        await cubit.setOrgDirectory(FakeDirectoryInfo());
+        await cubit.addFilePath(fakeFileInfo('work'));
+
+        await cubit.setOrgDirectory(FakeDirectoryInfo());
+
+        expect(cubit.state.filePaths, hasLength(1));
       });
     });
     group('addFilePath()', () {
@@ -166,6 +200,7 @@ void main() {
       ) async {
         when(() => repository.saveDirectory(any())).thenAnswer((_) async {});
         when(() => repository.saveFileList(any())).thenAnswer((_) async {});
+        when(() => repository.saveInboxFile(any())).thenAnswer((_) async {});
         when(
           () => repository.parseEntriesForFiles(any(), any(), any()),
         ).thenAnswer((_) async => [entry]);

@@ -158,7 +158,7 @@ class OrgFilesRepository {
     return _persistence.saveFileList(fileInfos);
   }
 
-  Future<void> saveInboxFile(FileInfo fileInfo) {
+  Future<void> saveInboxFile(FileInfo? fileInfo) {
     return _persistence.saveInboxFile(fileInfo);
   }
 

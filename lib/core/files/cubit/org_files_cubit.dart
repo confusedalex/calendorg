@@ -80,9 +80,21 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   }
 
   Future<void> setOrgDirectory(DirectoryInfo dirInfo) async {
-    await _repository.saveDirectory(dirInfo);
+    if (dirInfo.fileName == state.directory?.fileName) return;
 
-    emit(state.copyWith(directory: () => dirInfo));
+    await _repository.saveDirectory(dirInfo);
+    await _repository.saveFileList({});
+    await _repository.saveInboxFile(null);
+
+    emit(
+      state.copyWith(
+        directory: () => dirInfo,
+        filePaths: {},
+        inboxFile: () => null,
+        entries: [],
+      ),
+    );
+    await _repository.cacheOrgEntries([], state.todoStates);
   }
 
   Future<void> addFilePath(FileInfo? fileInfo) async {
