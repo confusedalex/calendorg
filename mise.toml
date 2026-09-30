@@ -9,6 +9,7 @@ zizmor = "latest"
 "build:apk" = "flutter build apk --release"
 "build:apk-split" = "flutter build apk --release --split-per-abi"
 "lint:workflows" = "zizmor ./.github/workflows"
+"screenshots" = "flutter test test/screenshots.dart"
 
 [tasks.format]
 run = "dart format -o none --set-exit-if-changed ./lib ./test"

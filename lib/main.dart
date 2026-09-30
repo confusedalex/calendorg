@@ -87,7 +87,9 @@ class Calendorg extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.showDebugTab = kDebugMode});
+
+  final bool showDebugTab;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final List pages = [
-      if (kDebugMode) const DiffViewPage(),
+      if (widget.showDebugTab) const DiffViewPage(),
       const TodayPage(),
       CalendarPage(DateTime.now()),
       const SettingsPage(),
@@ -137,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                 }),
                 selectedIndex: index,
                 destinations: [
-                  if (kDebugMode)
+                  if (widget.showDebugTab)
                     const NavigationDestination(
                       icon: Icon(Icons.compare_arrows),
                       label: 'Diff',
