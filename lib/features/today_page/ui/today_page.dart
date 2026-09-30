@@ -6,6 +6,7 @@ import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../entities/occurrence/occurrence_getter.dart';
 import '../../../util.dart';
 import '../../calendar/ui/event_card.dart';
+import '../../settings/agenda_files/ui/agenda_page.dart';
 
 class TodayPage extends StatelessWidget {
   const TodayPage({super.key});
@@ -14,6 +15,12 @@ class TodayPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final entries = context.select(
       (OrgFilesCubit cubit) => cubit.state.entries,
+    );
+    final needsSetup = context.select(
+      (OrgFilesCubit cubit) =>
+          cubit.state.status != OrgFilesStatus.loading &&
+          (cubit.state.directory == null ||
+              cubit.state.filePaths.isEmpty && cubit.state.inboxFile == null),
     );
     final now = DateTime.now();
     const days = 3;
@@ -41,7 +48,9 @@ class TodayPage extends StatelessWidget {
               ),
             ),
           ),
-          if (occurrences.isEmpty)
+          if (needsSetup)
+            const SliverFillRemaining(hasScrollBody: false, child: _SetupHint())
+          else if (occurrences.isEmpty)
             SliverFillRemaining(
               hasScrollBody: false,
               child: Center(
@@ -89,6 +98,41 @@ class TodayPage extends StatelessWidget {
           ],
           const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
         ],
+      ),
+    );
+  }
+}
+
+class _SetupHint extends StatelessWidget {
+  const _SetupHint();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 12,
+          children: [
+            Icon(Icons.folder_open, size: 48, color: theme.colorScheme.outline),
+            Text(
+              context.l10n.setup_hint,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AgendaPage()),
+              ),
+              child: Text(context.l10n.choose_files),
+            ),
+          ],
+        ),
       ),
     );
   }

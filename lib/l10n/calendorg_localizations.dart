@@ -570,6 +570,18 @@ abstract class CalendorgLocalizations {
   /// In en, this message translates to:
   /// **'Next {count} days'**
   String next_days(int count);
+
+  /// No description provided for @setup_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your org folder and files to see your events.'**
+  String get setup_hint;
+
+  /// No description provided for @choose_files.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose files'**
+  String get choose_files;
 }
 
 class _CalendorgLocalizationsDelegate

@@ -150,5 +150,7 @@
     "placeholders": {
       "count": { "type": "int" }
     }
-  }
+  },
+  "setup_hint": "Choose your org folder and files to see your events.",
+  "choose_files": "Choose files"
 }

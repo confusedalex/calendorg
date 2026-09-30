@@ -276,4 +276,11 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String next_days(int count) {
     return 'Next $count days';
   }
+
+  @override
+  String get setup_hint =>
+      'Choose your org folder and files to see your events.';
+
+  @override
+  String get choose_files => 'Choose files';
 }
