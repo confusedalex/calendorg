@@ -251,7 +251,6 @@ abstract final class AppTheme {
       useError: true,
       keepPrimary: true,
       keepSecondary: true,
-      keepError: true,
       keepTertiaryContainer: true,
     ),
     tones: FlexSchemeVariant.chroma
