@@ -5,7 +5,6 @@ import 'package:calendorg/core/files/services/org_file_persistence_service.dart'
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/entities/org_entry/entry_edit.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/features/date_picker/model/date_picker_bloc.dart';
 import 'package:calendorg/shared/org_text_hash.dart';
@@ -100,7 +99,6 @@ void main() {
       filePicker: filePicker,
       persistence: MockOrgFilePersistenceService(),
       parserService: parserService,
-      eventParserService: EventParserService(),
     );
 
     when(

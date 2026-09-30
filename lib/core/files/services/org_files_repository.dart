@@ -5,9 +5,9 @@ import 'package:logging/logging.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
-import '../../../entities/org_entry/event_parser_service.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/org_entry/org_entry_locator.dart';
+import '../../../entities/org_entry/org_entry_parser.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../shared/org_text_hash.dart';
 import '../org_files_problem.dart';
@@ -22,15 +22,12 @@ class OrgFilesRepository {
   final FilePickerWritable _filePicker;
   final OrgFilePersistenceService _persistence;
   final OrgParserService _parserService;
-  final EventParserService _eventParserService;
 
   OrgFilesRepository({
     required FilePickerWritable filePicker,
     required OrgFilePersistenceService persistence,
     required OrgParserService parserService,
-    required EventParserService eventParserService,
-  }) : _eventParserService = eventParserService,
-       _filePicker = filePicker,
+  }) : _filePicker = filePicker,
        _persistence = persistence,
        _parserService = parserService;
 
@@ -89,7 +86,7 @@ class OrgFilesRepository {
           }
 
           final parsed = await _parseText(text);
-          return _eventParserService.parseEntriesFromDocument(
+          return parseEntriesFromDocument(
             fileName,
             parsed.hash,
             parsed.document,
@@ -190,7 +187,7 @@ class OrgFilesRepository {
     await _writeText(inboxFile.identifier, newText);
     final parsed = await _parseText(newText);
 
-    return _eventParserService.parseEntriesFromDocument(
+    return parseEntriesFromDocument(
       fileName,
       parsed.hash,
       parsed.document,
@@ -215,7 +212,7 @@ class OrgFilesRepository {
     if (entry.fileHash != parsed.hash) {
       _log.info('File changed on disk, reloading $fileName');
       throw FileChangedOnDisk(
-        _eventParserService.parseEntriesFromDocument(
+        parseEntriesFromDocument(
           fileName,
           parsed.hash,
           parsed.document,
@@ -227,11 +224,7 @@ class OrgFilesRepository {
     final section = locateSection(parsed.document, entry.locator);
     if (section == null) throw EntryNotFound(entry.title);
 
-    final replacements = _eventParserService.replacementsFor(
-      section,
-      entry,
-      edit,
-    );
+    final replacements = replacementsFor(section, entry, edit);
     if (replacements.isEmpty) return null;
 
     final newDocument =
@@ -244,7 +237,7 @@ class OrgFilesRepository {
             as OrgDocument;
     await _writeText(resolved.identifier, newDocument.toMarkup());
 
-    return _eventParserService.parseEntriesFromDocument(
+    return parseEntriesFromDocument(
       entry.filePath,
       orgTextHash(newDocument.toMarkup()),
       newDocument,

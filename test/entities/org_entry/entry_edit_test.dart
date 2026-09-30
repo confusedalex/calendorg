@@ -1,15 +1,13 @@
 import 'package:calendorg/entities/org_entry/entry_edit.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/entities/org_entry/org_entry_locator.dart';
+import 'package:calendorg/entities/org_entry/org_entry_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../helpers/entries.dart';
 
 void main() {
-  final service = EventParserService();
-
   OrgSimpleTimestamp stamp(String day) => OrgSimpleTimestamp(
     '<',
     (year: '2025', month: '05', day: day, dayName: null),
@@ -23,11 +21,7 @@ void main() {
     final document = OrgDocument.parse(markup);
     final section = locateSection(document, entry.locator)!;
 
-    final replacements = service.replacementsFor(
-      section,
-      entry,
-      buildEdit(entry),
-    );
+    final replacements = replacementsFor(section, entry, buildEdit(entry));
 
     return (replacements
                 .fold<OrgZipper>(
@@ -45,11 +39,7 @@ void main() {
       final entry = parseEntries(OrgDocument.parse(markup)).first;
       final section = OrgDocument.parse(markup).sections.first;
 
-      final found = service.locateTimestamp(
-        section,
-        entry,
-        entry.timestamps.first,
-      );
+      final found = locateTimestamp(section, entry, entry.timestamps.first);
 
       expect(found, isNotNull);
       expect(found!.toMarkup(), equals('<2025-05-15>'));
@@ -60,19 +50,11 @@ void main() {
       final entry = parseEntries(OrgDocument.parse(markup)).first;
       final section = OrgDocument.parse(markup).sections.first;
 
-      final first = service.locateTimestamp(
-        section,
-        entry,
-        entry.timestamps.first,
-      );
-      final second = service.locateTimestamp(
-        section,
-        entry,
-        entry.timestamps[1],
-      );
+      final first = locateTimestamp(section, entry, entry.timestamps.first);
+      final second = locateTimestamp(section, entry, entry.timestamps[1]);
 
       expect(identical(first, second), isFalse);
-      expect(identical(second, service.allTimestampsOf(section)[1]), isTrue);
+      expect(identical(second, allTimestampsOf(section)[1]), isTrue);
     });
 
     test('returns null when the timestamp is gone', () {
@@ -82,10 +64,7 @@ void main() {
         '* Exam\n<2025-06-01>\n',
       ).sections.first;
 
-      expect(
-        service.locateTimestamp(section, entry, entry.timestamps.first),
-        isNull,
-      );
+      expect(locateTimestamp(section, entry, entry.timestamps.first), isNull);
     });
   });
 
@@ -156,7 +135,7 @@ void main() {
         '* Exam\n<2025-06-01>\n',
       ).sections.first;
 
-      final replacements = service.replacementsFor(
+      final replacements = replacementsFor(
         section,
         entry,
         EntryEdit(

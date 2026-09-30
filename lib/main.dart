@@ -12,7 +12,6 @@ import 'core/starting_day_cubit.dart';
 import 'core/tag_colors/tag_colors_cubit.dart';
 import 'core/todo_states_cubit.dart';
 import 'core/todo_states_listener.dart';
-import 'entities/org_entry/event_parser_service.dart';
 import 'features/calendar/ui/calendar_page.dart';
 import 'features/diff_view/model/diff_view_cubit.dart';
 import 'features/diff_view/ui/diff_view_page.dart';
@@ -39,7 +38,6 @@ void main() async {
     filePicker: filePicker,
     persistence: OrgFilePersistenceService(preferences, filePicker),
     parserService: parserService,
-    eventParserService: EventParserService(),
   );
 
   runApp(

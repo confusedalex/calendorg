@@ -12,7 +12,7 @@ void main() {
     return {for (final entry in entries) entry.title.trim(): entry.tags};
   }
 
-  group('EventParserService tag inheritance', () {
+  group('parseEntriesFromDocument tag inheritance', () {
     test('a section inherits the tags of every parent section', () {
       const markup = '''
 * Parent :a:b:

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
-import 'package:calendorg/entities/org_entry/event_parser_service.dart';
 import 'package:calendorg/shared/org_text_hash.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -48,7 +47,6 @@ void main() {
       filePicker: filePicker,
       persistence: MockOrgFilePersistenceService(),
       parserService: parserService,
-      eventParserService: EventParserService(),
     );
 
     when(
