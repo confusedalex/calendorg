@@ -74,4 +74,26 @@ void main() {
       expect(entries.first.timestamps.length, 2);
     });
   });
+  group('headline sanitizing', () {
+    String titleOf(String markup) =>
+        parseEntries(OrgDocument.parse(markup), ignored: {}).single.title;
+
+    test('removes a timestamp from the headline', () {
+      expect(
+        titleOf('* Meeting <2025-05-05 Mon> with Bob'),
+        'Meeting with Bob',
+      );
+    });
+
+    test('removes date range from headline', () {
+      expect(
+        titleOf('* Spain vacation <2025-05-01>--<2025-05-10>'),
+        'Spain vacation',
+      );
+    });
+
+    test('collapses whitespace and trims', () {
+      expect(titleOf('* TODO   Call   mom  \n<2025-05-05>'), 'Call mom');
+    });
+  });
 }

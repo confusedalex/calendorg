@@ -5,7 +5,9 @@ import 'org_entry.dart';
 import 'org_entry_locator.dart';
 
 final _whitespaceRegExp = RegExp(r'\s+');
-final _timestampRegExp = RegExp(r'[\s]?[<][0-9]{4}-[0-9]{2}-[0-9]{2}.*?[>]');
+final _timestampRegExp = RegExp(
+  r'\s?<[0-9]{4}-[0-9]{2}-[0-9]{2}[^>]*>(--<[0-9]{4}-[0-9]{2}-[0-9]{2}[^>]*>)?',
+);
 
 List<OrgEntry> parseEntriesFromDocument(
   String filePath,
