@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:calendorg/core/files/org_files_problem.dart';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
@@ -386,16 +387,21 @@ void main() {
     }
 
     test('an edit with a stale hash writes nothing', () async {
-      await applyStaleEdit();
+      await expectLater(applyStaleEdit(), throwsA(isA<FileChangedOnDisk>()));
 
       expect(written, isNull);
     });
 
-    test('an edit with a stale hash returns the entries on disk', () async {
-      final entries = await applyStaleEdit();
+    test('an edit with a stale hash reports the entries on disk', () async {
+      final List<OrgEntry> entries;
+      try {
+        await applyStaleEdit();
+        fail('expected FileChangedOnDisk');
+      } on FileChangedOnDisk catch (problem) {
+        entries = problem.entries;
+      }
 
-      expect(entries, isNotNull);
-      expect(entries!.map((e) => e.fileHash).toSet(), {orgTextHash(onDisk)});
+      expect(entries.map((e) => e.fileHash).toSet(), {orgTextHash(onDisk)});
       expect(entries.map((e) => e.title), ['Exam', 'Added outside']);
     });
   });

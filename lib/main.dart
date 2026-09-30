@@ -20,10 +20,10 @@ import 'features/settings/theme/model/theme_bloc.dart';
 import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
 import 'shared/config/preferences_service.dart';
+import 'shared/ui/errors.dart';
 import 'theme.dart';
 import 'util.dart';
 
-final rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setUpLogging();
@@ -83,7 +83,6 @@ class Calendorg extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeMode>(
       builder: (context, state) {
         return MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessengerKey,
           title: 'calendorg',
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
@@ -130,7 +129,10 @@ class _HomePageState extends State<HomePage> {
       CalendarPage(DateTime.now()),
       const SettingsPage(),
     ];
-    return BlocBuilder<OrgFilesCubit, OrgFilesState>(
+    return BlocConsumer<OrgFilesCubit, OrgFilesState>(
+      listenWhen: (_, filesState) => filesState.problem != null,
+      listener: (context, filesState) =>
+          showProblem(context, filesState.problem!),
       builder: (context, filesState) {
         return Scaffold(
           body: SafeArea(child: pages[index]),

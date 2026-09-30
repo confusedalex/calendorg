@@ -250,8 +250,8 @@ abstract class CalendorgLocalizations {
   /// No description provided for @error_entry_not_found.
   ///
   /// In en, this message translates to:
-  /// **'Entry {entry} no longer found in file!'**
-  String error_entry_not_found(Object entry);
+  /// **'Entry {title} no longer found in file!'**
+  String error_entry_not_found(String title);
 
   /// No description provided for @error_file_changed_on_disk.
   ///
@@ -342,48 +342,6 @@ abstract class CalendorgLocalizations {
   /// In en, this message translates to:
   /// **'Sunday'**
   String get sunday;
-
-  /// No description provided for @weekday_short_monday.
-  ///
-  /// In en, this message translates to:
-  /// **'Mon'**
-  String get weekday_short_monday;
-
-  /// No description provided for @weekday_short_tuesday.
-  ///
-  /// In en, this message translates to:
-  /// **'Tue'**
-  String get weekday_short_tuesday;
-
-  /// No description provided for @weekday_short_wednesday.
-  ///
-  /// In en, this message translates to:
-  /// **'Wed'**
-  String get weekday_short_wednesday;
-
-  /// No description provided for @weekday_short_thursday.
-  ///
-  /// In en, this message translates to:
-  /// **'Thu'**
-  String get weekday_short_thursday;
-
-  /// No description provided for @weekday_short_friday.
-  ///
-  /// In en, this message translates to:
-  /// **'Fri'**
-  String get weekday_short_friday;
-
-  /// No description provided for @weekday_short_saturday.
-  ///
-  /// In en, this message translates to:
-  /// **'Sat'**
-  String get weekday_short_saturday;
-
-  /// No description provided for @weekday_short_sunday.
-  ///
-  /// In en, this message translates to:
-  /// **'Sun'**
-  String get weekday_short_sunday;
 
   /// No description provided for @theme.
   ///

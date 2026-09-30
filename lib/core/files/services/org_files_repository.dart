@@ -10,7 +10,7 @@ import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/org_entry/org_entry_locator.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../shared/org_text_hash.dart';
-import '../../../util.dart';
+import '../org_files_problem.dart';
 import 'org_file_persistence_service.dart';
 import 'org_parser_service.dart';
 
@@ -44,20 +44,21 @@ class OrgFilesRepository {
     OrgTodoStatesWithIgnored todoStates,
     Iterable<OrgEntry> cachedEntries,
   ) async {
-    final (fileInfos, inboxFile, dirInfo) = await _persistence
+    final (:files, :inbox, :directory, :missing) = await _persistence
         .loadFilePreferences();
 
     return InitialState(
-      dirInfo: dirInfo,
-      fileInfos: fileInfos,
-      inboxFile: inboxFile,
+      dirInfo: directory,
+      fileInfos: files,
+      inboxFile: inbox,
       todoStates: todoStates,
       entries: await parseEntriesForFiles(
-        dirInfo,
-        [...fileInfos, ?inboxFile],
+        directory,
+        [...files, ?inbox],
         todoStates.ignored,
         cachedEntries,
       ),
+      missingFiles: missing,
     );
   }
 
@@ -123,43 +124,33 @@ class OrgFilesRepository {
     reader: (_, file) => file.readAsString(),
   );
 
-  Future<bool> validateFileDirectory(
-    FileInfo? fileInfo,
-    DirectoryInfo? dirInfo,
+  Future<void> ensureInDirectory(
+    FileInfo fileInfo,
+    DirectoryInfo dirInfo,
   ) async {
-    if (fileInfo == null || dirInfo == null) return false;
     final fileName = fileInfo.fileName;
-    if (fileName == null) return false;
+    if (fileName == null) throw const FileNotInOrgFolder();
 
-    void sendErr() => sendError(globalL10n.error_file_not_in_org_folder);
-
+    final EntityInfo relative;
     try {
-      late final EntityInfo relative;
-
-      try {
-        relative = await _filePicker.resolveRelativePath(
-          directoryIdentifier: dirInfo.identifier,
-          relativePath: fileName,
-        );
-      } on Exception {
-        sendErr();
-        return false;
-      }
-
-      final relativeHash = orgTextHash(await readText(relative.identifier));
-      final pickedHash = orgTextHash(await readText(fileInfo.identifier));
-
-      final isSameFile = relativeHash == pickedHash;
-
-      if (!isSameFile) {
-        sendErr();
-      }
-
-      return isSameFile;
+      relative = await _filePicker.resolveRelativePath(
+        directoryIdentifier: dirInfo.identifier,
+        relativePath: fileName,
+      );
     } on Exception {
-      sendError(globalL10n.error_reading_file);
-      return false;
+      throw const FileNotInOrgFolder();
     }
+
+    final String relativeText;
+    final String pickedText;
+    try {
+      relativeText = await readText(relative.identifier);
+      pickedText = await readText(fileInfo.identifier);
+    } on Exception {
+      throw const FileReadFailed();
+    }
+
+    if (relativeText != pickedText) throw const FileNotInOrgFolder();
   }
 
   Future<void> saveDirectory(DirectoryInfo dirInfo) {
@@ -194,22 +185,17 @@ class OrgFilesRepository {
     final fileName = inboxFile.fileName;
     if (fileName == null) return null;
 
-    try {
-      final oldText = await readText(inboxFile.identifier);
-      final newText = '$oldText\n$markup';
-      await _writeText(inboxFile.identifier, newText);
-      final parsed = await _parseText(newText);
+    final oldText = await readText(inboxFile.identifier);
+    final newText = '$oldText\n$markup';
+    await _writeText(inboxFile.identifier, newText);
+    final parsed = await _parseText(newText);
 
-      return _eventParserService.parseEntriesFromDocument(
-        fileName,
-        parsed.hash,
-        parsed.document,
-        ignoredTodoStates.toSet(),
-      );
-    } on Exception catch (e) {
-      sendError(globalL10n.error_saving_section(e));
-      return null;
-    }
+    return _eventParserService.parseEntriesFromDocument(
+      fileName,
+      parsed.hash,
+      parsed.document,
+      ignoredTodoStates.toSet(),
+    );
   }
 
   Future<List<OrgEntry>?> applyEdit(
@@ -228,20 +214,18 @@ class OrgFilesRepository {
 
     if (entry.fileHash != parsed.hash) {
       _log.info('File changed on disk, reloading $fileName');
-      sendError(globalL10n.error_file_changed_on_disk);
-      return _eventParserService.parseEntriesFromDocument(
-        fileName,
-        parsed.hash,
-        parsed.document,
-        ignored,
+      throw FileChangedOnDisk(
+        _eventParserService.parseEntriesFromDocument(
+          fileName,
+          parsed.hash,
+          parsed.document,
+          ignored,
+        ),
       );
     }
 
     final section = locateSection(parsed.document, entry.locator);
-    if (section == null) {
-      sendError(globalL10n.error_entry_not_found(entry));
-      return null;
-    }
+    if (section == null) throw EntryNotFound(entry.title);
 
     final replacements = _eventParserService.replacementsFor(
       section,
@@ -298,11 +282,14 @@ class InitialState {
   final OrgTodoStatesWithIgnored todoStates;
   final List<OrgEntry> entries;
 
+  final List<String> missingFiles;
+
   InitialState({
     required this.dirInfo,
     required this.fileInfos,
     required this.inboxFile,
     required this.todoStates,
     required this.entries,
+    this.missingFiles = const [],
   });
 }

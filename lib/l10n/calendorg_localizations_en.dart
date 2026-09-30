@@ -97,8 +97,8 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
       'File is not in org folder!\nPlease select a file that lies in your org folder or change your org folder.';
 
   @override
-  String error_entry_not_found(Object entry) {
-    return 'Entry $entry no longer found in file!';
+  String error_entry_not_found(String title) {
+    return 'Entry $title no longer found in file!';
   }
 
   @override
@@ -157,27 +157,6 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
 
   @override
   String get sunday => 'Sunday';
-
-  @override
-  String get weekday_short_monday => 'Mon';
-
-  @override
-  String get weekday_short_tuesday => 'Tue';
-
-  @override
-  String get weekday_short_wednesday => 'Wed';
-
-  @override
-  String get weekday_short_thursday => 'Thu';
-
-  @override
-  String get weekday_short_friday => 'Fri';
-
-  @override
-  String get weekday_short_saturday => 'Sat';
-
-  @override
-  String get weekday_short_sunday => 'Sun';
 
   @override
   String get theme => 'Theme';

@@ -4,17 +4,9 @@ import 'package:org_parser/org_parser.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'l10n/calendorg_localizations.dart';
-import 'main.dart';
 
 extension L10n on BuildContext {
   CalendorgLocalizations get l10n => CalendorgLocalizations.of(this);
-}
-
-CalendorgLocalizations get globalL10n {
-  final context = rootScaffoldMessengerKey.currentContext;
-  return context != null
-      ? context.l10n
-      : lookupCalendorgLocalizations(const Locale('en'));
 }
 
 String dayLabel(BuildContext context, DateTime day) {
@@ -45,42 +37,17 @@ String? validate(
   return null;
 }
 
-void sendError(String error) {
-  rootScaffoldMessengerKey.currentState?.showSnackBar(
-    SnackBar(
-      content: Text(
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-        error,
-      ),
-      backgroundColor: Colors.red,
-    ),
-  );
-}
-
 OrgDate dateTimeToOrgDate(DateTime dateTime) {
   final isoDate = dateTime.toIso8601String().split('T')[0].split('-');
   return (
     year: isoDate[0],
     month: isoDate[1],
     day: isoDate[2],
-    dayName: weekDayToString(globalL10n, dateTime.weekday),
+    dayName: _orgDayNames[dateTime.weekday - 1],
   );
 }
 
-String weekDayToString(CalendorgLocalizations l10n, int weekday) =>
-    switch (weekday) {
-      DateTime.monday => l10n.weekday_short_monday,
-      DateTime.tuesday => l10n.weekday_short_tuesday,
-      DateTime.wednesday => l10n.weekday_short_wednesday,
-      DateTime.thursday => l10n.weekday_short_thursday,
-      DateTime.friday => l10n.weekday_short_friday,
-      DateTime.saturday => l10n.weekday_short_saturday,
-      DateTime.sunday => l10n.weekday_short_sunday,
-      _ => throw ArgumentError.value(weekday, 'weekday'),
-    };
+const _orgDayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 OrgTime dateTimeToOrgTime(DateTime dateTime) {
   final isoTime = dateTime.toIso8601String().split('T')[1].split(':');

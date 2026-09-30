@@ -1,4 +1,5 @@
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/org_files_problem.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -7,6 +8,14 @@ class MockOrgFilesRepository extends Mock implements OrgFilesRepository {}
 
 void main() {
   group('OrgFilesState', () {
+    test('copyWith does not keep the problem', () {
+      final state = OrgFilesState.initial().copyWith(
+        problem: const FileReadFailed(),
+      );
+
+      expect(state.problem, isA<FileReadFailed>());
+      expect(state.copyWith(status: OrgFilesStatus.success).problem, isNull);
+    });
     test('', () {});
     group('initial', () {
       test('initial state should be loading', () {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:calendorg/core/files/cubit/org_files_cubit.dart';
+import 'package:calendorg/core/files/org_files_problem.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/entities/org_entry/entry_edit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
@@ -103,9 +104,12 @@ void main() {
         ).thenAnswer((_) async {});
 
         await cubit.changeInboxFile(inboxFile);
+        final problems = cubit.stream.map((s) => s.problem).toList();
         await cubit.addFilePath(inboxFile);
+        await cubit.close();
 
         expect(cubit.state.filePaths, isEmpty);
+        expect(await problems, [isA<InboxFileInAgendaFiles>()]);
       });
     });
     group('removeFilePath()', () {
@@ -198,6 +202,40 @@ void main() {
 
         expect(cubit.state.status, OrgFilesStatus.success);
       });
+
+      test('should report a failed save', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = await cubitWithFile(repository);
+        when(
+          () => repository.applyEdit(any(), any(), any(), any(), any()),
+        ).thenThrow(Exception('disk full'));
+
+        final problems = cubit.stream.map((s) => s.problem).toList();
+        await cubit.applyEdit(entry, const EntryEdit(newTitle: 'New'));
+        await cubit.close();
+
+        expect(await problems, contains(isA<SaveFailed>()));
+      });
+
+      test('should show the entries on disk when the file changed', () async {
+        final repository = MockOrgFilesRepository();
+        final cubit = await cubitWithFile(repository);
+        final onDisk = parseEntries(
+          OrgDocument.parse('* Exam\n<2026-05-01>\n* Added\n<2026-05-02>\n'),
+          fileHash: 'disk-hash',
+        );
+        when(
+          () => repository.applyEdit(any(), any(), any(), any(), any()),
+        ).thenThrow(FileChangedOnDisk(onDisk));
+
+        final problems = cubit.stream.map((s) => s.problem).toList();
+        await cubit.applyEdit(entry, const EntryEdit(newTitle: 'New'));
+        await cubit.close();
+
+        expect(cubit.state.entries, onDisk);
+        expect(cubit.state.problem, isNull);
+        expect(await problems, contains(isA<FileChangedOnDisk>()));
+      });
     });
     group('reload()', () {
       final oldEntry = parseEntries(
@@ -235,6 +273,34 @@ void main() {
         await cubit.init(todoStates);
         return cubit;
       }
+
+      test('should report saved files that are missing', () async {
+        final repository = MockOrgFilesRepository();
+        when(
+          () => repository.loadCachedEntries(any()),
+        ).thenAnswer((_) async => null);
+        when(() => repository.loadInitialState(any(), any())).thenAnswer(
+          (_) async => InitialState(
+            dirInfo: FakeDirectoryInfo(),
+            fileInfos: {},
+            inboxFile: null,
+            todoStates: todoStates,
+            entries: [],
+            missingFiles: ['old.org'],
+          ),
+        );
+        when(
+          () => repository.cacheOrgEntries(any(), any()),
+        ).thenAnswer((_) async {});
+        final cubit = OrgFilesCubit(repository);
+
+        await cubit.init(todoStates);
+
+        expect(
+          cubit.state.problem,
+          isA<FilesNotFound>().having((p) => p.names, 'names', ['old.org']),
+        );
+      });
 
       test('should emit the entries of changed files', () async {
         final repository = MockOrgFilesRepository();

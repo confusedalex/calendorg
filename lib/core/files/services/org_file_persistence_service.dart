@@ -5,7 +5,6 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:logging/logging.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../shared/config/preferences_service.dart';
-import '../../../util.dart';
 
 final _log = Logger('OrgFilePersistenceService');
 
@@ -76,8 +75,21 @@ class OrgFilePersistenceService {
     );
   }
 
-  Future<(Set<FileInfo>, FileInfo?, DirectoryInfo?)>
+  Future<
+    ({
+      Set<FileInfo> files,
+      FileInfo? inbox,
+      DirectoryInfo? directory,
+      List<String> missing,
+    })
+  >
   loadFilePreferences() async {
+    const none = (
+      files: <FileInfo>{},
+      inbox: null,
+      directory: null,
+      missing: <String>[],
+    );
     try {
       final filesString = await _prefs.getStringList(PrefKeys.agendaFiles);
       final inboxFileString = await _prefs.getString(PrefKeys.inboxFile);
@@ -91,9 +103,7 @@ class OrgFilePersistenceService {
           ? null
           : DirectoryInfo.fromJsonString(directoryString);
 
-      if (dirInfo == null) {
-        return (<FileInfo>{}, null, null);
-      }
+      if (dirInfo == null) return none;
 
       final missing = <String>[];
       Future<FileInfo?> resolve(String name) async {
@@ -107,16 +117,15 @@ class OrgFilePersistenceService {
         (filesString ?? const <String>[]).map(resolve),
       )).nonNulls.toSet();
 
-      if (missing.isNotEmpty) {
-        sendError(
-          globalL10n.error_files_not_found(missing.length, missing.join(', ')),
-        );
-      }
-
-      return (fileInfos, inboxFile, dirInfo);
+      return (
+        files: fileInfos,
+        inbox: inboxFile,
+        directory: dirInfo,
+        missing: missing,
+      );
     } on Exception catch (e, stack) {
       _log.warning('Error loading preferences', e, stack);
-      return (<FileInfo>{}, null, null);
+      return none;
     }
   }
 

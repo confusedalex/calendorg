@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import '../../../entities/org_entry/entry_edit.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/todo_states/todo_states_ignored.dart';
-import '../../../util.dart';
+import '../org_files_problem.dart';
 import '../services/org_files_repository.dart';
 
 part 'org_files_state.dart';
@@ -41,6 +41,9 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
           inboxFile: result.inboxFile,
           todoStates: result.todoStates,
           entries: result.entries,
+          problem: result.missingFiles.isEmpty
+              ? null
+              : FilesNotFound(result.missingFiles),
         ),
       );
       if (!_sameEntries(result.entries, cachedEntries)) {
@@ -85,7 +88,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
   Future<void> addFilePath(FileInfo? fileInfo) async {
     if (fileInfo == null) return;
     if (fileInfo.fileName == state.inboxFile?.fileName) {
-      sendError(globalL10n.error_inbox_file_to_agenda_files);
+      emit(state.copyWith(problem: const InboxFileInAgendaFiles()));
       return;
     }
 
@@ -114,7 +117,7 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
 
   Future<void> changeInboxFile(FileInfo fileInfo) async {
     if (state.filePaths.any((f) => f.fileName == fileInfo.fileName)) {
-      sendError(globalL10n.error_already_in_agenda_files);
+      emit(state.copyWith(problem: const AlreadyInAgendaFiles()));
       return;
     }
 
@@ -144,20 +147,25 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     final inboxFile = state.inboxFile;
     if (dirInfo == null || inboxFile == null) return;
 
-    final newEntries = await _repository.appendToInboxFile(
-      dirInfo,
-      inboxFile,
-      markup,
-      state.todoStates.ignored,
-    );
-    if (newEntries == null) return;
+    try {
+      final newEntries = await _repository.appendToInboxFile(
+        dirInfo,
+        inboxFile,
+        markup,
+        state.todoStates.ignored,
+      );
+      if (newEntries == null) return;
 
-    final entries = [
-      ...state.entries.where((e) => e.filePath != inboxFile.fileName),
-      ...newEntries,
-    ];
-    emit(state.copyWith(entries: entries));
-    await _repository.cacheOrgEntries(entries, state.todoStates);
+      final entries = [
+        ...state.entries.where((e) => e.filePath != inboxFile.fileName),
+        ...newEntries,
+      ];
+      emit(state.copyWith(entries: entries));
+      await _repository.cacheOrgEntries(entries, state.todoStates);
+    } on Exception catch (e, stack) {
+      _log.warning('Error appending to inbox file', e, stack);
+      emit(state.copyWith(problem: SaveFailed(e)));
+    }
   }
 
   Future<void> applyEdit(OrgEntry entry, EntryEdit edit) async {
@@ -182,8 +190,18 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
       ];
       emit(state.copyWith(entries: entries));
       await _repository.cacheOrgEntries(entries, state.todoStates);
+    } on FileChangedOnDisk catch (problem) {
+      final entries = [
+        ...state.entries.where((e) => e.filePath != fileInfo.fileName),
+        ...problem.entries,
+      ];
+      emit(state.copyWith(entries: entries, problem: problem));
+      await _repository.cacheOrgEntries(entries, state.todoStates);
+    } on OrgFilesProblem catch (problem) {
+      emit(state.copyWith(problem: problem));
     } on Exception catch (e, stack) {
       _log.warning('Error applying edit', e, stack);
+      emit(state.copyWith(problem: SaveFailed(e)));
     } finally {
       emit(state.copyWith(status: OrgFilesStatus.success));
     }

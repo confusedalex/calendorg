@@ -6,6 +6,7 @@ import '../../../core/files/cubit/org_files_cubit.dart';
 import '../../../core/tag_colors/tag_colors_cubit.dart';
 import '../../../core/todo_states_cubit.dart';
 import '../../../entities/occurrence/occurrence.dart';
+import '../../../shared/ui/errors.dart';
 import '../../../util.dart';
 import '../../event_view/ui/event_view.dart';
 
@@ -117,7 +118,7 @@ class EventCard extends StatelessWidget {
             onTap: () async {
               switch (filesStatus) {
                 case OrgFilesStatus.loading:
-                  sendError(context.l10n.error_edit_before_loading);
+                  showError(context, context.l10n.error_edit_before_loading);
                 case OrgFilesStatus.success:
                   await showDialog(
                     context: context,
@@ -127,7 +128,7 @@ class EventCard extends StatelessWidget {
                     ),
                   );
                 case OrgFilesStatus.failure:
-                  sendError(context.l10n.error_unknown);
+                  showError(context, context.l10n.error_unknown);
               }
             },
           ),

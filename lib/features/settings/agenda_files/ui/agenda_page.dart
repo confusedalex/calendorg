@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/files/org_files_problem.dart';
 import '../../../../core/files/services/org_files_repository.dart';
+import '../../../../shared/ui/errors.dart';
 import '../../../../util.dart';
 import 'agenda_files_dialog.dart';
 
@@ -55,21 +57,20 @@ class AgendaPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               onTap: () async {
+                final cubit = context.read<OrgFilesCubit>();
+                final dirInfo = state.directory;
                 try {
                   final fileInfo = await repository.pickFile();
+                  if (fileInfo == null || dirInfo == null) return;
 
-                  final valid = await repository.validateFileDirectory(
-                    fileInfo,
-                    state.directory,
-                  );
-
-                  if (valid && context.mounted) {
-                    await context.read<OrgFilesCubit>().changeInboxFile(
-                      fileInfo!,
-                    );
-                  }
+                  await repository.ensureInDirectory(fileInfo, dirInfo);
+                  await cubit.changeInboxFile(fileInfo);
+                } on OrgFilesProblem catch (problem) {
+                  if (context.mounted) showProblem(context, problem);
                 } on Exception catch (e) {
-                  sendError(globalL10n.error_loading_file(e));
+                  if (context.mounted) {
+                    showError(context, context.l10n.error_loading_file(e));
+                  }
                 }
               },
             ),

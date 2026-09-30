@@ -128,11 +128,13 @@ void main() {
         resolvesTo('folder.org', () async => fakeDirectoryInfo('folder'));
         resolvesTo('inbox.org', () async => fakeFileInfo('inbox'));
 
-        final (files, inbox, dir) = await service.loadFilePreferences();
+        final (:files, :inbox, :directory, :missing) = await service
+            .loadFilePreferences();
 
         expect(files.map((f) => f.fileName), ['work.org']);
         expect(inbox?.fileName, 'inbox.org');
-        expect(dir?.identifier, dirInfo.identifier);
+        expect(directory?.identifier, dirInfo.identifier);
+        expect(missing, unorderedEquals(['old.org', 'folder.org']));
       });
 
       test('should keep the files when the inbox file is missing', () async {
@@ -141,11 +143,13 @@ void main() {
         resolvesTo('folder.org', () async => fakeFileInfo('folder'));
         resolvesTo('inbox.org', () => Future.error(Exception('not found')));
 
-        final (files, inbox, dir) = await service.loadFilePreferences();
+        final (:files, :inbox, :directory, :missing) = await service
+            .loadFilePreferences();
 
         expect(files, hasLength(3));
         expect(inbox, isNull);
-        expect(dir, isNotNull);
+        expect(directory, isNotNull);
+        expect(missing, ['inbox.org']);
       });
     });
   });

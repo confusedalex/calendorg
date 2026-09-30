@@ -10,6 +10,7 @@ final class OrgFilesState {
     required this.todoStates,
     required this.entries,
     this.inboxFile,
+    this.problem,
   });
 
   final DirectoryInfo? directory;
@@ -18,6 +19,8 @@ final class OrgFilesState {
   final FileInfo? inboxFile;
   final OrgTodoStatesWithIgnored todoStates;
   final List<OrgEntry> entries;
+
+  final OrgFilesProblem? problem;
 
   factory OrgFilesState.initial() => OrgFilesState(
     directory: null,
@@ -38,6 +41,7 @@ final class OrgFilesState {
     OrgTodoStatesWithIgnored? todoStates,
     List<OrgEntry>? entries,
     ValueGetter<FileInfo?>? inboxFile,
+    OrgFilesProblem? problem,
   }) {
     return OrgFilesState(
       directory: directory != null ? directory() : this.directory,
@@ -46,6 +50,7 @@ final class OrgFilesState {
       todoStates: todoStates ?? this.todoStates,
       entries: entries ?? this.entries,
       inboxFile: inboxFile != null ? inboxFile() : this.inboxFile,
+      problem: problem,
     );
   }
 }

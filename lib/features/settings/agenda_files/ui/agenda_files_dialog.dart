@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/files/cubit/org_files_cubit.dart';
+import '../../../../core/files/org_files_problem.dart';
 import '../../../../core/files/services/org_files_repository.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
+import '../../../../shared/ui/errors.dart';
 import '../../../../util.dart';
 
 class AgendaFilesDialog extends StatelessWidget {
@@ -20,7 +22,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     bool validateFile(FileInfo? fileInfo) {
       if (fileInfo == null || fileInfo.fileName == null) {
-        sendError(context.l10n.file_could_not_open);
+        showError(context, context.l10n.file_could_not_open);
         return false;
       }
       return true;
@@ -28,7 +30,7 @@ class AgendaFilesDialog extends StatelessWidget {
 
     bool validateFileName(String? fileName) {
       if (fileName == null || filePaths.any((it) => it.fileName == fileName)) {
-        sendError(context.l10n.file_already_exists);
+        showError(context, context.l10n.file_already_exists);
         return false;
       }
       return true;
@@ -39,7 +41,7 @@ class AgendaFilesDialog extends StatelessWidget {
         return await repository.pickFile();
       } on Exception catch (e) {
         if (context.mounted) {
-          sendError(context.l10n.error_selecting_file(e));
+          showError(context, context.l10n.error_selecting_file(e));
         }
         return null;
       }
@@ -50,7 +52,7 @@ class AgendaFilesDialog extends StatelessWidget {
         return await repository.createEmptyFile('agenda.org');
       } on Exception catch (e) {
         if (context.mounted) {
-          sendError(context.l10n.error_creating_file(e));
+          showError(context, context.l10n.error_creating_file(e));
         }
         return null;
       }
@@ -61,13 +63,15 @@ class AgendaFilesDialog extends StatelessWidget {
       FileInfo? fileInfo,
     ) async {
       if (!validateFile(fileInfo)) return;
-      if (!(await repository.validateFileDirectory(
-        fileInfo,
-        orgFilesCubit.state.directory,
-      ))) {
+      final dirInfo = orgFilesCubit.state.directory;
+      if (dirInfo == null) return;
+      try {
+        await repository.ensureInDirectory(fileInfo!, dirInfo);
+      } on OrgFilesProblem catch (problem) {
+        if (context.mounted) showProblem(context, problem);
         return;
       }
-      if (!validateFileName(fileInfo?.fileName)) return;
+      if (!context.mounted || !validateFileName(fileInfo.fileName)) return;
       await orgFilesCubit.addFilePath(fileInfo);
     }
 
