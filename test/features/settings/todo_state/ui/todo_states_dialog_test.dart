@@ -24,21 +24,19 @@ void main() {
 
   Future<void> pumpWidgetToTester(dynamic tester) async {
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
-        supportedLocales: CalendorgLocalizations.supportedLocales,
-        home: Scaffold(
-          body: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => TodoStatesCubit(inMemoryPreferences()),
-              ),
-              BlocProvider(
-                create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
-              ),
-            ],
-            child: const TodoStatesDialog(),
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => TodoStatesCubit(inMemoryPreferences()),
           ),
+          BlocProvider(
+            create: (context) => OrgFilesCubit(MockOrgFilesRepository()),
+          ),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: CalendorgLocalizations.localizationsDelegates,
+          supportedLocales: CalendorgLocalizations.supportedLocales,
+          home: const Scaffold(body: TodoStatesDialog()),
         ),
       ),
     );

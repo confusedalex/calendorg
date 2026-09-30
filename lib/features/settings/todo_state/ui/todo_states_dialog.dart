@@ -6,7 +6,6 @@ import '../../../../entities/todo_states/todo_states.dart';
 import '../../../../entities/todo_states/todo_states_ignored.dart';
 import '../../../../shared/ui/editor_dialog_shell.dart';
 import '../../../../util.dart';
-import '../model/todo_state_add_dialog_cubit.dart';
 import 'todo_state_add_dialog.dart';
 
 class TodoStatesDialog extends StatelessWidget {
@@ -110,15 +109,7 @@ class _StatusSection extends StatelessWidget {
               label: Text(context.l10n.add),
               onPressed: () => showDialog(
                 context: context,
-                builder: (_) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(value: context.read<TodoStatesCubit>()),
-                    BlocProvider(
-                      create: (context) => TodoStateAddDialogCubit(),
-                    ),
-                  ],
-                  child: TodoStateAddDialog(status: status),
-                ),
+                builder: (_) => TodoStateAddDialog(status: status),
               ),
             ),
           ],
