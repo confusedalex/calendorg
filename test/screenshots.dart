@@ -137,7 +137,9 @@ OrgFilesState _filesState() {
       ),
     },
     todoStates: _todoStates,
-    entries: parseEntriesFromDocument('life.org', 'hash', document, {}),
+    entries: parseEntriesFromDocument('life.org', 'hash', document, {}, {
+      'DONE',
+    }),
   );
 }
 

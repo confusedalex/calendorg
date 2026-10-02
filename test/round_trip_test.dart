@@ -6,6 +6,7 @@ import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
 import 'package:calendorg/entities/org_entry/entry_edit.dart';
 import 'package:calendorg/entities/org_entry/org_entry.dart';
+import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/features/date_picker/model/date_picker_cubit.dart';
 import 'package:calendorg/shared/org_text_hash.dart';
 import 'package:calendorg/util.dart';
@@ -116,6 +117,9 @@ void main() {
     when(
       () => parserService.parseContentInBackground(any()),
     ).thenAnswer((i) async => OrgDocument.parse(i.positionalArguments.first));
+    when(
+      () => parserService.todoStates,
+    ).thenReturn(OrgTodoStatesWithIgnored.defaults);
     when(
       () => filePicker.writeFile(
         identifier: fileInfo.identifier,
@@ -363,6 +367,34 @@ void main() {
     });
   });
 
+  test('a second edit finds the entry after a title edit', () async {
+    source = '* Dentist\n<2026-10-05 Mon>\n';
+    final entry = parseEntries(
+      OrgDocument.parse(source),
+      fileHash: orgTextHash(source),
+    ).single;
+
+    final afterEdit = await repository.applyEdit(
+      dirInfo,
+      fileInfo,
+      entry,
+      const EntryEdit(newTitle: 'Doctor'),
+      [],
+    );
+    source = written!;
+
+    final edited = afterEdit!.single;
+    expect(edited.title, 'Doctor');
+    await repository.applyEdit(
+      dirInfo,
+      fileInfo,
+      edited,
+      const EntryEdit(newTitle: 'Doc'),
+      [],
+    );
+    expect(written, '* Doc\n<2026-10-05 Mon>\n');
+  });
+
   group('file changed on disk', () {
     const onDisk =
         '* Exam\n<2026-05-01 Fri>\n* Added outside\n<2026-05-02 Sat>\n';
@@ -400,6 +432,59 @@ void main() {
 
       expect(entries.map((e) => e.fileHash).toSet(), {orgTextHash(onDisk)});
       expect(entries.map((e) => e.title), ['Exam', 'Added outside']);
+    });
+  });
+
+  group('habit', () {
+    const habit = '''
+* TODO Run                                                          :sport:
+SCHEDULED: <2026-10-06 Tue .+1d/3d>
+:PROPERTIES:
+:STYLE:    habit
+:END:
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2026-10-05 Mon 09:00]
+:END:
+Run around the lake.
+
+* Other
+<2026-10-09 Fri>
+''';
+
+    test('marking a habit as done writes what Emacs writes', () async {
+      source = habit;
+      final entry =
+          parseEntries(
+                OrgDocument.parse(habit),
+                fileHash: orgTextHash(habit),
+              ).first
+              as OrgHabit;
+
+      final entries = await repository.markHabitDone(
+        dirInfo,
+        fileInfo,
+        entry,
+        DateTime(2026, 10, 7, 8, 12),
+        [],
+      );
+
+      expect(written, '''
+* TODO Run                                                          :sport:
+SCHEDULED: <2026-10-08 Thu .+1d/3d>
+:PROPERTIES:
+:STYLE:    habit
+:LAST_REPEAT: [2026-10-07 Wed 08:12]
+:END:
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2026-10-07 Wed 08:12]
+- State "DONE"       from "TODO"       [2026-10-05 Mon 09:00]
+:END:
+Run around the lake.
+
+* Other
+<2026-10-09 Fri>
+''');
+      expect((entries!.first as OrgHabit).completions, [20261005, 20261007]);
     });
   });
 }

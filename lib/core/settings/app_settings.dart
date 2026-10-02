@@ -11,12 +11,16 @@ class AppSettings {
     this.startingDay = StartingDayOfWeek.monday,
     this.tagColors = const [],
     this.todoStates = OrgTodoStatesWithIgnored.defaults,
+    this.showHabits = true,
   });
 
   final ThemeMode themeMode;
   final StartingDayOfWeek startingDay;
   final List<TagColor> tagColors;
   final OrgTodoStatesWithIgnored todoStates;
+
+  /// Show the habits tab. The tab shows only if a habit exists.
+  final bool showHabits;
 
   Color tagColorOf(OrgEntry entry) => tagColors
       .firstWhere(
@@ -30,10 +34,12 @@ class AppSettings {
     StartingDayOfWeek? startingDay,
     List<TagColor>? tagColors,
     OrgTodoStatesWithIgnored? todoStates,
+    bool? showHabits,
   }) => AppSettings(
     themeMode: themeMode ?? this.themeMode,
     startingDay: startingDay ?? this.startingDay,
     tagColors: tagColors ?? this.tagColors,
     todoStates: todoStates ?? this.todoStates,
+    showHabits: showHabits ?? this.showHabits,
   );
 }

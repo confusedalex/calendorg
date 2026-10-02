@@ -183,20 +183,40 @@ class OrgFilesCubit extends Cubit<OrgFilesState> {
     }
   }
 
-  Future<void> applyEdit(OrgEntry entry, EntryEdit edit) async {
+  Future<void> applyEdit(OrgEntry entry, EntryEdit edit) => _editFile(
+    entry,
+    (dirInfo, fileInfo) => _repository.applyEdit(
+      dirInfo,
+      fileInfo,
+      entry,
+      edit,
+      state.todoStates.ignored,
+    ),
+  );
+
+  Future<void> markHabitDone(OrgHabit habit) => _editFile(
+    habit,
+    (dirInfo, fileInfo) => _repository.markHabitDone(
+      dirInfo,
+      fileInfo,
+      habit,
+      DateTime.now(),
+      state.todoStates.ignored,
+    ),
+  );
+
+  Future<void> _editFile(
+    OrgEntry entry,
+    Future<List<OrgEntry>?> Function(DirectoryInfo dirInfo, FileInfo fileInfo)
+    edit,
+  ) async {
     final dirInfo = state.directory;
     final fileInfo = _fileInfoOf(entry.filePath);
     if (dirInfo == null || fileInfo == null) return;
 
     emit(state.copyWith(status: OrgFilesStatus.loading));
     try {
-      final newEntries = await _repository.applyEdit(
-        dirInfo,
-        fileInfo,
-        entry,
-        edit,
-        state.todoStates.ignored,
-      );
+      final newEntries = await edit(dirInfo, fileInfo);
       if (newEntries == null) return;
 
       final entries = [

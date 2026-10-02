@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:org_parser/org_parser.dart';
 
 import '../../../entities/org_entry/entry_edit.dart';
+import '../../../entities/org_entry/habit_completion.dart';
 import '../../../entities/org_entry/org_entry.dart';
 import '../../../entities/org_entry/org_entry_locator.dart';
 import '../../../entities/org_entry/org_entry_parser.dart';
@@ -91,6 +92,7 @@ class OrgFilesRepository {
             parsed.hash,
             parsed.document,
             ignored,
+            _doneStates,
           );
         } on Exception catch (e, stack) {
           _log.warning('Error loading file $fileName', e, stack);
@@ -171,6 +173,8 @@ class OrgFilesRepository {
 
   OrgTodoStatesWithIgnored get todoStates => _parserService.todoStates;
 
+  Set<String> get _doneStates => todoStates.done.toSet();
+
   set todoStates(OrgTodoStatesWithIgnored states) =>
       _parserService.todoStates = states;
 
@@ -193,6 +197,7 @@ class OrgFilesRepository {
       parsed.hash,
       parsed.document,
       ignoredTodoStates.toSet(),
+      _doneStates,
     );
   }
 
@@ -202,6 +207,55 @@ class OrgFilesRepository {
     OrgEntry entry,
     EntryEdit edit,
     List<String> ignoredTodoStates,
+  ) => _editSection(dirInfo, fileInfo, entry, ignoredTodoStates, (
+    document,
+    section,
+  ) {
+    final replacements = replacementsFor(section, entry, edit);
+    if (replacements.isEmpty) return null;
+
+    return replacements
+            .fold<OrgZipper>(
+              document.edit(),
+              (builder, nodes) => builder.find(nodes.$1)!.replace(nodes.$2),
+            )
+            .commit()
+        as OrgDocument;
+  });
+
+  Future<List<OrgEntry>?> markHabitDone(
+    DirectoryInfo dirInfo,
+    FileInfo fileInfo,
+    OrgHabit habit,
+    DateTime now,
+    List<String> ignoredTodoStates,
+  ) => _editSection(
+    dirInfo,
+    fileInfo,
+    habit,
+    ignoredTodoStates,
+    (document, section) =>
+        document
+                .editNode(section)!
+                .replace(
+                  completeHabit(
+                    section,
+                    doneKeyword: todoStates.done.firstOrNull ?? 'DONE',
+                    now: now,
+                  ),
+                )
+                .commit()
+            as OrgDocument,
+  );
+
+  /// Reads the file of [entry], applies [edit] to its section, and writes the
+  /// result. If [edit] returns null, nothing changes.
+  Future<List<OrgEntry>?> _editSection(
+    DirectoryInfo dirInfo,
+    FileInfo fileInfo,
+    OrgEntry entry,
+    List<String> ignoredTodoStates,
+    OrgDocument? Function(OrgDocument document, OrgSection section) edit,
   ) async {
     final fileName = fileInfo.fileName;
     if (fileName == null) return null;
@@ -218,6 +272,7 @@ class OrgFilesRepository {
           parsed.hash,
           parsed.document,
           ignored,
+          _doneStates,
         ),
       );
     }
@@ -225,24 +280,19 @@ class OrgFilesRepository {
     final section = locateSection(parsed.document, entry.locator);
     if (section == null) throw EntryNotFound(entry.title);
 
-    final replacements = replacementsFor(section, entry, edit);
-    if (replacements.isEmpty) return null;
+    final newDocument = edit(parsed.document, section);
+    if (newDocument == null) return null;
 
-    final newDocument =
-        replacements
-                .fold<OrgZipper>(
-                  parsed.document.edit(),
-                  (builder, nodes) => builder.find(nodes.$1)!.replace(nodes.$2),
-                )
-                .commit()
-            as OrgDocument;
-    await _writeText(resolved.identifier, newDocument.toMarkup());
+    final newText = newDocument.toMarkup();
+    await _writeText(resolved.identifier, newText);
 
+    final written = await _parseText(newText);
     return parseEntriesFromDocument(
       entry.filePath,
-      orgTextHash(newDocument.toMarkup()),
-      newDocument,
+      written.hash,
+      written.document,
       ignored,
+      _doneStates,
     );
   }
 

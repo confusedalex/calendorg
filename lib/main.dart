@@ -13,9 +13,11 @@ import 'core/logging.dart';
 import 'core/settings/app_settings.dart';
 import 'core/settings/settings_cubit.dart';
 import 'core/todo_states_listener.dart';
+import 'entities/org_entry/org_entry.dart';
 import 'features/calendar/ui/calendar_page.dart';
 import 'features/diff_view/model/diff_view_cubit.dart';
 import 'features/diff_view/ui/diff_view_page.dart';
+import 'features/habits/ui/habits_page.dart';
 import 'features/settings/settings_overview/ui/settings_page.dart';
 import 'features/today_page/ui/today_page.dart';
 import 'l10n/calendorg_localizations.dart';
@@ -106,8 +108,10 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+enum _Tab { diff, agenda, calendar, habits, settings }
+
 class _HomePageState extends State<HomePage> {
-  var index = 0;
+  var _tab = _Tab.agenda;
   late var _showSetup = widget.showSetup;
   late final AppLifecycleListener _lifecycleListener;
 
@@ -139,19 +143,36 @@ class _HomePageState extends State<HomePage> {
       return IntroductionPage(onDone: () => unawaited(_finishSetup()));
     }
 
-    final List pages = [
-      if (widget.showDebugTab) const DiffViewPage(),
-      const TodayPage(),
-      CalendarPage(DateTime.now()),
-      const SettingsPage(),
+    final showHabits =
+        context.select((SettingsCubit cubit) => cubit.state.showHabits) &&
+        context.select(
+          (OrgFilesCubit cubit) =>
+              cubit.state.entries.any((e) => e is OrgHabit),
+        );
+    final tabs = [
+      if (widget.showDebugTab) _Tab.diff,
+      _Tab.agenda,
+      _Tab.calendar,
+      if (showHabits) _Tab.habits,
+      _Tab.settings,
     ];
+    final tab = tabs.contains(_tab) ? _tab : _Tab.agenda;
+
     return BlocConsumer<OrgFilesCubit, OrgFilesState>(
       listenWhen: (_, filesState) => filesState.problem != null,
       listener: (context, filesState) =>
           showProblem(context, filesState.problem!),
       builder: (context, filesState) {
         return Scaffold(
-          body: SafeArea(child: pages[index]),
+          body: SafeArea(
+            child: switch (tab) {
+              _Tab.diff => const DiffViewPage(),
+              _Tab.agenda => const TodayPage(),
+              _Tab.calendar => CalendarPage(DateTime.now()),
+              _Tab.habits => const HabitsPage(),
+              _Tab.settings => const SettingsPage(),
+            },
+          ),
           bottomNavigationBar: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -159,30 +180,37 @@ class _HomePageState extends State<HomePage> {
                 const LinearProgressIndicator(minHeight: 2),
               NavigationBar(
                 onDestinationSelected: (value) => setState(() {
-                  index = value;
+                  _tab = tabs[value];
                 }),
-                selectedIndex: index,
+                selectedIndex: tabs.indexOf(tab),
                 destinations: [
-                  if (widget.showDebugTab)
-                    const NavigationDestination(
-                      icon: Icon(Icons.compare_arrows),
-                      label: 'Diff',
-                    ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.view_agenda_outlined),
-                    selectedIcon: const Icon(Icons.view_agenda),
-                    label: context.l10n.nav_agenda,
-                  ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.calendar_month_outlined),
-                    selectedIcon: const Icon(Icons.calendar_month),
-                    label: context.l10n.nav_calendar,
-                  ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.settings_outlined),
-                    selectedIcon: const Icon(Icons.settings),
-                    label: context.l10n.nav_settings,
-                  ),
+                  for (final tab in tabs)
+                    switch (tab) {
+                      _Tab.diff => const NavigationDestination(
+                        icon: Icon(Icons.compare_arrows),
+                        label: 'Diff',
+                      ),
+                      _Tab.agenda => NavigationDestination(
+                        icon: const Icon(Icons.view_agenda_outlined),
+                        selectedIcon: const Icon(Icons.view_agenda),
+                        label: context.l10n.nav_agenda,
+                      ),
+                      _Tab.calendar => NavigationDestination(
+                        icon: const Icon(Icons.calendar_month_outlined),
+                        selectedIcon: const Icon(Icons.calendar_month),
+                        label: context.l10n.nav_calendar,
+                      ),
+                      _Tab.habits => NavigationDestination(
+                        icon: const Icon(Icons.task_alt_outlined),
+                        selectedIcon: const Icon(Icons.task_alt),
+                        label: context.l10n.nav_habits,
+                      ),
+                      _Tab.settings => NavigationDestination(
+                        icon: const Icon(Icons.settings_outlined),
+                        selectedIcon: const Icon(Icons.settings),
+                        label: context.l10n.nav_settings,
+                      ),
+                    },
                 ],
               ),
             ],

@@ -18,6 +18,7 @@ abstract final class PrefKeys {
   static const doneStates = PrefKey<String>('doneStates');
   static const ignoredStates = PrefKey<String>('ignoredStates');
   static const showSetup = PrefKey<bool>('showSetup');
+  static const showHabits = PrefKey<bool>('showHabits');
 }
 
 class PreferencesService {

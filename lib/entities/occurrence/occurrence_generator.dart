@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:org_parser/org_parser.dart';
 
+import '../day_key.dart';
 import '../org_entry/org_entry.dart';
 import 'occurrence.dart';
 
-typedef DayKey = int;
-
-DayKey dayKeyOf(DateTime date) =>
-    date.year * 10000 + date.month * 100 + date.day;
-
-DayKey _dayKeyOfOrgDate(OrgDate date) =>
-    int.parse(date.year) * 10000 +
-    int.parse(date.month) * 100 +
-    int.parse(date.day);
-
-DateTime _dateOfDayKey(DayKey key) =>
-    DateTime(key ~/ 10000, key ~/ 100 % 100, key % 100);
+export '../day_key.dart';
 
 DayKey? _dayKeyOfTimestamp(OrgTimestamp timestamp) => switch (timestamp) {
-  OrgSimpleTimestamp() => _dayKeyOfOrgDate(timestamp.date),
-  OrgTimeRangeTimestamp() => _dayKeyOfOrgDate(timestamp.date),
+  OrgSimpleTimestamp() => dayKeyOfOrgDate(timestamp.date),
+  OrgTimeRangeTimestamp() => dayKeyOfOrgDate(timestamp.date),
   OrgDateRangeTimestamp() => null,
 };
 
@@ -43,13 +33,22 @@ List<Occurrence> occurrencesForInDays(
 ) {
   final occurrences = <Occurrence>[];
 
-  void addOccurrences(OrgTimestamp? timestamp, OccurrenceKind kind) {
+  void addOccurrences(
+    OrgTimestamp? timestamp,
+    OccurrenceKind kind, {
+    bool repeat = true,
+  }) {
     if (timestamp == null) return;
-    for (final key in _daysInWindow(timestamp, windowStart, windowEnd)) {
+    for (final key in _daysInWindow(
+      timestamp,
+      windowStart,
+      windowEnd,
+      repeat: repeat,
+    )) {
       occurrences.add(
         Occurrence(
           entry: entry,
-          date: _dateOfDayKey(key),
+          date: dateOfDayKey(key),
           kind: kind,
           timestamp: timestamp,
         ),
@@ -60,9 +59,12 @@ List<Occurrence> occurrencesForInDays(
   for (final timestamp in entry.timestamps) {
     addOccurrences(timestamp, OccurrenceKind.timestamp);
   }
+  // A habit repeats too often for the calendar. Like the org agenda, show
+  // only the next repetition.
   addOccurrences(
     entry.scheduled?.value as OrgTimestamp?,
     OccurrenceKind.scheduled,
+    repeat: entry is! OrgHabit,
   );
   addOccurrences(
     entry.deadline?.value as OrgTimestamp?,
@@ -76,18 +78,19 @@ List<Occurrence> occurrencesForInDays(
 List<DayKey> _daysInWindow(
   OrgTimestamp timestamp,
   DayKey windowStart,
-  DayKey windowEnd,
-) {
+  DayKey windowEnd, {
+  required bool repeat,
+}) {
   if (timestamp is! OrgDateRangeTimestamp) {
     final key = _dayKeyOfTimestamp(timestamp)!;
-    final repeater = _repeaterOf(timestamp);
+    final repeater = repeat ? _repeaterOf(timestamp) : null;
     final step = int.tryParse(repeater?.value ?? '') ?? 0;
     if (repeater == null || step <= 0) {
       if (key < windowStart || key > windowEnd) return const [];
       return [key];
     }
 
-    final base = _dateOfDayKey(key);
+    final base = dateOfDayKey(key);
     final days = <DayKey>[];
     for (var n = 0; ; n++) {
       final day = dayKeyOf(base.addModifier(n * step, repeater.unit));
@@ -107,7 +110,7 @@ List<DayKey> _daysInWindow(
   final rangeEnd = startDateKey < endDateKey ? endDateKey : startDateKey;
   if (rangeEnd < windowStart || rangeStart > windowEnd) return const [];
 
-  var current = _dateOfDayKey(
+  var current = dateOfDayKey(
     rangeStart < windowStart ? windowStart : rangeStart,
   );
   final last = rangeEnd > windowEnd ? windowEnd : rangeEnd;

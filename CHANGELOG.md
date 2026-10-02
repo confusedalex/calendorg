@@ -3,6 +3,7 @@
 ### Added
 - Add introduction screen to guide initial setup
 ### Fixed
+- Reparse files on editing
 - Set min/max date for the calendar to 1900-01-01 and 2100-01-01
 - Canceling the directory picker won't throw an error
 - Remember start/endtime when re-enterin date picker

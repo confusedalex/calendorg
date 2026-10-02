@@ -26,6 +26,7 @@ class SettingsCubit extends Cubit<AppSettings> {
           startingDay: await _loadStartingDay(prefs),
           tagColors: await _loadTagColors(prefs),
           todoStates: await _loadTodoStates(prefs),
+          showHabits: await _loadShowHabits(prefs),
         ),
       );
 
@@ -37,6 +38,11 @@ class SettingsCubit extends Cubit<AppSettings> {
   Future<void> setStartingDay(StartingDayOfWeek startingDay) async {
     emit(state.copyWith(startingDay: startingDay));
     await _prefs.setInt(PrefKeys.startingDay, startingDay.index);
+  }
+
+  Future<void> setShowHabits({required bool showHabits}) async {
+    emit(state.copyWith(showHabits: showHabits));
+    await _prefs.setBool(PrefKeys.showHabits, value: showHabits);
   }
 
   Future<void> addTagColor(TagColor tagColor) => _setTagColors([
@@ -106,6 +112,14 @@ class SettingsCubit extends Cubit<AppSettings> {
           StartingDayOfWeek.monday;
     } on Exception {
       return StartingDayOfWeek.monday;
+    }
+  }
+
+  static Future<bool> _loadShowHabits(PreferencesService prefs) async {
+    try {
+      return await prefs.getBool(PrefKeys.showHabits) ?? true;
+    } on Exception {
+      return true;
     }
   }
 
