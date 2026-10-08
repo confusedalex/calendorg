@@ -40,11 +40,5 @@ void main() {
 
       expect(find.text('Select file'), findsOneWidget);
     });
-
-    testWidgets('should find "create file" button', (tester) async {
-      await pumpWidgetToTester(tester);
-
-      expect(find.text('Create file'), findsOneWidget);
-    });
   });
 }

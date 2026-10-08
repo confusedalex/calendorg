@@ -28,7 +28,6 @@
   "file_could_not_open": "The file could not be opened.",
   "file_already_exists": "This file is already in the list.",
   "select_file": "Select file",
-  "create_file": "Create file",
   "agenda_files": "Agenda files",
   "file_name_couldnt_load": "File name could not be loaded",
   "pick_org_directory": "Pick org directory",
