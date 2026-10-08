@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## 1.8.0 - 2026-10-08
 ### Added
 - Add introduction screen to guide initial setup
 ### Fixed
