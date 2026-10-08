@@ -10,4 +10,11 @@
   </p>
   
   <p>The mobile org-mode calendar app</p>
+
+  <p>
+    <img src="screenshots/1_agenda.png" alt="Agenda" width="24%" />
+    <img src="screenshots/2_calendar.png" alt="Calendar" width="24%" />
+    <img src="screenshots/3_edit_event.png" alt="Edit event" width="24%" />
+    <img src="screenshots/4_tag_colors.png" alt="Tag colors" width="24%" />
+  </p>
 </div>
