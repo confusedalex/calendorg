@@ -27,7 +27,7 @@ depends = ["pub:get"]
 depends = ["format", "analyze", "test"]
 
 [tasks.release]
-depends = ["build:apk-split"]
+depends = ["build:apk"]
 
 [settings]
 lockfile = true
