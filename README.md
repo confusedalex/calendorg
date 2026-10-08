@@ -1,3 +1,6 @@
+> [!WARNING]
+> Calendorg is still very much in a beta state. Please always backup your org mode files, so you don't experience data loss.
+
 <div align="center">
   <img src="https://raw.githubusercontent.com/confusedalex/calendorg/refs/heads/main/assets/calendorg-round.png" style="width: 20%;">
   
