@@ -55,9 +55,6 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get select_file => 'Select file';
 
   @override
-  String get create_file => 'Create file';
-
-  @override
   String get agenda_files => 'Agenda files';
 
   @override

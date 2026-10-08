@@ -181,12 +181,6 @@ abstract class CalendorgLocalizations {
   /// **'Select file'**
   String get select_file;
 
-  /// No description provided for @create_file.
-  ///
-  /// In en, this message translates to:
-  /// **'Create file'**
-  String get create_file;
-
   /// No description provided for @agenda_files.
   ///
   /// In en, this message translates to:

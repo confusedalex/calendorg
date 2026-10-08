@@ -51,18 +51,6 @@ class AgendaFilesDialog extends StatelessWidget {
       }
     }
 
-    Future<FileInfo?> createGetFileInfo() async {
-      try {
-        return await repository.createEmptyFile('agenda.org');
-      } on Exception catch (e, stack) {
-        _log.warning('Error creating file', e, stack);
-        if (context.mounted) {
-          showError(context, context.l10n.error_creating_file);
-        }
-        return null;
-      }
-    }
-
     Future<void> onPressed(
       OrgFilesCubit orgFilesCubit,
       FileInfo? fileInfo,
@@ -81,12 +69,6 @@ class AgendaFilesDialog extends StatelessWidget {
     }
 
     final buttons = [
-      TextButton.icon(
-        onPressed: () async =>
-            onPressed(orgFilesCubit, await createGetFileInfo()),
-        icon: const Icon(Icons.note_add_outlined),
-        label: Text(context.l10n.create_file),
-      ),
       FilledButton.tonalIcon(
         onPressed: () async =>
             onPressed(orgFilesCubit, await selectGetFileInfo()),
