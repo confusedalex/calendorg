@@ -5,7 +5,6 @@ import 'package:org_parser/org_parser.dart';
 List<OrgEntry> parseEntries(
   OrgDocument document, {
   Set<String> ignored = const {},
-  Set<String> done = const {'DONE'},
   String filePath = 'test.org',
   String fileHash = 'hash',
-}) => parseEntriesFromDocument(filePath, fileHash, document, ignored, done);
+}) => parseEntriesFromDocument(filePath, fileHash, document, ignored);

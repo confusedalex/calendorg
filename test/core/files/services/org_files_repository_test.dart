@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
 import 'package:calendorg/core/files/services/org_files_repository.dart';
 import 'package:calendorg/core/files/services/org_parser_service.dart';
-import 'package:calendorg/entities/todo_states/todo_states_ignored.dart';
 import 'package:calendorg/shared/org_text_hash.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,9 +64,6 @@ void main() {
     when(
       () => parserService.parseContentInBackground(markup),
     ).thenAnswer((_) async => OrgDocument.parse(markup));
-    when(
-      () => parserService.todoStates,
-    ).thenReturn(OrgTodoStatesWithIgnored.defaults);
   });
 
   group('parseEntriesForFiles', () {

@@ -1,6 +1,5 @@
 import 'package:org_parser/org_parser.dart';
 
-import '../day_key.dart';
 import 'entry_edit.dart';
 import 'org_entry.dart';
 import 'org_entry_locator.dart';
@@ -9,19 +8,12 @@ final _whitespaceRegExp = RegExp(r'\s+');
 final _timestampRegExp = RegExp(
   r'\s?<[0-9]{4}-[0-9]{2}-[0-9]{2}[^>]*>(--<[0-9]{4}-[0-9]{2}-[0-9]{2}[^>]*>)?',
 );
-// A state change note, like `- State "DONE" from "TODO" [2025-05-05 Mon]`.
-// See `org-habit-parse-todo`.
-final _stateChangeRegExp = RegExp(
-  r'^[ \t]*-[ \t]+State[ \t]+"([^"]+)".*?\[([0-9]{4})-([0-9]{2})-([0-9]{2})',
-  multiLine: true,
-);
 
 List<OrgEntry> parseEntriesFromDocument(
   String filePath,
   String fileHash,
   OrgDocument document,
   Set<String> ignoredTodoStates,
-  Set<String> doneTodoStates,
 ) {
   final List<OrgEntry> entries = [];
 
@@ -42,7 +34,6 @@ List<OrgEntry> parseEntriesFromDocument(
       fileHash,
       tags,
       locator,
-      doneTodoStates,
     );
     if (event != null) entries.add(event);
   });
@@ -56,7 +47,6 @@ OrgEntry? _extractEventFromSection(
   String fileHash,
   List<String> tags,
   OrgEntryLocator locator,
-  Set<String> doneTodoStates,
 ) {
   final foundTimestamps = _extractTimestamps(section);
   final headline = _sanitizeHeadline(section);
@@ -68,23 +58,6 @@ OrgEntry? _extractEventFromSection(
       planning.$2 == null &&
       keyword == null) {
     return null;
-  }
-
-  if (planning.$1 case final scheduled?
-      when _isHabit(section, scheduled.value)) {
-    return OrgHabit(
-      todoKeyword: keyword,
-      locator: locator,
-      containsTimestampInHeadline: _containsTimestampInHeadline(section),
-      title: headline,
-      tags: tags,
-      timestamps: foundTimestamps,
-      scheduled: scheduled,
-      deadline: planning.$2,
-      filePath: filePath,
-      fileHash: fileHash,
-      completions: _completionsOf(section, doneTodoStates),
-    );
   }
 
   return OrgEntry(
@@ -211,24 +184,6 @@ List<OrgTimestamp> _extractTimestamps(OrgSection section) {
     child.visit(visitor);
   }
   return foundTimestamps;
-}
-
-bool _isHabit(OrgSection section, OrgNode scheduled) =>
-    scheduled is OrgSimpleTimestamp &&
-    scheduled.repeats &&
-    section
-        .getProperties(':STYLE:')
-        .any((style) => style.toLowerCase() == 'habit');
-
-List<DayKey> _completionsOf(OrgSection section, Set<String> doneTodoStates) {
-  final days = {
-    for (final match in _stateChangeRegExp.allMatches(
-      section.content?.toMarkup() ?? '',
-    ))
-      if (doneTodoStates.contains(match[1]))
-        int.parse('${match[2]}${match[3]}${match[4]}'),
-  };
-  return days.toList()..sort();
 }
 
 bool _containsTimestampInHeadline(OrgSection section) =>

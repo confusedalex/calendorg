@@ -115,12 +115,6 @@ abstract class CalendorgLocalizations {
   /// **'Settings'**
   String get nav_settings;
 
-  /// No description provided for @nav_habits.
-  ///
-  /// In en, this message translates to:
-  /// **'Habits'**
-  String get nav_habits;
-
   /// No description provided for @add.
   ///
   /// In en, this message translates to:
@@ -660,78 +654,6 @@ abstract class CalendorgLocalizations {
   /// In en, this message translates to:
   /// **'Finish Setup'**
   String get intro_finish;
-
-  /// No description provided for @habits.
-  ///
-  /// In en, this message translates to:
-  /// **'Habits'**
-  String get habits;
-
-  /// No description provided for @habit_every.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Every day} other{Every {count} days}}'**
-  String habit_every(int count);
-
-  /// No description provided for @habit_every_range.
-  ///
-  /// In en, this message translates to:
-  /// **'Every {min} to {max} days'**
-  String habit_every_range(int min, int max);
-
-  /// No description provided for @habit_streak.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No streak} other{{count} in a row}}'**
-  String habit_streak(int count);
-
-  /// No description provided for @habit_mark_done.
-  ///
-  /// In en, this message translates to:
-  /// **'Mark as done today'**
-  String get habit_mark_done;
-
-  /// No description provided for @habit_done_today.
-  ///
-  /// In en, this message translates to:
-  /// **'Done today'**
-  String get habit_done_today;
-
-  /// No description provided for @habit_status_early.
-  ///
-  /// In en, this message translates to:
-  /// **'Not due'**
-  String get habit_status_early;
-
-  /// No description provided for @habit_status_due.
-  ///
-  /// In en, this message translates to:
-  /// **'Due'**
-  String get habit_status_due;
-
-  /// No description provided for @habit_status_last_day.
-  ///
-  /// In en, this message translates to:
-  /// **'Last day'**
-  String get habit_status_last_day;
-
-  /// No description provided for @habit_status_overdue.
-  ///
-  /// In en, this message translates to:
-  /// **'Overdue'**
-  String get habit_status_overdue;
-
-  /// No description provided for @settings_show_habits.
-  ///
-  /// In en, this message translates to:
-  /// **'Habits tab'**
-  String get settings_show_habits;
-
-  /// No description provided for @settings_show_habits_hint.
-  ///
-  /// In en, this message translates to:
-  /// **'Shows entries with the property STYLE: habit'**
-  String get settings_show_habits_hint;
 }
 
 class _CalendorgLocalizationsDelegate

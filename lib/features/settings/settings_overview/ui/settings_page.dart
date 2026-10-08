@@ -22,9 +22,6 @@ class SettingsPage extends StatelessWidget {
     final themeMode = context.select(
       (SettingsCubit cubit) => cubit.state.themeMode,
     );
-    final showHabits = context.select(
-      (SettingsCubit cubit) => cubit.state.showHabits,
-    );
     final directory = context.select(
       (OrgFilesCubit cubit) => cubit.state.directory?.fileName,
     );
@@ -67,14 +64,6 @@ class SettingsPage extends StatelessWidget {
             context: context,
             builder: (_) => const TodoStatesDialog(),
           ),
-        ),
-        SwitchListTile(
-          secondary: const Icon(Icons.task_alt_outlined),
-          title: Text(context.l10n.settings_show_habits),
-          subtitle: Text(context.l10n.settings_show_habits_hint),
-          value: showHabits,
-          onChanged: (value) =>
-              context.read<SettingsCubit>().setShowHabits(showHabits: value),
         ),
         _SectionHeader(context.l10n.settings_section_appearance),
         ListTile(

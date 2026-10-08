@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:calendorg/core/files/services/org_file_persistence_service.dart';
-import 'package:calendorg/entities/org_entry/org_entry.dart';
 import 'package:calendorg/shared/config/preferences_service.dart';
 import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -77,10 +76,7 @@ void main() {
           await prefs.getStringList(PrefKeys.entriesCache),
           entries.map((entry) => entry.toJson()).toList(),
         );
-        expect(
-          await prefs.getString(PrefKeys.entriesCacheKey),
-          'v2|TODO|DONE|',
-        );
+        expect(await prefs.getString(PrefKeys.entriesCacheKey), 'TODO|DONE|');
       });
     });
     group('loadCachedOrgEntries()', () {
@@ -100,32 +96,6 @@ void main() {
         await service.saveEntriesCache(entries, 'TODO|DONE|');
 
         expect(await service.loadCachedOrgEntries('TODO|DONE|LATER'), isNull);
-      });
-      test('should return null for a cache from an older version', () async {
-        final entries = parseEntries(OrgDocument.parse('* Exam\n<2026-05-01>'));
-        await service.saveEntriesCache(entries, 'TODO|DONE|');
-        await prefs.setString(PrefKeys.entriesCacheKey, 'TODO|DONE|');
-
-        expect(await service.loadCachedOrgEntries('TODO|DONE|'), isNull);
-      });
-      test('should keep habits as habits', () async {
-        final entries = parseEntries(
-          OrgDocument.parse('''
-* TODO Run
-SCHEDULED: <2026-05-02 Sat .+1d/3d>
-:PROPERTIES:
-:STYLE: habit
-:END:
-- State "DONE"       from "TODO"       [2026-05-01 Fri 08:00]
-'''),
-        );
-        await service.saveEntriesCache(entries, 'TODO|DONE|');
-
-        final cached = await service.loadCachedOrgEntries('TODO|DONE|');
-
-        final habit = cached!.single as OrgHabit;
-        expect(habit.completions, [20260501]);
-        expect(habit.maxDays, 3);
       });
     });
     group('loadFilePreferences()', () {

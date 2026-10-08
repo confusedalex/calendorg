@@ -8,10 +8,6 @@ import '../../../shared/config/preferences_service.dart';
 
 final _log = Logger('OrgFilePersistenceService');
 
-/// Change this when the cached JSON of [OrgEntry] changes, so that the app
-/// parses the files again.
-const _entriesCacheVersion = 'v2';
-
 class OrgFilePersistenceService {
   OrgFilePersistenceService(this._prefs, this._filePicker);
   final PreferencesService _prefs;
@@ -57,10 +53,7 @@ class OrgFilePersistenceService {
       );
 
       await _prefs.setStringList(PrefKeys.entriesCache, json);
-      await _prefs.setString(
-        PrefKeys.entriesCacheKey,
-        '$_entriesCacheVersion|$cacheKey',
-      );
+      await _prefs.setString(PrefKeys.entriesCacheKey, cacheKey);
     } on Exception catch (e, stack) {
       _log.warning('Error saving entries cache', e, stack);
       rethrow;
@@ -68,8 +61,7 @@ class OrgFilePersistenceService {
   }
 
   Future<List<OrgEntry>?>? loadCachedOrgEntries(String cacheKey) async {
-    final storedKey = await _prefs.getString(PrefKeys.entriesCacheKey);
-    if (storedKey != '$_entriesCacheVersion|$cacheKey') {
+    if (await _prefs.getString(PrefKeys.entriesCacheKey) != cacheKey) {
       return null;
     }
 

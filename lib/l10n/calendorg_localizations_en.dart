@@ -18,9 +18,6 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
   String get nav_settings => 'Settings';
 
   @override
-  String get nav_habits => 'Habits';
-
-  @override
   String get add => 'Add';
 
   @override
@@ -322,59 +319,4 @@ class CalendorgLocalizationsEn extends CalendorgLocalizations {
 
   @override
   String get intro_finish => 'Finish Setup';
-
-  @override
-  String get habits => 'Habits';
-
-  @override
-  String habit_every(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Every $count days',
-      one: 'Every day',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String habit_every_range(int min, int max) {
-    return 'Every $min to $max days';
-  }
-
-  @override
-  String habit_streak(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count in a row',
-      zero: 'No streak',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get habit_mark_done => 'Mark as done today';
-
-  @override
-  String get habit_done_today => 'Done today';
-
-  @override
-  String get habit_status_early => 'Not due';
-
-  @override
-  String get habit_status_due => 'Due';
-
-  @override
-  String get habit_status_last_day => 'Last day';
-
-  @override
-  String get habit_status_overdue => 'Overdue';
-
-  @override
-  String get settings_show_habits => 'Habits tab';
-
-  @override
-  String get settings_show_habits_hint =>
-      'Shows entries with the property STYLE: habit';
 }
