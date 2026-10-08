@@ -1,5 +1,5 @@
 # Changelog
-## Unreleased
+## 1.8.1 - 2026-10-08
 ### Fixed
 - Remove 'create file' button which didn't work and is useless
 ## 1.8.0 - 2026-10-08
